@@ -1,0 +1,12 @@
+E:\ControlHub\ControlHub\src\ControlHub.SharedKernel\bin\Debug\net8.0\ControlHub.SharedKernel.deps.json
+E:\ControlHub\ControlHub\src\ControlHub.SharedKernel\bin\Debug\net8.0\ControlHub.SharedKernel.dll
+E:\ControlHub\ControlHub\src\ControlHub.SharedKernel\bin\Debug\net8.0\ControlHub.SharedKernel.pdb
+E:\ControlHub\ControlHub\src\ControlHub.SharedKernel\obj\Debug\net8.0\ControlHub.SharedKernel.GeneratedMSBuildEditorConfig.editorconfig
+E:\ControlHub\ControlHub\src\ControlHub.SharedKernel\obj\Debug\net8.0\ControlHub.SharedKernel.AssemblyInfoInputs.cache
+E:\ControlHub\ControlHub\src\ControlHub.SharedKernel\obj\Debug\net8.0\ControlHub.SharedKernel.AssemblyInfo.cs
+E:\ControlHub\ControlHub\src\ControlHub.SharedKernel\obj\Debug\net8.0\ControlHub.SharedKernel.csproj.CoreCompileInputs.cache
+E:\ControlHub\ControlHub\src\ControlHub.SharedKernel\obj\Debug\net8.0\ControlHub.SharedKernel.sourcelink.json
+E:\ControlHub\ControlHub\src\ControlHub.SharedKernel\obj\Debug\net8.0\ControlHub.SharedKernel.dll
+E:\ControlHub\ControlHub\src\ControlHub.SharedKernel\obj\Debug\net8.0\refint\ControlHub.SharedKernel.dll
+E:\ControlHub\ControlHub\src\ControlHub.SharedKernel\obj\Debug\net8.0\ControlHub.SharedKernel.pdb
+E:\ControlHub\ControlHub\src\ControlHub.SharedKernel\obj\Debug\net8.0\ref\ControlHub.SharedKernel.dll

@@ -1,0 +1,12 @@
+E:\ControlHub\ControlHub\src\ControlHub.Domain\bin\Debug\net8.0\ControlHub.Domain.deps.json
+E:\ControlHub\ControlHub\src\ControlHub.Domain\bin\Debug\net8.0\ControlHub.Domain.dll
+E:\ControlHub\ControlHub\src\ControlHub.Domain\bin\Debug\net8.0\ControlHub.Domain.pdb
+E:\ControlHub\ControlHub\src\ControlHub.Domain\obj\Debug\net8.0\ControlHub.Domain.GeneratedMSBuildEditorConfig.editorconfig
+E:\ControlHub\ControlHub\src\ControlHub.Domain\obj\Debug\net8.0\ControlHub.Domain.AssemblyInfoInputs.cache
+E:\ControlHub\ControlHub\src\ControlHub.Domain\obj\Debug\net8.0\ControlHub.Domain.AssemblyInfo.cs
+E:\ControlHub\ControlHub\src\ControlHub.Domain\obj\Debug\net8.0\ControlHub.Domain.csproj.CoreCompileInputs.cache
+E:\ControlHub\ControlHub\src\ControlHub.Domain\obj\Debug\net8.0\ControlHub.Domain.sourcelink.json
+E:\ControlHub\ControlHub\src\ControlHub.Domain\obj\Debug\net8.0\ControlHub.Domain.dll
+E:\ControlHub\ControlHub\src\ControlHub.Domain\obj\Debug\net8.0\refint\ControlHub.Domain.dll
+E:\ControlHub\ControlHub\src\ControlHub.Domain\obj\Debug\net8.0\ControlHub.Domain.pdb
+E:\ControlHub\ControlHub\src\ControlHub.Domain\obj\Debug\net8.0\ref\ControlHub.Domain.dll
