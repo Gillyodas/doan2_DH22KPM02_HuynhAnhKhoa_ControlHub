@@ -1,24 +1,7 @@
 {
   "Version": 1,
   "WorkspaceRootPath": "E:\\ControlHub\\ControlHub\\",
-  "Documents": [
-    {
-      "AbsoluteMoniker": "D:0:0:{8BC4BF58-E3D5-4E73-B79D-F6D09240F3FE}|ControlHub.Application\\ControlHub.Application.csproj|e:\\controlhub\\controlhub\\controlhub.application\\usecases\\registeruser\\registerusercommandhandler.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{8BC4BF58-E3D5-4E73-B79D-F6D09240F3FE}|ControlHub.Application\\ControlHub.Application.csproj|solutionrelative:controlhub.application\\usecases\\registeruser\\registerusercommandhandler.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{C0A7F451-5FD8-4EFD-B1C3-598E7CD0E299}|ControlHub.Domain\\ControlHub.Domain.csproj|e:\\controlhub\\controlhub\\controlhub.domain\\entities\\user.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{C0A7F451-5FD8-4EFD-B1C3-598E7CD0E299}|ControlHub.Domain\\ControlHub.Domain.csproj|solutionrelative:controlhub.domain\\entities\\user.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{C0A7F451-5FD8-4EFD-B1C3-598E7CD0E299}|ControlHub.Domain\\ControlHub.Domain.csproj|e:\\controlhub\\controlhub\\controlhub.domain\\entities\\account.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{C0A7F451-5FD8-4EFD-B1C3-598E7CD0E299}|ControlHub.Domain\\ControlHub.Domain.csproj|solutionrelative:controlhub.domain\\entities\\account.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{03F403A4-4D52-4A34-BF27-33704B461878}|ControlHub.SharedKernel\\ControlHub.SharedKernel.csproj|e:\\controlhub\\controlhub\\controlhub.sharedkernel\\errors\\error.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{03F403A4-4D52-4A34-BF27-33704B461878}|ControlHub.SharedKernel\\ControlHub.SharedKernel.csproj|solutionrelative:controlhub.sharedkernel\\errors\\error.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    }
-  ],
+  "Documents": [],
   "DocumentGroupContainers": [
     {
       "Orientation": 0,
@@ -26,7 +9,7 @@
       "DocumentGroups": [
         {
           "DockedWidth": 200,
-          "SelectedChildIndex": 5,
+          "SelectedChildIndex": -1,
           "Children": [
             {
               "$type": "Bookmark",
@@ -43,58 +26,6 @@
             {
               "$type": "Bookmark",
               "Name": "ST:0:0:{0ad07096-bba9-4900-a651-0598d26f6d24}"
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 3,
-              "Title": "Error.cs",
-              "DocumentMoniker": "E:\\ControlHub\\ControlHub\\ControlHub.SharedKernel\\Errors\\Error.cs",
-              "RelativeDocumentMoniker": "ControlHub.SharedKernel\\Errors\\Error.cs",
-              "ToolTip": "E:\\ControlHub\\ControlHub\\ControlHub.SharedKernel\\Errors\\Error.cs",
-              "RelativeToolTip": "ControlHub.SharedKernel\\Errors\\Error.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-08-18T15:54:00.98Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 0,
-              "Title": "RegisterUserCommandHandler.cs",
-              "DocumentMoniker": "E:\\ControlHub\\ControlHub\\ControlHub.Application\\UseCases\\RegisterUser\\RegisterUserCommandHandler.cs",
-              "RelativeDocumentMoniker": "ControlHub.Application\\UseCases\\RegisterUser\\RegisterUserCommandHandler.cs",
-              "ToolTip": "E:\\ControlHub\\ControlHub\\ControlHub.Application\\UseCases\\RegisterUser\\RegisterUserCommandHandler.cs",
-              "RelativeToolTip": "ControlHub.Application\\UseCases\\RegisterUser\\RegisterUserCommandHandler.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAYAAAArAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-08-16T03:16:44.064Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 2,
-              "Title": "Account.cs",
-              "DocumentMoniker": "E:\\ControlHub\\ControlHub\\ControlHub.Domain\\Entities\\Account.cs",
-              "RelativeDocumentMoniker": "ControlHub.Domain\\Entities\\Account.cs",
-              "ToolTip": "E:\\ControlHub\\ControlHub\\ControlHub.Domain\\Entities\\Account.cs",
-              "RelativeToolTip": "ControlHub.Domain\\Entities\\Account.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAACAAAAAAAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-08-15T08:58:28.866Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 1,
-              "Title": "User.cs",
-              "DocumentMoniker": "E:\\ControlHub\\ControlHub\\ControlHub.Domain\\Entities\\User.cs",
-              "RelativeDocumentMoniker": "ControlHub.Domain\\Entities\\User.cs",
-              "ToolTip": "E:\\ControlHub\\ControlHub\\ControlHub.Domain\\Entities\\User.cs",
-              "RelativeToolTip": "ControlHub.Domain\\Entities\\User.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAABgAAAAaAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-08-15T08:57:39.267Z",
-              "EditorCaption": ""
             }
           ]
         }
