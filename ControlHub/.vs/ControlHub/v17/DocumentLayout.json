@@ -1,16 +1,7 @@
 {
   "Version": 1,
   "WorkspaceRootPath": "E:\\ControlHub\\ControlHub\\",
-  "Documents": [
-    {
-      "AbsoluteMoniker": "D:0:0:{2B497E9D-C510-AC81-0097-9E0FDFC52CEA}|tests\\ControlHub.Application.Tests\\ControlHub.Application.Tests.csproj|e:\\controlhub\\controlhub\\tests\\controlhub.application.tests\\entities\\accounttests.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{2B497E9D-C510-AC81-0097-9E0FDFC52CEA}|tests\\ControlHub.Application.Tests\\ControlHub.Application.Tests.csproj|solutionrelative:tests\\controlhub.application.tests\\entities\\accounttests.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{2B497E9D-C510-AC81-0097-9E0FDFC52CEA}|tests\\ControlHub.Application.Tests\\ControlHub.Application.Tests.csproj|e:\\controlhub\\controlhub\\tests\\controlhub.application.tests\\entities\\usertests.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{2B497E9D-C510-AC81-0097-9E0FDFC52CEA}|tests\\ControlHub.Application.Tests\\ControlHub.Application.Tests.csproj|solutionrelative:tests\\controlhub.application.tests\\entities\\usertests.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    }
-  ],
+  "Documents": [],
   "DocumentGroupContainers": [
     {
       "Orientation": 0,
@@ -18,7 +9,7 @@
       "DocumentGroups": [
         {
           "DockedWidth": 200,
-          "SelectedChildIndex": 5,
+          "SelectedChildIndex": -1,
           "Children": [
             {
               "$type": "Bookmark",
@@ -35,32 +26,6 @@
             {
               "$type": "Bookmark",
               "Name": "ST:0:0:{0ad07096-bba9-4900-a651-0598d26f6d24}"
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 1,
-              "Title": "UserTests.cs",
-              "DocumentMoniker": "E:\\ControlHub\\ControlHub\\tests\\ControlHub.Application.Tests\\Entities\\UserTests.cs",
-              "RelativeDocumentMoniker": "tests\\ControlHub.Application.Tests\\Entities\\UserTests.cs",
-              "ToolTip": "E:\\ControlHub\\ControlHub\\tests\\ControlHub.Application.Tests\\Entities\\UserTests.cs",
-              "RelativeToolTip": "tests\\ControlHub.Application.Tests\\Entities\\UserTests.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAkAAAA7AAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-08-18T17:28:30.941Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 0,
-              "Title": "AccountTests.cs",
-              "DocumentMoniker": "E:\\ControlHub\\ControlHub\\tests\\ControlHub.Application.Tests\\Entities\\AccountTests.cs",
-              "RelativeDocumentMoniker": "tests\\ControlHub.Application.Tests\\Entities\\AccountTests.cs",
-              "ToolTip": "E:\\ControlHub\\ControlHub\\tests\\ControlHub.Application.Tests\\Entities\\AccountTests.cs",
-              "RelativeToolTip": "tests\\ControlHub.Application.Tests\\Entities\\AccountTests.cs",
-              "ViewState": "AgIAAAYAAAAAAAAAAIA2wBoAAAAxAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-08-18T17:28:27.526Z",
-              "EditorCaption": ""
             }
           ]
         }
