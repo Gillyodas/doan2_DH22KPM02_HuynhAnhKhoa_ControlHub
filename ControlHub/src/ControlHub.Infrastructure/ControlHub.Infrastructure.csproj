@@ -8,8 +8,7 @@
 
   <ItemGroup>
     <Folder Include="ExternalAPIs\" />
-    <Folder Include="Persistence\Context\" />
-    <Folder Include="Persistence\Configurations\" />
+    <Folder Include="Factories\" />
     <Folder Include="Persistence\Migrations\" />
     <Folder Include="Persistence\User\" />
   </ItemGroup>
@@ -17,6 +16,10 @@
   <ItemGroup>
     <PackageReference Include="Konscious.Security.Cryptography.Argon2" Version="1.3.1" />
     <PackageReference Include="Microsoft.EntityFrameworkCore" Version="9.0.8" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="9.0.8">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
     <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="9.0.8" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="9.0.8">
       <PrivateAssets>all</PrivateAssets>

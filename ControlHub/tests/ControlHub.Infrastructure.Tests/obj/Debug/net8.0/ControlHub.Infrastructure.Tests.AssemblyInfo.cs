@@ -14,7 +14,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("ControlHub.Infrastructure.Tests")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+9453d99d64c746e2f54288c60f2c980d15c19b2e")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+9748fea5fb3f76799d2598853981a952a078d12d")]
 [assembly: System.Reflection.AssemblyProductAttribute("ControlHub.Infrastructure.Tests")]
 [assembly: System.Reflection.AssemblyTitleAttribute("ControlHub.Infrastructure.Tests")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

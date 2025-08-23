@@ -1,5 +1,5 @@
 ﻿using ControlHub.Infrastructure.Security;
-using ControlHub.Application.Interfaces.Security;
+using ControlHub.Domain.Interfaces.Security;
 
 namespace ControlHub.API.Configurations
 {
