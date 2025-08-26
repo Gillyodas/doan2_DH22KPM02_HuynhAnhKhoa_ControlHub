@@ -206,7 +206,11 @@
         "frameworks": {
           "net8.0": {
             "targetAlias": "net8.0",
-            "projectReferences": {}
+            "projectReferences": {
+              "E:\\ControlHub\\ControlHub\\src\\ControlHub.SharedKernel\\ControlHub.SharedKernel.csproj": {
+                "projectPath": "E:\\ControlHub\\ControlHub\\src\\ControlHub.SharedKernel\\ControlHub.SharedKernel.csproj"
+              }
+            }
           }
         },
         "warningProperties": {
@@ -277,6 +281,9 @@
               },
               "E:\\ControlHub\\ControlHub\\src\\ControlHub.Domain\\ControlHub.Domain.csproj": {
                 "projectPath": "E:\\ControlHub\\ControlHub\\src\\ControlHub.Domain\\ControlHub.Domain.csproj"
+              },
+              "E:\\ControlHub\\ControlHub\\src\\ControlHub.SharedKernel\\ControlHub.SharedKernel.csproj": {
+                "projectPath": "E:\\ControlHub\\ControlHub\\src\\ControlHub.SharedKernel\\ControlHub.SharedKernel.csproj"
               }
             }
           }

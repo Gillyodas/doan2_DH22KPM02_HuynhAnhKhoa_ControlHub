@@ -1,4 +1,4 @@
-﻿namespace ControlHub.Domain.Entities
+﻿namespace ControlHub.Domain.Users
 {
     public class User
     {

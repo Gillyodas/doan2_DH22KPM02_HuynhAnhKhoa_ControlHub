@@ -1,6 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using ControlHub.Infrastructure.Persistence.Models;
+using ControlHub.Domain.Accounts.ValueObjects;
 
 namespace ControlHub.Infrastructure.Persistence.Configurations
 {
@@ -13,6 +14,10 @@ namespace ControlHub.Infrastructure.Persistence.Configurations
             builder.HasKey(a => a.Id);
 
             builder.Property(a => a.Email)
+                    .HasConversion(
+                    email => email.Value,           // Từ VO Email → string để lưu DB
+                    value => Email.UnsafeCreate(value)   // Từ string DB → VO Email
+                    )
                    .IsRequired()
                    .HasMaxLength(200);
 

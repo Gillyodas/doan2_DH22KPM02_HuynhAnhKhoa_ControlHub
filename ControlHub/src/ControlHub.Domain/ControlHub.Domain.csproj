@@ -7,10 +7,11 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Folder Include="Events\" />
-    <Folder Include="Factories\" />
-    <Folder Include="ValueObjects\" />
-    <Folder Include="Services\" />
+    <Folder Include="Accounts\Interfaces\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\ControlHub.SharedKernel\ControlHub.SharedKernel.csproj" />
   </ItemGroup>
 
 </Project>

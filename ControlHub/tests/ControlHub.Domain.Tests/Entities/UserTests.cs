@@ -1,5 +1,5 @@
 ﻿using System;
-using ControlHub.Domain.Entities;
+using ControlHub.Domain.Users;
 using Xunit;
 
 namespace ControlHub.Domain.Tests.Entities

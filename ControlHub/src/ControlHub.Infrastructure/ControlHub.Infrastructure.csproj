@@ -10,7 +10,7 @@
     <Folder Include="ExternalAPIs\" />
     <Folder Include="Factories\" />
     <Folder Include="Persistence\Migrations\" />
-    <Folder Include="Persistence\User\" />
+    <Folder Include="Persistence\Repositories\" />
   </ItemGroup>
 
   <ItemGroup>
@@ -30,6 +30,7 @@
   <ItemGroup>
     <ProjectReference Include="..\ControlHub.Application\ControlHub.Application.csproj" />
     <ProjectReference Include="..\ControlHub.Domain\ControlHub.Domain.csproj" />
+    <ProjectReference Include="..\ControlHub.SharedKernel\ControlHub.SharedKernel.csproj" />
   </ItemGroup>
 
 </Project>

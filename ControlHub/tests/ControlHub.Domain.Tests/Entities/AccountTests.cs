@@ -1,5 +1,7 @@
 ﻿using System;
-using ControlHub.Domain.Entities;
+using ControlHub.Domain.Accounts;
+using ControlHub.Domain.Accounts.ValueObjects;
+using ControlHub.Domain.Users;
 using Xunit;
 
 namespace ControlHub.Domain.Tests.Entities
@@ -11,10 +13,9 @@ namespace ControlHub.Domain.Tests.Entities
         {
             // Arrange
             var id = Guid.NewGuid();
-            var email = "test@example.com";
+            var email = Email.Create("test@example.com").Value;
             var hash = new byte[] { 1, 2, 3 };
             var salt = new byte[] { 4, 5, 6 };
-            var userId = Guid.NewGuid();
 
             // Act
             var account = new Account(id, email, hash, salt);
@@ -31,21 +32,42 @@ namespace ControlHub.Domain.Tests.Entities
         [Fact]
         public void Deactivate_ShouldSetIsActiveFalse()
         {
-            var account = new Account(Guid.NewGuid(), "a@b.com", new byte[1], new byte[1]);
+            // Arrange
+            var account = new Account(Guid.NewGuid(), Email.Create("a@b.com").Value, new byte[1], new byte[1]);
 
+            // Act
             account.Deactivate();
 
+            // Assert
             Assert.False(account.IsActive);
         }
 
         [Fact]
         public void Delete_ShouldSetIsDeletedTrue()
         {
-            var account = new Account(Guid.NewGuid(), "a@b.com", new byte[1], new byte[1]);
+            // Arrange
+            var account = new Account(Guid.NewGuid(), Email.Create("a@b.com").Value, new byte[1], new byte[1]);
 
+            // Act
             account.Delete();
 
+            // Assert
             Assert.True(account.IsDeleted);
+        }
+
+        [Fact]
+        public void Delete_ShouldAlsoDeleteUser_WhenUserExists()
+        {
+            // Arrange
+            var user = new User(Guid.NewGuid(), Guid.NewGuid(), "testuser");
+            var account = Account.Rehydrate(Guid.NewGuid(), Email.Create("a@b.com").Value, new byte[1], new byte[1], true, false, user);
+
+            // Act
+            account.Delete();
+
+            // Assert
+            Assert.True(account.IsDeleted);
+            Assert.True(account.User!.IsDeleted); // User đi theo account
         }
     }
 }

@@ -7,10 +7,9 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Folder Include="Behaviors\" />
-    <Folder Include="Contracts\" />
-    <Folder Include="DTOs\" />
     <Folder Include="Interfaces\Security\" />
+    <Folder Include="Accounts\DTOs\" />
+    <Folder Include="Accounts\Queries\" />
   </ItemGroup>
 
   <ItemGroup>

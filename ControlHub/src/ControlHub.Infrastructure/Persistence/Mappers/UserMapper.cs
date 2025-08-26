@@ -1,4 +1,4 @@
-﻿using ControlHub.Domain.Entities;
+﻿using ControlHub.Domain.Users;
 using ControlHub.Infrastructure.Persistence.Models;
 
 namespace ControlHub.Infrastructure.Persistence.Mappers

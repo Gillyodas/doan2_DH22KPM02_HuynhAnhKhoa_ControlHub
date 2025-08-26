@@ -1,5 +1,5 @@
-﻿// Infrastructure/Persistence/Mappers/AccountMapper.cs
-using ControlHub.Domain.Entities;
+﻿using ControlHub.Domain.Accounts;
+using ControlHub.Domain.Users;
 using ControlHub.Infrastructure.Persistence.Models;
 
 namespace ControlHub.Infrastructure.Persistence.Mappers

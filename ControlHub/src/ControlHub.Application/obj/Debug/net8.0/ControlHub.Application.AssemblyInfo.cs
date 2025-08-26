@@ -14,7 +14,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("ControlHub.Application")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+9748fea5fb3f76799d2598853981a952a078d12d")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+41c2f3d57469d6980b2b9514de9b469ec0020302")]
 [assembly: System.Reflection.AssemblyProductAttribute("ControlHub.Application")]
 [assembly: System.Reflection.AssemblyTitleAttribute("ControlHub.Application")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]
