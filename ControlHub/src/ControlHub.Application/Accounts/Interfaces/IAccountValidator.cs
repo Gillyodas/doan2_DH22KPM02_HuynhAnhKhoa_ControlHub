@@ -11,10 +11,5 @@ namespace ControlHub.Application.Accounts.Interfaces
     public interface IAccountValidator
     {
         Task<Result<bool>> EmailIsExistAsync(Email email);
-
-        /// <summary>
-        /// Validate password rules (ex: length, complexity)
-        /// </summary>
-        Result ValidatePassword(string password);
     }
 }

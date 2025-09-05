@@ -1,6 +1,6 @@
-﻿namespace ControlHub.API.ViewModels.Account.Request
+﻿namespace ControlHub.API.Accounts.ViewModels.Request
 {
-    public class CreateAccountRequest
+    public class RegisterRequest
     {
         public string Email { get; set; } = null!;
         public string Password { get; set; } = null!;

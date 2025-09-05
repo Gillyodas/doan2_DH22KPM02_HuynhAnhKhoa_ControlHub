@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace ControlHub.SharedKernel.Errors
+namespace ControlHub.SharedKernel.Common
 {
     public sealed record Error(string Code, string Message)
     {

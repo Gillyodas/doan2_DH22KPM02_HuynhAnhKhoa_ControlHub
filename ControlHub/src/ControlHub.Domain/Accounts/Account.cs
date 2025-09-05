@@ -1,5 +1,6 @@
 ﻿using ControlHub.Domain.Accounts.ValueObjects;
 using ControlHub.Domain.Users;
+using ControlHub.SharedKernel.Results;
 
 namespace ControlHub.Domain.Accounts
 {
@@ -43,6 +44,17 @@ namespace ControlHub.Domain.Accounts
             => new Account(id, email, hash, salt, isActive, isDeleted, user);
 
         // Behaviors
+        public Result AttachUser(User user)
+        {
+            if (user == null)
+                return Result.Failure("User cannot be null.");
+
+            if (_user != null)
+                return Result.Failure("User already attached.");
+
+            _user = user;
+            return Result.Success();
+        }
         public void Deactivate() => IsActive = false;   
         public void Delete()
         {

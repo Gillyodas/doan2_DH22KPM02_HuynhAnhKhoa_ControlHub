@@ -1,4 +1,6 @@
-﻿namespace ControlHub.SharedKernel.Errors
+﻿using ControlHub.SharedKernel.Common;
+
+namespace ControlHub.SharedKernel.Users
 {
     public static class UserErrors
     {

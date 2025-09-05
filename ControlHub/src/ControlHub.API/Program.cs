@@ -1,4 +1,10 @@
 using ControlHub.API.Configurations;
+using ControlHub.Application.Accounts.Commands.CreateAccount;
+using ControlHub.Application.Common.Behaviors;
+using MediatR;
+using Microsoft.Extensions.DependencyInjection;
+using ControlHub.Application.Common.Behaviors;
+using FluentValidation;
 
 namespace ControlHub.API
 {
@@ -7,6 +13,11 @@ namespace ControlHub.API
         public static void Main(string[] args)
         {
             var builder = WebApplication.CreateBuilder(args);
+
+            builder.Services.AddMediatR(cfg =>
+                cfg.RegisterServicesFromAssembly(ControlHub.Application.AssemblyReference.Assembly));
+            builder.Services.AddValidatorsFromAssemblyContaining<CreateAccountCommandValidator>();
+            builder.Services.AddTransient(typeof(IPipelineBehavior<,>), typeof(ValidationBehavior<,>));
 
             // Load extra config files BEFORE services use them
             builder.Configuration
@@ -38,7 +49,12 @@ namespace ControlHub.API
 
             //*****************************************************************************************************
 
+            builder.Services.AddMediatR(cfg =>
+                cfg.RegisterServicesFromAssembly(ControlHub.Application.AssemblyReference.Assembly));
+
             var app = builder.Build();
+
+            app.UseMiddleware<ValidationExceptionMiddleware>();
 
             // Configure the HTTP request pipeline.
             if (app.Environment.IsDevelopment())

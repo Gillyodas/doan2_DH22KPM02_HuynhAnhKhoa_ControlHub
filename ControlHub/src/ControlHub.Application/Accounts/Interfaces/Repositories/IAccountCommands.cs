@@ -1,12 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using ControlHub.Domain.Accounts;
+using ControlHub.SharedKernel.Results;
 
 namespace ControlHub.Application.Accounts.Interfaces.Repositories
 {
-    internal interface IAccountCommands
+    public interface IAccountCommands
     {
+        public Task<Result<bool>> AddAsync(Account accDomain);
     }
 }

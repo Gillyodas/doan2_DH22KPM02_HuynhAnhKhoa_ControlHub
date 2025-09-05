@@ -1,6 +1,6 @@
 ﻿using System.Security.Cryptography;
 using System.Text;
-using ControlHub.Domain.Interfaces.Security;
+using ControlHub.Application.Accounts.Interfaces.Security;
 using Konscious.Security.Cryptography;
 using Microsoft.Extensions.Options;
 
@@ -25,15 +25,12 @@ public sealed class Argon2PasswordHasher : IPasswordHasher
             throw new ArgumentException("DegreeOfParallelism must be > 0", nameof(_opt.DegreeOfParallelism));
     }
 
-    public string Hash(string password)
+    public (byte[] Salt, byte[] Hash) Hash(string password)
     {
         var salt = RandomNumberGenerator.GetBytes(_opt.SaltSize);
         var bytes = Compute(password, salt, _opt.MemorySizeKB, _opt.Iterations, _opt.DegreeOfParallelism, _opt.HashSize);
 
-        // PHC string: $argon2id$v=19$m=...,t=...,p=...$base64(salt)$base64(hash)
-        return $"$argon2id$v=19$m={_opt.MemorySizeKB},t={_opt.Iterations},p={_opt.DegreeOfParallelism}$" +
-               $"{Convert.ToBase64String(salt)}$" +
-               $"{Convert.ToBase64String(bytes)}";
+        return (salt, bytes);
     }
 
     public bool Verify(string password, string phc)

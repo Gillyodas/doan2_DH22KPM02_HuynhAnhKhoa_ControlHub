@@ -24,15 +24,5 @@ namespace ControlHub.Infrastructure.Accounts.Validators
 
             return Result<bool>.Success(result.Value.HasValue);
         }
-
-        public Result ValidatePassword(string password)
-        {
-            throw new NotImplementedException();
-        }
-
-        public Task<Result> ValidateUsernameAsync(string username)
-        {
-            throw new NotImplementedException();
-        }
     }
 }

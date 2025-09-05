@@ -27,4 +27,8 @@
     <ProjectReference Include="..\..\src\ControlHub.Infrastructure\ControlHub.Infrastructure.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Security\" />
+  </ItemGroup>
+
 </Project>

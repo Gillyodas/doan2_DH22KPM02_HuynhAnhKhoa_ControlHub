@@ -8,7 +8,7 @@ namespace ControlHub.Infrastructure.Accounts.Repositories
 {
     public class AccountQueries : IAccountQueries
     {
-        AppDbContext _db;
+        private readonly AppDbContext _db;
 
         public AccountQueries(AppDbContext db)
         {
@@ -29,7 +29,7 @@ namespace ControlHub.Infrastructure.Accounts.Repositories
             }
             catch (Exception ex)
             {
-                return Result<Maybe<Email>>.Failure("Database error", ex);
+                return Result<Maybe<Email>>.Failure("Db error", ex);
             }
         }
 

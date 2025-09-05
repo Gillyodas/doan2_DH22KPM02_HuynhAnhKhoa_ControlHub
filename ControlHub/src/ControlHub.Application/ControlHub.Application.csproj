@@ -7,7 +7,6 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Folder Include="Interfaces\Security\" />
     <Folder Include="Accounts\DTOs\" />
     <Folder Include="Accounts\Queries\" />
   </ItemGroup>
