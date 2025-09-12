@@ -1,4 +1,6 @@
-﻿namespace ControlHub.Infrastructure.Persistence.Models
+﻿using ControlHub.Infrastructure.Accounts;
+
+namespace ControlHub.Infrastructure.Users
 {
     public class UserEntity
     {

@@ -1,13 +1,18 @@
 ﻿using ControlHub.Domain.Accounts;
 using ControlHub.Domain.Users;
-using ControlHub.Infrastructure.Persistence.Models;
+using ControlHub.SharedKernel.Results;
+using ControlHub.Infrastructure.Users;
 
-namespace ControlHub.Infrastructure.Persistence.Mappers
+namespace ControlHub.Infrastructure.Accounts
 {
     public static class AccountMapper
     {
         public static Account ToDomain(AccountEntity entity)
         {
+            var user = entity.User != null
+                ? Maybe<User>.From(new User(entity.User.Id, entity.User.AccId, entity.User.Username))
+                : Maybe<User>.None;
+
             return Account.Rehydrate(
                 entity.Id,
                 entity.Email,
@@ -15,9 +20,7 @@ namespace ControlHub.Infrastructure.Persistence.Mappers
                 entity.Salt,
                 entity.IsActive,
                 entity.IsDeleted,
-                entity.User != null
-                    ? new User(entity.User.Id, entity.User.AccId, entity.User.Username)
-                    : null
+                user
             );
         }
 
@@ -31,14 +34,15 @@ namespace ControlHub.Infrastructure.Persistence.Mappers
                 Salt = domain.Salt,
                 IsActive = domain.IsActive,
                 IsDeleted = domain.IsDeleted,
-                User = domain.User != null
-                    ? new UserEntity
+                User = domain.User.Match(
+                    some: u => new UserEntity
                     {
-                        Id = domain.User.Id,
-                        AccId = domain.User.AccId,
-                        Username = domain.User.Username
-                    }
-                    : null
+                        Id = u.Id,
+                        AccId = u.AccId,
+                        Username = u.Username
+                    },
+                    none: () => null!
+                )
             };
         }
     }

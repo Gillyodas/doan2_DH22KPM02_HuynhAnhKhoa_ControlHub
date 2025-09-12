@@ -1,7 +1,6 @@
 ﻿using ControlHub.Application.Users.Interfaces.Repositories;
 using ControlHub.Domain.Users;
 using ControlHub.Infrastructure.Persistence;
-using ControlHub.Infrastructure.Persistence.Mappers;
 using ControlHub.SharedKernel.Results;
 
 namespace ControlHub.Infrastructure.Users.Repositories

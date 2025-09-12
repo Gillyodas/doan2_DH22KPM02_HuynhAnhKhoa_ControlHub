@@ -1,9 +1,9 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
-using ControlHub.Infrastructure.Persistence.Models;
 using ControlHub.Domain.Accounts.ValueObjects;
+using ControlHub.Infrastructure.Users;
 
-namespace ControlHub.Infrastructure.Persistence.Configurations
+namespace ControlHub.Infrastructure.Accounts
 {
     public class AccountConfig : IEntityTypeConfiguration<AccountEntity>
     {

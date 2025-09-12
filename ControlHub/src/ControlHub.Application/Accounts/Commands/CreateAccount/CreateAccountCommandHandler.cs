@@ -26,26 +26,6 @@ namespace ControlHub.Application.Accounts.Commands.CreateAccount
             _passwordHasher = passwordHasher;
         }
 
-        private async Task<Result<Unit>> ValidateRequestAsync(CreateAccountCommand request, CancellationToken cancellationToken)
-        {
-            // Validate Email (Domain VO check)
-            var emailResult = Email.Create(request.Email);
-            if (!emailResult.IsSuccess)
-                return Result<Unit>.Failure(emailResult.Error);
-
-            var email = emailResult.Value;
-
-            // Check Email Exists (Application check qua Repository/Validator)
-            var emailIsExist = await _accountValidator.EmailIsExistAsync(email);
-            if (!emailIsExist.IsSuccess)
-                return Result<Unit>.Failure(emailIsExist.Error);
-
-            if (emailIsExist.Value)
-                return Result<Unit>.Failure("Email already exists");
-
-            return Result<Unit>.Success(Unit.Value);
-        }
-
         public async Task<Result<Guid>> Handle(CreateAccountCommand request, CancellationToken cancellationToken)
         {
             try
@@ -68,9 +48,12 @@ namespace ControlHub.Application.Accounts.Commands.CreateAccount
 
                 var accId = Guid.NewGuid();
 
-                var (salt, hash) = _passwordHasher.Hash(request.Password);
+                var passwordHashResult = _passwordHasher.Hash(request.Password);
 
-                var accountResult = AccountFactory.CreateWithUser(accId, email, hash, salt);
+                if(!passwordHashResult.IsSuccess)
+                    return Result<Guid>.Failure(emailIsExist.Error);
+
+                var accountResult = AccountFactory.CreateWithUser(accId, email, passwordHashResult.Value.Hash, passwordHashResult.Value.Salt);
 
                 if (!accountResult.IsSuccess)
                     return Result<Guid>.Failure(accountResult.Error);

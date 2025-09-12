@@ -22,11 +22,14 @@ namespace ControlHub.API
             Log.Logger = new LoggerConfiguration()
                 .Enrich.FromLogContext()
                 .Enrich.WithProperty("Application", "ControlHub.API")
-                .WriteTo.Console() // log ra console
-                .WriteTo.File("Logs/log-.txt", rollingInterval: RollingInterval.Day) // log file
+                .WriteTo.Console(outputTemplate: "[{Timestamp:HH:mm:ss} {Level:u3}] {Message:lj}{NewLine}{Exception}")
+                .WriteTo.File("Logs/log-.log",
+                    rollingInterval: RollingInterval.Day,
+                    retainedFileCountLimit: 14,
+                    outputTemplate: "[{Timestamp:yyyy-MM-dd HH:mm:ss} {Level:u3}] {Message:lj}{NewLine}{Exception}")
                 .CreateLogger();
 
-            builder.Host.UseSerilog(); // thay thế logger mặc định
+            builder.Host.UseSerilog();
 
             // Config OpenTelemetry
             builder.Services.AddOpenTelemetry()

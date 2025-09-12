@@ -1,6 +1,5 @@
-﻿using ControlHub.Infrastructure.Persistence.Configs;
-using ControlHub.Infrastructure.Persistence.Configurations;
-using ControlHub.Infrastructure.Persistence.Models;
+﻿using ControlHub.Infrastructure.Accounts;
+using ControlHub.Infrastructure.Users;
 using Microsoft.EntityFrameworkCore;
 
 namespace ControlHub.Infrastructure.Persistence

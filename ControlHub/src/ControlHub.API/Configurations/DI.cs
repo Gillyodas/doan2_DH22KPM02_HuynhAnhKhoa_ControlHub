@@ -1,4 +1,4 @@
-﻿using ControlHub.Infrastructure.Security;
+﻿using ControlHub.Infrastructure.Accounts.Security;
 using ControlHub.Application.Accounts.Interfaces.Security;
 using ControlHub.Application.Accounts.Interfaces;
 using ControlHub.Infrastructure.Accounts.Validators;

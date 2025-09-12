@@ -1,7 +1,6 @@
 ﻿using ControlHub.Application.Accounts.Interfaces.Repositories;
 using ControlHub.Domain.Accounts;
 using ControlHub.SharedKernel.Results;
-using ControlHub.Infrastructure.Persistence.Mappers;
 using ControlHub.Infrastructure.Persistence;
 
 namespace ControlHub.Infrastructure.Accounts.Repositories

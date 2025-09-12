@@ -1,7 +1,6 @@
 ﻿using ControlHub.Domain.Users;
-using ControlHub.Infrastructure.Persistence.Models;
 
-namespace ControlHub.Infrastructure.Persistence.Mappers
+namespace ControlHub.Infrastructure.Users
 {
     public static class UserMapper
     {

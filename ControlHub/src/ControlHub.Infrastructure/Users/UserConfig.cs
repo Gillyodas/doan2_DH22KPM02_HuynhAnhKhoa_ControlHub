@@ -1,8 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
-using ControlHub.Infrastructure.Persistence.Models;
 
-namespace ControlHub.Infrastructure.Persistence.Configs
+namespace ControlHub.Infrastructure.Users
 {
     public class UserConfig : IEntityTypeConfiguration<UserEntity>
     {

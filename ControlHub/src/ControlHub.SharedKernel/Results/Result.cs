@@ -63,6 +63,12 @@
             Func<TResult> none) =>
             HasValue ? some(_value!) : none();
 
+        public void Match(Action<T> some, Action none)
+        {
+            if (HasValue) some(_value!);
+            else none();
+        }
+
         public T GetValueOrDefault(T defaultValue = default!) =>
             HasValue ? _value! : defaultValue;
     }

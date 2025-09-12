@@ -1,6 +1,7 @@
 ﻿using ControlHub.API.Accounts.ViewModels.Request;
 using ControlHub.API.Accounts.ViewModels.Response;
 using ControlHub.Application.Accounts.Commands.CreateAccount;
+using ControlHub.Application.Accounts.Commands.SignIn;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 
@@ -31,6 +32,23 @@ namespace ControlHub.API.Accounts.Controllers
             {
                 AccountId = result.Value,
                 Message = "Register success"
+            });
+        }
+
+        [HttpPost("signin")]
+        public async Task<IActionResult> SignIn([FromBody] SignInRequest request)
+        {
+            var command = new SignInCommand(request.Email, request.Password);
+
+            var result = await _mediator.Send(command);
+
+            if (!result.IsSuccess)
+                return BadRequest(new SignInResponse { Message = result.Error });
+
+            return Ok(new SignInResponse
+            {
+                AccountId = result.Value.AccountId,
+                Username = result.Value.Username
             });
         }
     }

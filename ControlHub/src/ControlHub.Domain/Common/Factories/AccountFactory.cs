@@ -9,7 +9,7 @@ namespace ControlHub.Domain.Common.Factories
     {
         public static Result<Maybe<Account>> CreateWithUser(Guid accountId, Email email, byte[] hash, byte[] salt, string? username = null)
         {
-            var account = new Account(accountId, email, hash, salt);
+            var account = Account.Create(accountId, email, hash, salt);
 
             var user = new User(Guid.NewGuid(), accountId, username);
 

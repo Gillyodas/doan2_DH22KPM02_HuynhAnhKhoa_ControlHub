@@ -1,11 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using ControlHub.Domain.Accounts.ValueObjects;
+﻿using ControlHub.Domain.Accounts.ValueObjects;
+using ControlHub.Infrastructure.Users;
 
-namespace ControlHub.Infrastructure.Persistence.Models
+namespace ControlHub.Infrastructure.Accounts
 {
     public class AccountEntity
     {

@@ -13,10 +13,9 @@ namespace ControlHub.Domain.Accounts
         public bool IsActive { get; private set; }
         public bool IsDeleted { get; private set; }
 
-        private User? _user;
-        public User? User => _user;
+        public Maybe<User> User { get; private set; }
 
-        public Account(Guid id, Email email, byte[] hashPassword, byte[] salt)
+        private Account(Guid id, Email email, byte[] hashPassword, byte[] salt, bool isActive, bool isDeleted, Maybe<User> user)
         {
             if (id == Guid.Empty) throw new ArgumentException("Id is required", nameof(id));
 
@@ -24,23 +23,17 @@ namespace ControlHub.Domain.Accounts
             Email = email;
             HashPassword = hashPassword;
             Salt = salt;
-            IsActive = true;
-            IsDeleted = false;
-        }
-
-        // For persistence only
-        private Account(Guid id, Email email, byte[] hash, byte[] salt, bool isActive, bool isDeleted, User? user)
-        {
-            Id = id;
-            Email = email;
-            HashPassword = hash;
-            Salt = salt;
             IsActive = isActive;
             IsDeleted = isDeleted;
-            _user = user;
+            User = user;
         }
 
-        public static Account Rehydrate(Guid id, Email email, byte[] hash, byte[] salt, bool isActive, bool isDeleted, User? user)
+        // Factory khi khởi tạo mới account
+        public static Account Create(Guid id, Email email, byte[] hashPassword, byte[] salt)
+            => new Account(id, email, hashPassword, salt, true, false, Maybe<User>.None);
+
+        // Factory cho persistence
+        public static Account Rehydrate(Guid id, Email email, byte[] hash, byte[] salt, bool isActive, bool isDeleted, Maybe<User> user)
             => new Account(id, email, hash, salt, isActive, isDeleted, user);
 
         // Behaviors
@@ -49,17 +42,22 @@ namespace ControlHub.Domain.Accounts
             if (user == null)
                 return Result.Failure("User cannot be null.");
 
-            if (_user != null)
+            if (User.HasValue)
                 return Result.Failure("User already attached.");
 
-            _user = user;
+            User = Maybe<User>.From(user);
             return Result.Success();
         }
-        public void Deactivate() => IsActive = false;   
+
+        public void Deactivate() => IsActive = false;
+
         public void Delete()
         {
             IsDeleted = true;
-            _user?.Delete(); // đảm bảo consistency: User đi theo
+            User.Match(
+                some: u => u.Delete(),
+                none: () => { }
+            );
         }
     }
 }
