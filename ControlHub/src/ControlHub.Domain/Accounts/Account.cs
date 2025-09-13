@@ -15,7 +15,7 @@ namespace ControlHub.Domain.Accounts
 
         public Maybe<User> User { get; private set; }
 
-        private Account(Guid id, Email email, byte[] hashPassword, byte[] salt, bool isActive, bool isDeleted, Maybe<User> user)
+        public Account(Guid id, Email email, byte[] hashPassword, byte[] salt, bool isActive, bool isDeleted, Maybe<User> user)
         {
             if (id == Guid.Empty) throw new ArgumentException("Id is required", nameof(id));
 

@@ -14,7 +14,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("ControlHub.Domain.Tests")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+d28ab605d027d093e5ab7da97181a75857e30f1e")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+adc1dc6d990bb98a2cf1746cb95a77fbfaec6000")]
 [assembly: System.Reflection.AssemblyProductAttribute("ControlHub.Domain.Tests")]
 [assembly: System.Reflection.AssemblyTitleAttribute("ControlHub.Domain.Tests")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]
