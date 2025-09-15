@@ -4,8 +4,6 @@ using ControlHub.Domain.Accounts.ValueObjects;
 using ControlHub.Domain.Users;
 using ControlHub.Infrastructure.Persistence;
 using ControlHub.Infrastructure.Users;
-using ControlHub.SharedKernel.Accounts;
-using ControlHub.SharedKernel.Results;
 using Microsoft.EntityFrameworkCore;
 
 namespace ControlHub.Infrastructure.Accounts.Repositories

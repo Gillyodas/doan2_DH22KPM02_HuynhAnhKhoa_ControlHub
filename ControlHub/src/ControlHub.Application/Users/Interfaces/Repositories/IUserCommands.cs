@@ -5,7 +5,7 @@ namespace ControlHub.Application.Users.Interfaces.Repositories
 {
     public interface IUserCommands
     {
-        Task<Result<bool>> AddAsync(User user, CancellationToken cancellationToken);
+        Task AddAsync(User user, CancellationToken cancellationToken);
         Task SaveAsync(User user, CancellationToken cancellationToken);
     }
 }
