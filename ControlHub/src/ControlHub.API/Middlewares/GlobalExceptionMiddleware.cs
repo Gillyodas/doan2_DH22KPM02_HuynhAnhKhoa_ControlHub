@@ -1,5 +1,5 @@
 ﻿using System.Net;
-using System.Text.Json;
+using Microsoft.EntityFrameworkCore;
 
 namespace ControlHub.API.Middlewares
 {
@@ -18,7 +18,7 @@ namespace ControlHub.API.Middlewares
         {
             try
             {
-                await _next(context); // cho request chạy tiếp
+                await _next(context);
             }
             catch (Exception ex)
             {
@@ -27,14 +27,39 @@ namespace ControlHub.API.Middlewares
                     context.Request.Path,
                     context.TraceIdentifier);
 
+<<<<<<< Updated upstream
                 var errorResponse = new
                 {
                     code = "System.UnhandledException",
+=======
+                int statusCode = ex switch
+                {
+                    UnauthorizedAccessException => (int)HttpStatusCode.Unauthorized,
+                    KeyNotFoundException => (int)HttpStatusCode.NotFound,
+                    DbUpdateConcurrencyException => (int)HttpStatusCode.Conflict,
+                    DbUpdateException => (int)HttpStatusCode.InternalServerError,
+                    _ => (int)HttpStatusCode.InternalServerError
+                };
+
+                var errorResponse = new
+                {
+                    code = ex switch
+                    {
+                        DbUpdateConcurrencyException => "System.ConcurrencyError",
+                        DbUpdateException => "System.DatabaseError",
+                        _ => "System.UnhandledException"
+                    },
+>>>>>>> Stashed changes
                     message = "Unexpected error occurred",
                     traceId = context.TraceIdentifier
                 };
 
+<<<<<<< Updated upstream
                 context.Response.StatusCode = (int)HttpStatusCode.InternalServerError;
+=======
+                context.Response.StatusCode = statusCode;
+
+>>>>>>> Stashed changes
                 context.Response.ContentType = "application/json";
                 await context.Response.WriteAsJsonAsync(errorResponse);
             }

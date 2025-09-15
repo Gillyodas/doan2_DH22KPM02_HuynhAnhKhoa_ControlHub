@@ -14,21 +14,11 @@ namespace ControlHub.Infrastructure.Accounts.Repositories
         {
             _db = db;
         }
-        public async Task<Result<bool>> AddAsync(Account accDomain)
+        public async Task AddAsync(Account accDomain)
         {
-            try
-            {
-                var accEntity = AccountMapper.ToEntity(accDomain);
-
-                await _db.Accounts.AddAsync(accEntity);
-                int rowEffected = await _db.SaveChangesAsync();
-
-                return Result<bool>.Success(rowEffected > 0);
-            }
-            catch(Exception ex)
-            {
-                return Result<bool>.Failure("Db error", ex);
-            }
+            var accEntity = AccountMapper.ToEntity(accDomain);
+            await _db.Accounts.AddAsync(accEntity);
+            await _db.SaveChangesAsync();
         }
     }
 }

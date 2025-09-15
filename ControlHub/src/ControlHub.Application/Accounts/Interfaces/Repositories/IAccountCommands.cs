@@ -5,6 +5,6 @@ namespace ControlHub.Application.Accounts.Interfaces.Repositories
 {
     public interface IAccountCommands
     {
-        public Task<Result<bool>> AddAsync(Account accDomain);
+        public Task AddAsync(Account accDomain);
     }
 }
