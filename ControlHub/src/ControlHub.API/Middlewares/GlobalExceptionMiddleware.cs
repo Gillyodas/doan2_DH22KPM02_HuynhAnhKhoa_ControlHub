@@ -1,5 +1,6 @@
 ﻿using System.Net;
-using System.Text.Json;
+using Microsoft.AspNetCore.Http.HttpResults;
+using Microsoft.EntityFrameworkCore;
 
 namespace ControlHub.API.Middlewares
 {
@@ -18,7 +19,7 @@ namespace ControlHub.API.Middlewares
         {
             try
             {
-                await _next(context); // cho request chạy tiếp
+                await _next(context);
             }
             catch (Exception ex)
             {
@@ -27,19 +28,27 @@ namespace ControlHub.API.Middlewares
                     context.Request.Path,
                     context.TraceIdentifier);
 
-                var errorResponse = new
-                {
-                    code = "System.UnhandledException",
-                    message = "Unexpected error occurred",
-                    traceId = context.TraceIdentifier
-                };
-
                 int statusCode = ex switch
                 {
                     UnauthorizedAccessException => (int)HttpStatusCode.Unauthorized,
                     KeyNotFoundException => (int)HttpStatusCode.NotFound,
+                    DbUpdateConcurrencyException => (int)HttpStatusCode.Conflict,
+                    DbUpdateException => (int)HttpStatusCode.InternalServerError,
                     _ => (int)HttpStatusCode.InternalServerError
                 };
+
+                var errorResponse = new
+                {
+                    code = ex switch
+                    {
+                        DbUpdateConcurrencyException => "System.ConcurrencyError",
+                        DbUpdateException => "System.DatabaseError",
+                        _ => "System.UnhandledException"
+                    },
+                    message = "Unexpected error occurred",
+                    traceId = context.TraceIdentifier
+                };
+
                 context.Response.StatusCode = statusCode;
 
                 context.Response.ContentType = "application/json";
