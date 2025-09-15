@@ -1,16 +1,14 @@
 # Build artifacts
-bin/
-obj/
+**/bin/
+**/obj/
 
-# User-specific files
+# VS user files
+.vs/
 *.user
 *.rsuser
 *.suo
 *.userosscache
 *.sln.docstates
-
-# Visual Studio
-.vs/
 
 # NuGet
 *.nupkg
