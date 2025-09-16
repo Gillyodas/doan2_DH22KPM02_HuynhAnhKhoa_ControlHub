@@ -1,4 +1,5 @@
-﻿using ControlHub.API.Accounts.ViewModels.Request;
+﻿using System.Threading;
+using ControlHub.API.Accounts.ViewModels.Request;
 using ControlHub.API.Accounts.ViewModels.Response;
 using ControlHub.Application.Accounts.Commands.CreateAccount;
 using ControlHub.Application.Accounts.Commands.SignIn;
@@ -19,11 +20,11 @@ namespace ControlHub.API.Accounts.Controllers
         }
 
         [HttpPost("register")]
-        public async Task<IActionResult> Register([FromBody] RegisterRequest request)
+        public async Task<IActionResult> Register([FromBody] RegisterRequest request, CancellationToken cancellationToken)
         {
             var command = new CreateAccountCommand(request.Email, request.Password);
 
-            var result = await _mediator.Send(command);
+            var result = await _mediator.Send(command, cancellationToken);
 
             if (!result.IsSuccess)
                 return BadRequest(new RegisterResponse { Message = result.Error });
@@ -36,11 +37,11 @@ namespace ControlHub.API.Accounts.Controllers
         }
 
         [HttpPost("signin")]
-        public async Task<IActionResult> SignIn([FromBody] SignInRequest request)
+        public async Task<IActionResult> SignIn([FromBody] SignInRequest request, CancellationToken cancellationToken)
         {
             var command = new SignInCommand(request.Email, request.Password);
 
-            var result = await _mediator.Send(command);
+            var result = await _mediator.Send(command, cancellationToken);
 
             if (!result.IsSuccess)
                 return BadRequest(new SignInResponse { Message = result.Error });

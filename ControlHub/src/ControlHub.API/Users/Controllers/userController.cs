@@ -20,11 +20,11 @@ namespace ControlHub.API.Users.Controllers
         }
 
         [HttpPatch("{id}/username")]
-        public async Task<IActionResult> UpdateUsername(Guid id, [FromBody] UpdateUsernameRequest request)
+        public async Task<IActionResult> UpdateUsername(Guid id, [FromBody] UpdateUsernameRequest request, CancellationToken cancellationToken)
         {
             var command = new UpdateUsernameCommand(id, request.username);
 
-            var result = await _mediator.Send(command);
+            var result = await _mediator.Send(command, cancellationToken);
 
             if (!result.IsSuccess)
                 return BadRequest(new UpdateUsernameResponse { message = result.Error });

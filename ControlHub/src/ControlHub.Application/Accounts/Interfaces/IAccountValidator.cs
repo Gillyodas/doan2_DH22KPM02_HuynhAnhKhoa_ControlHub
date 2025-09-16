@@ -10,6 +10,6 @@ namespace ControlHub.Application.Accounts.Interfaces
 {
     public interface IAccountValidator
     {
-        Task<bool> EmailIsExistAsync(Email email);
+        Task<bool> EmailIsExistAsync(Email email, CancellationToken cancellationToken);
     }
 }

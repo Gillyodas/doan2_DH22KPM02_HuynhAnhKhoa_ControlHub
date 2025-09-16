@@ -18,15 +18,15 @@ namespace ControlHub.Infrastructure.Users.Repositories
         public async Task AddAsync(User user, CancellationToken cancellationToken)
         {
             var userEntity = UserMapper.ToEntity(user);
-            await _db.Users.AddAsync(userEntity);
-            await _db.SaveChangesAsync();
+            await _db.Users.AddAsync(userEntity, cancellationToken);
+            await _db.SaveChangesAsync(cancellationToken);
         }
 
         public async Task SaveAsync(User user, CancellationToken cancellationToken)
         {
             var userEntity = UserMapper.ToEntity(user);
             _db.Users.Update(userEntity);
-            await _db.SaveChangesAsync();
+            await _db.SaveChangesAsync(cancellationToken);
         }
     }
 }

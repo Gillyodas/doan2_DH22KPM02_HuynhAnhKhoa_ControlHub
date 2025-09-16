@@ -17,26 +17,26 @@ namespace ControlHub.Infrastructure.Accounts.Repositories
             _db = db;
         }
 
-        public async Task<Account> GetAccountByEmail(Email email)
+        public async Task<Account> GetAccountByEmail(Email email, CancellationToken cancellationToken)
         {
                 return AccountMapper.ToDomain(await _db.Accounts
                                                        .AsNoTracking()
                                                        .Include(a => a.User)
-                                                       .FirstOrDefaultAsync(a => a.Email == email));
+                                                       .FirstOrDefaultAsync(a => a.Email == email, cancellationToken));
         }
 
-        public async Task<Email?> GetEmailByEmailAsync(Email email)
+        public async Task<Email?> GetEmailByEmailAsync(Email email, CancellationToken cancellationToken)
         {
             return await _db.Accounts
                 .AsNoTracking()
                 .Where(a => a.Email == email)
                 .Select(a => a.Email)
-                .FirstOrDefaultAsync();
+                .FirstOrDefaultAsync(cancellationToken);
         }
 
         public async Task<User> GetUserById(Guid id, CancellationToken cancellationToken)
         {
-            return UserMapper.ToDomain(await _db.Users.AsNoTracking().FirstOrDefaultAsync(u => u.AccId == id));
+            return UserMapper.ToDomain(await _db.Users.AsNoTracking().FirstOrDefaultAsync(u => u.AccId == id, cancellationToken));
         }
     }
 }

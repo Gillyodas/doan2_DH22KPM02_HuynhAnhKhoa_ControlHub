@@ -35,7 +35,7 @@ namespace ControlHub.Application.Accounts.Commands.CreateAccount
 
             var email = emailResult.Value;
 
-            if (await _accountValidator.EmailIsExistAsync(email))
+            if (await _accountValidator.EmailIsExistAsync(email, cancellationToken))
             {
                 return Result<Guid>.Failure(AccountErrors.EmailAlreadyExists.Code);
             }
@@ -49,7 +49,7 @@ namespace ControlHub.Application.Accounts.Commands.CreateAccount
             if (!accountResult.IsSuccess)
                 return Result<Guid>.Failure(accountResult.Error);
 
-            await _accountCommands.AddAsync(accountResult.Value.Value);
+            await _accountCommands.AddAsync(accountResult.Value.Value, cancellationToken);
 
             return Result<Guid>.Success(accId);
         }

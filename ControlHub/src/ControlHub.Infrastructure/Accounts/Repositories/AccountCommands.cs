@@ -13,11 +13,11 @@ namespace ControlHub.Infrastructure.Accounts.Repositories
         {
             _db = db;
         }
-        public async Task AddAsync(Account accDomain)
+        public async Task AddAsync(Account accDomain, CancellationToken cancellationToken)
         {
             var accEntity = AccountMapper.ToEntity(accDomain);
-            await _db.Accounts.AddAsync(accEntity);
-            await _db.SaveChangesAsync();
+            await _db.Accounts.AddAsync(accEntity, cancellationToken);
+            await _db.SaveChangesAsync(cancellationToken);
         }
     }
 }

@@ -27,7 +27,7 @@ namespace ControlHub.Application.Accounts.Commands.SignIn
             {
                 Email email = Email.Create(request.email).Value;
 
-                var resultAccount = await _accountQueries.GetAccountByEmail(email);
+                var resultAccount = await _accountQueries.GetAccountByEmail(email, cancellationToken);
 
                 var resultVerifyPassword = _passwordHasher.Verify(request.password, resultAccount.Salt, resultAccount.HashPassword);
 

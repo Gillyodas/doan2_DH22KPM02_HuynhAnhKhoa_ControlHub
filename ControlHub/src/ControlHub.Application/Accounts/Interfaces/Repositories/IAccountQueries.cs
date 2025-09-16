@@ -7,8 +7,8 @@ namespace ControlHub.Application.Accounts.Interfaces.Repositories
 {
     public interface IAccountQueries
     {
-        Task<Email?> GetEmailByEmailAsync(Email email);
-        Task<Account> GetAccountByEmail(Email email);
+        Task<Email?> GetEmailByEmailAsync(Email email, CancellationToken cancellationToken);
+        Task<Account> GetAccountByEmail(Email email, CancellationToken cancellationToken);
         Task<User> GetUserById(Guid id, CancellationToken cancellationToken);
     }
 }
