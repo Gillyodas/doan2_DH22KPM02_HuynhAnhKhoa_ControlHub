@@ -4,6 +4,9 @@ namespace ControlHub.SharedKernel.Accounts
 {
     public static class AccountErrors
     {
+        public static readonly Error AccountNotFound =
+            new("Account.NotFound", "The account was not found.");
+
         public static readonly Error EmailRequired =
             new("Account.EmailRequired", "Email is required.");
 
@@ -42,6 +45,9 @@ namespace ControlHub.SharedKernel.Accounts
 
         public static readonly Error PasswordIsNotValid =
             new("Account.PasswordIsNotValid", "Password is not valid.");
+
+        public static readonly Error PasswordSameAsOld = 
+            new("Account.PasswordSameAsOld", "New password must not be the same as the current password.");
 
         public static readonly Error InvalidCredentials =
             new("Account.InvalidCredentials", "Email or password is incorrect.");
