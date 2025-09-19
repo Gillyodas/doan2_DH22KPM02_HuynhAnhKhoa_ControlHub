@@ -25,9 +25,12 @@ namespace ControlHub.Application.Accounts.Commands.SignIn
         {
             try
             {
-                Email email = Email.Create(request.email).Value;
+                Result<Email> resultCreateEmail = Email.Create(request.email);
 
-                var resultAccount = await _accountQueries.GetAccountByEmail(email, cancellationToken);
+                if (!resultCreateEmail.IsSuccess)
+                    return Result<SignInDTO>.Failure(AccountErrors.InvalidEmail.Code);
+
+                var resultAccount = await _accountQueries.GetAccountByEmail(resultCreateEmail.Value, cancellationToken);
 
                 var resultVerifyPassword = _passwordHasher.Verify(request.password, resultAccount.Password);
 
