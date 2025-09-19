@@ -1,7 +1,8 @@
 ﻿using ControlHub.Domain.Accounts;
+using ControlHub.Domain.Accounts.ValueObjects;
 using ControlHub.Domain.Users;
-using ControlHub.SharedKernel.Results;
 using ControlHub.Infrastructure.Users;
+using ControlHub.SharedKernel.Results;
 
 namespace ControlHub.Infrastructure.Accounts
 {
@@ -13,11 +14,12 @@ namespace ControlHub.Infrastructure.Accounts
                 ? Maybe<User>.From(new User(entity.User.Id, entity.User.AccId, entity.User.Username))
                 : Maybe<User>.None;
 
+            var password = Password.From(entity.HashPassword, entity.Salt);
+
             return Account.Rehydrate(
                 entity.Id,
                 entity.Email,
-                entity.HashPassword,
-                entity.Salt,
+                password,
                 entity.IsActive,
                 entity.IsDeleted,
                 user
@@ -30,8 +32,8 @@ namespace ControlHub.Infrastructure.Accounts
             {
                 Id = domain.Id,
                 Email = domain.Email,
-                HashPassword = domain.HashPassword,
-                Salt = domain.Salt,
+                HashPassword = domain.Password.Hash,
+                Salt = domain.Password.Salt,
                 IsActive = domain.IsActive,
                 IsDeleted = domain.IsDeleted,
                 User = domain.User.Match(

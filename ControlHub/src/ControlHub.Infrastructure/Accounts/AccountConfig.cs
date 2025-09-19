@@ -22,9 +22,11 @@ namespace ControlHub.Infrastructure.Accounts
                    .HasMaxLength(200);
 
             builder.Property(a => a.HashPassword)
+                   .HasColumnType("varbinary(64)")
                    .IsRequired();
 
             builder.Property(a => a.Salt)
+                   .HasColumnType("varbinary(64)")
                    .IsRequired();
 
             builder.Property(a => a.IsActive)

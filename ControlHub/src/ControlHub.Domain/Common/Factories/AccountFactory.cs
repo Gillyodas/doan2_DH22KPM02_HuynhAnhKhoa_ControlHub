@@ -7,9 +7,9 @@ namespace ControlHub.Domain.Common.Factories
 {
     public class AccountFactory
     {
-        public static Result<Maybe<Account>> CreateWithUser(Guid accountId, Email email, byte[] hash, byte[] salt, string? username = "No name")
+        public static Result<Maybe<Account>> CreateWithUser(Guid accountId, Email email, Password pass, string? username = "No name")
         {
-            var account = Account.Create(accountId, email, hash, salt);
+            var account = Account.Create(accountId, email, pass);
 
             var user = new User(Guid.NewGuid(), accountId, username);
 

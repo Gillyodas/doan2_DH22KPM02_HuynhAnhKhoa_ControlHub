@@ -7,8 +7,8 @@ namespace ControlHub.Infrastructure.Accounts
     {
         public Guid Id { get; set; }
         public Email Email { get; set; } = null!;
-        public byte[] HashPassword { get; set; } = null!;
-        public byte[] Salt { get; set; } = null!;
+        public byte[] HashPassword { get; set; } = default!;
+        public byte[] Salt { get; set; } = default!;
         public bool IsActive { get; set; }
         public bool IsDeleted { get; set; }
 

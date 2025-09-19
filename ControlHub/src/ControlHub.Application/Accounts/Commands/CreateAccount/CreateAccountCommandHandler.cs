@@ -1,7 +1,6 @@
 ﻿using ControlHub.Application.Accounts.Interfaces;
 using ControlHub.Application.Accounts.Interfaces.Repositories;
 using ControlHub.Application.Accounts.Interfaces.Security;
-using ControlHub.Domain.Accounts;
 using ControlHub.Domain.Accounts.ValueObjects;
 using ControlHub.Domain.Common.Factories;
 using ControlHub.SharedKernel.Accounts;
@@ -44,7 +43,7 @@ namespace ControlHub.Application.Accounts.Commands.CreateAccount
 
             var passwordHashResult = _passwordHasher.Hash(request.Password);
 
-            var accountResult = AccountFactory.CreateWithUser(accId, email, passwordHashResult.Hash, passwordHashResult.Salt);
+            var accountResult = AccountFactory.CreateWithUser(accId, email, passwordHashResult);
 
             if (!accountResult.IsSuccess)
                 return Result<Guid>.Failure(accountResult.Error);

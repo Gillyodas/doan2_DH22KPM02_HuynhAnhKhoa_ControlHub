@@ -6,5 +6,6 @@ namespace ControlHub.Application.Accounts.Interfaces.Repositories
     public interface IAccountCommands
     {
         public Task AddAsync(Account accDomain, CancellationToken cancellationToken);
+        public Task UpdateAsync(Account accDomain, CancellationToken cancellationToken);
     }
 }

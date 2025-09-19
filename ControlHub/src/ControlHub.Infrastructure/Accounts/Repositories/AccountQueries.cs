@@ -25,6 +25,11 @@ namespace ControlHub.Infrastructure.Accounts.Repositories
                                                        .FirstOrDefaultAsync(a => a.Email == email, cancellationToken));
         }
 
+        public async Task<Account> GetAccountWithoutUserById(Guid id, CancellationToken cancellationToken)
+        {
+            return AccountMapper.ToDomain(await _db.Accounts.AsNoTracking().FirstOrDefaultAsync(a => a.Id == id, cancellationToken));
+        }
+
         public async Task<Email?> GetEmailByEmailAsync(Email email, CancellationToken cancellationToken)
         {
             return await _db.Accounts

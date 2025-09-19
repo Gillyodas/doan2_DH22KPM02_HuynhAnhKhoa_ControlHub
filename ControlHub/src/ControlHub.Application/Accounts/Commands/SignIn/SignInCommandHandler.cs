@@ -29,7 +29,7 @@ namespace ControlHub.Application.Accounts.Commands.SignIn
 
                 var resultAccount = await _accountQueries.GetAccountByEmail(email, cancellationToken);
 
-                var resultVerifyPassword = _passwordHasher.Verify(request.password, resultAccount.Salt, resultAccount.HashPassword);
+                var resultVerifyPassword = _passwordHasher.Verify(request.password, resultAccount.Password);
 
                 if (!resultVerifyPassword)
                 {
@@ -57,7 +57,6 @@ namespace ControlHub.Application.Accounts.Commands.SignIn
                     ex
                 );
             }
-
         }
     }
 }

@@ -10,5 +10,6 @@ namespace ControlHub.Application.Accounts.Interfaces.Repositories
         Task<Email?> GetEmailByEmailAsync(Email email, CancellationToken cancellationToken);
         Task<Account> GetAccountByEmail(Email email, CancellationToken cancellationToken);
         Task<User> GetUserById(Guid id, CancellationToken cancellationToken);
+        Task<Account> GetAccountWithoutUserById(Guid id, CancellationToken cancellationToken);
     }
 }

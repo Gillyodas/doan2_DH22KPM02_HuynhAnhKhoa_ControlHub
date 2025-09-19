@@ -40,6 +40,9 @@ namespace ControlHub.SharedKernel.Accounts
         public static readonly Error PasswordVerifyFailed =
             new("Account.PasswordVerifyFailed", "Password verification failed.");
 
+        public static readonly Error PasswordIsNotValid =
+            new("Account.PasswordIsNotValid", "Password is not valid.");
+
         public static readonly Error InvalidCredentials =
             new("Account.InvalidCredentials", "Email or password is incorrect.");
 
