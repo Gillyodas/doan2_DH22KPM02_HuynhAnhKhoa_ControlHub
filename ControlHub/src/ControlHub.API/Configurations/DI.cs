@@ -1,10 +1,11 @@
-﻿using ControlHub.Infrastructure.Accounts.Security;
-using ControlHub.Application.Accounts.Interfaces.Security;
-using ControlHub.Application.Accounts.Interfaces;
-using ControlHub.Infrastructure.Accounts.Validators;
+﻿using ControlHub.Application.Accounts.Interfaces;
 using ControlHub.Application.Accounts.Interfaces.Repositories;
-using ControlHub.Infrastructure.Accounts.Repositories;
+using ControlHub.Application.Accounts.Interfaces.Security;
 using ControlHub.Application.Users.Interfaces.Repositories;
+using ControlHub.Infrastructure.Accounts.Repositories;
+using ControlHub.Infrastructure.Accounts.Security;
+using ControlHub.Infrastructure.Accounts.Validators;
+using ControlHub.Infrastructure.Tokens.Generate;
 using ControlHub.Infrastructure.Users.Repositories;
 
 namespace ControlHub.API.Configurations
@@ -15,6 +16,12 @@ namespace ControlHub.API.Configurations
         {
             //Securities
             services.AddScoped<IPasswordHasher, Argon2PasswordHasher>();
+
+            //Securities.Token
+            services.AddScoped<AccessTokenGenerator>();
+            services.AddScoped<RefreshTokenGenerator>();
+            services.AddScoped<PasswordResetTokenGenerator>();
+            services.AddScoped<EmailConfirmationTokenGenerator>();
 
             //Account.Validator
             services.AddScoped<IAccountValidator, AccountValidator>();

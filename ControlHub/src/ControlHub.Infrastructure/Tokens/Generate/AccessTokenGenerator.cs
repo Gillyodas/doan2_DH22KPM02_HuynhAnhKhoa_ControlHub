@@ -1,0 +1,24 @@
+﻿using System.IdentityModel.Tokens.Jwt;
+using System.Security.Claims;
+using Microsoft.Extensions.Configuration;
+
+namespace ControlHub.Infrastructure.Tokens.Generate
+{
+    public class AccessTokenGenerator : TokenGeneratorBase
+    {
+        public AccessTokenGenerator(IConfiguration config) : base(config) { }
+
+        public string Generate(string userId, string email, IEnumerable<string> roles)
+        {
+            var claims = new List<Claim>
+        {
+            new Claim(JwtRegisteredClaimNames.Sub, userId),
+            new Claim(JwtRegisteredClaimNames.Email, email),
+            new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString())
+        };
+            claims.AddRange(roles.Select(r => new Claim(ClaimTypes.Role, r)));
+
+            return GenerateToken(claims, TimeSpan.FromMinutes(15)); // TTL 15'
+        }
+    }
+}

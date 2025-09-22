@@ -40,6 +40,8 @@ namespace ControlHub.Infrastructure.Accounts
                    .WithOne(u => u.Account)
                    .HasForeignKey<UserEntity>(u => u.AccId)
                    .OnDelete(DeleteBehavior.Cascade);
+
+            builder.HasIndex(a => a.Email).IsUnique();
         }
     }
 }

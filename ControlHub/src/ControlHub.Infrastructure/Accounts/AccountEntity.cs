@@ -1,4 +1,5 @@
 ﻿using ControlHub.Domain.Accounts.ValueObjects;
+using ControlHub.Infrastructure.Tokens;
 using ControlHub.Infrastructure.Users;
 
 namespace ControlHub.Infrastructure.Accounts
@@ -14,5 +15,6 @@ namespace ControlHub.Infrastructure.Accounts
 
         // Navigation
         public UserEntity? User { get; set; }
+        public ICollection<TokenEntity> Tokens { get; set; } = new List<TokenEntity>();
     }
 }
