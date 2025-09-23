@@ -17,17 +17,21 @@ namespace ControlHub.Infrastructure.Accounts.Repositories
             _db = db;
         }
 
-        public async Task<Account> GetAccountByEmail(Email email, CancellationToken cancellationToken)
+        public async Task<Account?> GetAccountByEmail(Email email, CancellationToken cancellationToken)
         {
-                return AccountMapper.ToDomain(await _db.Accounts
-                                                       .AsNoTracking()
-                                                       .Include(a => a.User)
-                                                       .FirstOrDefaultAsync(a => a.Email == email, cancellationToken));
+            var acc = await _db.Accounts
+                               .AsNoTracking()
+                               .Include(a => a.User)
+                               .FirstOrDefaultAsync(a => a.Email == email, cancellationToken);
+
+            return acc is not null ? AccountMapper.ToDomain(acc) : null;
         }
 
-        public async Task<Account> GetAccountWithoutUserById(Guid id, CancellationToken cancellationToken)
+        public async Task<Account?> GetAccountWithoutUserById(Guid id, CancellationToken cancellationToken)
         {
-            return AccountMapper.ToDomain(await _db.Accounts.AsNoTracking().FirstOrDefaultAsync(a => a.Id == id, cancellationToken));
+            var acc = await _db.Accounts.AsNoTracking().FirstOrDefaultAsync(a => a.Id == id, cancellationToken);
+
+            return acc is not null ? AccountMapper.ToDomain(acc) : null;
         }
 
         public async Task<Email?> GetEmailByEmailAsync(Email email, CancellationToken cancellationToken)
@@ -39,9 +43,11 @@ namespace ControlHub.Infrastructure.Accounts.Repositories
                 .FirstOrDefaultAsync(cancellationToken);
         }
 
-        public async Task<User> GetUserById(Guid id, CancellationToken cancellationToken)
+        public async Task<User?> GetUserById(Guid id, CancellationToken cancellationToken)
         {
-            return UserMapper.ToDomain(await _db.Users.AsNoTracking().FirstOrDefaultAsync(u => u.AccId == id, cancellationToken));
+            var user = await _db.Users.AsNoTracking().FirstOrDefaultAsync(u => u.AccId == id, cancellationToken);
+
+            return user is not null ? UserMapper.ToDomain(user) : null;
         }
     }
 }
