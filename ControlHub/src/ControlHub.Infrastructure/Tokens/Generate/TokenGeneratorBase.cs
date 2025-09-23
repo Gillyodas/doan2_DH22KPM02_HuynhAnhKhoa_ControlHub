@@ -7,7 +7,7 @@ using ControlHub.Application.Tokens.Interfaces;
 
 namespace ControlHub.Infrastructure.Tokens.Generate
 {
-    public abstract class TokenGeneratorBase : ITokenGenerator
+    public abstract class TokenGeneratorBase
     {
         private readonly IConfiguration _config;
 

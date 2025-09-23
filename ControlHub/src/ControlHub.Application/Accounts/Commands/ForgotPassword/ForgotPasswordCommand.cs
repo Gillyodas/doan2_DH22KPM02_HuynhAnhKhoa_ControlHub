@@ -3,5 +3,5 @@ using MediatR;
 
 namespace ControlHub.Application.Accounts.Commands.ForgotPassword
 {
-    public sealed record ForgotPasswordCommand() : IRequest<Result>;
+    public sealed record ForgotPasswordCommand(string email) : IRequest<Result>;
 }

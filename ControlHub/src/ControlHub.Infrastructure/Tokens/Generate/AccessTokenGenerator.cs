@@ -1,10 +1,11 @@
 ﻿using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
+using ControlHub.Application.Tokens.Interfaces;
 using Microsoft.Extensions.Configuration;
 
 namespace ControlHub.Infrastructure.Tokens.Generate
 {
-    public class AccessTokenGenerator : TokenGeneratorBase
+    public class AccessTokenGenerator : TokenGeneratorBase, IAccessTokenGenerator
     {
         public AccessTokenGenerator(IConfiguration config) : base(config) { }
 

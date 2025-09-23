@@ -1,6 +1,7 @@
 ﻿using ControlHub.API.Accounts.ViewModels.Request;
 using ControlHub.API.Accounts.ViewModels.Response;
 using ControlHub.Application.Accounts.Commands.ChangePassword;
+using ControlHub.Application.Accounts.Commands.ForgotPassword;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 
@@ -26,6 +27,19 @@ namespace ControlHub.API.Accounts.Controllers
 
             if (!result.IsSuccess)
                 return BadRequest(new ChangePasswordResponse { Message = result.Error });
+
+            return Ok();
+        }
+
+        [HttpPost("forgot-password")]
+        public async Task<IActionResult> ForgotPassword([FromBody] ForgotPasswordRequest request, CancellationToken cancellationToken)
+        {
+            var command = new ForgotPasswordCommand(request.Email);
+
+            var result = await _mediator.Send(command, cancellationToken);
+
+            if (!result.IsSuccess)
+                return BadRequest(new ForgotPasswordResponse { Message = result.Error });
 
             return Ok();
         }

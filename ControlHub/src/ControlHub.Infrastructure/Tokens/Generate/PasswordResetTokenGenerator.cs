@@ -1,10 +1,11 @@
 ﻿using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
+using ControlHub.Application.Tokens.Interfaces;
 using Microsoft.Extensions.Configuration;
 
 namespace ControlHub.Infrastructure.Tokens.Generate
 {
-    public class PasswordResetTokenGenerator : TokenGeneratorBase
+    public class PasswordResetTokenGenerator : TokenGeneratorBase, IPasswordResetTokenGenerator
     {
         public PasswordResetTokenGenerator(IConfiguration config) : base(config) { }
 
