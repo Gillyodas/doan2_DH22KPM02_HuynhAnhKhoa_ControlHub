@@ -15,51 +15,71 @@ namespace ControlHub.Application.Accounts.Commands.SignIn
         private readonly IPasswordHasher _passwordHasher;
         private readonly IAccountQueries _accountQueries;
         private readonly ILogger<SignInCommandHandler> _logger;
-        public SignInCommandHandler(IPasswordHasher passwordHasher, IAccountQueries accountQueries, ILogger<SignInCommandHandler> logger)
+
+        public SignInCommandHandler(
+            IPasswordHasher passwordHasher,
+            IAccountQueries accountQueries,
+            ILogger<SignInCommandHandler> logger)
         {
             _passwordHasher = passwordHasher;
             _accountQueries = accountQueries;
             _logger = logger;
         }
+
         public async Task<Result<SignInDTO>> Handle(SignInCommand request, CancellationToken cancellationToken)
         {
-            try
+            _logger.LogInformation("{Code}: {Message} for Email {Email}",
+                AccountLogs.SignIn_Started.Code,
+                AccountLogs.SignIn_Started.Message,
+                request.email);
+
+            var resultCreateEmail = Email.Create(request.email);
+            if (!resultCreateEmail.IsSuccess)
             {
-                Result<Email> resultCreateEmail = Email.Create(request.email);
+                _logger.LogWarning("{Code}: {Message} for Email {Email}",
+                    AccountLogs.SignIn_InvalidEmail.Code,
+                    AccountLogs.SignIn_InvalidEmail.Message,
+                    request.email);
 
-                if (!resultCreateEmail.IsSuccess)
-                    return Result<SignInDTO>.Failure(AccountErrors.InvalidEmail.Code);
+                return Result<SignInDTO>.Failure(AccountErrors.InvalidEmail.Code);
+            }
 
-                var resultAccount = await _accountQueries.GetAccountByEmail(resultCreateEmail.Value, cancellationToken);
+            var account = await _accountQueries.GetAccountByEmail(resultCreateEmail.Value, cancellationToken);
+            if (account is null)
+            {
+                _logger.LogWarning("{Code}: {Message} for Email {Email}",
+                    AccountLogs.SignIn_AccountNotFound.Code,
+                    AccountLogs.SignIn_AccountNotFound.Message,
+                    request.email);
 
-                var resultVerifyPassword = _passwordHasher.Verify(request.password, resultAccount.Password);
+                return Result<SignInDTO>.Failure(AccountErrors.InvalidCredentials.Code);
+            }
 
-                if (!resultVerifyPassword)
-                {
-                    return Result<SignInDTO>.Failure(AccountErrors.InvalidCredentials.Code);
-                }
-
-                Account account = resultAccount;
-
-                var dto = new SignInDTO(
+            var resultVerifyPassword = _passwordHasher.Verify(request.password, account.Password);
+            if (!resultVerifyPassword)
+            {
+                _logger.LogWarning("{Code}: {Message} for AccountId {AccountId}, Email {Email}",
+                    AccountLogs.SignIn_InvalidPassword.Code,
+                    AccountLogs.SignIn_InvalidPassword.Message,
                     account.Id,
-                    account.User.Match(
-                        some: u => u.Username,
-                        none: () => "No name"
-                    ),
-                    "fake_jwt_here"
-                );
-                return Result<SignInDTO>.Success(dto);
-            }
-            catch (Exception ex)
-            {
-                _logger.LogError(ex, "Unexpected error occurred during SignIn for {Email}", request.email);
+                    request.email);
 
-                return Result<SignInDTO>.Failure(
-                    AccountErrors.UnexpectedError.Code,
-                    ex
-                );
+                return Result<SignInDTO>.Failure(AccountErrors.InvalidCredentials.Code);
             }
+
+            _logger.LogInformation("{Code}: {Message} for AccountId {AccountId}, Email {Email}",
+                AccountLogs.SignIn_Success.Code,
+                AccountLogs.SignIn_Success.Message,
+                account.Id,
+                request.email);
+
+            var dto = new SignInDTO(
+                account.Id,
+                account.User.Match(some: u => u.Username, none: () => "No name"),
+                "fake_jwt_here"
+            );
+
+            return Result<SignInDTO>.Success(dto);
         }
     }
 }

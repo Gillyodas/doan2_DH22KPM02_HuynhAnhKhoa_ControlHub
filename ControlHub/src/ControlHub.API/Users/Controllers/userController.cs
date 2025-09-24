@@ -22,7 +22,7 @@ namespace ControlHub.API.Users.Controllers
         [HttpPatch("{id}/username")]
         public async Task<IActionResult> UpdateUsername(Guid id, [FromBody] UpdateUsernameRequest request, CancellationToken cancellationToken)
         {
-            var command = new UpdateUsernameCommand(id, request.username);
+            var command = new UpdateUsernameCommand(id, request.Username);
 
             var result = await _mediator.Send(command, cancellationToken);
 

@@ -129,6 +129,12 @@ namespace ControlHub.API
             {
                 app.UseSwagger();
                 app.UseSwaggerUI();
+
+                app.UseDeveloperExceptionPage();
+            }
+            else
+            {
+                app.UseGlobalExceptionMiddleware();
             }
 
             app.UseHttpsRedirection();
