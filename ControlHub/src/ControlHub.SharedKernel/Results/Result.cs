@@ -1,38 +1,43 @@
-﻿namespace ControlHub.SharedKernel.Results
+﻿using ControlHub.SharedKernel.Common.Errors;
+
+namespace ControlHub.SharedKernel.Results
 {
     public class Result
     {
         public bool IsSuccess { get; }
-        public string Error { get; }
+        public bool IsFailure => !IsSuccess;
+        public Error Error { get; }
         public Exception? Exception { get; }
 
-        protected Result(bool isSuccess, string error, Exception? exception = null)
+        protected Result(bool isSuccess, Error error, Exception? exception = null)
         {
             IsSuccess = isSuccess;
             Error = error;
             Exception = exception;
         }
 
-        public static Result Success() => new(true, string.Empty);
-        public static Result Failure(string error, Exception? ex = null)
-        => new(false, error, ex);
+        public static Result Success() =>
+            new(true, Error.None);
+
+        public static Result Failure(Error error, Exception? ex = null) =>
+            new(false, error, ex);
     }
 
     public class Result<T> : Result
     {
         public T Value { get; }
 
-        private Result(T value, bool isSuccess, string error, Exception? exception = null)
+        private Result(T value, bool isSuccess, Error error, Exception? exception = null)
             : base(isSuccess, error, exception)
         {
             Value = value;
         }
 
-        public static Result<T> Success(T value)
-            => new(value, true, string.Empty);
+        public static Result<T> Success(T value) =>
+            new(value, true, Error.None);
 
-        public static Result<T> Failure(string error, Exception? ex = null)
-            => new(default!, false, error, ex);
+        public static Result<T> Failure(Error error, Exception? ex = null) =>
+            new(default!, false, error, ex);
     }
 
     public class Maybe<T>
