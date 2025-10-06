@@ -1,5 +1,6 @@
 ﻿using ControlHub.Application.Accounts.Interfaces;
 using ControlHub.Application.Accounts.Interfaces.Repositories;
+using ControlHub.Domain.Accounts.Enums;
 using ControlHub.Domain.Accounts.ValueObjects;
 using ControlHub.Domain.Users;
 using ControlHub.SharedKernel.Results;
@@ -15,9 +16,9 @@ namespace ControlHub.Infrastructure.Accounts.Validators
             _accountQueries = accountQueries;
         }
 
-        public async Task<bool> EmailIsExistAsync(Email email, CancellationToken cancellationToken)
+        public async Task<bool> IdentifierIsExist(string Value, IdentifierType Type, CancellationToken cancellationToken)
         {
-            return await _accountQueries.GetEmailByEmailAsync(email, cancellationToken) != null;
+            return await _accountQueries.GetIdentifierByIdentifierAsync(Type, Value, cancellationToken) != null ? true : false;
         }
     }
 }

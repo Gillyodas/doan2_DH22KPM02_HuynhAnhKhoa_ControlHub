@@ -7,10 +7,6 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Folder Include="Accounts\Interfaces\" />
-  </ItemGroup>
-
-  <ItemGroup>
     <ProjectReference Include="..\ControlHub.SharedKernel\ControlHub.SharedKernel.csproj" />
   </ItemGroup>
 

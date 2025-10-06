@@ -7,11 +7,11 @@ namespace ControlHub.Application.Accounts.Commands.SignIn
     {
         public SignInCommandValidator()
         {
-            RuleFor(x => x.email)
-                .NotEmpty().WithMessage(AccountErrors.EmailRequired.Message)
-                .EmailAddress().WithMessage(AccountErrors.InvalidEmail.Message);
+            RuleFor(x => x.Value)
+                .NotEmpty().WithMessage(AccountErrors.IdentifierRequired.Message)
+                .MaximumLength(300).WithMessage(AccountErrors.IdentifierTooLong.Message);
 
-            RuleFor(x => x.password)
+            RuleFor(x => x.Password)
                 .NotEmpty().WithMessage(AccountErrors.PasswordRequired.Message)
                 .MinimumLength(8).WithMessage(AccountErrors.PasswordTooShort.Message)
                 .Matches("[A-Z]").WithMessage(AccountErrors.PasswordMissingUppercase.Message)

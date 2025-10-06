@@ -1,8 +1,8 @@
 ﻿using System.Text;
 using ControlHub.API.Configurations;
 using ControlHub.API.Middlewares;
-using ControlHub.Application.Accounts.Commands.CreateAccount;
 using ControlHub.Application.Common.Behaviors;
+using ControlHub.Infrastructure.Tokens;
 using FluentValidation;
 using MediatR;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
@@ -114,7 +114,12 @@ namespace ControlHub.API
             // Register DbContext
             builder.Services.AddDatabase(builder.Configuration);
 
+            // Register TokenSettings
+            builder.Services.Configure<TokenSettings>(
+                builder.Configuration.GetSection("TokenSettings"));
+
             //*****************************************************************************************************
+
 
             var app = builder.Build();
 

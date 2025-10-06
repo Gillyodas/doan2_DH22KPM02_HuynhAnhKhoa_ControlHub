@@ -27,7 +27,7 @@ namespace ControlHub.Application.Users.Commands.UpdateUsername
             var user = await _accountQueries.GetUserById(request.id, cancellationToken);
 
             if (user is null)
-                return Result<string>.Failure(UserErrors.NotFound.Code);
+                return Result<string>.Failure(UserErrors.NotFound);
 
             var updateResult = user.UpdateUsername(request.username);
 

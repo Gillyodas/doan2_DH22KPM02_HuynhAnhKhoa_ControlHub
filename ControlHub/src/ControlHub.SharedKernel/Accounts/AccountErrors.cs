@@ -7,6 +7,9 @@ namespace ControlHub.SharedKernel.Accounts
         public static readonly Error AccountNotFound =
             new("Account.NotFound", "The account was not found.");
 
+        public static readonly Error AccountIdRequired =
+            new("Account.AccountIdRequired", "Account ID is required.");
+
         public static readonly Error EmailRequired =
             new("Account.EmailRequired", "Email is required.");
 
@@ -55,7 +58,25 @@ namespace ControlHub.SharedKernel.Accounts
         public static readonly Error LockedOut =
             new("Account.LockedOut", "Account is temporarily locked due to multiple failed login attempts.");
 
+        public static readonly Error UnsupportedIdentifierType =
+            new("Identifier.UnsupportedType", "Unsupported identifier type.");
+
+        public static readonly Error IdentifierNotFound =
+            new("Identifier.NotFound", "The identifier was not found.");
+
+        public static readonly Error IdentifierRequired =
+            new("Identifier.Required", "The identifier is required.");
+
+        public static readonly Error IdentifierTooLong =
+            new("Identifier.TooLong", "The identifier is too long.");
+
+        public static readonly Error IdentifierAlreadyExists =
+            new("Account.IdentifierAlreadyExists", "Identifier is already registered.");
+
         public static readonly Error UnexpectedError =
             new("Account.UnexpectedError", "An unexpected error occurred. Please try again later.");
+
+        public static readonly Error AccountDisabled =
+            new("Account.Disabled", "Account has been disabled.");
     }
 }

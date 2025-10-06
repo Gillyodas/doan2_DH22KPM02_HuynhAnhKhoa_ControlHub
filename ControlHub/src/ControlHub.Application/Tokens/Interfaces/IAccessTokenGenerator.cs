@@ -8,6 +8,6 @@ namespace ControlHub.Application.Tokens.Interfaces
 {
     public interface IAccessTokenGenerator
     {
-        string Generate(string userId, string email, IEnumerable<string> roles);
+        string Generate(string accId, string identifier, IEnumerable<string> roles);
     }
 }

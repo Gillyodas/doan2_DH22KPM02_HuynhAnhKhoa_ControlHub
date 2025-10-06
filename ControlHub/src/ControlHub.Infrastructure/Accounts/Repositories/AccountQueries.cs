@@ -1,5 +1,6 @@
 ﻿using ControlHub.Application.Accounts.Interfaces.Repositories;
 using ControlHub.Domain.Accounts;
+using ControlHub.Domain.Accounts.Enums;
 using ControlHub.Domain.Accounts.ValueObjects;
 using ControlHub.Domain.Users;
 using ControlHub.Infrastructure.Persistence;
@@ -17,30 +18,44 @@ namespace ControlHub.Infrastructure.Accounts.Repositories
             _db = db;
         }
 
-        public async Task<Account?> GetAccountByEmail(Email email, CancellationToken cancellationToken)
+        public async Task<Account?> GetWithoutUserByIdAsync(Guid id, CancellationToken cancellationToken)
         {
             var acc = await _db.Accounts
-                               .AsNoTracking()
-                               .Include(a => a.User)
-                               .FirstOrDefaultAsync(a => a.Email == email, cancellationToken);
-
-            return acc is not null ? AccountMapper.ToDomain(acc) : null;
-        }
-
-        public async Task<Account?> GetAccountWithoutUserById(Guid id, CancellationToken cancellationToken)
-        {
-            var acc = await _db.Accounts.AsNoTracking().FirstOrDefaultAsync(a => a.Id == id, cancellationToken);
-
-            return acc is not null ? AccountMapper.ToDomain(acc) : null;
-        }
-
-        public async Task<Email?> GetEmailByEmailAsync(Email email, CancellationToken cancellationToken)
-        {
-            return await _db.Accounts
                 .AsNoTracking()
-                .Where(a => a.Email == email)
-                .Select(a => a.Email)
-                .FirstOrDefaultAsync(cancellationToken);
+                .Include(a => a.Identifiers)
+                .FirstOrDefaultAsync(a => a.Id == id, cancellationToken);
+
+            return acc is not null ? AccountMapper.ToDomain(acc) : null;
+        }
+
+        public async Task<Account?> GetByIdentifierAsync(IdentifierType identifierType, string normalizedValue, CancellationToken cancellationToken)
+        {
+            var entity = await _db.AccountIdentifiers
+                .Where(i => i.Type == identifierType && i.NormalizedValue == normalizedValue)
+                .Include(i => i.Account)
+                    .ThenInclude(a => a.User)
+                .SingleOrDefaultAsync(cancellationToken);
+
+            return entity?.Account is null ? null : AccountMapper.ToDomain(entity.Account);
+        }
+
+        public async Task<Account?> GetByIdentifierWithoutUserAsync(IdentifierType identifierType, string normalizedValue, CancellationToken cancellationToken)
+        {
+            var entity = await _db.AccountIdentifiers
+                .Where(i => i.Type == identifierType && i.NormalizedValue == normalizedValue)
+                .Include(i => i.Account)
+                .SingleOrDefaultAsync(cancellationToken);
+
+            return entity?.Account is null ? null : AccountMapper.ToDomain(entity.Account);
+        }
+
+        public async Task<Identifier?> GetIdentifierByIdentifierAsync(IdentifierType identifierType, string normalizedValue, CancellationToken cancellationToken)
+        {
+            var ident = await _db.AccountIdentifiers
+                .Where(i => i.Type == identifierType && i.NormalizedValue == normalizedValue)
+                .SingleOrDefaultAsync(cancellationToken);
+
+            return ident is null ? null : IdentifierMapper.ToDomain(ident);
         }
 
         public async Task<User?> GetUserById(Guid id, CancellationToken cancellationToken)

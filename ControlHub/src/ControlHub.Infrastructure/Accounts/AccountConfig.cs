@@ -1,47 +1,40 @@
-﻿using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Metadata.Builders;
-using ControlHub.Domain.Accounts.ValueObjects;
+﻿using ControlHub.Infrastructure.Accounts;
 using ControlHub.Infrastructure.Users;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
-namespace ControlHub.Infrastructure.Accounts
+public class AccountConfig : IEntityTypeConfiguration<AccountEntity>
 {
-    public class AccountConfig : IEntityTypeConfiguration<AccountEntity>
+    public void Configure(EntityTypeBuilder<AccountEntity> builder)
     {
-        public void Configure(EntityTypeBuilder<AccountEntity> builder)
-        {
-            builder.ToTable("Accounts");
+        builder.ToTable("Accounts");
 
-            builder.HasKey(a => a.Id);
+        builder.HasKey(a => a.Id);
 
-            builder.Property(a => a.Email)
-                    .HasConversion(
-                    email => email.Value,           // Từ VO Email → string để lưu DB
-                    value => Email.UnsafeCreate(value)   // Từ string DB → VO Email
-                    )
-                   .IsRequired()
-                   .HasMaxLength(200);
+        builder.Property(a => a.HashPassword)
+               .HasColumnType("varbinary(64)")
+               .IsRequired();
 
-            builder.Property(a => a.HashPassword)
-                   .HasColumnType("varbinary(64)")
-                   .IsRequired();
+        builder.Property(a => a.Salt)
+               .HasColumnType("varbinary(64)")
+               .IsRequired();
 
-            builder.Property(a => a.Salt)
-                   .HasColumnType("varbinary(64)")
-                   .IsRequired();
+        builder.Property(a => a.IsActive)
+               .IsRequired();
 
-            builder.Property(a => a.IsActive)
-                   .IsRequired();
+        builder.Property(a => a.IsDeleted)
+               .IsRequired();
 
-            builder.Property(a => a.IsDeleted)
-                   .IsRequired();
+        // 1-1: Account <-> User
+        builder.HasOne(a => a.User)
+               .WithOne(u => u.Account)
+               .HasForeignKey<UserEntity>(u => u.AccId)
+               .OnDelete(DeleteBehavior.Cascade);
 
-            // 1-1: Account <-> User
-            builder.HasOne(a => a.User)
-                   .WithOne(u => u.Account)
-                   .HasForeignKey<UserEntity>(u => u.AccId)
-                   .OnDelete(DeleteBehavior.Cascade);
-
-            builder.HasIndex(a => a.Email).IsUnique();
-        }
+        // 1-N: Account <-> Identifiers
+        builder.HasMany(a => a.Identifiers)
+               .WithOne(i => i.Account)
+               .HasForeignKey(i => i.AccountId)
+               .OnDelete(DeleteBehavior.Cascade);
     }
 }

@@ -22,8 +22,10 @@ namespace ControlHub.Infrastructure.Tokens
                   .OnDelete(DeleteBehavior.Cascade);
 
             builder.Property(t => t.Value)
-                   .HasMaxLength(512) // JWT, GUID, random string… thường < 512 chars
+                   .HasMaxLength(2048) // JWT, GUID, random string… thường < 512 chars
                    .IsRequired();
+
+            builder.HasIndex(t => t.Value).IsUnique();
 
             builder.HasIndex(t => t.ExpiredAt);
         }

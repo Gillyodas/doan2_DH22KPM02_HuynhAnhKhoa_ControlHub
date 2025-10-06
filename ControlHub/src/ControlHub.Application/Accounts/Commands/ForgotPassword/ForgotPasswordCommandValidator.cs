@@ -7,9 +7,9 @@ namespace ControlHub.Application.Accounts.Commands.ForgotPassword
     {
         public ForgotPasswordCommandValidator()
         {
-            RuleFor(x => x.email)
-                .NotEmpty().WithMessage(AccountErrors.EmailRequired.Message)
-                .EmailAddress().WithMessage(AccountErrors.InvalidEmail.Message);
+            RuleFor(x => x.Value)
+                .NotEmpty().WithMessage(AccountErrors.IdentifierRequired.Message)
+                .MaximumLength(300).WithMessage(AccountErrors.IdentifierTooLong.Message);
         }
     }
 }

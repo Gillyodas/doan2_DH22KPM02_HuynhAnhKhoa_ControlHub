@@ -1,4 +1,5 @@
 ﻿using ControlHub.SharedKernel.Results;
+using ControlHub.SharedKernel.Users;
 
 namespace ControlHub.Domain.Users
 {
@@ -32,7 +33,7 @@ namespace ControlHub.Domain.Users
         public Result UpdateUsername(string username)
         {
             if (string.IsNullOrEmpty(username))
-                return Result.Failure("Username cannot be empty");
+                return Result.Failure(UserErrors.Required);
 
             Username = username;
 

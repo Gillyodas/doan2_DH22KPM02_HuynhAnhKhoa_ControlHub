@@ -1,11 +1,12 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using ControlHub.Application.Accounts.Interfaces;
+﻿using System.Text.Json;
 using ControlHub.Application.Accounts.Interfaces.Repositories;
-using ControlHub.Application.Emails.Interfaces;
+using ControlHub.Application.Common.Persistence;
+using ControlHub.Application.OutBoxs.Repositories;
 using ControlHub.Application.Tokens.Interfaces;
-using ControlHub.Domain.Accounts.ValueObjects;
+using ControlHub.Application.Tokens.Interfaces.Repositories;
+using ControlHub.Domain.Accounts.Identifiers.Interfaces;
+using ControlHub.Domain.Outboxs;
+using ControlHub.Domain.Tokens.Enums;
 using ControlHub.SharedKernel.Accounts;
 using ControlHub.SharedKernel.Results;
 using MediatR;
@@ -17,71 +18,102 @@ namespace ControlHub.Application.Accounts.Commands.ForgotPassword
     {
         private readonly IPasswordResetTokenGenerator _passwordResetTokenGenerator;
         private readonly IAccountQueries _accountQueries;
-        private readonly IAccountValidator _accountValidator;
-        private readonly IEmailSender _emailSender;
         private readonly ILogger<ForgotPasswordCommandHandler> _logger;
+        private readonly IIdentifierValidatorFactory _identifierValidatorFactory;
+        private readonly IUnitOfWork _uow;
+        private readonly ITokenCommands _tokenCommands;
+        private readonly ITokenFactory _tokenFactory;
+        private readonly IOutboxCommands _outboxCommands;
 
         public ForgotPasswordCommandHandler(
             IPasswordResetTokenGenerator passwordResetTokenGenerator,
             IAccountQueries accountQueries,
-            IAccountValidator accountValidator,
-            IEmailSender emailSender,
-            ILogger<ForgotPasswordCommandHandler> logger)
+            ILogger<ForgotPasswordCommandHandler> logger,
+            IIdentifierValidatorFactory identifierValidatorFactory,
+            IUnitOfWork uow,
+            ITokenCommands tokenCommands,
+            ITokenFactory tokenFactory,
+            IOutboxCommands outboxCommands)
         {
             _passwordResetTokenGenerator = passwordResetTokenGenerator;
             _accountQueries = accountQueries;
-            _accountValidator = accountValidator;
-            _emailSender = emailSender;
             _logger = logger;
+            _identifierValidatorFactory = identifierValidatorFactory;
+            _uow = uow;
+            _tokenCommands = tokenCommands;
+            _tokenFactory = tokenFactory;
+            _outboxCommands = outboxCommands;
         }
 
         public async Task<Result> Handle(ForgotPasswordCommand request, CancellationToken cancellationToken)
         {
-            _logger.LogInformation("{Code}: {Message} for Email {Email}",
+            _logger.LogInformation("{Code}: {Message} for Identifier {Ident}",
                 AccountLogs.ForgotPassword_Started.Code,
                 AccountLogs.ForgotPassword_Started.Message,
-                request.email);
+                request.Value);
 
-            var emailResult = Email.Create(request.email);
-            if (!emailResult.IsSuccess)
+            var validator = _identifierValidatorFactory.Get(request.Type);
+            if (validator == null)
             {
-                _logger.LogWarning("{Code}: {Message} for Email {Email}",
-                    AccountLogs.ForgotPassword_InvalidEmail.Code,
-                    AccountLogs.ForgotPassword_InvalidEmail.Message,
-                    request.email);
+                _logger.LogWarning("{Code}: {Message} for IdentifierType {Type}",
+                    AccountLogs.ForgotPassword_InvalidIdentifier.Code,
+                    AccountLogs.ForgotPassword_InvalidIdentifier.Message,
+                    request.Type);
 
-                return Result<string>.Failure(emailResult.Error);
+                return Result.Failure(AccountErrors.UnsupportedIdentifierType);
             }
 
-            var acc = await _accountQueries.GetAccountByEmail(emailResult.Value, cancellationToken);
+            var (isValid, normalized, error) = validator.ValidateAndNormalize(request.Value);
+            if (!isValid)
+            {
+                _logger.LogWarning("{Code}: {Message} for Identifier {Ident}. Error: {Error}",
+                    AccountLogs.ForgotPassword_InvalidIdentifier.Code,
+                    AccountLogs.ForgotPassword_InvalidIdentifier.Message,
+                    request.Value, error);
 
+                return Result<string>.Failure(error);
+            }
+
+            var acc = await _accountQueries.GetByIdentifierWithoutUserAsync(request.Type, normalized, cancellationToken);
             if (acc is null)
             {
-                _logger.LogWarning("{Code}: {Message} for Email {Email}",
-                    AccountLogs.ForgotPassword_EmailNotFound.Code,
-                    AccountLogs.ForgotPassword_EmailNotFound.Message,
-                    request.email);
+                _logger.LogWarning("{Code}: {Message} for Identifier {Ident}",
+                    AccountLogs.ForgotPassword_IdentifierNotFound.Code,
+                    AccountLogs.ForgotPassword_IdentifierNotFound.Message,
+                    request.Value);
 
-                return Result<string>.Failure(AccountErrors.EmailNotFound.Code);
+                return Result<string>.Failure(AccountErrors.IdentifierNotFound);
             }
 
             string resetToken = _passwordResetTokenGenerator.Generate(acc.Id.ToString());
-
             _logger.LogInformation("{Code}: {Message} for AccountId {AccountId}",
                 AccountLogs.ForgotPassword_TokenGenerated.Code,
                 AccountLogs.ForgotPassword_TokenGenerated.Message,
                 acc.Id);
 
-            var resetLink = $"https://your-app/reset-password?token={resetToken}";
-            var subject = "Reset your password";
-            var body = $"Click this link to reset your password: <a href='{resetLink}'>Reset Password</a>";
+            var domainToken = _tokenFactory.Create(acc.Id, resetToken, TokenType.ResetPassword);
+            await _tokenCommands.AddAsync(domainToken, cancellationToken);
 
-            await _emailSender.SendEmailAsync(request.email, subject, body);
+            var resetLink = $"https://localhost:7110/swagger/index.html?token={domainToken.Value}";
+            var payload = new
+            {
+                To = request.Value,
+                Subject = "Reset your password",
+                Body = $"Click this link to reset your password: <a href='{resetLink}'>Reset Password</a>"
+            };
 
-            _logger.LogInformation("{Code}: {Message} for Email {Email}",
-                AccountLogs.ForgotPassword_EmailSent.Code,
-                AccountLogs.ForgotPassword_EmailSent.Message,
-                request.email);
+            var outboxMessage = OutboxMessage.Create(
+                OutboxMessageType.Email,
+                JsonSerializer.Serialize(payload)
+            );
+            await _outboxCommands.AddAsync(outboxMessage, cancellationToken);
+
+            await _uow.CommitAsync(cancellationToken);
+
+            _logger.LogInformation("{Code}: {Message} for Identifier {Ident}",
+                AccountLogs.ForgotPassword_NotificationSent.Code,
+                AccountLogs.ForgotPassword_NotificationSent.Message,
+                request.Value);
 
             return Result.Success();
         }

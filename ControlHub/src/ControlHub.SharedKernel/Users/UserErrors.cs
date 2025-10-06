@@ -21,5 +21,11 @@ namespace ControlHub.SharedKernel.Users
 
         public static readonly Error UnexpectedError =
             new("User.UnexpectedError", "An unexpected error occurred. Please try again later.");
+
+        public static readonly Error Required =
+            new("User.Required", "User is required.");
+
+        public static readonly Error AlreadyAtached =
+            new("User.AlreadyAtached", "User is already atached.");
     }
 }

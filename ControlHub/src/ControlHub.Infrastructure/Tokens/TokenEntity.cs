@@ -1,4 +1,4 @@
-﻿using ControlHub.Domain.Accounts.ValueObjects;
+﻿using ControlHub.Domain.Tokens.Enums;
 using ControlHub.Infrastructure.Accounts;
 
 namespace ControlHub.Infrastructure.Tokens
@@ -11,7 +11,7 @@ namespace ControlHub.Infrastructure.Tokens
 
         public string Value { get; set; } = null!; // random string
 
-        public string Type { get; set; } = null!; // ResetPassword, VerifyEmail, RefreshToken...
+        public TokenType Type { get; set; } // ResetPassword, VerifyEmail, RefreshToken...
 
         public DateTime ExpiredAt { get; set; }
 

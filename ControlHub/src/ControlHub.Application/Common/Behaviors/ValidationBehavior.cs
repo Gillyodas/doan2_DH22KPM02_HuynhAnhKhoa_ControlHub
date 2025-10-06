@@ -1,6 +1,7 @@
 ﻿using FluentValidation;
 using MediatR;
 using ControlHub.SharedKernel.Results;
+using ControlHub.SharedKernel.Common.Errors;
 
 namespace ControlHub.Application.Common.Behaviors
 {
@@ -35,6 +36,7 @@ namespace ControlHub.Application.Common.Behaviors
                 if (failures.Count != 0)
                 {
                     var errorMessage = string.Join("; ", failures.Select(f => f.ErrorMessage));
+                    var error = new Error("Validation.Failed", errorMessage);
 
                     // Nếu handler return Result<T>
                     if (typeof(TResponse).IsGenericType &&
@@ -54,7 +56,7 @@ namespace ControlHub.Application.Common.Behaviors
                     // Nếu handler return Result (non-generic)
                     if (typeof(TResponse) == typeof(Result))
                     {
-                        return (TResponse)(object)Result.Failure(errorMessage);
+                        return (TResponse)(object)Result.Failure(error);
                     }
 
                     // Nếu không phải Result => fallback throw như cũ

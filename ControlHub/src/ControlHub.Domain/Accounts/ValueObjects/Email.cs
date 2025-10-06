@@ -1,5 +1,4 @@
-﻿using System;
-using System.Text.RegularExpressions;
+﻿using System.Text.RegularExpressions;
 using ControlHub.SharedKernel.Accounts;
 using ControlHub.SharedKernel.Results;
 
@@ -8,7 +7,8 @@ namespace ControlHub.Domain.Accounts.ValueObjects
     public sealed class Email : IEquatable<Email>
     {
         private static readonly Regex _emailRegex =
-            new(@"^[^@\s]+@[^@\s]+\.[^@\s]+$", RegexOptions.Compiled);
+            // tối thiểu 2 ký tự sau dấu chấm, chỉ cho phép a-z
+            new(@"^[^@\s]+@[^@\s]+\.[a-z]{2,}$", RegexOptions.Compiled | RegexOptions.IgnoreCase);
 
         public string Value { get; }
 
@@ -18,10 +18,10 @@ namespace ControlHub.Domain.Accounts.ValueObjects
         public static Result<Email> Create(string value)
         {
             if (string.IsNullOrWhiteSpace(value))
-                return Result<Email>.Failure(AccountErrors.EmailRequired.Code);
+                return Result<Email>.Failure(AccountErrors.EmailRequired);
 
             if (!_emailRegex.IsMatch(value))
-                return Result<Email>.Failure(AccountErrors.InvalidEmail.Code);
+                return Result<Email>.Failure(AccountErrors.InvalidEmail);
 
             return Result<Email>.Success(new Email(value));
         }

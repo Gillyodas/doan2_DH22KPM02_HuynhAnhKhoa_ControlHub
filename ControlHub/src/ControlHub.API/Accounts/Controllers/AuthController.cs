@@ -1,8 +1,7 @@
-﻿using System.Threading;
+﻿using ControlHub.API.Accounts.Mappers;
 using ControlHub.API.Accounts.ViewModels.Request;
 using ControlHub.API.Accounts.ViewModels.Response;
-using ControlHub.Application.Accounts.Commands.CreateAccount;
-using ControlHub.Application.Accounts.Commands.SignIn;
+using ControlHub.Application.Accounts.Commands.RefreshAccessToken;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 
@@ -22,12 +21,12 @@ namespace ControlHub.API.Accounts.Controllers
         [HttpPost("register")]
         public async Task<IActionResult> Register([FromBody] RegisterRequest request, CancellationToken cancellationToken)
         {
-            var command = new CreateAccountCommand(request.Email, request.Password);
+            var command = RegisterRequestMapper.ToCommand(request);
 
             var result = await _mediator.Send(command, cancellationToken);
 
             if (!result.IsSuccess)
-                return BadRequest(new RegisterResponse { Message = result.Error });
+                return BadRequest(new RegisterResponse { Message = result.Error.Message });
 
             return Ok(new RegisterResponse
             {
@@ -39,17 +38,36 @@ namespace ControlHub.API.Accounts.Controllers
         [HttpPost("signin")]
         public async Task<IActionResult> SignIn([FromBody] SignInRequest request, CancellationToken cancellationToken)
         {
-            var command = new SignInCommand(request.Email, request.Password);
+            var command = SignInRequestMapper.ToCommand(request);
 
             var result = await _mediator.Send(command, cancellationToken);
 
             if (!result.IsSuccess)
-                return BadRequest(new SignInResponse { Message = result.Error });
+                return BadRequest(new SignInResponse { message = result.Error.Message });
 
             return Ok(new SignInResponse
             {
-                AccountId = result.Value.AccountId,
-                Username = result.Value.Username
+                accountId = result.Value.AccountId,
+                username = result.Value.Username,
+                accessToken = result.Value.AccessToken,
+                refreshToken = result.Value.RefreshToken
+            });
+        }
+
+        [HttpPost("refresh")]
+        public async Task<IActionResult> Refresh([FromBody] RefreshAccessTokenRequest request, CancellationToken cancellationToken)
+        {
+            var command = new RefreshAccessTokenCommand(request.RefreshToken, request.AccID, request.AccessToken);
+
+            var result = await _mediator.Send(command, cancellationToken);
+
+            if (!result.IsSuccess)
+                return BadRequest(new SignInResponse { message = result.Error.Message });
+
+            return Ok(new RefreshAccessTokenReponse
+            {
+                RefreshToken = request.RefreshToken,
+                AccessToken = request.AccessToken
             });
         }
     }

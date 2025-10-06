@@ -7,8 +7,14 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Folder Include="Accounts\DTOs\CommandDTOs\" />
+    <Compile Remove="Accounts\DTOs\CommandDTOs\**" />
+    <EmbeddedResource Remove="Accounts\DTOs\CommandDTOs\**" />
+    <None Remove="Accounts\DTOs\CommandDTOs\**" />
+  </ItemGroup>
+
+  <ItemGroup>
     <Folder Include="Accounts\Queries\" />
+    <Folder Include="Accounts\Services\" />
   </ItemGroup>
 
   <ItemGroup>

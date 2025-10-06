@@ -27,7 +27,7 @@ namespace ControlHub.API.Users.Controllers
             var result = await _mediator.Send(command, cancellationToken);
 
             if (!result.IsSuccess)
-                return BadRequest(new UpdateUsernameResponse { message = result.Error });
+                return BadRequest(new UpdateUsernameResponse { message = result.Error.Message });
 
             return Ok(new UpdateUsernameResponse { username = result.Value });
         }

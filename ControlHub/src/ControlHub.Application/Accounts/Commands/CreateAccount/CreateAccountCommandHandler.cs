@@ -1,8 +1,9 @@
 ﻿using ControlHub.Application.Accounts.Interfaces;
 using ControlHub.Application.Accounts.Interfaces.Repositories;
-using ControlHub.Application.Accounts.Interfaces.Security;
-using ControlHub.Domain.Accounts.ValueObjects;
-using ControlHub.Domain.Common.Factories;
+using ControlHub.Application.Common.Persistence;
+using ControlHub.Domain.Accounts.Identifiers.Interfaces;
+using ControlHub.Domain.Accounts.Interfaces.Security;
+using ControlHub.Domain.Accounts.Services;
 using ControlHub.SharedKernel.Accounts;
 using ControlHub.SharedKernel.Results;
 using MediatR;
@@ -16,61 +17,58 @@ namespace ControlHub.Application.Accounts.Commands.CreateAccount
         private readonly IAccountCommands _accountCommands;
         private readonly IPasswordHasher _passwordHasher;
         private readonly ILogger<CreateAccountCommandHandler> _logger;
+        private readonly IIdentifierValidatorFactory _identifierValidatorFactory;
+        private readonly IUnitOfWork _uow;
 
         public CreateAccountCommandHandler(
             IAccountValidator accountValidator,
             IAccountCommands accountCommands,
             IPasswordHasher passwordHasher,
-            ILogger<CreateAccountCommandHandler> logger)
+            ILogger<CreateAccountCommandHandler> logger,
+            IIdentifierValidatorFactory identifierValidatorFactory,
+            IUnitOfWork uow)
         {
             _accountValidator = accountValidator;
             _accountCommands = accountCommands;
             _passwordHasher = passwordHasher;
             _logger = logger;
+            _identifierValidatorFactory = identifierValidatorFactory;
+            _uow = uow;
         }
 
         public async Task<Result<Guid>> Handle(CreateAccountCommand request, CancellationToken cancellationToken)
         {
-            _logger.LogInformation("{Code}: {Message} for Email {Email}",
+            _logger.LogInformation("{Code}: {Message} for Ident {Ident}",
                 AccountLogs.CreateAccount_Started.Code,
                 AccountLogs.CreateAccount_Started.Message,
-                request.Email);
+                request.Value);
 
-            var emailResult = Email.Create(request.Email);
-            if (!emailResult.IsSuccess)
+            if (await _accountValidator.IdentifierIsExist(request.Value.ToLower(), request.Type, cancellationToken))
             {
-                _logger.LogWarning("{Code}: {Message} for Email {Email}",
-                    AccountLogs.CreateAccount_InvalidEmail.Code,
-                    AccountLogs.CreateAccount_InvalidEmail.Message,
-                    request.Email);
+                _logger.LogWarning("{Code}: {Message} for Ident {Ident}",
+                    AccountLogs.CreateAccount_IdentifierExists.Code,
+                    AccountLogs.CreateAccount_IdentifierExists.Message,
+                    request.Value);
 
-                return Result<Guid>.Failure(emailResult.Error);
-            }
-
-            var email = emailResult.Value;
-
-            if (await _accountValidator.EmailIsExistAsync(email, cancellationToken))
-            {
-                _logger.LogWarning("{Code}: {Message} for Email {Email}",
-                    AccountLogs.CreateAccount_EmailExists.Code,
-                    AccountLogs.CreateAccount_EmailExists.Message,
-                    request.Email);
-
-                return Result<Guid>.Failure(AccountErrors.EmailAlreadyExists.Code);
+                return Result<Guid>.Failure(AccountErrors.EmailAlreadyExists);
             }
 
             var accId = Guid.NewGuid();
 
-            var passwordHashResult = _passwordHasher.Hash(request.Password);
-
-            var accountResult = AccountFactory.CreateWithUser(accId, email, passwordHashResult);
+            var accountResult = RegisterService.CreateWithUserAndIdentifier(
+                accId,
+                request.Value,
+                request.Type,
+                request.Password,
+                _passwordHasher,
+                _identifierValidatorFactory);
 
             if (!accountResult.IsSuccess)
             {
-                _logger.LogError("{Code}: {Message} for Email {Email}. Error: {Error}",
+                _logger.LogError("{Code}: {Message} for Ident {Ident}. Error: {Error}",
                     AccountLogs.CreateAccount_FactoryFailed.Code,
                     AccountLogs.CreateAccount_FactoryFailed.Message,
-                    request.Email,
+                    request.Value,
                     accountResult.Error);
 
                 return Result<Guid>.Failure(accountResult.Error);
@@ -78,11 +76,13 @@ namespace ControlHub.Application.Accounts.Commands.CreateAccount
 
             await _accountCommands.AddAsync(accountResult.Value.Value, cancellationToken);
 
-            _logger.LogInformation("{Code}: {Message} for AccountId {AccountId}, Email {Email}",
+            _logger.LogInformation("{Code}: {Message} for AccountId {AccountId}, Ident {Ident}",
                 AccountLogs.CreateAccount_Success.Code,
                 AccountLogs.CreateAccount_Success.Message,
                 accId,
-                request.Email);
+                request.Value);
+
+            await _uow.CommitAsync(cancellationToken);
 
             return Result<Guid>.Success(accId);
         }

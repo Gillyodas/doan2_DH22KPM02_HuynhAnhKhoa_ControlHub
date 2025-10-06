@@ -16,13 +16,17 @@ namespace ControlHub.Infrastructure.Accounts
 
             var password = Password.From(entity.HashPassword, entity.Salt);
 
+            var identifiers = entity.Identifiers
+                .Select(IdentifierMapper.ToDomain)
+                .ToList();
+
             return Account.Rehydrate(
                 entity.Id,
-                entity.Email,
                 password,
                 entity.IsActive,
                 entity.IsDeleted,
-                user
+                user,
+                identifiers
             );
         }
 
@@ -31,11 +35,13 @@ namespace ControlHub.Infrastructure.Accounts
             return new AccountEntity
             {
                 Id = domain.Id,
-                Email = domain.Email,
                 HashPassword = domain.Password.Hash,
                 Salt = domain.Password.Salt,
                 IsActive = domain.IsActive,
                 IsDeleted = domain.IsDeleted,
+                Identifiers = domain.Identifiers
+                    .Select(i => IdentifierMapper.ToEntity(i, domain.Id))
+                    .ToList(),
                 User = domain.User.Match(
                     some: u => new UserEntity
                     {

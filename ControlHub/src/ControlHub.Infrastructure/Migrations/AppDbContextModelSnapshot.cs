@@ -28,11 +28,6 @@ namespace ControlHub.Infrastructure.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<string>("Email")
-                        .IsRequired()
-                        .HasMaxLength(200)
-                        .HasColumnType("nvarchar(200)");
-
                     b.Property<byte[]>("HashPassword")
                         .IsRequired()
                         .HasColumnType("varbinary(64)");
@@ -50,6 +45,108 @@ namespace ControlHub.Infrastructure.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Accounts", (string)null);
+                });
+
+            modelBuilder.Entity("ControlHub.Infrastructure.Accounts.AccountIdentifierEntity", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid>("AccountId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("NormalizedValue")
+                        .IsRequired()
+                        .HasMaxLength(300)
+                        .HasColumnType("nvarchar(300)");
+
+                    b.Property<int>("Type")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Value")
+                        .IsRequired()
+                        .HasMaxLength(300)
+                        .HasColumnType("nvarchar(300)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("AccountId");
+
+                    b.HasIndex("Type", "NormalizedValue")
+                        .IsUnique();
+
+                    b.ToTable("AccountIdentifiers", (string)null);
+                });
+
+            modelBuilder.Entity("ControlHub.Infrastructure.Outboxs.OutboxMessageEntity", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("Error")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("OccurredOn")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Payload")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool>("Processed")
+                        .HasColumnType("bit");
+
+                    b.Property<DateTime?>("ProcessedOn")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int>("Type")
+                        .HasMaxLength(100)
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("OutboxMessages", (string)null);
+                });
+
+            modelBuilder.Entity("ControlHub.Infrastructure.Tokens.TokenEntity", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid>("AccountId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime>("ExpiredAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<bool>("IsUsed")
+                        .HasColumnType("bit");
+
+                    b.Property<int>("Type")
+                        .HasMaxLength(50)
+                        .HasColumnType("int");
+
+                    b.Property<string>("Value")
+                        .IsRequired()
+                        .HasMaxLength(2048)
+                        .HasColumnType("nvarchar(2048)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("AccountId");
+
+                    b.HasIndex("ExpiredAt");
+
+                    b.HasIndex("Value")
+                        .IsUnique();
+
+                    b.ToTable("Tokens");
                 });
 
             modelBuilder.Entity("ControlHub.Infrastructure.Users.UserEntity", b =>
@@ -76,6 +173,28 @@ namespace ControlHub.Infrastructure.Migrations
                     b.ToTable("Users", (string)null);
                 });
 
+            modelBuilder.Entity("ControlHub.Infrastructure.Accounts.AccountIdentifierEntity", b =>
+                {
+                    b.HasOne("ControlHub.Infrastructure.Accounts.AccountEntity", "Account")
+                        .WithMany("Identifiers")
+                        .HasForeignKey("AccountId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Account");
+                });
+
+            modelBuilder.Entity("ControlHub.Infrastructure.Tokens.TokenEntity", b =>
+                {
+                    b.HasOne("ControlHub.Infrastructure.Accounts.AccountEntity", "Account")
+                        .WithMany("Tokens")
+                        .HasForeignKey("AccountId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Account");
+                });
+
             modelBuilder.Entity("ControlHub.Infrastructure.Users.UserEntity", b =>
                 {
                     b.HasOne("ControlHub.Infrastructure.Accounts.AccountEntity", "Account")
@@ -89,6 +208,10 @@ namespace ControlHub.Infrastructure.Migrations
 
             modelBuilder.Entity("ControlHub.Infrastructure.Accounts.AccountEntity", b =>
                 {
+                    b.Navigation("Identifiers");
+
+                    b.Navigation("Tokens");
+
                     b.Navigation("User");
                 });
 #pragma warning restore 612, 618

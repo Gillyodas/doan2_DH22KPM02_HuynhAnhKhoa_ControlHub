@@ -1,6 +1,7 @@
 ﻿using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using ControlHub.Application.Tokens.Interfaces;
+using ControlHub.Domain.Accounts.ValueObjects;
 using Microsoft.Extensions.Configuration;
 
 namespace ControlHub.Infrastructure.Tokens.Generate
@@ -9,12 +10,12 @@ namespace ControlHub.Infrastructure.Tokens.Generate
     {
         public AccessTokenGenerator(IConfiguration config) : base(config) { }
 
-        public string Generate(string userId, string email, IEnumerable<string> roles)
+        public string Generate(string accId, string identifier, IEnumerable<string> roles)
         {
             var claims = new List<Claim>
         {
-            new Claim(JwtRegisteredClaimNames.Sub, userId),
-            new Claim(JwtRegisteredClaimNames.Email, email),
+            new Claim(JwtRegisteredClaimNames.Sub, accId),
+            new Claim(ClaimTypes.NameIdentifier, identifier),
             new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString())
         };
             claims.AddRange(roles.Select(r => new Claim(ClaimTypes.Role, r)));

@@ -1,9 +1,8 @@
 ﻿using ControlHub.Application.Accounts.Interfaces.Repositories;
-using ControlHub.Application.Accounts.Interfaces.Security;
 using ControlHub.Domain.Accounts;
+using ControlHub.Domain.Accounts.Interfaces.Security;
 using ControlHub.Domain.Accounts.ValueObjects;
 using ControlHub.SharedKernel.Accounts;
-using ControlHub.SharedKernel.Common.Logs;
 using ControlHub.SharedKernel.Results;
 using MediatR;
 using Microsoft.Extensions.Logging;
@@ -36,7 +35,7 @@ namespace ControlHub.Application.Accounts.Commands.ChangePassword
                 AccountLogs.ChangePassword_Started.Message,
                 request.id);
 
-            Account? acc = await _accountQueries.GetAccountWithoutUserById(request.id, cancellationToken);
+            Account? acc = await _accountQueries.GetWithoutUserByIdAsync(request.id, cancellationToken);
             if (acc is null)
             {
                 _logger.LogWarning("{Code}: {Message} for AccountId {AccountId}",
@@ -44,7 +43,7 @@ namespace ControlHub.Application.Accounts.Commands.ChangePassword
                     AccountLogs.ChangePassword_AccountNotFound.Message,
                     request.id);
 
-                return Result.Failure(AccountErrors.AccountNotFound.Code);
+                return Result.Failure(AccountErrors.AccountNotFound);
             }
 
             var passIsVerify = _passwordHasher.Verify(request.curPassword, acc.Password);
@@ -54,7 +53,7 @@ namespace ControlHub.Application.Accounts.Commands.ChangePassword
                     AccountLogs.ChangePassword_InvalidPassword.Code,
                     AccountLogs.ChangePassword_InvalidPassword.Message,
                     request.id);
-                return Result.Failure(AccountErrors.InvalidCredentials.Code);
+                return Result.Failure(AccountErrors.InvalidCredentials);
             }
 
             Password newPass = _passwordHasher.Hash(request.newPassword);

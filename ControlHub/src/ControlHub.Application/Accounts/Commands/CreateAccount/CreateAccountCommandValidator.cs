@@ -7,9 +7,9 @@ namespace ControlHub.Application.Accounts.Commands.CreateAccount
     {
         public CreateAccountCommandValidator()
         {
-            RuleFor(x => x.Email)
-                .NotEmpty().WithMessage(AccountErrors.EmailRequired.Message)
-                .EmailAddress().WithMessage(AccountErrors.InvalidEmail.Message);
+            RuleFor(x => x.Value)
+                .NotEmpty().WithMessage(AccountErrors.IdentifierRequired.Message)
+                .MaximumLength(300).WithMessage(AccountErrors.IdentifierTooLong.Message);
 
             RuleFor(x => x.Password)
                 .NotEmpty().WithMessage(AccountErrors.PasswordRequired.Message)

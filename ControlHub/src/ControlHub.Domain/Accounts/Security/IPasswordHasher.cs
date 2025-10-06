@@ -1,7 +1,6 @@
 ﻿using ControlHub.Domain.Accounts.ValueObjects;
-using ControlHub.SharedKernel.Results;
 
-namespace ControlHub.Application.Accounts.Interfaces.Security
+namespace ControlHub.Domain.Accounts.Interfaces.Security
 {
     public interface IPasswordHasher
     {

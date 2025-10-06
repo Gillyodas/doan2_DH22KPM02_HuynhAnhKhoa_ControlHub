@@ -2,6 +2,7 @@
 {
     public class ForgotPasswordRequest
     {
-        public string Email { get; set; }
+        public string Value { get; set; } = null!;
+        public string Type { get; set; } = null!;
     }
 }
