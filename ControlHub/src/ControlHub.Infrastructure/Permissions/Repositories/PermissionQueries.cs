@@ -41,5 +41,24 @@ namespace ControlHub.Infrastructure.Permissions.Repositories
 
             return entities.Select(PermissionMapper.ToDomain).ToList();
         }
+
+        public async Task<bool> ExistAsync(Guid id, CancellationToken cancellationToken)
+        {
+            return await _db.Permissions
+                .AsNoTracking()
+                .Where(p => p.Id == id)
+                .FirstOrDefaultAsync(cancellationToken)
+                != null ? true : false;
+        }
+
+        public async Task<IEnumerable<Permission>> GetByIdsAsync(IEnumerable<Guid> permissionIds, CancellationToken cancellationToken)
+        {
+            var entities = await _db.Permissions
+            .AsNoTracking()
+            .Where(p => permissionIds.Contains(p.Id))
+            .ToListAsync(cancellationToken);
+
+            return entities.Select(PermissionMapper.ToDomain).ToList();
+        }
     }
 }

@@ -5,8 +5,7 @@ using ControlHub.SharedKernel.Common.Errors;
 
 namespace ControlHub.Application.Common.Behaviors
 {
-    public class ValidationBehavior<TRequest, TResponse>
-        : IPipelineBehavior<TRequest, TResponse>
+    public class ValidationBehavior<TRequest, TResponse> : IPipelineBehavior<TRequest, TResponse>
         where TRequest : notnull
     {
         private readonly IEnumerable<IValidator<TRequest>> _validators;
@@ -21,50 +20,51 @@ namespace ControlHub.Application.Common.Behaviors
             RequestHandlerDelegate<TResponse> next,
             CancellationToken cancellationToken)
         {
-            var count = _validators.Count();
-            Console.WriteLine($"[ValidationBehavior] Loaded validators: {count} for {typeof(TRequest).Name}");
+            if (!_validators.Any())
+                return await next();
 
-            if (_validators.Any())
+            var context = new ValidationContext<TRequest>(request);
+
+            var validationResults = await Task.WhenAll(
+                _validators.Select(v => v.ValidateAsync(context, cancellationToken))
+            );
+
+            var failures = validationResults
+                .SelectMany(r => r.Errors)
+                .Where(f => f != null)
+                .ToList();
+
+            if (failures.Count == 0)
+                return await next();
+
+            // Ghép lỗi thành Error chuẩn
+            var errorMessage = string.Join("; ", failures.Select(f => f.ErrorMessage));
+            var error = Error.Validation("Validation.Failed", errorMessage);
+
+            // Trường hợp Handler trả về Result<T>
+            if (typeof(TResponse).IsGenericType &&
+                typeof(TResponse).GetGenericTypeDefinition() == typeof(Result<>))
             {
-                var context = new ValidationContext<TRequest>(request);
-                var failures = (await Task.WhenAll(
-                        _validators.Select(v => v.ValidateAsync(context, cancellationToken))))
-                    .SelectMany(r => r.Errors)
-                    .Where(f => f != null)
-                    .ToList();
+                var genericType = typeof(TResponse).GetGenericArguments()[0];
+                var failureMethod = typeof(Result<>)
+                    .MakeGenericType(genericType)
+                    .GetMethod(nameof(Result<object>.Failure), new[] { typeof(Error) });
 
-                if (failures.Count != 0)
-                {
-                    var errorMessage = string.Join("; ", failures.Select(f => f.ErrorMessage));
-                    var error = new Error("Validation.Failed", errorMessage);
+                if (failureMethod == null)
+                    throw new InvalidOperationException($"Cannot find Failure(Error) on Result<{genericType.Name}>");
 
-                    // Nếu handler return Result<T>
-                    if (typeof(TResponse).IsGenericType &&
-                        typeof(TResponse).GetGenericTypeDefinition() == typeof(Result<>))
-                    {
-                        var genericArg = typeof(TResponse).GetGenericArguments()[0];
-                        var method = typeof(Result<>)
-                                    .MakeGenericType(genericArg)
-                                    .GetMethod("Failure", System.Reflection.BindingFlags.Public | System.Reflection.BindingFlags.Static);
-
-                        if (method == null)
-                            throw new InvalidOperationException($"Cannot find Failure method on Result<{genericArg.Name}>");
-
-                        return (TResponse)method.Invoke(null, new object[] { errorMessage, null })!;
-                    }
-
-                    // Nếu handler return Result (non-generic)
-                    if (typeof(TResponse) == typeof(Result))
-                    {
-                        return (TResponse)(object)Result.Failure(error);
-                    }
-
-                    // Nếu không phải Result => fallback throw như cũ
-                    throw new ValidationException(errorMessage, failures);
-                }
+                var result = failureMethod.Invoke(null, new object[] { error });
+                return (TResponse)result!;
             }
 
-            return await next();
+            // Trường hợp Handler trả về Result (non-generic)
+            if (typeof(TResponse) == typeof(Result))
+            {
+                return (TResponse)(object)Result.Failure(error);
+            }
+
+            // Nếu không phải Result => fallback throw exception truyền thống
+            throw new ValidationException(errorMessage, failures);
         }
     }
 }

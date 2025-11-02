@@ -12,5 +12,6 @@ namespace ControlHub.Application.Roles.Interfaces.Repositories
         Task<Role> GetByIdAsync(Guid id, CancellationToken cancellationToken);
         Task<IEnumerable<Role>> GetAllAsync(CancellationToken cancellationToken);
         Task<IEnumerable<Role>> SearchByNameAsync(string name, CancellationToken cancellationToken);
+        Task<bool> ExistAsync(Guid roleId, CancellationToken cancellationToken);
     }
 }

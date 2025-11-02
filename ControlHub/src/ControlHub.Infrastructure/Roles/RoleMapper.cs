@@ -45,13 +45,7 @@ namespace ControlHub.Infrastructure.Roles
                 RolePermissions = domain.Permissions.Select(p => new RolePermissionEntity
                 {
                     RoleId = domain.Id,
-                    PermissionId = p.Id,
-                    Permission = new PermissionEntity
-                    {
-                        Id = p.Id,
-                        Code = p.Code,
-                        Description = p.Description
-                    }
+                    PermissionId = p.Id // <-- chỉ gán ID thôi, không khởi tạo PermissionEntity
                 }).ToList()
             };
 

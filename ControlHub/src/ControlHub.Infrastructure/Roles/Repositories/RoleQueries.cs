@@ -47,5 +47,12 @@ namespace ControlHub.Infrastructure.Roles.Repositories
 
             return entities.Select(RoleMapper.ToDomain);
         }
+
+        public async Task<bool> ExistAsync(Guid roleId, CancellationToken cancellationToken)
+        {
+            return await _db.Roles
+                .AsNoTracking()
+                .AnyAsync(r => r.Id == roleId, cancellationToken);
+        }
     }
 }

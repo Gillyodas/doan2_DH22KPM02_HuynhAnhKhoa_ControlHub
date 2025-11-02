@@ -19,7 +19,7 @@ namespace ControlHub.API.Accounts.Controllers
             _mediator = mediator;
         }
 
-        [HttpPost("{id}/change-password")]
+        [HttpPost("change-password/{id}")]
         public async Task<IActionResult> ChangePasswordCommand(Guid id, [FromBody] ChangePasswordRequest request, CancellationToken cancellationToken)
         {
             var command = new ChangePasswordCommand(id, request.curPass, request.newPass);

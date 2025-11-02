@@ -14,6 +14,7 @@ using ControlHub.Application.Tokens.Interfaces.Sender;
 using ControlHub.Application.Users.Interfaces.Repositories;
 using ControlHub.Domain.Accounts.Identifiers.Interfaces;
 using ControlHub.Domain.Accounts.Interfaces.Security;
+using ControlHub.Domain.Common.Services;
 using ControlHub.Infrastructure.Accounts.Repositories;
 using ControlHub.Infrastructure.Accounts.Security;
 using ControlHub.Infrastructure.Accounts.Validators;
@@ -105,6 +106,10 @@ namespace ControlHub.API.Configurations
             //Permission.Repositories
             services.AddScoped<IPermissionCommands, PermissionCommands>();
             services.AddScoped<IPermissionQueries, PermissionQueries>();
+
+            services.AddScoped<CreateRoleWithPermissionsService>();
+            services.AddScoped<AssignPermissionsService>();
+
 
             return services;
         }

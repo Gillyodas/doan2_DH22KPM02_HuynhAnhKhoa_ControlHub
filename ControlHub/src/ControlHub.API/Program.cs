@@ -3,6 +3,7 @@ using ControlHub.API.Configurations;
 using ControlHub.API.Middlewares;
 using ControlHub.Application.Common.Behaviors;
 using ControlHub.Infrastructure.Tokens;
+using ControlHub.Infrastructure.Tokens.Generate;
 using FluentValidation;
 using MediatR;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
@@ -20,6 +21,19 @@ namespace ControlHub.API
         public static void Main(string[] args)
         {
             var builder = WebApplication.CreateBuilder(args);
+
+            builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+            .AddJwtBearer(options =>
+            {
+                options.TokenValidationParameters = TokenVerifier.GetValidationParameters();
+            });
+
+            // --- Register AutoMapper ---
+            builder.Services.AddAutoMapper(cfg =>
+            {
+                cfg.AddMaps(typeof(ControlHub.Application.AssemblyReference).Assembly);
+                cfg.AddMaps(typeof(ControlHub.Infrastructure.AssemblyReference).Assembly);
+            });
 
             // Add Authentication + JWT config
             builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)

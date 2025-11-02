@@ -27,6 +27,34 @@ namespace ControlHub.Infrastructure.Tokens.Generate
             _logger = logger;
         }
 
+        // ====== STATIC METHOD DÙNG CHO AddJwtBearer() ======
+        public static TokenValidationParameters GetValidationParameters(IConfiguration? config = null)
+        {
+            // Nếu config bị null (ví dụ gọi từ static Program.cs) thì đọc trực tiếp từ environment
+            string issuer = config?["Jwt:Issuer"] ?? Environment.GetEnvironmentVariable("Jwt__Issuer") ?? "UnknownIssuer";
+            string audience = config?["Jwt:Audience"] ?? Environment.GetEnvironmentVariable("Jwt__Audience") ?? "UnknownAudience";
+            string key = config?["Jwt:Key"] ?? Environment.GetEnvironmentVariable("Jwt__Key") ?? throw new InvalidOperationException("JWT key is missing.");
+
+            return new TokenValidationParameters
+            {
+                ValidateIssuerSigningKey = true,
+                IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(key)),
+
+                ValidateIssuer = true,
+                ValidIssuer = issuer,
+
+                ValidateAudience = true,
+                ValidAudience = audience,
+
+                ValidateLifetime = true,
+                ClockSkew = TimeSpan.Zero, // Không cho phép lệch thời gian
+
+                // Chặn giả mạo thuật toán khác
+                ValidAlgorithms = new[] { SecurityAlgorithms.HmacSha256 }
+            };
+        }
+
+        // ====== VERIFY TOKEN TRỰC TIẾP ======
         public ClaimsPrincipal? Verify(string token)
         {
             var tokenHandler = new JwtSecurityTokenHandler();

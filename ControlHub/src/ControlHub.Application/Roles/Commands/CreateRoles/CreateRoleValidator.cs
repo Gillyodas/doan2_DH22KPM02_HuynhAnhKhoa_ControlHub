@@ -12,6 +12,7 @@ namespace ControlHub.Application.Roles.Commands.CreateRoles
                 .MaximumLength(100).WithMessage("Role name must not exceed 100 characters.");
 
             RuleFor(r => r.Description)
+                .NotEmpty().WithMessage("Role description is required.")
                 .MaximumLength(255).WithMessage("Description must not exceed 255 characters.");
 
             RuleFor(r => r.PermissionIds)

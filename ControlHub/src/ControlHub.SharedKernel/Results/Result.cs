@@ -40,6 +40,36 @@ namespace ControlHub.SharedKernel.Results
             new(default!, false, error, ex);
     }
 
+    /// <summary>
+    /// Kết quả dạng partial cho batch operation (một phần thành công, một phần thất bại)
+    /// </summary>
+    public class PartialResult<TSuccess, TFailure>
+    {
+        public IReadOnlyList<TSuccess> Successes { get; }
+        public IReadOnlyList<TFailure> Failures { get; }
+
+        public bool IsFullSuccess => Failures.Count == 0 && Successes.Count > 0;
+        public bool IsFullFailure => Successes.Count == 0 && Failures.Count > 0;
+        public bool IsPartial => Successes.Count > 0 && Failures.Count > 0;
+
+        private PartialResult(IEnumerable<TSuccess> successes, IEnumerable<TFailure> failures)
+        {
+            Successes = successes.ToList();
+            Failures = failures.ToList();
+        }
+
+        public static PartialResult<TSuccess, TFailure> Create(
+            IEnumerable<TSuccess> successes,
+            IEnumerable<TFailure> failures) =>
+            new(successes, failures);
+
+        public static PartialResult<TSuccess, TFailure> FromSuccess(IEnumerable<TSuccess> successes) =>
+            new(successes, Array.Empty<TFailure>());
+
+        public static PartialResult<TSuccess, TFailure> FromFailure(IEnumerable<TFailure> failures) =>
+            new(Array.Empty<TSuccess>(), failures);
+    }
+
     public class Maybe<T>
     {
         private readonly T? _value;
