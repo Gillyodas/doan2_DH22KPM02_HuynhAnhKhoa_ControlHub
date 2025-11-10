@@ -1,5 +1,4 @@
-﻿using Azure.Core;
-using ControlHub.Application.Emails.Interfaces;
+﻿using ControlHub.Application.Emails.Interfaces;
 using ControlHub.Application.Tokens.Interfaces.Sender;
 using ControlHub.Domain.Accounts.Enums;
 

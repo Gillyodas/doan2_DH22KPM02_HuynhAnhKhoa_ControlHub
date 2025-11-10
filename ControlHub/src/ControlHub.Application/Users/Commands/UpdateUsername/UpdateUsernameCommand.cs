@@ -1,5 +1,5 @@
-﻿using MediatR;
-using ControlHub.SharedKernel.Results;
+﻿using ControlHub.SharedKernel.Results;
+using MediatR;
 
 namespace ControlHub.Application.Users.Commands.UpdateUsername
 {

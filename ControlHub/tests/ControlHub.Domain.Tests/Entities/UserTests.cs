@@ -1,6 +1,4 @@
-﻿using System;
-using ControlHub.Domain.Users;
-using Xunit;
+﻿using ControlHub.Domain.Users;
 
 namespace ControlHub.Domain.Tests.Entities
 {

@@ -1,5 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore;
-using ControlHub.Infrastructure.Persistence;
+﻿using ControlHub.Infrastructure.Persistence;
+using Microsoft.EntityFrameworkCore;
 
 namespace ControlHub.API.Configurations
 {

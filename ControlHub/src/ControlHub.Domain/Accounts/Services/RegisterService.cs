@@ -24,7 +24,7 @@ namespace ControlHub.Domain.Accounts.Services
             var account = Account.Create(accountId, pass);
 
             var validator = identifierValidatorFactory.Get(Type);
-            if(validator == null)
+            if (validator == null)
                 return Result<Maybe<Account>>.Failure(AccountErrors.UnsupportedIdentifierType);
 
             var (isValid, normalized, error) = validator.ValidateAndNormalize(Value);

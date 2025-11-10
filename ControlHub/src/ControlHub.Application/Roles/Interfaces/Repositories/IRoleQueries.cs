@@ -1,9 +1,13 @@
+<<<<<<< Updated upstream
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using ControlHub.Domain.Roles;
+=======
+﻿using ControlHub.Domain.Roles;
+>>>>>>> Stashed changes
 
 namespace ControlHub.Application.Roles.Interfaces.Repositories
 {

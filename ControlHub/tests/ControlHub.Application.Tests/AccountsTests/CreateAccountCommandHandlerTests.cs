@@ -1,12 +1,10 @@
 ﻿using ControlHub.Application.Accounts.Commands.CreateAccount;
 using ControlHub.Application.Accounts.Interfaces;
 using ControlHub.Application.Accounts.Interfaces.Repositories;
-using ControlHub.Application.Accounts.Interfaces.Security;
 using ControlHub.Domain.Accounts;
 using ControlHub.Domain.Accounts.ValueObjects;
 using ControlHub.SharedKernel.Results;
 using Moq;
-using Xunit;
 
 public class CreateAccountCommandHandlerTests
 {

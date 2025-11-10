@@ -22,7 +22,7 @@ namespace ControlHub.API.Permissions
 
             var result = await _mediator.Send(command);
 
-            if(result.IsFailure)
+            if (result.IsFailure)
             {
                 return BadRequest(new CreatePermissionsResponse { Message = result.Error.Message });
             }

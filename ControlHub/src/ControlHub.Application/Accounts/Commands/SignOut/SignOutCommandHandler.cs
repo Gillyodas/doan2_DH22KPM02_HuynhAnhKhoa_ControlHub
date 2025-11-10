@@ -1,4 +1,5 @@
-﻿using ControlHub.Application.Common.Persistence;
+﻿using System.IdentityModel.Tokens.Jwt;
+using ControlHub.Application.Common.Persistence;
 using ControlHub.Application.Tokens.Interfaces;
 using ControlHub.Application.Tokens.Interfaces.Repositories;
 using ControlHub.SharedKernel.Accounts;
@@ -6,7 +7,6 @@ using ControlHub.SharedKernel.Results;
 using ControlHub.SharedKernel.Tokens;
 using MediatR;
 using Microsoft.Extensions.Logging;
-using System.IdentityModel.Tokens.Jwt;
 
 namespace ControlHub.Application.Accounts.Commands.SignOut
 {

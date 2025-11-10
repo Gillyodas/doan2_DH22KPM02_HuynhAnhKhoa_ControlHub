@@ -1,8 +1,6 @@
-﻿using System;
-using ControlHub.Domain.Accounts;
+﻿using ControlHub.Domain.Accounts;
 using ControlHub.Domain.Accounts.ValueObjects;
 using ControlHub.Domain.Users;
-using Xunit;
 
 namespace ControlHub.Domain.Tests.Entities
 {

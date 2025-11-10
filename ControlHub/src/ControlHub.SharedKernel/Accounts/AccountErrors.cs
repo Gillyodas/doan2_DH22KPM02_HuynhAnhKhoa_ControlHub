@@ -49,7 +49,7 @@ namespace ControlHub.SharedKernel.Accounts
         public static readonly Error PasswordIsNotValid =
             new("Account.PasswordIsNotValid", "Password is not valid.");
 
-        public static readonly Error PasswordSameAsOld = 
+        public static readonly Error PasswordSameAsOld =
             new("Account.PasswordSameAsOld", "New password must not be the same as the current password.");
 
         public static readonly Error InvalidCredentials =

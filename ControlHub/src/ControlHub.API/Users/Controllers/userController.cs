@@ -1,10 +1,7 @@
-﻿using ControlHub.API.Accounts.ViewModels.Response;
-using ControlHub.API.Users.ViewModels.Request;
+﻿using ControlHub.API.Users.ViewModels.Request;
 using ControlHub.API.Users.ViewModels.Response;
 using ControlHub.Application.Users.Commands.UpdateUsername;
-using ControlHub.SharedKernel.Results;
 using MediatR;
-using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
 
 namespace ControlHub.API.Users.Controllers

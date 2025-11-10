@@ -1,6 +1,4 @@
-﻿using System.Text.Json;
-using ControlHub.Application.Emails.Interfaces;
-using ControlHub.Infrastructure.Persistence;
+﻿using ControlHub.Infrastructure.Persistence;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;

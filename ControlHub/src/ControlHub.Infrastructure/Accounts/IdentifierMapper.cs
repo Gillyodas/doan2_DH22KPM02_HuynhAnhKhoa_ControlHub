@@ -1,5 +1,4 @@
-﻿using ControlHub.Domain.Accounts.Enums;
-using ControlHub.Domain.Accounts.ValueObjects;
+﻿using ControlHub.Domain.Accounts.ValueObjects;
 
 namespace ControlHub.Infrastructure.Accounts
 {

@@ -1,4 +1,9 @@
+<<<<<<< Updated upstream
 ﻿using ControlHub.SharedKernel.Permissions;
+=======
+﻿using System.Text.RegularExpressions;
+using ControlHub.SharedKernel.Permissions;
+>>>>>>> Stashed changes
 using ControlHub.SharedKernel.Results;
 
 namespace ControlHub.Domain.Permissions

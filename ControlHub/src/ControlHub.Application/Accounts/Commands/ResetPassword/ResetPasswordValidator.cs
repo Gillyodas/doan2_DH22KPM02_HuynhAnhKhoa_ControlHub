@@ -13,6 +13,6 @@ namespace ControlHub.Application.Accounts.Commands.ResetPassword
 
             RuleFor(x => x.Password)
                 .NotEmpty().WithMessage(AccountErrors.PasswordRequired.Message);
-        } 
+        }
     }
 }

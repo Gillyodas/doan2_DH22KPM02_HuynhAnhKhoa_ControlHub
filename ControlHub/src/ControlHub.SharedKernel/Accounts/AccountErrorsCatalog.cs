@@ -1,5 +1,4 @@
-﻿using ControlHub.SharedKernel.Accounts;
-using ControlHub.SharedKernel.Common.Errors;
+﻿using ControlHub.SharedKernel.Common.Errors;
 
 namespace ControlHub.SharedKernel.Accounts
 {

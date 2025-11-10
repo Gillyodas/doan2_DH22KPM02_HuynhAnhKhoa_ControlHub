@@ -1,6 +1,6 @@
-﻿using ControlHub.Application.Accounts.Commands.CreateAccount;
+﻿using ControlHub.API.Accounts.ViewModels.Request;
+using ControlHub.Application.Accounts.Commands.CreateAccount;
 using ControlHub.Domain.Accounts.Enums;
-using ControlHub.API.Accounts.ViewModels.Request;
 
 namespace ControlHub.API.Accounts.Mappers
 {

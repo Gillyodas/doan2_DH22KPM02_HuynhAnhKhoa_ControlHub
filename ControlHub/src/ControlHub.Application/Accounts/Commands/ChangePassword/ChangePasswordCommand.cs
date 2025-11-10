@@ -1,5 +1,4 @@
-﻿using ControlHub.Domain.Accounts.ValueObjects;
-using ControlHub.SharedKernel.Results;
+﻿using ControlHub.SharedKernel.Results;
 using MediatR;
 
 namespace ControlHub.Application.Accounts.Commands.ChangePassword

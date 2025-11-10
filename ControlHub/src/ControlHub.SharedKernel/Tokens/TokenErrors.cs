@@ -22,7 +22,7 @@ namespace ControlHub.SharedKernel.Tokens
         public static readonly Error TokenNotBelongToAccount =
             new("Token.NotBelongToAccount", "Token does not belong to this account.");
 
-        public static readonly Error TokenGenerationFailed = 
+        public static readonly Error TokenGenerationFailed =
             new("Token.GenerationFailed", "Failed to generate access or refresh token.");
 
         public static readonly Error TokenAlreadyRevoked =

@@ -1,7 +1,7 @@
-﻿using FluentValidation;
-using MediatR;
+﻿using ControlHub.SharedKernel.Common.Errors;
 using ControlHub.SharedKernel.Results;
-using ControlHub.SharedKernel.Common.Errors;
+using FluentValidation;
+using MediatR;
 
 namespace ControlHub.Application.Common.Behaviors
 {

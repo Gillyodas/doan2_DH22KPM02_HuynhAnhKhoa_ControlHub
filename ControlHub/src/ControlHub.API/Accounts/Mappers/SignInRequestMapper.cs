@@ -1,5 +1,4 @@
 ﻿using ControlHub.API.Accounts.ViewModels.Request;
-using ControlHub.Application.Accounts.Commands.CreateAccount;
 using ControlHub.Application.Accounts.Commands.SignIn;
 using ControlHub.Domain.Accounts.Enums;
 

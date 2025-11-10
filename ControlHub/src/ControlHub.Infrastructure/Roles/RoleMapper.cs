@@ -1,8 +1,6 @@
 ﻿using ControlHub.Domain.Permissions;
 using ControlHub.Domain.Roles;
-using ControlHub.Infrastructure.Permissions;
 using ControlHub.Infrastructure.RolePermissions;
-using System.Linq;
 
 namespace ControlHub.Infrastructure.Roles
 {
