@@ -1,6 +1,5 @@
 ﻿using ControlHub.Domain.Accounts.Enums;
 using ControlHub.Domain.Accounts.ValueObjects;
-using ControlHub.Domain.Roles;
 using ControlHub.Domain.Users;
 using ControlHub.SharedKernel.Accounts;
 using ControlHub.SharedKernel.Results;
@@ -15,10 +14,6 @@ namespace ControlHub.Domain.Accounts
         public bool IsActive { get; private set; }
         public bool IsDeleted { get; private set; }
 
-        // Quan hệ 1-nhiều (Account - Role)
-        public Guid RoleId { get; private set; }
-        public Maybe<Role> Role { get; private set; } = Maybe<Role>.None;
-
         private readonly List<Identifier> _identifiers = new();
         public IReadOnlyCollection<Identifier> Identifiers => _identifiers.AsReadOnly();
 
@@ -26,34 +21,23 @@ namespace ControlHub.Domain.Accounts
 
         private Account() { }
 
-        private Account(Guid id, Password pass, Guid roleId, bool isActive, bool isDeleted, Maybe<User> user, Maybe<Role> role)
+        private Account(Guid id, Password pass, bool isActive, bool isDeleted, Maybe<User> user)
         {
             if (id == Guid.Empty) throw new ArgumentException("Id is required", nameof(id));
-            if (roleId == Guid.Empty) throw new ArgumentException("RoleId is required", nameof(roleId));
 
             Id = id;
             Password = pass;
-            RoleId = roleId;
             IsActive = isActive;
             IsDeleted = isDeleted;
             User = user;
-            Role = role;
         }
 
-        public static Account Create(Guid id, Password pass, Guid roleId)
-            => new Account(id, pass, roleId, true, false, Maybe<User>.None, Maybe<Role>.None);
+        public static Account Create(Guid id, Password pass)
+            => new Account(id, pass, true, false, Maybe<User>.None);
 
-        public static Account Rehydrate(
-            Guid id,
-            Password pass,
-            Guid roleId,
-            bool isActive,
-            bool isDeleted,
-            Maybe<User> user,
-            Maybe<Role> role,
-            IEnumerable<Identifier> identifiers)
+        public static Account Rehydrate(Guid id, Password pass, bool isActive, bool isDeleted, Maybe<User> user, IEnumerable<Identifier> identifiers)
         {
-            var acc = new Account(id, pass, roleId, isActive, isDeleted, user, role);
+            var acc = new Account(id, pass, isActive, isDeleted, user);
             acc._identifiers.AddRange(identifiers);
             return acc;
         }
@@ -76,7 +60,6 @@ namespace ControlHub.Domain.Accounts
             _identifiers.Remove(found);
             return Result.Success();
         }
-
         public Result AttachUser(User user)
         {
             if (user == null)
@@ -86,16 +69,6 @@ namespace ControlHub.Domain.Accounts
                 return Result.Failure(UserErrors.AlreadyAtached);
 
             User = Maybe<User>.From(user);
-            return Result.Success();
-        }
-
-        public Result AttachRole(Role role)
-        {
-            if (role == null)
-                return Result.Failure(AccountErrors.RoleRequired);
-
-            Role = Maybe<Role>.From(role);
-            RoleId = role.Id;
             return Result.Success();
         }
 

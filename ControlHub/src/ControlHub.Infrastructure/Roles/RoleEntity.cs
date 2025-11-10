@@ -1,5 +1,5 @@
-﻿using ControlHub.Infrastructure.RolePermissions;
-using ControlHub.Infrastructure.Accounts;
+﻿using ControlHub.Infrastructure.AccountRoles;
+using ControlHub.Infrastructure.RolePermissions;
 
 namespace ControlHub.Infrastructure.Roles
 {
@@ -11,7 +11,7 @@ namespace ControlHub.Infrastructure.Roles
         public bool IsActive { get; set; }
 
         // Navigation
-        public ICollection<AccountEntity> Accounts { get; set; } = new List<AccountEntity>();
+        public ICollection<AccountRoleEntity> AccountRoles { get; set; } = new List<AccountRoleEntity>();
         public ICollection<RolePermissionEntity> RolePermissions { get; set; } = new List<RolePermissionEntity>();
     }
 }

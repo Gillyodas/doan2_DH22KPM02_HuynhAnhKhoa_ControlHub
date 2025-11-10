@@ -4,6 +4,7 @@ using ControlHub.Infrastructure.Tokens;
 using ControlHub.Infrastructure.Outboxs;
 using ControlHub.Infrastructure.Roles;
 using ControlHub.Infrastructure.Permissions;
+using ControlHub.Infrastructure.AccountRoles;
 using ControlHub.Infrastructure.RolePermissions;
 using Microsoft.EntityFrameworkCore;
 
@@ -28,6 +29,7 @@ namespace ControlHub.Infrastructure.Persistence
         public DbSet<OutboxMessageEntity> OutboxMessages { get; set; } = default!;
 
         // Join Entities
+        public DbSet<AccountRoleEntity> AccountRoles { get; set; } = default!;
         public DbSet<RolePermissionEntity> RolePermissions { get; set; } = default!;
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)

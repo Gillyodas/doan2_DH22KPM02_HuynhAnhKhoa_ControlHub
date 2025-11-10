@@ -30,11 +30,11 @@ namespace ControlHub.Application.Permissions.Commands.CreatePermissions
         public async Task<Result> Handle(CreatePermissionsCommand request, CancellationToken cancellationToken)
         {
             _logger.LogInformation("{Code}: {Message}. Count={Count}",
-                PermissionLogs.CreatePermissions_Started.Code,
-                PermissionLogs.CreatePermissions_Started.Message,
-                request.Permissions.Count());
+            PermissionLogs.CreatePermissions_Started.Code,
+            PermissionLogs.CreatePermissions_Started.Message,
+            request.Permissions.Count());
 
-            // 1. Kiểm tra trùng Code (Giữ nguyên)
+            // Kiểm tra trùng Code
             var existing = await _permissionQueries.GetAllAsync(cancellationToken);
             var duplicates = request.Permissions
                 .Where(p => existing.Any(e => e.Code.Equals(p.Code, StringComparison.OrdinalIgnoreCase)))
@@ -50,32 +50,17 @@ namespace ControlHub.Application.Permissions.Commands.CreatePermissions
                 return Result.Failure(PermissionErrors.PermissionCodeAlreadyExists);
             }
 
-            var validPermissions = new List<Permission>();
+            var permissions = request.Permissions
+                .Select(p => Permission.Create(Guid.NewGuid(), p.Code, p.Description))
+                .ToList();
 
-            foreach (var p in request.Permissions)
-            {
-                var permissionResult = Permission.Create(Guid.NewGuid(), p.Code, p.Description);
-
-                if (permissionResult.IsFailure)
-                {
-                    _logger.LogWarning("Domain validation failed for code '{Code}': {ErrorCode} - {ErrorMessage}",
-                        p.Code,
-                        permissionResult.Error.Code,
-                        permissionResult.Error.Message);
-
-                    return Result.Failure(permissionResult.Error);
-                }
-
-                validPermissions.Add(permissionResult.Value);
-            }
-
-            await _permissionCommands.AddRangeAsync(validPermissions, cancellationToken);
+            await _permissionCommands.AddRangeAsync(permissions, cancellationToken);
             await _uow.CommitAsync(cancellationToken);
 
             _logger.LogInformation("{Code}: {Message}. Created={Count}",
                 PermissionLogs.CreatePermissions_Success.Code,
                 PermissionLogs.CreatePermissions_Success.Message,
-                validPermissions.Count);
+                permissions.Count);
 
             return Result.Success();
         }

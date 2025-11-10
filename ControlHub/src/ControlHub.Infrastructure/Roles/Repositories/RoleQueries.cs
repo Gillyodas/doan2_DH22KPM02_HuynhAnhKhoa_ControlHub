@@ -1,5 +1,4 @@
 ﻿using ControlHub.Application.Roles.Interfaces.Repositories;
-using ControlHub.Domain.Permissions;
 using ControlHub.Domain.Roles;
 using ControlHub.Infrastructure.Persistence;
 using Microsoft.EntityFrameworkCore;
@@ -54,15 +53,6 @@ namespace ControlHub.Infrastructure.Roles.Repositories
             return await _db.Roles
                 .AsNoTracking()
                 .AnyAsync(r => r.Id == roleId, cancellationToken);
-        }
-
-        public async Task<IReadOnlyList<Guid>> GetPermissionIdsByRoleIdAsync(Guid roleId, CancellationToken cancellationToken)
-        {
-            return await _db.RolePermissions
-                .AsNoTracking()
-                .Where(rp => rp.RoleId == roleId)
-                .Select(rp => rp.PermissionId)
-                .ToListAsync(cancellationToken);
         }
     }
 }

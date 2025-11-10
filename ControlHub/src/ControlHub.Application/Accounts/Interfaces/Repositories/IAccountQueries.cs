@@ -1,7 +1,6 @@
 ﻿using ControlHub.Domain.Accounts;
 using ControlHub.Domain.Accounts.Enums;
 using ControlHub.Domain.Accounts.ValueObjects;
-using ControlHub.Domain.Roles;
 using ControlHub.Domain.Users;
 
 namespace ControlHub.Application.Accounts.Interfaces.Repositories
@@ -26,10 +25,6 @@ namespace ControlHub.Application.Accounts.Interfaces.Repositories
         Task<Identifier?> GetIdentifierByIdentifierAsync(
             IdentifierType identifierType,
             string normalizedValue,
-            CancellationToken cancellationToken);
-
-        Task<Guid> GetRoleIdByAccIdAsync(
-            Guid accId,
             CancellationToken cancellationToken);
     }
 }

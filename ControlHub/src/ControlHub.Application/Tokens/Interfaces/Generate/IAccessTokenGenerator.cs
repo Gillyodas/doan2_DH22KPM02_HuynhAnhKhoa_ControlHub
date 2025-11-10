@@ -2,6 +2,6 @@
 {
     public interface IAccessTokenGenerator
     {
-        string Generate(string accId, string identifier, string roleId);
+        string Generate(string accId, string identifier, IEnumerable<string> roles);
     }
 }

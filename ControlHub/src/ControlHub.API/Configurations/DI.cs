@@ -5,7 +5,6 @@ using ControlHub.Application.Common.Persistence;
 using ControlHub.Application.Emails.Interfaces;
 using ControlHub.Application.OutBoxs;
 using ControlHub.Application.OutBoxs.Repositories;
-using ControlHub.Application.Permissions.Interfaces;
 using ControlHub.Application.Permissions.Interfaces.Repositories;
 using ControlHub.Application.Roles.Interfaces.Repositories;
 using ControlHub.Application.Tokens.Interfaces;
@@ -24,7 +23,6 @@ using ControlHub.Infrastructure.Identifiers.Validator;
 using ControlHub.Infrastructure.Outboxs;
 using ControlHub.Infrastructure.Outboxs.Handler;
 using ControlHub.Infrastructure.Outboxs.Repositories;
-using ControlHub.Infrastructure.Permissions;
 using ControlHub.Infrastructure.Permissions.Repositories;
 using ControlHub.Infrastructure.Persistence;
 using ControlHub.Infrastructure.Roles.Repositories;
@@ -33,7 +31,6 @@ using ControlHub.Infrastructure.Tokens.Generate;
 using ControlHub.Infrastructure.Tokens.Repositories;
 using ControlHub.Infrastructure.Tokens.Sender;
 using ControlHub.Infrastructure.Users.Repositories;
-using Microsoft.AspNetCore.Authorization;
 
 namespace ControlHub.API.Configurations
 {
@@ -109,9 +106,6 @@ namespace ControlHub.API.Configurations
             //Permission.Repositories
             services.AddScoped<IPermissionCommands, PermissionCommands>();
             services.AddScoped<IPermissionQueries, PermissionQueries>();
-
-            //Permission.Services
-            services.AddScoped<IPermissionService, PermissionService>();
 
             services.AddScoped<CreateRoleWithPermissionsService>();
             services.AddScoped<AssignPermissionsService>();

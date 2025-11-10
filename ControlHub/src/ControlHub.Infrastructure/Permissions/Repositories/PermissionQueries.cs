@@ -60,16 +60,5 @@ namespace ControlHub.Infrastructure.Permissions.Repositories
 
             return entities.Select(PermissionMapper.ToDomain).ToList();
         }
-
-        public async Task<IEnumerable<Permission>> GetByRoleIdAsync(Guid roleId, CancellationToken cancellationToken)
-        {
-            var entities = await _db.Permissions
-                .AsNoTracking()
-                .Where(p => _db.RolePermissions
-                    .Any(rp => rp.RoleId == roleId && rp.PermissionId == p.Id))
-                .ToListAsync(cancellationToken);
-
-            return entities.Select(PermissionMapper.ToDomain).ToList();
-        }
     }
 }

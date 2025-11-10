@@ -22,6 +22,21 @@ namespace ControlHub.Infrastructure.Migrations
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
 
+            modelBuilder.Entity("ControlHub.Infrastructure.AccountRoles.AccountRoleEntity", b =>
+                {
+                    b.Property<Guid>("AccountId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid>("RoleId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.HasKey("AccountId", "RoleId");
+
+                    b.HasIndex("RoleId");
+
+                    b.ToTable("AccountRoles", (string)null);
+                });
+
             modelBuilder.Entity("ControlHub.Infrastructure.Accounts.AccountEntity", b =>
                 {
                     b.Property<Guid>("Id")
@@ -38,16 +53,11 @@ namespace ControlHub.Infrastructure.Migrations
                     b.Property<bool>("IsDeleted")
                         .HasColumnType("bit");
 
-                    b.Property<Guid>("RoleId")
-                        .HasColumnType("uniqueidentifier");
-
                     b.Property<byte[]>("Salt")
                         .IsRequired()
                         .HasColumnType("varbinary(64)");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("RoleId");
 
                     b.ToTable("Accounts", (string)null);
                 });
@@ -243,13 +253,21 @@ namespace ControlHub.Infrastructure.Migrations
                     b.ToTable("Users", (string)null);
                 });
 
-            modelBuilder.Entity("ControlHub.Infrastructure.Accounts.AccountEntity", b =>
+            modelBuilder.Entity("ControlHub.Infrastructure.AccountRoles.AccountRoleEntity", b =>
                 {
-                    b.HasOne("ControlHub.Infrastructure.Roles.RoleEntity", "Role")
-                        .WithMany("Accounts")
-                        .HasForeignKey("RoleId")
-                        .OnDelete(DeleteBehavior.Restrict)
+                    b.HasOne("ControlHub.Infrastructure.Accounts.AccountEntity", "Account")
+                        .WithMany("AccountRoles")
+                        .HasForeignKey("AccountId")
+                        .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.HasOne("ControlHub.Infrastructure.Roles.RoleEntity", "Role")
+                        .WithMany("AccountRoles")
+                        .HasForeignKey("RoleId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Account");
 
                     b.Navigation("Role");
                 });
@@ -308,6 +326,8 @@ namespace ControlHub.Infrastructure.Migrations
 
             modelBuilder.Entity("ControlHub.Infrastructure.Accounts.AccountEntity", b =>
                 {
+                    b.Navigation("AccountRoles");
+
                     b.Navigation("Identifiers");
 
                     b.Navigation("Tokens");
@@ -322,7 +342,7 @@ namespace ControlHub.Infrastructure.Migrations
 
             modelBuilder.Entity("ControlHub.Infrastructure.Roles.RoleEntity", b =>
                 {
-                    b.Navigation("Accounts");
+                    b.Navigation("AccountRoles");
 
                     b.Navigation("RolePermissions");
                 });

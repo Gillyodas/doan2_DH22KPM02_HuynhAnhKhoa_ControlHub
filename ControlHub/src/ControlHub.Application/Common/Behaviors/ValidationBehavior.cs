@@ -47,17 +47,13 @@ namespace ControlHub.Application.Common.Behaviors
             {
                 var genericType = typeof(TResponse).GetGenericArguments()[0];
                 var failureMethod = typeof(Result<>)
-                .MakeGenericType(genericType)
-                .GetMethods()
-                .FirstOrDefault(m => m.Name == nameof(Result<object>.Failure)
-                    && m.GetParameters().FirstOrDefault()?.ParameterType == typeof(Error));
+                    .MakeGenericType(genericType)
+                    .GetMethod(nameof(Result<object>.Failure), new[] { typeof(Error) });
 
                 if (failureMethod == null)
                     throw new InvalidOperationException($"Cannot find Failure(Error) on Result<{genericType.Name}>");
 
-                var result = failureMethod.GetParameters().Length == 2
-                    ? failureMethod.Invoke(null, new object[] { error, null })
-                    : failureMethod.Invoke(null, new object[] { error });
+                var result = failureMethod.Invoke(null, new object[] { error });
                 return (TResponse)result!;
             }
 

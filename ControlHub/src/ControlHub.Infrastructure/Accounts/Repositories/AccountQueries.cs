@@ -2,7 +2,6 @@
 using ControlHub.Domain.Accounts;
 using ControlHub.Domain.Accounts.Enums;
 using ControlHub.Domain.Accounts.ValueObjects;
-using ControlHub.Domain.Roles;
 using ControlHub.Domain.Users;
 using ControlHub.Infrastructure.Persistence;
 using ControlHub.Infrastructure.Users;
@@ -64,15 +63,6 @@ namespace ControlHub.Infrastructure.Accounts.Repositories
             var user = await _db.Users.AsNoTracking().FirstOrDefaultAsync(u => u.AccId == id, cancellationToken);
 
             return user is not null ? UserMapper.ToDomain(user) : null;
-        }
-
-        public async Task<Guid> GetRoleIdByAccIdAsync(Guid accId, CancellationToken cancellationToken)
-        {
-            return await _db.Accounts
-                .AsNoTracking()
-                .Where(a => a.Id == accId)
-                .Select(a => a.RoleId)
-                .FirstOrDefaultAsync(cancellationToken);
         }
     }
 }

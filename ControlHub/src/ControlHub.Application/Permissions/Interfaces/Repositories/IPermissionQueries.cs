@@ -9,6 +9,5 @@ namespace ControlHub.Application.Permissions.Interfaces.Repositories
         Task<IEnumerable<Permission>> SearchByCodeAsync(string code, CancellationToken cancellationToken);
         Task<bool> ExistAsync(Guid id, CancellationToken cancellationToken);
         Task<IEnumerable<Permission>> GetByIdsAsync(IEnumerable<Guid> permissionIds, CancellationToken cancellationToken);
-        Task<IEnumerable<Permission>> GetByRoleIdAsync(Guid roleId, CancellationToken cancellationToken);
     }
 }

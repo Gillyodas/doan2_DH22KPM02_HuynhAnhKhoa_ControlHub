@@ -4,7 +4,6 @@ using ControlHub.Application.Roles.Commands.CreateRoles;
 using ControlHub.Domain.Roles;
 using ControlHub.SharedKernel.Results;
 using MediatR;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace ControlHub.API.Roles
@@ -18,8 +17,6 @@ namespace ControlHub.API.Roles
         {
             _mediator = mediator;
         }
-
-        [AllowAnonymous]
         [HttpPost("roles")]
         public async Task<IActionResult> CreateRoles([FromBody] CreateRolesRequest request, CancellationToken ct)
         {

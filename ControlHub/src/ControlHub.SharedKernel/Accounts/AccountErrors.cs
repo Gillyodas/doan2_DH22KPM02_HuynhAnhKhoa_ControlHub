@@ -78,8 +78,5 @@ namespace ControlHub.SharedKernel.Accounts
 
         public static readonly Error AccountDisabled =
             new("Account.Disabled", "Account has been disabled.");
-
-        public static readonly Error RoleRequired =
-            new("Account.RoleRequired", "Account required role");
     }
 }
