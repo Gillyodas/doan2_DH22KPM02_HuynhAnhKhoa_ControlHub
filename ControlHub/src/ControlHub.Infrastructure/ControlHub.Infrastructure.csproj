@@ -7,7 +7,7 @@
 		<OutputType>Library</OutputType>
 
 		<IsPackable>true</IsPackable>
-		<Version>1.1.10</Version>
+		<Version>1.1.13</Version>
 		<Authors>Huỳnh Anh Khoa</Authors>
 		<PackageId>ControlHub.Infrastructure</PackageId>
 		<ReactBuildDir>..\ControlHub.UI\dist</ReactBuildDir>

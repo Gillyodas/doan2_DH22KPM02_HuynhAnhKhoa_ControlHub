@@ -1,8 +1,10 @@
 ﻿using ControlHub.API.Controllers; // BaseApiController
 using ControlHub.API.Roles.ViewModels.Requests;
 using ControlHub.API.Roles.ViewModels.Responses;
+using ControlHub.Application.Common.DTOs;
 using ControlHub.Application.Roles.Commands.CreateRoles;
 using ControlHub.Application.Roles.Commands.SetRolePermissions; // Đổi tên namespace nếu bạn đã đổi tên command thành AddPermissionsForRole
+using ControlHub.Application.Roles.Queries.SearchRoles;
 using ControlHub.Domain.Permissions;
 using ControlHub.Domain.Roles;
 using ControlHub.SharedKernel.Results;
@@ -92,6 +94,27 @@ namespace ControlHub.API.Roles
                 SuccessCount = request.Roles.Count(),
                 FailureCount = 0
             });
+        }
+
+        [Authorize(Policy = "Permission:role.view")]
+        [HttpGet]
+        [ProducesResponseType(typeof(PagedResult<Role>), StatusCodes.Status200OK)]
+        public async Task<IActionResult> GetRoles(
+        [FromQuery] int pageIndex = 1,
+        [FromQuery] int pageSize = 10,
+        [FromQuery] string? searchTerm = null)
+        {
+            var conditions = string.IsNullOrEmpty(searchTerm) ? Array.Empty<string>() : new[] { searchTerm };
+
+            var query = new SearchRolesQuery(pageIndex, pageSize, conditions);
+            var result = await Mediator.Send(query);
+
+            if (result.IsFailure)
+            {
+                return HandleFailure(result);
+            }
+
+            return Ok(result.Value);
         }
     }
 }

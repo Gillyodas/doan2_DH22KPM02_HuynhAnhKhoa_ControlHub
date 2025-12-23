@@ -1,79 +1,72 @@
-import React from 'react';
-import { 
-  LayoutDashboard, Settings, Users, Activity, X, Menu, 
-  type LucideIcon 
-} from 'lucide-react';
+"use client"
+
+import { LayoutDashboard, Users, ShieldCheck, Settings, ChevronLeft, ChevronRight, Code2 } from "lucide-react"
+import { NavLink } from "react-router-dom"
+import { cn } from "@/lib/utils"
+import { Button } from "@/components/ui/button"
 
 interface SidebarProps {
-  isOpen: boolean;
-  setIsOpen: (open: boolean) => void;
-  activeTab: string;
-  setActiveTab: (tab: string) => void;
+  collapsed: boolean
+  onToggle: () => void
 }
 
-interface SidebarItemProps {
-  icon: LucideIcon;
-  label: string;
-  active: boolean;
-  onClick: () => void;
-  isOpen: boolean;
-}
+const menuItems = [
+  { icon: LayoutDashboard, label: "Dashboard", href: "/" },
+  { icon: Users, label: "User Management", href: "/users" },
+  { icon: ShieldCheck, label: "Roles & Permissions", href: "/roles" },
+  { icon: Code2, label: "API", href: "/apis" },
+  { icon: Settings, label: "Settings", href: "/settings" },
+]
 
-const SidebarItem: React.FC<SidebarItemProps> = ({ icon: Icon, label, active, onClick, isOpen }) => (
-  <button
-    onClick={onClick}
-    className={`w-full flex items-center space-x-3 px-4 py-3 rounded-lg transition-all ${
-      active 
-        ? 'bg-blue-600 text-white shadow-lg shadow-blue-500/50' 
-        : 'text-slate-400 hover:bg-slate-800 hover:text-white'
-    }`}
-  >
-    <Icon size={20} />
-    {isOpen && <span className="font-medium">{label}</span>}
-  </button>
-);
-
-export const Sidebar: React.FC<SidebarProps> = ({ isOpen, setIsOpen, activeTab, setActiveTab }) => {
-  const menuItems = [
-    { id: 'Dashboard', label: 'Bảng Điều Khiển', icon: LayoutDashboard },
-    { id: 'Users', label: 'Người Dùng', icon: Users },
-    { id: 'Performance', label: 'Hiệu Suất', icon: Activity },
-    { id: 'Settings', label: 'Cài Đặt', icon: Settings },
-  ];
-
+export function Sidebar({ collapsed, onToggle }: SidebarProps) {
   return (
-    <aside className={`${isOpen ? 'w-64' : 'w-20'} bg-slate-900 border-r border-slate-800 transition-all duration-300 flex flex-col fixed h-full z-20`}>
-      <div className="p-6 flex items-center justify-between">
-        {isOpen && <h1 className="text-xl font-bold bg-gradient-to-r from-blue-400 to-indigo-400 bg-clip-text text-transparent">ControlHub</h1>}
-        <button onClick={() => setIsOpen(!isOpen)} className="p-1 hover:bg-slate-800 text-slate-400 rounded-md transition-colors">
-          {isOpen ? <X size={20} /> : <Menu size={20} />}
-        </button>
+    <aside
+      className={cn(
+        "relative flex flex-col bg-black text-zinc-100 transition-all duration-300 border-r border-zinc-800",
+        collapsed ? "w-16" : "w-64",
+      )}
+    >
+      {/* Header */}
+      <div className="flex items-center justify-between h-16 px-4 border-b border-zinc-800">
+        {!collapsed && <h1 className="text-xl font-semibold text-white">ControlHub</h1>}
+        {collapsed && (
+          <div className="w-full flex justify-center">
+            <span className="text-xl font-bold text-white">C</span>
+          </div>
+        )}
       </div>
 
-      <nav className="flex-1 px-4 space-y-2 mt-4">
+      {/* Navigation */}
+      <nav className="flex-1 py-4">
         {menuItems.map((item) => (
-          <SidebarItem 
-            key={item.id}
-            icon={item.icon}
-            label={item.label}
-            active={activeTab === item.id}
-            onClick={() => setActiveTab(item.id)}
-            isOpen={isOpen}
-          />
+          <NavLink
+            key={item.label}
+            to={item.href}
+            className={({ isActive }: { isActive: boolean }) =>
+              cn(
+                "flex items-center gap-3 px-4 py-3 mx-2 rounded-lg transition-colors hover:bg-zinc-900",
+                isActive ? "bg-zinc-900 text-white" : "text-zinc-300 hover:text-white",
+              )
+            }
+            end={item.href === "/"}
+          >
+            <item.icon className="w-5 h-5 shrink-0" />
+            {!collapsed && <span className="text-sm font-medium">{item.label}</span>}
+          </NavLink>
         ))}
       </nav>
-      
-      <div className="p-4 border-t border-slate-800">
-        <div className="flex items-center space-x-3 p-2">
-          <div className="w-8 h-8 rounded-full bg-slate-800 flex items-center justify-center font-bold text-blue-400">AD</div>
-          {isOpen && (
-            <div className="overflow-hidden">
-              <p className="text-sm font-bold text-slate-200 truncate">Admin</p>
-              <p className="text-xs text-slate-500 truncate">Online</p>
-            </div>
-          )}
-        </div>
+
+      {/* Toggle Button */}
+      <div className="p-4 border-t border-zinc-800">
+        <Button
+          variant="ghost"
+          size="icon"
+          onClick={onToggle}
+          className="w-full text-zinc-400 hover:text-white hover:bg-zinc-900"
+        >
+          {collapsed ? <ChevronRight className="w-5 h-5" /> : <ChevronLeft className="w-5 h-5" />}
+        </Button>
       </div>
     </aside>
-  );
-};
+  )
+}

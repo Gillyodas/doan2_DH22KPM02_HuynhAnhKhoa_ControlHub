@@ -5,88 +5,88 @@ namespace ControlHub.SharedKernel.Accounts
     public static class AccountErrors
     {
         public static readonly Error AccountNotFound =
-            new("Account.NotFound", "The account was not found.");
+            Error.NotFound("Account.NotFound", "The account was not found.");
 
         public static readonly Error AccountIdRequired =
-            new("Account.AccountIdRequired", "Account ID is required.");
+            Error.Validation("Account.AccountIdRequired", "Account ID is required.");
 
         public static readonly Error EmailRequired =
-            new("Account.EmailRequired", "Email is required.");
+            Error.Validation("Account.EmailRequired", "Email is required.");
 
         public static readonly Error MasterKeyRequired =
-            new("Account.MasterKeyRequired", "MasterKey is required.");
+            Error.Validation("Account.MasterKeyRequired", "MasterKey is required.");
 
         public static readonly Error InvalidEmail =
-            new("Account.InvalidEmail", "Email format is invalid.");
+            Error.Validation("Account.InvalidEmail", "Email format is invalid.");
 
         public static readonly Error EmailAlreadyExists = Error.Conflict(
         "Account.EmailAlreadyExists", "The email provided is already in use.");
 
         public static readonly Error EmailNotFound =
-            new("Account.EmailNotFound", "Email does not exist.");
+            Error.NotFound("Account.EmailNotFound", "Email does not exist.");
 
         public static readonly Error PasswordRequired =
-            new("Account.PasswordRequired", "Password cannot be empty.");
+            Error.Validation("Account.PasswordRequired", "Password cannot be empty.");
 
         public static readonly Error PasswordIsWeak =
-            new("Account.PasswordIsWeak", "Password is weak.");
+            Error.Validation("Account.PasswordIsWeak", "Password is weak.");
 
         public static readonly Error PasswordMissingUppercase =
-            new("Account.PasswordMissingUppercase", "Password must contain at least one uppercase letter.");
+            Error.Validation("Account.PasswordMissingUppercase", "Password must contain at least one uppercase letter.");
 
         public static readonly Error PasswordMissingLowercase =
-            new("Account.PasswordMissingLowercase", "Password must contain at least one lowercase letter.");
+            Error.Validation("Account.PasswordMissingLowercase", "Password must contain at least one lowercase letter.");
 
         public static readonly Error PasswordMissingDigit =
-            new("Account.PasswordMissingDigit", "Password must contain at least one digit.");
+            Error.Validation("Account.PasswordMissingDigit", "Password must contain at least one digit.");
 
         public static readonly Error PasswordMissingSpecial =
-            new("Account.PasswordMissingSpecial", "Password must contain at least one special character (!@#$%^&*()).");
+            Error.Validation("Account.PasswordMissingSpecial", "Password must contain at least one special character (!@#$%^&*()).");
 
         public static readonly Error PasswordHashFailed =
-            new("Account.PasswordHashFailed", "Password hashing failed.");
+            Error.Failure("Account.PasswordHashFailed", "Password hashing failed.");
 
         public static readonly Error PasswordVerifyFailed =
-            new("Account.PasswordVerifyFailed", "Password verification failed.");
+            Error.Failure("Account.PasswordVerifyFailed", "Password verification failed.");
 
         public static readonly Error PasswordIsNotValid =
-            new("Account.PasswordIsNotValid", "Password is not valid.");
+            Error.Validation("Account.PasswordIsNotValid", "Password is not valid.");
 
         public static readonly Error PasswordTooShort =
-            new("Account.PasswordTooShort", "Password is too short.");
+            Error.Validation("Account.PasswordTooShort", "Password is too short.");
 
         public static readonly Error PasswordSameAsOld =
-            new("Account.PasswordSameAsOld", "New password must not be the same as the current password.");
+            Error.Validation("Account.PasswordSameAsOld", "New password must not be the same as the current password.");
 
         public static readonly Error InvalidCredentials = Error.Unauthorized(
         "Auth.InvalidCredentials", "Invalid email or password.");
 
         public static readonly Error LockedOut =
-            new("Account.LockedOut", "Account is temporarily locked due to multiple failed login attempts.");
+            Error.Unauthorized("Account.LockedOut", "Account is temporarily locked due to multiple failed login attempts.");
 
         public static readonly Error UnsupportedIdentifierType =
-            new("Identifier.UnsupportedType", "Unsupported identifier type.");
+            Error.Validation("Identifier.UnsupportedType", "Unsupported identifier type.");
 
         public static readonly Error IdentifierNotFound = Error.NotFound(
         "Account.IdentifierNotFound", "Identifier not found.");
 
         public static readonly Error IdentifierRequired =
-            new("Identifier.Required", "The identifier is required.");
+            Error.Validation("Identifier.Required", "The identifier is required.");
 
         public static readonly Error IdentifierTooLong =
-            new("Identifier.TooLong", "The identifier is too long.");
+            Error.Validation("Identifier.TooLong", "The identifier is too long.");
 
         public static readonly Error IdentifierAlreadyExists =
-            new("Account.IdentifierAlreadyExists", "Identifier is already registered.");
+            Error.Conflict("Account.IdentifierAlreadyExists", "Identifier is already registered.");
 
         public static readonly Error UnexpectedError =
-            new("Account.UnexpectedError", "An unexpected error occurred. Please try again later.");
+            Error.Failure("Account.UnexpectedError", "An unexpected error occurred. Please try again later.");
 
         public static readonly Error AccountDisabled =
-            new("Account.Disabled", "Account has been disabled.");
+            Error.Forbidden("Account.Disabled", "Account has been disabled.");
 
         public static readonly Error RoleRequired =
-            new("Account.RoleRequired", "Account required role");
+            Error.Validation("Account.RoleRequired", "Account required role");
 
         public static readonly Error AccountDeleted = Error.Failure(
         "Account.Deleted", "The account has been deleted and cannot perform this action.");

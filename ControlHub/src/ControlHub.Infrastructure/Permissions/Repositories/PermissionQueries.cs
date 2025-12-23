@@ -1,6 +1,10 @@
-﻿using ControlHub.Application.Permissions.Interfaces.Repositories;
+﻿using System.Linq;
+using ControlHub.Application.Common.DTOs;
+using ControlHub.Application.Permissions.Interfaces.Repositories;
 using ControlHub.Domain.Permissions;
+using ControlHub.Domain.Roles;
 using ControlHub.Infrastructure.Persistence;
+using ControlHub.SharedKernel.Utils;
 using Microsoft.EntityFrameworkCore;
 
 namespace ControlHub.Infrastructure.Permissions.Repositories
@@ -60,6 +64,36 @@ namespace ControlHub.Infrastructure.Permissions.Repositories
                 .Where(p => _db.RolePermissions
                     .Any(rp => rp.RoleId == roleId && rp.PermissionId == p.Id))
                 .ToListAsync(cancellationToken);
+        }
+
+        public async Task<PagedResult<Permission>> SearchPaginationAsync(int pageIndex, int pageSize, string[] conditions, CancellationToken cancellationToken)
+        {
+            var query = _db.Permissions.AsNoTracking();
+
+            if (conditions != null && conditions.Length > 0)
+            {
+                var predicate = PredicateBuilder.False<Permission>();
+
+                foreach (var rawTerm in conditions)
+                {
+                    if (string.IsNullOrWhiteSpace(rawTerm)) continue;
+                    var term = rawTerm.Trim();
+
+                    predicate = predicate.Or(r => r.Code.Contains(term) || r.Description.Contains(term));
+                }
+
+                query = query.Where(predicate);
+            }
+
+            var totalCount = await query.CountAsync(cancellationToken);
+
+            var items = await query
+                .OrderBy(r => r.Code)
+                .Skip((pageIndex - 1) * pageSize)
+                .Take(pageSize)
+                .ToListAsync(cancellationToken);
+
+            return new PagedResult<Permission>(items, totalCount, pageIndex, pageSize);
         }
     }
 }

@@ -97,7 +97,7 @@ namespace ControlHub.API.Accounts.Controllers
             });
         }
 
-        [Authorize]
+        [AllowAnonymous]
         [HttpPost("refresh")]
         public async Task<IActionResult> Refresh([FromBody] RefreshAccessTokenRequest request, CancellationToken ct)
         {
@@ -109,8 +109,8 @@ namespace ControlHub.API.Accounts.Controllers
 
             return Ok(new RefreshAccessTokenReponse
             {
-                RefreshToken = request.RefreshToken,
-                AccessToken = request.AccessToken
+                RefreshToken = result.Value.RefreshToken,
+                AccessToken = result.Value.AccessToken
             });
         }
 

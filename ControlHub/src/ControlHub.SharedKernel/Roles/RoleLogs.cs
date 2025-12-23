@@ -45,5 +45,11 @@ namespace ControlHub.SharedKernel.Roles
 
         public static readonly LogCode SetPermissions_Finished =
             new("Role.SetPermissions.Finished", "Finished setting permissions for role");
+
+            public static readonly LogCode SearchRoles_Started =
+        new("Role.SearchRoles.Started", "Starting role search process");
+
+        public static readonly LogCode SearchRoles_Success =
+            new("Role.SearchRoles.Success", "Role search completed successfully");
     }
 }

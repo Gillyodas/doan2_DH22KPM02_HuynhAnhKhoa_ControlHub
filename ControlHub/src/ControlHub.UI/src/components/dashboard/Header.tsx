@@ -1,34 +1,78 @@
-import React from 'react';
-import { Search, Bell, Sun } from 'lucide-react';
+"use client"
 
-export const Header: React.FC = () => {
+import { Bell, ChevronRight } from "lucide-react"
+import { Button } from "@/components/ui/button"
+import { useAuth } from "@/auth/use-auth"
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuLabel,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu"
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
+
+export function Header() {
+  const { auth, signOut } = useAuth()
+
+  const username = auth?.username ?? "Unknown"
+  const initials = username
+    .split(/\s+/)
+    .filter(Boolean)
+    .slice(0, 2)
+    .map((p) => p[0]?.toUpperCase())
+    .join("")
+
   return (
-    <header className="h-16 bg-slate-900/80 backdrop-blur-md border-b border-slate-800 flex items-center justify-between px-8 sticky top-0 z-10">
-      <div className="flex items-center bg-slate-800/50 border border-slate-700 px-3 py-1.5 rounded-xl w-full max-w-md focus-within:border-blue-500 transition-all">
-        <Search size={18} className="text-slate-500 mr-2" />
-        <input 
-          type="text" 
-          placeholder="Tìm kiếm hệ thống..." 
-          className="bg-transparent border-none focus:outline-none text-sm w-full text-slate-200 placeholder:text-slate-600" 
-        />
+    <header className="flex items-center justify-between h-16 px-6 bg-zinc-900 border-b border-zinc-800">
+      {/* Breadcrumb */}
+      <div className="flex items-center gap-2 text-sm">
+        <span className="text-zinc-400">Home</span>
+        <ChevronRight className="w-4 h-4 text-zinc-600" />
+        <span className="font-medium text-zinc-100">Dashboard</span>
       </div>
-      
-      <div className="flex items-center space-x-4 ml-4">
-        <button className="p-2 text-slate-400 hover:bg-slate-800 hover:text-amber-400 rounded-full transition-all">
-          <Sun size={20} />
-        </button>
-        
-        <button className="relative p-2 text-slate-400 hover:bg-slate-800 hover:text-white rounded-full transition-all">
-          <Bell size={20} />
-          <span className="absolute top-2 right-2 w-2 h-2 bg-blue-500 rounded-full border-2 border-slate-900"></span>
-        </button>
-        
-        <div className="h-8 w-px bg-slate-800 mx-2 hidden md:block"></div>
-        
-        <button className="hidden md:block bg-slate-800 text-slate-200 border border-slate-700 px-4 py-2 rounded-lg text-sm font-medium hover:bg-slate-700 transition-colors">
-          Hệ thống
-        </button>
+
+      {/* Right Section */}
+      <div className="flex items-center gap-3">
+        {/* Notification Bell */}
+        <Button variant="ghost" size="icon" className="relative text-zinc-400 hover:text-zinc-100 hover:bg-zinc-800">
+          <Bell className="w-5 h-5" />
+          <span className="absolute top-1.5 right-1.5 w-2 h-2 bg-red-500 rounded-full" />
+        </Button>
+
+        {/* User Profile Dropdown */}
+        <DropdownMenu>
+          <DropdownMenuTrigger asChild>
+            <Button variant="ghost" className="flex items-center gap-2 px-2 hover:bg-zinc-800">
+              <Avatar className="w-8 h-8">
+                <AvatarImage src="/placeholder.svg?height=32&width=32" alt="User" />
+                <AvatarFallback className="bg-zinc-700 text-zinc-200">{initials || "U"}</AvatarFallback>
+              </Avatar>
+              <div className="hidden md:block text-left">
+                <p className="text-sm font-medium text-zinc-100">{username}</p>
+                <p className="text-xs text-zinc-400">Authenticated</p>
+              </div>
+            </Button>
+          </DropdownMenuTrigger>
+          <DropdownMenuContent align="end" className="w-56 bg-zinc-900 border-zinc-800">
+            <DropdownMenuLabel className="text-zinc-100">My Account</DropdownMenuLabel>
+            <DropdownMenuSeparator className="bg-zinc-800" />
+            <DropdownMenuItem className="text-zinc-300 focus:bg-zinc-800 focus:text-zinc-100">Profile</DropdownMenuItem>
+            <DropdownMenuItem className="text-zinc-300 focus:bg-zinc-800 focus:text-zinc-100">
+              Settings
+            </DropdownMenuItem>
+            <DropdownMenuItem className="text-zinc-300 focus:bg-zinc-800 focus:text-zinc-100">Billing</DropdownMenuItem>
+            <DropdownMenuSeparator className="bg-zinc-800" />
+            <DropdownMenuItem
+              className="text-red-400 focus:bg-zinc-800 focus:text-red-300"
+              onSelect={() => signOut()}
+            >
+              Log out
+            </DropdownMenuItem>
+          </DropdownMenuContent>
+        </DropdownMenu>
       </div>
     </header>
-  );
-};
+  )
+}

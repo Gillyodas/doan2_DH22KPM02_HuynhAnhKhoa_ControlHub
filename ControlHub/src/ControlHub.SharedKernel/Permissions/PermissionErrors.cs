@@ -5,30 +5,30 @@ namespace ControlHub.SharedKernel.Permissions
     public static class PermissionErrors
     {
         public static readonly Error PermissionCodeRequired =
-            new("Permission.CodeRequired", "Permission code is required.");
+            Error.Validation("Permission.CodeRequired", "Permission code is required.");
 
         public static readonly Error PermissionAlreadyExists =
-            new("Permission.AlreadyExists", "A permission with the same code already exists.");
+            Error.Conflict("Permission.AlreadyExists", "A permission with the same code already exists.");
 
         public static readonly Error PermissionNotFound =
-            new("Permission.NotFound", "The specified permission does not exist.");
+            Error.NotFound("Permission.NotFound", "The specified permission does not exist.");
 
         public static readonly Error InvalidPermissionFormat =
-            new("Permission.InvalidFormat", "Permission code format is invalid.");
+            Error.Validation("Permission.InvalidFormat", "Permission code format is invalid.");
 
         public static readonly Error PermissionInUse =
-            new("Permission.InUse", "The permission is currently assigned to a role and cannot be deleted.");
+            Error.Conflict("Permission.InUse", "The permission is currently assigned to a role and cannot be deleted.");
 
         public static readonly Error PermissionCodeAlreadyExists =
-            new("Permission.CodeAlreadyExists", "Permission code already exists.");
+            Error.Conflict("Permission.CodeAlreadyExists", "Permission code already exists.");
 
         public static readonly Error PermissionUnexpectedError =
-            new("Permission.UnexpectedError", "Unexpected error occurred while creating permissions.");
+            Error.Failure("Permission.UnexpectedError", "Unexpected error occurred while creating permissions.");
 
         public static readonly Error PermissionNotFoundValid =
-            new("Permission.NotFoundValid", "No valid permissions found.");
+            Error.NotFound("Permission.NotFoundValid", "No valid permissions found.");
 
         public static readonly Error IdRequired =
-            new("Permission.Id.Required", "Id is required.");
+            Error.Validation("Permission.Id.Required", "Id is required.");
     }
 }

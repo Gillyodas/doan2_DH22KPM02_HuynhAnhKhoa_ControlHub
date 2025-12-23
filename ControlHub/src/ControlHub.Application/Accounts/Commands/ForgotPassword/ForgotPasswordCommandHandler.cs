@@ -121,15 +121,15 @@ namespace ControlHub.Application.Accounts.Commands.ForgotPassword
             var domainToken = _tokenFactory.Create(acc.Id, resetToken, TokenType.ResetPassword);
             await _tokenRepository.AddAsync(domainToken, cancellationToken);
 
-            var clientBaseUrl = _configuration["AppSettings:ClientBaseUrl"];
+            var devBaseUrl = _configuration["BaseUrl:DevBaseUrl"];
 
-            if (string.IsNullOrEmpty(clientBaseUrl))
+            if (string.IsNullOrEmpty(devBaseUrl))
             {
                 _logger.LogError("Missing configuration: AppSettings:ClientBaseUrl");
                 return Result.Failure(CommonErrors.SystemConfigurationError);
             }
 
-            var resetLink = $"{clientBaseUrl}/reset-password?token={domainToken.Value}";
+            var resetLink = $"{devBaseUrl}/reset-password?token={domainToken.Value}";
             var payload = new
             {
                 To = request.Value,

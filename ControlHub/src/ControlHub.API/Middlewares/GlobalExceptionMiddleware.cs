@@ -32,7 +32,7 @@ public class GlobalExceptionMiddleware
                 throw;
             }
 
-            var (status, type, title) = MapExceptionToProblem(ex);
+            var (status, type, title, code) = MapExceptionToProblem(ex);
 
             _logger.LogError(ex,
                 "Unhandled exception at {Path} [{Type}] with TraceId {TraceId}",
@@ -45,6 +45,8 @@ public class GlobalExceptionMiddleware
                 Status = status,
                 Instance = context.Request.Path
             };
+
+            pd.Extensions["code"] = code;
 
             if (_env.IsDevelopment())
             {
@@ -69,19 +71,19 @@ public class GlobalExceptionMiddleware
         }
     }
 
-    private static (int status, string type, string title) MapExceptionToProblem(Exception ex)
+    private static (int status, string type, string title, string code) MapExceptionToProblem(Exception ex)
     {
         return ex switch
         {
-            UnauthorizedAccessException _ => ((int)HttpStatusCode.Unauthorized, "https://httpstatuses.com/401", "Unauthorized"),
-            KeyNotFoundException _ => ((int)HttpStatusCode.NotFound, "https://httpstatuses.com/404", "Not Found"),
-            InvalidOperationException _ => ((int)HttpStatusCode.BadRequest, "https://httpstatuses.com/400", "Invalid Operation"),
-            DbUpdateConcurrencyException _ => ((int)HttpStatusCode.Conflict, "urn:controlhub:errors:concurrency", "Concurrency error"),
-            ApplicationException _ => ((int)HttpStatusCode.BadRequest, "urn:controlhub:errors:application", "Application layer error"),
-            RepositoryConcurrencyException _ => ((int)HttpStatusCode.Conflict, "urn:controlhub:errors:repository-concurrency", "Repository concurrency error"),
-            RepositoryException _ => ((int)HttpStatusCode.InternalServerError, "urn:controlhub:errors:repository", "Database repository error"),
-            DbUpdateException _ => ((int)HttpStatusCode.InternalServerError, "urn:controlhub:errors:database", "Database error"),
-            _ => ((int)HttpStatusCode.InternalServerError, "urn:controlhub:errors:unhandled", "Unhandled error")
+            UnauthorizedAccessException _ => ((int)HttpStatusCode.Unauthorized, "https://httpstatuses.com/401", "Unauthorized", "Auth.Unauthorized"),
+            KeyNotFoundException _ => ((int)HttpStatusCode.NotFound, "https://httpstatuses.com/404", "Not Found", "Common.NotFound"),
+            InvalidOperationException _ => ((int)HttpStatusCode.BadRequest, "https://httpstatuses.com/400", "Invalid Operation", "Common.InvalidOperation"),
+            DbUpdateConcurrencyException _ => ((int)HttpStatusCode.Conflict, "urn:controlhub:errors:concurrency", "Concurrency error", "Database.Concurrency"),
+            ApplicationException _ => ((int)HttpStatusCode.BadRequest, "urn:controlhub:errors:application", "Application layer error", "Application.Error"),
+            RepositoryConcurrencyException _ => ((int)HttpStatusCode.Conflict, "urn:controlhub:errors:repository-concurrency", "Repository concurrency error", "Repository.Concurrency"),
+            RepositoryException _ => ((int)HttpStatusCode.InternalServerError, "urn:controlhub:errors:repository", "Database repository error", "Repository.Error"),
+            DbUpdateException _ => ((int)HttpStatusCode.InternalServerError, "urn:controlhub:errors:database", "Database error", "Database.Error"),
+            _ => ((int)HttpStatusCode.InternalServerError, "urn:controlhub:errors:unhandled", "Unhandled error", "Unhandled.Error")
         };
     }
 }

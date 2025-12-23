@@ -1,4 +1,6 @@
-﻿using ControlHub.Domain.Permissions;
+﻿using ControlHub.Application.Common.DTOs;
+using ControlHub.Domain.Permissions;
+using ControlHub.Domain.Roles;
 
 namespace ControlHub.Application.Permissions.Interfaces.Repositories
 {
@@ -10,5 +12,6 @@ namespace ControlHub.Application.Permissions.Interfaces.Repositories
         Task<bool> ExistAsync(Guid id, CancellationToken cancellationToken);
         Task<IEnumerable<Permission>> GetByIdsAsync(IEnumerable<Guid> permissionIds, CancellationToken cancellationToken);
         Task<IEnumerable<Permission>> GetByRoleIdAsync(Guid roleId, CancellationToken cancellationToken);
+        Task<PagedResult<Permission>> SearchPaginationAsync(int pageIndex, int pageSize, string[] conditions, CancellationToken cancellationToken);
     }
 }
