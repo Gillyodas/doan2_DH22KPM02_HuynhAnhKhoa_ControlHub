@@ -44,17 +44,17 @@ export const ROUTES = {
 
 export const API_ENDPOINTS = {
   auth: {
-    signIn: '/api/Auth/signin',
-    register: '/api/Auth/register',
-    registerAdmin: '/api/Auth/register-admin',
-    registerSuperAdmin: '/api/Auth/register-superadmin',
-    refresh: '/api/Auth/refresh',
-    signOut: '/api/Auth/signout',
+    signIn: '/api/Auth/auth/signin',
+    register: '/api/Auth/users/register',
+    registerAdmin: '/api/Auth/admins/register',
+    registerSuperAdmin: '/api/Auth/superadmins/register',
+    refresh: '/api/Auth/auth/refresh',
+    signOut: '/api/Auth/auth/signout',
   },
   account: {
-    changePassword: (id: string) => `/api/Account/change-password/${id}`,
-    forgotPassword: '/api/Account/forgot-password',
-    resetPassword: '/api/Account/reset-password',
+    changePassword: (id: string) => `/api/Account/users/${id}/password`,
+    forgotPassword: '/api/Account/auth/forgot-password',
+    resetPassword: '/api/Account/auth/reset-password',
   },
   permissions: {
     create: '/api/Permission/permissions',
@@ -62,11 +62,11 @@ export const API_ENDPOINTS = {
   },
   roles: {
     create: '/api/Role/roles',
-    update: '/api/Role/update',
+    update: '/api/Role/roles/{roleId}/permissions',
     list: '/api/Role',
   },
   users: {
-    updateUsername: (id: string) => `/api/User/username/${id}`,
+    updateUsername: (id: string) => `/api/User/users/${id}/username`,
   },
 } as const
 

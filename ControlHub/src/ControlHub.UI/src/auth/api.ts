@@ -61,7 +61,7 @@ async function postJsonVoid(path: string, body: unknown, accessToken?: string) {
 }
 
 export async function signIn(req: SignInRequest): Promise<AuthData> {
-  const data = await postJson<AuthData>("/api/Auth/signin", {
+  const data = await postJson<AuthData>("/api/Auth/auth/signin", {
     value: req.value,
     password: req.password,
     type: req.type,
@@ -72,12 +72,12 @@ export async function signIn(req: SignInRequest): Promise<AuthData> {
 
 export async function register(role: RegisterRole, req: RegisterRequest, options?: { masterKey?: string; accessToken?: string }) {
   if (role === "User") {
-    return postJson<{ accountId: string | number; message: string }>("/api/Auth/register", req)
+    return postJson<{ accountId: string | number; message: string }>("/api/Auth/users/register", req)
   }
 
   if (role === "Admin") {
     return postJson<{ accountId: string | number; message: string }>(
-      "/api/Auth/register-admin",
+      "/api/Auth/admins/register",
       req,
       options?.accessToken,
     )
@@ -88,13 +88,13 @@ export async function register(role: RegisterRole, req: RegisterRequest, options
     masterKey: options?.masterKey ?? "",
   }
 
-  return postJson<{ accountId: string | number; message: string }>("/api/Auth/register-superadmin", superReq)
+  return postJson<{ accountId: string | number; message: string }>("/api/Auth/superadmins/register", superReq)
 }
 
 export async function forgotPassword(req: ForgotPasswordRequest) {
-  await postJsonVoid("/api/Account/forgot-password", req)
+  await postJsonVoid("/api/Account/auth/forgot-password", req)
 }
 
 export async function resetPassword(req: ResetPasswordRequest) {
-  await postJsonVoid("/api/Account/reset-password", req)
+  await postJsonVoid("/api/Account/auth/reset-password", req)
 }

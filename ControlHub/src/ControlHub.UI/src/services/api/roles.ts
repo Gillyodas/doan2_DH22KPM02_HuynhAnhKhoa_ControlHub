@@ -20,10 +20,11 @@ export async function createRoles(
 }
 
 export async function addPermissionsForRole(
+  roleId: string,
   req: AddPermissionsForRoleRequest,
   accessToken: string
 ): Promise<AddPermissionsForRoleResponse> {
-  return fetchJson<AddPermissionsForRoleResponse>("/api/Role/update", {
+  return fetchJson<AddPermissionsForRoleResponse>(`/api/Role/roles/${roleId}/permissions`, {
     method: "POST",
     body: req,
     accessToken,

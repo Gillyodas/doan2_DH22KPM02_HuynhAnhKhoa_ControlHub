@@ -8,6 +8,7 @@ using ControlHub.Infrastructure.Authorization.Requirements;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Logging;
 
 namespace ControlHub.API.Accounts.Controllers
 {
@@ -16,14 +17,17 @@ namespace ControlHub.API.Accounts.Controllers
     public class AccountController : BaseApiController
     {
         private readonly IAuthorizationService _authorizationService;
-        public AccountController(IMediator mediator, IAuthorizationService authorizationService)
-            : base(mediator)
+        private readonly ILogger<AccountController> _logger;
+        
+        public AccountController(IMediator mediator, IAuthorizationService authorizationService, ILogger<AccountController> logger)
+            : base(mediator, logger)
         {
             _authorizationService = authorizationService;
+            _logger = logger;
         }
 
         [Authorize]
-        [HttpPost("change-password/{id}")]
+        [HttpPatch("users/{id}/password")]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
@@ -51,7 +55,7 @@ namespace ControlHub.API.Accounts.Controllers
         }
 
         [AllowAnonymous]
-        [HttpPost("forgot-password")]
+        [HttpPost("auth/forgot-password")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
@@ -70,7 +74,7 @@ namespace ControlHub.API.Accounts.Controllers
         }
 
         [AllowAnonymous]
-        [HttpPost("reset-password")]
+        [HttpPost("auth/reset-password")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         public async Task<IActionResult> ResetPassword([FromBody] ResetPasswordRequest request, CancellationToken cancellationToken)

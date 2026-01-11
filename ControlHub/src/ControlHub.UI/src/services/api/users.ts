@@ -9,7 +9,7 @@ export async function updateUsername(
   req: UpdateUsernameRequest,
   accessToken: string
 ): Promise<UpdateUsernameResponse> {
-  return fetchJson<UpdateUsernameResponse>(`/api/User/username/${userId}`, {
+  return fetchJson<UpdateUsernameResponse>(`/api/User/users/${userId}/username`, {
     method: "PATCH",
     body: req,
     accessToken,

@@ -93,8 +93,8 @@ export async function createPermissions(permissions: CreatePermissionInput[], ac
 
 export async function addPermissionsForRole(roleId: string, permissionIds: string[], accessToken: string) {
   return postJson<{ message: string; successCount: number; failureCount: number; failedRoles?: string[] }>(
-    "/api/Role/update",
-    { roleId, permissionIds },
+    `/api/Role/roles/${roleId}/permissions`,
+    { permissionIds },
     accessToken,
   )
 }

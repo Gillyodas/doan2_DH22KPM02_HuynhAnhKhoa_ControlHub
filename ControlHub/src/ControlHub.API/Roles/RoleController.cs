@@ -11,6 +11,7 @@ using ControlHub.SharedKernel.Results;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Logging;
 
 namespace ControlHub.API.Roles
 {
@@ -18,17 +19,20 @@ namespace ControlHub.API.Roles
     [Route("api/[controller]")]
     public class RoleController : BaseApiController
     {
-        public RoleController(IMediator mediator) : base(mediator)
+        private readonly ILogger<RoleController> _logger;
+        
+        public RoleController(IMediator mediator, ILogger<RoleController> logger) : base(mediator, logger)
         {
+            _logger = logger;
         }
 
         [Authorize(Policy = "Permission:role.add_permissions")]
-        [HttpPost("update")]
+        [HttpPost("roles/{roleId}/permissions")]
         [ProducesResponseType(typeof(AddPermissonsForRoleResponse), StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        public async Task<IActionResult> AddPermissionsForRole([FromBody] AddPermissonsForRoleRequest request, CancellationToken cancellationToken)
+        public async Task<IActionResult> AddPermissionsForRole(string roleId, [FromBody] AddPermissonsForRoleRequest request, CancellationToken cancellationToken)
         {
-            var command = new AddPermissonsForRoleCommand(request.RoleId, request.PermissionIds, cancellationToken);
+            var command = new AddPermissonsForRoleCommand(roleId, request.PermissionIds, cancellationToken);
             var result = await Mediator.Send(command, cancellationToken);
 
             if (result.IsFailure)

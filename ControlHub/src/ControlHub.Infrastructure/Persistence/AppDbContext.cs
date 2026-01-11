@@ -24,10 +24,16 @@ namespace ControlHub.Infrastructure.Persistence
         // Entities thuộc Aggregate
         public DbSet<User> Users { get; set; } = default!;
         public DbSet<Token> Tokens { get; set; } = default!;
-        public DbSet<OutboxMessage> OutboxMessages { get; set; } = default!;
+        //TODO: Add OutboxMessage to DbContext + sử dụng virtual DbSet để hỗ trợ testing
+        public virtual DbSet<OutboxMessage> OutboxMessages { get; set; } = default!;
 
         // Join Entities
         public DbSet<RolePermissionEntity> RolePermissions { get; set; } = default!;
+
+        public override async Task<int> SaveChangesAsync(CancellationToken cancellationToken = default)
+        {
+            return await base.SaveChangesAsync(cancellationToken);
+        }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {

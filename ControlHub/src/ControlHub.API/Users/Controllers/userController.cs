@@ -8,6 +8,7 @@ using ControlHub.Application.Users.Commands.UpdateUsername;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Logging;
 
 namespace ControlHub.API.Users.Controllers
 {
@@ -15,12 +16,15 @@ namespace ControlHub.API.Users.Controllers
     [Route("api/[controller]")]
     public class UserController : BaseApiController
     {
-        public UserController(IMediator mediator) : base(mediator)
+        private readonly ILogger<UserController> _logger;
+
+        public UserController(IMediator mediator, ILogger<UserController> logger) : base(mediator, logger)
         {
+            _logger = logger;
         }
 
         [Authorize]
-        [HttpPatch("username/{id}")]
+        [HttpPatch("users/{id}/username")]
         [ProducesResponseType(typeof(UpdateUsernameResponse), StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]

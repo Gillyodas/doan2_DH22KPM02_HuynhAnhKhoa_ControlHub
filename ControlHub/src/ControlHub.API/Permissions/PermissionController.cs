@@ -8,6 +8,7 @@ using ControlHub.Domain.Permissions;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Logging;
 
 namespace ControlHub.API.Permissions
 {
@@ -15,8 +16,11 @@ namespace ControlHub.API.Permissions
     [Route("api/[controller]")]
     public class PermissionController : BaseApiController
     {
-        public PermissionController(IMediator mediator) : base(mediator)
+        private readonly ILogger<PermissionController> _logger;
+
+        public PermissionController(IMediator mediator, ILogger<PermissionController> logger) : base(mediator, logger)
         {
+            _logger = logger;
         }
 
         [Authorize(Policy = "Permission:permission.create")]

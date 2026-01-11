@@ -17,13 +17,14 @@ namespace ControlHub.API.Accounts.Controllers
     [Route("api/[controller]")]
     public class AuthController : BaseApiController
     {
+        private ILogger<AuthController> _logger;
         // Constructor truyền Mediator xuống lớp Base
-        public AuthController(IMediator mediator) : base(mediator)
+        public AuthController(IMediator mediator, ILogger<AuthController> logger) : base(mediator, logger)
         {
         }
 
         [AllowAnonymous]
-        [HttpPost("register")]
+        [HttpPost("users/register")]
         [ProducesResponseType(typeof(RegisterUserResponse), StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status409Conflict)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
@@ -43,7 +44,7 @@ namespace ControlHub.API.Accounts.Controllers
         }
 
         [Authorize(Policy = "Permission:account.register_admin")]
-        [HttpPost("register-admin")]
+        [HttpPost("admins/register")]
         public async Task<IActionResult> RegisterAdmin([FromBody] RegisterAdminRequest request, CancellationToken ct)
         {
             var command = new RegisterAdminCommand(request.Value, request.Type, request.Password);
@@ -60,7 +61,7 @@ namespace ControlHub.API.Accounts.Controllers
         }
 
         [AllowAnonymous]
-        [HttpPost("register-superadmin")]
+        [HttpPost("superadmins/register")]
         public async Task<IActionResult> RegisterSuperAdmin([FromBody] RegisterSupperAdminRequest request, CancellationToken ct)
         {
             var command = new RegisterSupperAdminCommand(request.Value, request.Type, request.Password, request.MasterKey);
@@ -77,7 +78,7 @@ namespace ControlHub.API.Accounts.Controllers
         }
 
         [AllowAnonymous]
-        [HttpPost("signin")]
+        [HttpPost("auth/signin")]
         [ProducesResponseType(typeof(SignInResponse), StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         public async Task<IActionResult> SignIn([FromBody] SignInRequest request, CancellationToken ct)
@@ -98,7 +99,7 @@ namespace ControlHub.API.Accounts.Controllers
         }
 
         [AllowAnonymous]
-        [HttpPost("refresh")]
+        [HttpPost("auth/refresh")]
         public async Task<IActionResult> Refresh([FromBody] RefreshAccessTokenRequest request, CancellationToken ct)
         {
             var command = new RefreshAccessTokenCommand(request.RefreshToken, request.AccID, request.AccessToken);
@@ -115,7 +116,7 @@ namespace ControlHub.API.Accounts.Controllers
         }
 
         [Authorize]
-        [HttpPost("signout")]
+        [HttpPost("auth/signout")]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         public async Task<IActionResult> SignOut([FromBody] SignOutRequest request, CancellationToken ct)
         {

@@ -46,7 +46,7 @@ function processQueue(error: unknown, token: string | null) {
 
 function isAuthEndpoint(url?: string) {
   if (!url) return false
-  return url.includes("/api/Auth/signin") || url.includes("/api/Auth/refresh")
+  return url.includes("/api/Auth/auth/signin") || url.includes("/api/Auth/auth/refresh")
 }
 
 async function refreshAccessToken() {
@@ -57,7 +57,7 @@ async function refreshAccessToken() {
 
   // NOTE: Use a plain axios call without interceptors to avoid recursion
   const res = await axios.post<RefreshResponse>(
-    `${API_BASE}/api/Auth/refresh`,
+    `${API_BASE}/api/Auth/auth/refresh`,
     {
       refreshToken: auth.refreshToken,
       accessToken: auth.accessToken,
