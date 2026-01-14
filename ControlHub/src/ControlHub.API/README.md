@@ -1,106 +1,405 @@
-ControlHub - Identity & Access Management SolutionControlHub là thư viện .NET 8 trọn gói cung cấp giải pháp xác thực (Authentication), phân quyền (RBAC), và quản lý người dùng (User Management) chuẩn Clean Architecture.📦 Cài đặtCài đặt gói NuGet vào dự án ASP.NET Core của bạn bằng lệnh:dotnet add package ControlHub.Core
-🚀 Hướng dẫn tích hợp (Quick Start)Bước 1: Cấu hình appsettings.json (BẮT BUỘC)Copy đoạn cấu hình dưới đây vào file appsettings.json của dự án. Hãy thay đổi các giá trị trong ngoặc <...> cho phù hợp với môi trường của bạn.{
-  "Logging": {
-    "LogLevel": {
-      "Default": "Information",
-      "Microsoft.AspNetCore": "Warning"
-    }
-  },
-  "AllowedHosts": "*",
+🚀
+## 📋 Giới thiệu
 
-  // 1. Cấu hình Database (SQL Server)
-  "ConnectionStrings": {
-    "DefaultConnection": "Server=localhost;Database=ControlHub_AuthDB;Trusted_Connection=True;MultipleActiveResultSets=true;TrustServerCertificate=True"
-  },
+ControlHub.Core là một thư viện Identity và Authentication đầy đủ tính năng được xây dựng trên .NET 8, sử dụng các patterns hiện đại như CQRS, Domain-Driven Design (DDD), và Entity Framework Core.
 
-  // 2. Cấu hình JWT (Token)
-  "Jwt": {
-    "Issuer": "ControlHub",
-    "Audience": "ControlHubUsers",
-    "Key": "<YOUR_SECRET_KEY_MUST_BE_AT_LEAST_32_CHARS_LONG>" 
-    // ⚠️ Key phải dài ít nhất 32 ký tự
-  },
+### ✨ Tính năng chính
 
-  // 3. Cấu hình thời hạn Token
-  "TokenSettings": {
-    "AccessTokenMinutes": 15,
-    "RefreshTokenDays": 14,
-    "ResetPasswordMinutes": 30,
-    "VerifyEmailHours": 24
-  },
+- 🔐 **Multi-Identifier Authentication**: Hỗ trợ Email, Phone, Username, và custom identifiers
+- 🎛️ **Dynamic Identifier Configuration**: Cấu hình validation rules tại runtime
+- 🏗️ **Clean Architecture**: DDD + CQRS + Repository Pattern
+- 🗄️ **Entity Framework Core**: Code-first migrations với schema support
+- 🔑 **JWT Authentication**: Access & Refresh tokens
+- 📊 **OpenTelemetry**: Monitoring và tracing
+- 📝 **Swagger Documentation**: API documentation tự động
+- 🧪 **Test Data Provider**: Built-in test data seeding
 
-  // 4. Mật khẩu ứng dụng (Dùng để tạo SuperAdmin ban đầu)
-  "AppPassword": {
-    "MasterKey": "<YOUR_SECURE_MASTER_KEY>"
-  },
+## 🚀 Quick Start
 
-  // 5. Cấu hình Email (SMTP)
-  "Smtp": {
-    "Host": "smtp.gmail.com",
-    "Port": "587",
-    "Username": "<your_email@gmail.com>",
-    "Password": "<your_app_password>",
-    "From": "<your_email@gmail.com>"
-  },
+### Installation
 
-  // 6. Cấu hình đường dẫn Client
-  "BaseUrl": {
-    "ClientBaseUrl": "[https://your-frontend-domain.com](https://your-frontend-domain.com)",
-    "DevBaseUrl": "https://localhost:7110"
-  },
+```bash
+dotnet add package ControlHub.Core
+```
 
-  // 7. Cấu hình Role ID (Tùy chọn)
-  "RoleSettings": {
-    "SuperAdminRoleId": "9BA459E9-2A98-43C4-8530-392A63C66F1B",
-    "AdminRoleId": "0CD24FAC-ABD7-4AD9-A7E4-248058B8D404",
-    "UserRoleId": "8CF94B41-5AD8-4893-82B2-B193C91717AF"
-  }
-}
-Bước 2: Tích hợp trong Program.csMở file Program.cs, import namespace và thêm 2 dòng lệnh quan trọng (AddControlHub và UseControlHub).using ControlHub; // 1. Import namespace
+### Basic Configuration
 
+```csharp
+// Program.cs
 var builder = WebApplication.CreateBuilder(args);
 
-// =============================================================
-// A. ĐĂNG KÝ DỊCH VỤ (Service Registration)
-// =============================================================
-
-// Tự động đăng ký: EF Core, JWT Auth, MediatR, Swagger Config, Repositories...
+// Add ControlHub services
 builder.Services.AddControlHub(builder.Configuration);
-
-// (Các cấu hình khác của app chính...)
-builder.Services.AddEndpointsApiExplorer();
-// Lưu ý: ControlHub đã tự động cấu hình Swagger Gen (Bearer Auth).
-// Bạn KHÔNG CẦN gọi builder.Services.AddSwaggerGen() nữa trừ khi muốn override.
 
 var app = builder.Build();
 
-// =============================================================
-// B. KÍCH HOẠT PIPELINE (Middleware & Data)
-// =============================================================
+app.UseControlHub(app.Environment);
+app.Run();
+```
 
+### appsettings.json
+
+```json
+{
+  "ConnectionStrings": {
+    "DefaultConnection": "Server=localhost;Database=ControlHub;Trusted_Connection=true;"
+  },
+  "Jwt": {
+    "SecretKey": "your-secret-key-here",
+    "Issuer": "ControlHub",
+    "Audience": "ControlHub.Users",
+    "AccessTokenExpiration": 3600,
+    "RefreshTokenExpiration": 86400
+  },
+  "Argon2": {
+    "SaltSize": 16,
+    "MemorySize": 65536,
+    "Iterations": 3
+  }
+}
+```
+
+## 📚 API Endpoints
+
+### Authentication
+
+| Method | Endpoint | Description |
+|--------|----------|-------------|
+| `POST` | `/api/auth/signin` | Đăng nhập |
+| `POST` | `/api/auth/register/user` | Đăng ký User |
+| `POST` | `/api/auth/register/admin` | Đăng ký Admin |
+| `POST` | `/api/auth/register/superadmin` | Đăng ký SuperAdmin |
+| `POST` | `/api/auth/refresh` | Refresh token |
+
+### Identifier Configuration
+
+| Method | Endpoint | Description |
+|--------|----------|-------------|
+| `GET` | `/api/Identifier` | Lấy tất cả configs (Auth required) |
+| `GET` | `/api/Identifier/active` | Lấy configs active (No auth) |
+| `POST` | `/api/Identifier` | Tạo config mới (Auth required) |
+| `PUT` | `/api/Identifier/{id}` | Cập nhật config (Auth required) |
+| `PATCH` | `/api/Identifier/{id}/toggle-active` | Toggle active status (Auth required) |
+
+## 🎯 Usage Examples
+
+### SignIn với Email
+
+```bash
+POST /api/auth/signin
+Content-Type: application/json
+
+{
+  "value": "user@example.com",
+  "password": "User@123",
+  "type": 0
+}
+```
+
+### SignIn với Username
+
+```bash
+POST /api/auth/signin
+Content-Type: application/json
+
+{
+  "value": "username123",
+  "password": "User@123",
+  "type": 2
+}
+```
+
+### Tạo Identifier Config mới
+
+```bash
+POST /api/Identifier
+Authorization: Bearer {token}
+Content-Type: application/json
+
+{
+  "name": "StudentID",
+  "description": "Student ID validation",
+  "rules": [
+    {
+      "type": 3,
+      "parameters": { "pattern": "^STU\\d{6}$" },
+      "errorMessage": "Invalid student ID format",
+      "order": 1
+    }
+  ]
+}
+```
+
+## 🔧 Identifier Types
+
+| Type | Value | Description |
+|------|-------|-------------|
+| Email | 0 | Email address |
+| Phone | 1 | Phone number |
+| Username | 2 | Username or custom identifier |
+
+## 🛠️ Validation Rules
+
+### Built-in Rules
+
+- **Required**: Field không được để trống
+- **Email**: Validate email format
+- **Phone**: Validate phone number (international support)
+- **MinLength**: Độ dài tối thiểu
+- **MaxLength**: Độ dài tối đa
+- **Pattern**: Regular expression pattern
+- **Range**: Numeric range validation
+- **Custom**: Custom validation logic
+
+### Example Configuration
+
+```csharp
+// EmployeeID validation
+var config = IdentifierConfig.Create("EmployeeID", "EmployeeID validation");
+config.AddRule(ValidationRuleType.Required, new Dictionary<string, object>());
+config.AddRule(ValidationRuleType.MinLength, new Dictionary<string, object> { { "length", 5 } });
+config.AddRule(ValidationRuleType.MaxLength, new Dictionary<string, object> { { "length", 10 } });
+config.AddRule(ValidationRuleType.Pattern, new Dictionary<string, object>
+{
+    { "pattern", @"^EMP\d{4,9}$" },
+    { "options", 0 }
+});
+```
+
+## 🧪 Database Seeding
+
+ControlHub includes a comprehensive database seeding system that allows you to populate your database with initial data for development and testing.
+
+### Automatic Seeding
+
+By default, the seeding system will:
+- **Check if data exists**: If the database already contains data, seeding will be skipped
+- **Seed only when empty**: Data is only seeded when the database is empty
+- **Provide console feedback**: All seeding operations are logged to the console
+
+### Manual Seeding Control
+
+You can control seeding behavior programmatically:
+
+```csharp
+// In Program.cs or your startup configuration
+using ControlHub.Infrastructure.Persistence.Seeders;
+
+// Get database context
+var scope = app.Services.CreateScope();
+var db = scope.ServiceProvider.GetRequiredService<AppDbContext>();
+
+// Seed only if database is empty (default behavior)
+await ControlHubSeeder.SeedAsync(db, forceSeed: false);
+
+// Force seed even if data exists (will clear and reseed)
+await ControlHubSeeder.SeedAsync(db, forceSeed: true);
+
+// Seed individual components
+await TestDataProvider.SeedTestAccountsAsync(db, includeExtended: true, forceSeed: false);
+await TestDataProvider.SeedPermissionsAndRolesAsync(db, forceSeed: false);
+await TestDataProvider.SeedTestIdentifierConfigsAsync(db, forceSeed: false);
+```
+
+### Seeding Configuration
+
+The seeding system includes these components:
+
+| Component | Description | Default Behavior |
+|-----------|-------------|------------------|
+| **Roles** | SuperAdmin, Admin, User roles | Seeded if no roles exist |
+| **Permissions** | 20+ system permissions | Seeded if no permissions exist |
+| **Identifier Configs** | Email, Phone, Username, EmployeeID, Age validation | Seeded if no configs exist |
+| **Test Accounts** | Pre-configured test users | Always cleared and reseeded |
+
+### Test Accounts
+
+The system creates these test accounts by default:
+
+| Role | Identifier | Password | Usage |
+|------|------------|----------|-------|
+| SuperAdmin | `gillyodaswork@gmail.com` | `Admin@123` | Full system access |
+| Admin | `admin123` | `Admin@123` | Administrative access |
+| User | `EMP00001` | `Admin@123` | Standard user access |
+| User | `+84123456789` | `Admin@123` | Phone-based login |
+
+### Environment-Specific Seeding
+
+You can configure different seeding behavior per environment:
+
+```csharp
+// In Program.cs
 if (app.Environment.IsDevelopment())
 {
-    app.UseSwagger();
-    app.UseSwaggerUI();
+    // Development: Force seed to ensure fresh test data
+    await ControlHubSeeder.SeedAsync(db, forceSeed: true);
 }
+else if (app.Environment.IsProduction())
+{
+    // Production: Only seed if database is empty
+    await ControlHubSeeder.SeedAsync(db, forceSeed: false);
+}
+```
 
-app.UseHttpsRedirection();
+### Custom Seeding
 
-// Bắt buộc phải có Auth Middleware của App chính
-app.UseAuthentication();
-app.UseAuthorization();
+You can extend the seeding system for your custom data:
 
-// Kích hoạt ControlHub:
-// - Tự động chạy Migration tạo bảng (Schema: ControlHub.*)
-// - Tự động Seed dữ liệu Roles & SuperAdmin mặc định
-app.UseControlHub();
+```csharp
+public static class CustomSeeder
+{
+    public static async Task SeedCustomDataAsync(AppDbContext db, bool forceSeed = false)
+    {
+        var hasExistingData = await db.CustomEntities.AnyAsync();
+        
+        if (hasExistingData && !forceSeed)
+        {
+            Console.WriteLine("Custom data already exists. Use forceSeed=true to override.");
+            return;
+        }
+        
+        // Your custom seeding logic here
+        var customData = new List<CustomEntity>
+        {
+            // ... create your entities
+        };
+        
+        await db.CustomEntities.AddRangeAsync(customData);
+        await db.SaveChangesAsync();
+        
+        Console.WriteLine($"Seeded {customData.Count} custom entities successfully.");
+    }
+}
+```
 
-app.MapControllers();
+## 🧪 Test Data Provider
 
-app.Run();
-🛠 Xử lý sự cố thường gặp (Troubleshooting)1. Lỗi More than one DbContext was foundKhi bạn chạy lệnh tạo Migration cho ứng dụng của mình (ví dụ QuanLyPhongTro), EF Core thấy có 2 DbContext: ApplicationDbContext (của bạn) và AppDbContext (của ControlHub).Khắc phục: Bạn cần chỉ định rõ DbContext nào bằng tham số --context:# Tạo migration cho DB của bạn
-dotnet ef migrations add Init_MyDb --context YourApplicationDbContext
+Bao gồm built-in test data provider để dễ dàng testing:
 
-# Update DB của bạn
-dotnet ef database update --context YourApplicationDbContext
-(Thay YourApplicationDbContext bằng tên class DbContext trong dự án của bạn).2. Lỗi Signature validation failed (IDX10500)Nguyên nhân: Chưa cấu hình Jwt:Key hoặc Key quá ngắn (dưới 32 ký tự).Khắc phục: Kiểm tra lại file appsettings.json.3. Không thấy bảng trong DatabaseNguyên nhân: Connection String sai hoặc chưa chạy app.UseControlHub().Khắc phục: ControlHub sử dụng Schema riêng (ControlHub.Users, ControlHub.Roles...). Hãy kiểm tra kỹ trong SQL Server dưới mục Tables (có thể cần Refresh).4. Lỗi Unable to resolve service...Nguyên nhân: Thiếu file DLL hoặc chưa gọi builder.Services.AddControlHub(...).Khắc phục: Clean Solution và Rebuild lại project.
+```csharp
+// Seed test data
+await TestDataProvider.SeedTestAccountsAsync(db, includeExtended: false);
+
+// Get test account
+var superAdmin = TestDataProvider.GetTestAccount("gillyodaswork@gmail.com");
+
+// Get accounts by role
+var adminAccounts = TestDataProvider.GetTestAccountsByRole("Admin");
+```
+
+### Test Accounts
+
+| Role | Identifier | Password |
+|------|------------|----------|
+| SuperAdmin | `gillyodaswork@gmail.com` | `Admin@123` |
+| Admin | `admin123` | `Admin@123` |
+| User | `EMP00001` | `Admin@123` |
+| User | `+84123456789` | `Admin@123` |
+
+## 🏗️ Architecture
+
+### Layers
+
+```bash
+📁 ControlHub.API
+├── Controllers        # API Controllers
+├── ViewModels        # DTOs
+└── Configurations    # API Configurations
+
+📁 ControlHub.Application
+├── Commands          # CQRS Commands
+├── Queries            # CQRS Queries
+├── DTOs               # Data Transfer Objects
+└── Services          # Application Services
+
+📁 ControlHub.Domain
+├── Accounts         # Domain Entities
+├── Roles            # Role Management
+├── Users              # User Management
+└── SharedKernel       # Shared Domain Logic
+
+📁 ControlHub.Infrastructure
+├── Persistence        # EF Core
+├── Repositories       # Repository Implementations
+└── Seeders           # Data Seeding
+```
+
+### Design Patterns
+
+- **Domain-Driven Design (DDD)**: Domain entities, value objects, aggregates
+- **CQRS**: Command Query Responsibility Segregation via MediatR
+- **Repository Pattern**: Abstract data access
+- **Unit of Work**: Transaction management
+- **Result Pattern**: Consistent error handling
+
+## 🔐 Security Features
+
+- **Argon2 Password Hashing**: Modern password hashing algorithm
+- **JWT Tokens**: Secure access and refresh keys
+- **Role-based Authorization**: SuperAdmin > Admin > User
+- **Password Policies**: Strong password requirements
+- **Token Revocation**: Secure logout functionality
+
+## 📊 Monitoring & Observability
+
+- **OpenTelemetry**: Distributed tracing
+- **Prometheus Metrics**: Application metrics
+- **Serilog Logging**: Structured logging
+- **Health Checks**: Application health monitoring
+
+## 🛡️ Database Schema
+
+### Core Tables
+
+- `Roles`: User roles and permissions
+- `Accounts`: User accounts with passwords
+- `AccountIdentifiers`: Multi-identifier support
+- `IdentifierConfig`: Dynamic validation rules
+- `IdentifierValidationRules`: Rule definitions
+- `Users`: User profiles
+- `Tokens`: JWT token management
+
+### Schema Support
+
+ControlHub supports schemas (useful: `ControlHub`) for multi-tenant scenarios.
+
+## 🔄 Migration Guide
+
+### From v1.0 to v1.1
+
+```bash
+# Create migration
+dotnet ef migrations add UpdateTo_v110
+
+# Apply migration
+dotnet database update
+```
+
+## 🤝 Contributing
+
+1. Fork the repository
+2. Create your feature branch (`git checkout -b feature/amazing-feature`)
+3. Commit your changes (`git commit -m 'Add some amazing feature'`)
+4. Push to the branch (`git push origin feature/amazing-feature`)
+5. Open a Pull Request
+
+## 📄 License
+
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+
+## 🆘 Support
+
+- 📧 Email: support@controlhub.dev
+- 🐛 Issues: [Git Issues](https://github.com/your-repo/controlhub/issues)
+- 📖 Documentation: [Wiki](https://github.com/your-repo/controlhub/wiki)
+
+## 🙏 Acknowledgments
+
+- Built with .NET 8
+- Powered by Entity Framework Core
+- Secured with Argon2
+- Documented with Swagger/OpenAPI
+
+---
+
+**ControlHub** - Identity & Authentication made simple! 🚀

@@ -5,6 +5,7 @@ using ControlHub.Application.Accounts.DTOs;
 using ControlHub.Application.Accounts.Queries.GetActiveIdentifierConfigs;
 using ControlHub.Application.Accounts.Queries.GetIdentifierConfigs;
 using ControlHub.API.Controllers;
+using ControlHub.Domain.Permissions;
 using ControlHub.SharedKernel.Results;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
@@ -30,6 +31,7 @@ namespace ControlHub.API.Accounts.Controllers
         /// </summary>
         /// <returns>List of identifier configurations</returns>
         [HttpGet]
+        [Authorize(Policy = "Permission:identifiers.view")]
         [ProducesResponseType(typeof(List<IdentifierConfigDto>), StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
@@ -57,6 +59,7 @@ namespace ControlHub.API.Accounts.Controllers
         /// <param name="command">Identifier configuration creation request</param>
         /// <returns>Created identifier configuration ID</returns>
         [HttpPost]
+        [Authorize(Policy = "Permission:identifiers.create")]
         [ProducesResponseType(typeof(Guid), StatusCodes.Status201Created)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
@@ -81,16 +84,17 @@ namespace ControlHub.API.Accounts.Controllers
         /// <summary>
         /// Get active identifier configurations (for login page)
         /// </summary>
+        /// <param name="includeDeactivated">Whether to include deactivated configurations</param>
         /// <returns>List of active identifier configurations</returns>
         [HttpGet("active")]
         [AllowAnonymous]
         [ProducesResponseType(typeof(List<IdentifierConfigDto>), StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        public async Task<IActionResult> GetActiveIdentifierConfigs()
+        public async Task<IActionResult> GetActiveIdentifierConfigs([FromQuery] bool includeDeactivated = false)
         {
-            _logger.LogInformation("Getting active identifier configurations");
+            _logger.LogInformation("Getting active identifier configurations, includeDeactivated: {IncludeDeactivated}", includeDeactivated);
 
-            var query = new GetActiveIdentifierConfigsQuery();
+            var query = new GetActiveIdentifierConfigsQuery(includeDeactivated);
             var result = await Mediator.Send(query);
 
             if (result.IsFailure)
@@ -99,8 +103,9 @@ namespace ControlHub.API.Accounts.Controllers
                 return HandleFailure(Result.Failure(result.Error));
             }
 
-            _logger.LogInformation("Successfully retrieved {Count} active identifier configurations", 
-                result.Value?.Count ?? 0);
+            var configType = includeDeactivated ? "all" : "active";
+            _logger.LogInformation("Successfully retrieved {Count} {ConfigType} identifier configurations", 
+                result.Value?.Count ?? 0, configType);
             return Ok(result.Value);
         }
 
@@ -111,6 +116,7 @@ namespace ControlHub.API.Accounts.Controllers
         /// <param name="request">Toggle request with isActive flag</param>
         /// <returns>Success result</returns>
         [HttpPatch("{id}/toggle-active")]
+        [Authorize(Policy = "Permission:identifiers.toggle")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
@@ -139,6 +145,7 @@ namespace ControlHub.API.Accounts.Controllers
         /// <param name="command">Update request</param>
         /// <returns>Success result</returns>
         [HttpPut("{id}")]
+        [Authorize(Policy = "Permission:identifiers.update")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]

@@ -1,5 +1,6 @@
 using ControlHub.Application.Accounts.DTOs;
 using ControlHub.Application.Accounts.Interfaces.Repositories;
+using ControlHub.Domain.Accounts.Identifiers;
 using ControlHub.SharedKernel.Results;
 using MediatR;
 
@@ -16,9 +17,28 @@ namespace ControlHub.Application.Accounts.Queries.GetActiveIdentifierConfigs
 
         public async Task<Result<List<IdentifierConfigDto>>> Handle(GetActiveIdentifierConfigsQuery request, CancellationToken cancellationToken)
         {
-            var configs = await _repository.GetActiveConfigsAsync(cancellationToken);
+            List<IdentifierConfig> allConfigs = new List<IdentifierConfig>();
 
-            var dtos = configs.Select(c => new IdentifierConfigDto(
+            // Get active configs
+            var activeConfigsResult = await _repository.GetActiveConfigsAsync(cancellationToken);
+            if (activeConfigsResult.IsFailure)
+            {
+                return Result<List<IdentifierConfigDto>>.Failure(activeConfigsResult.Error);
+            }
+            allConfigs.AddRange(activeConfigsResult.Value);
+
+            // Get deactivated configs if requested
+            if (request.IncludeDeactivated)
+            {
+                var deactiveConfigsResult = await _repository.GetDeactiveConfigsAsync(cancellationToken);
+                if (deactiveConfigsResult.IsFailure)
+                {
+                    return Result<List<IdentifierConfigDto>>.Failure(deactiveConfigsResult.Error);
+                }
+                allConfigs.AddRange(deactiveConfigsResult.Value);
+            }
+
+            var dtos = allConfigs.Select(c => new IdentifierConfigDto(
                 c.Id,
                 c.Name,
                 c.Description,

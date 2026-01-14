@@ -1,6 +1,10 @@
-﻿using ControlHub.Domain.Accounts.Enums;
+﻿using ControlHub.Domain.Accounts;
+using ControlHub.Domain.Accounts.Enums;
 using ControlHub.Domain.Accounts.Identifiers;
+using ControlHub.Domain.Accounts.Security;
+using ControlHub.Domain.Accounts.ValueObjects;
 using ControlHub.Domain.Roles;
+using ControlHub.Domain.Users;
 using ControlHub.SharedKernel.Constants;
 using Microsoft.EntityFrameworkCore;
 
@@ -8,8 +12,22 @@ namespace ControlHub.Infrastructure.Persistence.Seeders
 {
     public static class ControlHubSeeder
     {
-        public static async Task SeedAsync(AppDbContext db)
+        public static async Task SeedAsync(AppDbContext db, bool forceSeed = false)
         {
+            // Check if database already has data
+            var hasExistingData = await HasExistingDataAsync(db);
+            
+            if (hasExistingData && !forceSeed)
+            {
+                Console.WriteLine("Database already contains data. Use forceSeed=true to override.");
+                return;
+            }
+            
+            if (hasExistingData && forceSeed)
+            {
+                Console.WriteLine("Database contains data but forceSeed=true. Clearing and reseeding...");
+            }
+            
             // Seed Roles
             if (!await db.Roles.AnyAsync())
             {
@@ -29,59 +47,38 @@ namespace ControlHub.Infrastructure.Persistence.Seeders
                     "Standard User");
 
                 await db.Roles.AddRangeAsync(superAdmin, admin, user);
-            }
-
-            // Seed IdentifierConfigs
-            if (!await db.IdentifierConfigs.AnyAsync())
-            {
-                // Email Identifier Config
-                var emailConfig = IdentifierConfig.Create("Email", "Email address validation");
-                emailConfig.AddRule(ValidationRuleType.Required, new Dictionary<string, object>());
-                emailConfig.AddRule(ValidationRuleType.Email, new Dictionary<string, object>());
-                await db.IdentifierConfigs.AddAsync(emailConfig);
-
-                // Phone Identifier Config
-                var phoneConfig = IdentifierConfig.Create("Phone", "Phone number validation");
-                phoneConfig.AddRule(ValidationRuleType.Required, new Dictionary<string, object>());
-                phoneConfig.AddRule(ValidationRuleType.Phone, new Dictionary<string, object>
-                {
-                    { "pattern", @"^(\+?\d{1,3}[-.\s]?)?\(?\d{3}\)?[-.\s]?\d{3}[-.\s]?\d{4}$" },
-                    { "allowInternational", true }
-                });
-                await db.IdentifierConfigs.AddAsync(phoneConfig);
-
-                // Employee ID Config
-                var employeeIdConfig = IdentifierConfig.Create("EmployeeID", "Employee ID validation");
-                employeeIdConfig.AddRule(ValidationRuleType.Required, new Dictionary<string, object>());
-                employeeIdConfig.AddRule(ValidationRuleType.MinLength, new Dictionary<string, object> { { "length", 5 } });
-                employeeIdConfig.AddRule(ValidationRuleType.MaxLength, new Dictionary<string, object> { { "length", 10 } });
-                employeeIdConfig.AddRule(ValidationRuleType.Pattern, new Dictionary<string, object>
-                {
-                    { "pattern", @"^EMP\d{4,9}$" },
-                    { "options", 0 } // RegexOptions.None
-                });
-                await db.IdentifierConfigs.AddAsync(employeeIdConfig);
-
-                // Username Config
-                var usernameConfig = IdentifierConfig.Create("Username", "Username validation");
-                usernameConfig.AddRule(ValidationRuleType.Required, new Dictionary<string, object>());
-                usernameConfig.AddRule(ValidationRuleType.MinLength, new Dictionary<string, object> { { "length", 3 } });
-                usernameConfig.AddRule(ValidationRuleType.MaxLength, new Dictionary<string, object> { { "length", 20 } });
-                usernameConfig.AddRule(ValidationRuleType.Custom, new Dictionary<string, object> { { "customLogic", "alphanumeric" } });
-                await db.IdentifierConfigs.AddAsync(usernameConfig);
-
-                // Age Config (Range validation example)
-                var ageConfig = IdentifierConfig.Create("Age", "Age validation");
-                ageConfig.AddRule(ValidationRuleType.Required, new Dictionary<string, object>());
-                ageConfig.AddRule(ValidationRuleType.Range, new Dictionary<string, object>
-                {
-                    { "min", 18 },
-                    { "max", 65 }
-                });
-                await db.IdentifierConfigs.AddAsync(ageConfig);
-
                 await db.SaveChangesAsync();
             }
+
+            // Seed IdentifierConfigs using TestDataProvider
+            await TestDataProvider.SeedTestIdentifierConfigsAsync(db, forceSeed);
+
+            // Seed Permissions and assign to roles
+            await TestDataProvider.SeedPermissionsAndRolesAsync(db, forceSeed);
+
+            // Seed Test Accounts using TestDataProvider (clear and reseed for testing)
+            var existingAccounts = await db.Accounts.ToListAsync();
+            if (existingAccounts.Any())
+            {
+                db.Accounts.RemoveRange(existingAccounts);
+                await db.SaveChangesAsync();
+            }
+            await TestDataProvider.SeedTestAccountsAsync(db, includeExtended: false, forceSeed: forceSeed);
+            
+            Console.WriteLine("Database seeding completed successfully.");
+        }
+        
+        /// <summary>
+        /// Checks if the database already contains essential data
+        /// </summary>
+        private static async Task<bool> HasExistingDataAsync(AppDbContext db)
+        {
+            // Check if any of the core tables have data
+            var hasRoles = await db.Roles.AnyAsync();
+            var hasAccounts = await db.Accounts.AnyAsync();
+            var hasIdentifierConfigs = await db.IdentifierConfigs.AnyAsync();
+            
+            return hasRoles || hasAccounts || hasIdentifierConfigs;
         }
     }
 }

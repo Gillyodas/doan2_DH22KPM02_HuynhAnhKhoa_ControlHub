@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useCallback } from "react"
 import { Plus, Edit, Eye, EyeOff, Power, Save, X } from "lucide-react"
 import { 
-  getIdentifierConfigs, 
+  getActiveIdentifierConfigs, 
   createIdentifierConfig, 
   toggleIdentifierActive, 
   updateIdentifierConfig,
@@ -29,11 +29,12 @@ export default function IdentifiersPage() {
   const [loading, setLoading] = useState(true)
   const [showCreateModal, setShowCreateModal] = useState(false)
   const [error, setError] = useState<string | null>(null)
+  const [includeDeactivated, setIncludeDeactivated] = useState(false)
 
   const loadConfigs = useCallback(async () => {
     try {
       setLoading(true)
-      const data = await getIdentifierConfigs(auth!.accessToken)
+      const data = await getActiveIdentifierConfigs(includeDeactivated)
       setConfigs(data)
       setError(null)
     } catch (err) {
@@ -42,7 +43,7 @@ export default function IdentifiersPage() {
     } finally {
       setLoading(false)
     }
-  }, [auth])
+  }, [includeDeactivated])
 
   useEffect(() => {
     loadConfigs()
@@ -73,6 +74,23 @@ export default function IdentifiersPage() {
             <Plus className="w-4 h-4" />
             Create Configuration
           </button>
+        </div>
+
+        <div className="flex items-center gap-4 mb-6">
+          <label className="flex items-center gap-2 text-sm text-gray-300 cursor-pointer">
+            <input
+              type="checkbox"
+              checked={includeDeactivated}
+              onChange={(e) => setIncludeDeactivated(e.target.checked)}
+              className="w-4 h-4 text-blue-600 bg-gray-700 border-gray-600 rounded focus:ring-blue-500 focus:ring-2"
+            />
+            Show deactivated configurations
+          </label>
+          {includeDeactivated && (
+            <span className="text-xs text-gray-500">
+              Showing {configs.filter(c => !c.isActive).length} deactivated configurations
+            </span>
+          )}
         </div>
 
         {error && (
@@ -137,10 +155,23 @@ function IdentifierConfigCard({ config, onUpdate }: { config: IdentifierConfigDt
 
   return (
     <>
-      <div className="bg-gray-800 rounded-lg shadow-sm border border-gray-700 p-4">
+      <div className={`bg-gray-800 rounded-lg shadow-sm border p-4 ${
+        config.isActive 
+          ? "border-gray-700" 
+          : "border-gray-600 opacity-75"
+      }`}>
         <div className="flex justify-between items-start">
           <div className="flex-1">
-            <h3 className="text-lg font-semibold text-gray-100">{config.name}</h3>
+            <div className="flex items-center gap-2">
+              <h3 className={`text-lg font-semibold ${
+                config.isActive ? "text-gray-100" : "text-gray-400"
+              }`}>{config.name}</h3>
+              {!config.isActive && (
+                <span className="px-2 py-1 bg-gray-600 text-gray-300 text-xs rounded-full">
+                  Deactivated
+                </span>
+              )}
+            </div>
             <p className="text-gray-400 text-sm mt-1">{config.description}</p>
             <div className="flex items-center gap-3 mt-2">
               <span className="text-gray-500 text-xs">

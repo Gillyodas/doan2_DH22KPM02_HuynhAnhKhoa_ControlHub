@@ -60,8 +60,9 @@ export async function createIdentifierConfig(
   })
 }
 
-export async function getActiveIdentifierConfigs(): Promise<IdentifierConfigDto[]> {
-  return fetchJson<IdentifierConfigDto[]>("/api/Identifier/active", {
+export async function getActiveIdentifierConfigs(includeDeactivated = false): Promise<IdentifierConfigDto[]> {
+  const url = includeDeactivated ? "/api/Identifier/active?includeDeactivated=true" : "/api/Identifier/active"
+  return fetchJson<IdentifierConfigDto[]>(url, {
     method: "GET",
   })
 }
