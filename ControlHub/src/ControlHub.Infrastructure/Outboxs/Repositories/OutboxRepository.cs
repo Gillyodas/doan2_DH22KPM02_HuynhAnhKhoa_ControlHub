@@ -7,7 +7,7 @@ using Microsoft.Extensions.Logging;
 
 namespace ControlHub.Infrastructure.Outboxs.Repositories
 {
-    public class OutboxRepository : IOutboxRepository
+    internal class OutboxRepository : IOutboxRepository
     {
         private readonly AppDbContext _db;
         private readonly ILogger<OutboxRepository> _logger;

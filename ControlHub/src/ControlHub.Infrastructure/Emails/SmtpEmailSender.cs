@@ -5,7 +5,7 @@ using Microsoft.Extensions.Configuration;
 
 namespace ControlHub.Infrastructure.Emails
 {
-    public class SmtpEmailSender : IEmailSender
+    internal class SmtpEmailSender : IEmailSender
     {
         private readonly IConfiguration _config;
 

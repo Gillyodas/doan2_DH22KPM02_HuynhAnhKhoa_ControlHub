@@ -4,7 +4,7 @@ using Microsoft.Extensions.Configuration;
 
 namespace ControlHub.Infrastructure.Persistence
 {
-    public class AppDbContextFactory : IDesignTimeDbContextFactory<AppDbContext>
+    internal class AppDbContextFactory : IDesignTimeDbContextFactory<AppDbContext>
     {
         // Design-time factory phải có constructor rỗng mặc định
         public AppDbContext CreateDbContext(string[] args)

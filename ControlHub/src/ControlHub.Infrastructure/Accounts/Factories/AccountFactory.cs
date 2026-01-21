@@ -8,7 +8,7 @@ using ControlHub.SharedKernel.Results;
 
 namespace ControlHub.Infrastructure.Accounts.Factories
 {
-    public class AccountFactory : IAccountFactory
+    internal class AccountFactory : IAccountFactory
     {
         private readonly IPasswordHasher _passwordHasher;
         private readonly IdentifierFactory _identifierFactory;

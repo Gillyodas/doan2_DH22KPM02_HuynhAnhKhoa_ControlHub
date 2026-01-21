@@ -8,7 +8,7 @@ using Microsoft.IdentityModel.Tokens;
 
 namespace ControlHub.Infrastructure.Tokens.Generate
 {
-    public class TokenVerifier : ITokenVerifier
+    internal class TokenVerifier : ITokenVerifier
     {
         private readonly ILogger<TokenVerifier> _logger;
         private readonly TokenValidationParameters _validationParameters;

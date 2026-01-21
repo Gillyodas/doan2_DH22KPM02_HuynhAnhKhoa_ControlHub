@@ -5,7 +5,7 @@ using Microsoft.Extensions.Options;
 
 namespace ControlHub.Infrastructure.Tokens
 {
-    public class TokenFactory : ITokenFactory
+    internal class TokenFactory : ITokenFactory
     {
         private readonly TokenSettings _settings;
 

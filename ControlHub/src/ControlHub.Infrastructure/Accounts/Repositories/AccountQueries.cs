@@ -8,7 +8,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace ControlHub.Infrastructure.Accounts.Repositories
 {
-    public class AccountQueries : IAccountQueries
+    internal class AccountQueries : IAccountQueries
     {
         private readonly AppDbContext _db;
 

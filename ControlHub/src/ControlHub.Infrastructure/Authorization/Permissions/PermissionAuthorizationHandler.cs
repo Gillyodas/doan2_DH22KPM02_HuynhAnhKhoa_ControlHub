@@ -1,11 +1,11 @@
 ﻿using ControlHub.Application.Tokens;
-using ControlHub.Infrastructure.Authorization.Permissions;
+using ControlHub.Application.Authorization.Requirements;
 using ControlHub.SharedKernel.Constants;
 using Microsoft.AspNetCore.Authorization;
 
 namespace ControlHub.Infrastructure.Permissions.AuthZ
 {
-    public class PermissionAuthorizationHandler : AuthorizationHandler<PermissionRequirement>
+    internal class PermissionAuthorizationHandler : AuthorizationHandler<PermissionRequirement>
     {
         protected override Task HandleRequirementAsync(
             AuthorizationHandlerContext context,

@@ -7,7 +7,7 @@ using Microsoft.Extensions.Logging;
 
 namespace ControlHub.Infrastructure.Authorization.Permissions
 {
-    public class PermissionClaimsTransformation : IClaimsTransformation
+    internal class PermissionClaimsTransformation : IClaimsTransformation
     {
         private readonly IServiceProvider _serviceProvider;
         private readonly ILogger<PermissionClaimsTransformation> _logger;

@@ -4,7 +4,7 @@ using ControlHub.Domain.Accounts.Enums;
 
 namespace ControlHub.Infrastructure.Tokens.Sender
 {
-    public class EmailTokenSender : ITokenSender
+    internal class EmailTokenSender : ITokenSender
     {
         private readonly IEmailSender _emailSender;
         public IdentifierType Type => IdentifierType.Email;

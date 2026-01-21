@@ -4,7 +4,7 @@ using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 namespace ControlHub.Infrastructure.Permissions
 {
-    public class PermissionConfig : IEntityTypeConfiguration<Permission>
+    internal class PermissionConfig : IEntityTypeConfiguration<Permission>
     {
         public void Configure(EntityTypeBuilder<Permission> builder)
         {

@@ -1,10 +1,10 @@
 ﻿using System.Security.Claims;
-using ControlHub.Infrastructure.Authorization.Requirements;
+using ControlHub.Application.Authorization.Requirements;
 using Microsoft.AspNetCore.Authorization;
 
 namespace ControlHub.Infrastructure.Authorization.Handlers
 {
-    public class SameUserAuthorizationHandler : AuthorizationHandler<SameUserRequirement, Guid>
+    internal class SameUserAuthorizationHandler : AuthorizationHandler<SameUserRequirement, Guid>
     {
         protected override Task HandleRequirementAsync(
             AuthorizationHandlerContext context,

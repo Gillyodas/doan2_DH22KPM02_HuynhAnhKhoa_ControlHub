@@ -8,7 +8,7 @@ using Microsoft.Extensions.Logging;
 
 namespace ControlHub.Infrastructure.Accounts.Repositories
 {
-    public class AccountRepository : IAccountRepository
+    internal class AccountRepository : IAccountRepository
     {
         private readonly AppDbContext _db;
         private readonly ILogger<AccountRepository> _logger;

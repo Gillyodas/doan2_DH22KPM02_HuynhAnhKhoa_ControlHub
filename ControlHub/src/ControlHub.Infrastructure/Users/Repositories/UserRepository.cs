@@ -7,7 +7,7 @@ using Microsoft.Extensions.Logging;
 
 namespace ControlHub.Infrastructure.Users.Repositories
 {
-    public class UserRepository : IUserRepository
+    internal class UserRepository : IUserRepository
     {
         private readonly AppDbContext _db;
         private readonly ILogger<UserRepository> _logger;

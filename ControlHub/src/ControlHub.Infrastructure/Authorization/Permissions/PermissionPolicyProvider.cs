@@ -1,3 +1,4 @@
+using ControlHub.Application.Authorization.Requirements;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.Extensions.Options;
 

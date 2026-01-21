@@ -5,7 +5,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace ControlHub.Infrastructure.Tokens.Repositories
 {
-    public class TokenQueries : ITokenQueries
+    internal class TokenQueries : ITokenQueries
     {
         private readonly AppDbContext _db;
 

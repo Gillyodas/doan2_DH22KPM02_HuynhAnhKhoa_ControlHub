@@ -5,7 +5,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace ControlHub.Infrastructure.Users.Repositories
 {
-    public class UserQueries : IUserQueries
+    internal class UserQueries : IUserQueries
     {
         private readonly AppDbContext _db;
 

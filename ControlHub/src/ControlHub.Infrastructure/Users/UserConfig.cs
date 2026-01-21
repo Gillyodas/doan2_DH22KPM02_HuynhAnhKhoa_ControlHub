@@ -4,7 +4,7 @@ using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 namespace ControlHub.Infrastructure.Users
 {
-    public class UserConfig : IEntityTypeConfiguration<User>
+    internal class UserConfig : IEntityTypeConfiguration<User>
     {
         public void Configure(EntityTypeBuilder<User> builder)
         {

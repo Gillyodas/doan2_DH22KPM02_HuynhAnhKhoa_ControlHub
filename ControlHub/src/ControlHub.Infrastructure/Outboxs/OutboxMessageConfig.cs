@@ -4,7 +4,7 @@ using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 namespace ControlHub.Infrastructure.Outboxs
 {
-    public class OutboxMessageConfig : IEntityTypeConfiguration<OutboxMessage>
+    internal class OutboxMessageConfig : IEntityTypeConfiguration<OutboxMessage>
     {
         public void Configure(EntityTypeBuilder<OutboxMessage> builder)
         {

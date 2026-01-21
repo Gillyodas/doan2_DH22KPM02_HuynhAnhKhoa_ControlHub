@@ -7,7 +7,7 @@ using Microsoft.Extensions.Options;
 
 namespace ControlHub.Infrastructure.Accounts.Security;
 
-public sealed class Argon2PasswordHasher : IPasswordHasher
+internal sealed class Argon2PasswordHasher : IPasswordHasher
 {
     private readonly Argon2Options _opt;
     public Argon2PasswordHasher(IOptions<Argon2Options> opt)

@@ -5,7 +5,7 @@ using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 namespace ControlHub.Infrastructure.Roles
 {
-    public class RoleConfig : IEntityTypeConfiguration<Role>
+    internal class RoleConfig : IEntityTypeConfiguration<Role>
     {
         public void Configure(EntityTypeBuilder<Role> builder)
         {

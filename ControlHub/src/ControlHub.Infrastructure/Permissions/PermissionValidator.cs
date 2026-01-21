@@ -5,14 +5,15 @@ using Microsoft.Extensions.Logging;
 
 namespace ControlHub.Infrastructure.Permissions
 {
-    public class PermissionValidator : IPermissionValidator
+    internal class PermissionValidator : IPermissionValidator
     {
         private readonly AppDbContext _db;
         private readonly ILogger<PermissionValidator> _looger;
 
-        public PermissionValidator()
+        public PermissionValidator(AppDbContext db, ILogger<PermissionValidator> logger)
         {
-
+            _db = db;
+            _looger = logger;
         }
         public async Task<List<Guid>> PermissionIdsExistAsync(IEnumerable<Guid> permissionIds, CancellationToken cancellationToken)
         {

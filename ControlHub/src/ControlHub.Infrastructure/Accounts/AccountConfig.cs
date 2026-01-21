@@ -5,7 +5,7 @@ using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 namespace ControlHub.Infrastructure.Accounts
 {
-    public class AccountConfig : IEntityTypeConfiguration<Account>
+    internal class AccountConfig : IEntityTypeConfiguration<Account>
     {
         public void Configure(EntityTypeBuilder<Account> builder)
         {

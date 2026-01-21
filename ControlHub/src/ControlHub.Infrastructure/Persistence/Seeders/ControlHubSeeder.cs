@@ -10,7 +10,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace ControlHub.Infrastructure.Persistence.Seeders
 {
-    public static class ControlHubSeeder
+    internal static class ControlHubSeeder
     {
         public static async Task SeedAsync(AppDbContext db, bool forceSeed = false)
         {

@@ -4,7 +4,7 @@ using ControlHub.Domain.Accounts.Enums;
 
 namespace ControlHub.Infrastructure.Accounts.Validators
 {
-    public class AccountValidator : IAccountValidator
+    internal class AccountValidator : IAccountValidator
     {
         private readonly IAccountQueries _accountQueries;
 

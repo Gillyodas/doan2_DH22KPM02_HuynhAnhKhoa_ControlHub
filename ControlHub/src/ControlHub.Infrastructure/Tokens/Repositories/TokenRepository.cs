@@ -7,7 +7,7 @@ using Microsoft.Extensions.Logging;
 
 namespace ControlHub.Infrastructure.Tokens.Repositories
 {
-    public class TokenRepository : ITokenRepository
+    internal class TokenRepository : ITokenRepository
     {
         private readonly AppDbContext _db;
         private readonly ILogger<TokenRepository> _logger;

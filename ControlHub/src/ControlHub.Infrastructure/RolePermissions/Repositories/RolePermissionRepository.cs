@@ -4,7 +4,7 @@ using ControlHub.Infrastructure.Persistence;
 
 namespace ControlHub.Infrastructure.RolePermissions.Repositories
 {
-    public class RolePermissionRepository : IRolePermissionsRepository
+    internal class RolePermissionRepository : IRolePermissionsRepository
     {
         private readonly AppDbContext _context;
         private readonly IMapper _mapper;

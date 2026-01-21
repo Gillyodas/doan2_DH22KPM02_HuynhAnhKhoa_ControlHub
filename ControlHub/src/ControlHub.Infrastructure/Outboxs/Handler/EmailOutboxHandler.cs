@@ -5,7 +5,7 @@ using ControlHub.Domain.Outboxs;
 
 namespace ControlHub.Infrastructure.Outboxs.Handler
 {
-    public class EmailOutboxHandler : IOutboxHandler
+    internal class EmailOutboxHandler : IOutboxHandler
     {
         private readonly IEmailSender _emailSender;
 

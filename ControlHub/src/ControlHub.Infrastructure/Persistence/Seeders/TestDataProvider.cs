@@ -16,7 +16,7 @@ namespace ControlHub.Infrastructure.Persistence.Seeders
     /// <summary>
     /// Helper class for creating test data for development and testing
     /// </summary>
-    public static class TestDataProvider
+    internal static class TestDataProvider
     {
         /// <summary>
         /// Test accounts with their credentials

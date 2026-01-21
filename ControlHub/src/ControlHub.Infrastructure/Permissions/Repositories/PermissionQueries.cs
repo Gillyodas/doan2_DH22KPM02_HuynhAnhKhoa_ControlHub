@@ -7,7 +7,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace ControlHub.Infrastructure.Permissions.Repositories
 {
-    public class PermissionQueries : IPermissionQueries
+    internal class PermissionQueries : IPermissionQueries
     {
         private readonly AppDbContext _db;
 

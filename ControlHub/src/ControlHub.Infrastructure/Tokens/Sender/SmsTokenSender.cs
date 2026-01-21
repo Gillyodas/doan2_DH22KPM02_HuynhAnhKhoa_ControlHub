@@ -3,7 +3,7 @@ using ControlHub.Domain.Accounts.Enums;
 
 namespace ControlHub.Infrastructure.Tokens.Sender
 {
-    public class SmsTokenSender : ITokenSender
+    internal class SmsTokenSender : ITokenSender
     {
         public IdentifierType Type => IdentifierType.Phone;
 

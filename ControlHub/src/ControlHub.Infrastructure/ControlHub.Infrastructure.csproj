@@ -57,4 +57,10 @@
 		</EmbeddedResource>
 	</ItemGroup>
 
+	<ItemGroup>
+		<InternalsVisibleTo Include="ControlHub.Infrastructure.Tests" />
+		<InternalsVisibleTo Include="ControlHub.API" />
+		<InternalsVisibleTo Include="DynamicProxyGenAssembly2" />
+	</ItemGroup>
+
 </Project>

@@ -7,7 +7,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace ControlHub.Infrastructure.Roles.Repositories
 {
-    public class RoleQueries : IRoleQueries
+    internal class RoleQueries : IRoleQueries
     {
         private readonly AppDbContext _db;
 

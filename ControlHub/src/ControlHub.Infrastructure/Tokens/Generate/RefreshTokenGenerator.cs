@@ -3,7 +3,7 @@ using ControlHub.Application.Tokens.Interfaces.Generate;
 
 namespace ControlHub.Infrastructure.Tokens.Generate
 {
-    public class RefreshTokenGenerator : IRefreshTokenGenerator
+    internal class RefreshTokenGenerator : IRefreshTokenGenerator
     {
         public string Generate()
         {

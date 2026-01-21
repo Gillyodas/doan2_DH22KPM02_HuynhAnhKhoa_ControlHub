@@ -45,6 +45,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Caching.Memory;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.FileProviders;
@@ -108,9 +109,15 @@ namespace ControlHub
             services.AddScoped<IUserQueries, UserQueries>();
 
             // 6. Identifier Configuration Services
-            services.AddScoped<IIdentifierConfigRepository, IdentifierConfigRepository>();
+            services.AddScoped<ControlHub.Infrastructure.Accounts.Repositories.IdentifierConfigRepository>();
+            services.AddScoped<ControlHub.Application.Accounts.Interfaces.Repositories.IIdentifierConfigRepository>(sp =>
+            {
+                var baseRepo = sp.GetRequiredService<ControlHub.Infrastructure.Accounts.Repositories.IdentifierConfigRepository>();
+                var memoryCache = sp.GetRequiredService<IMemoryCache>();
+                return new CachedIdentifierConfigRepository(baseRepo, memoryCache);
+            });
             services.AddScoped<Domain.Accounts.Identifiers.IIdentifierConfigRepository>(sp => 
-                sp.GetRequiredService<IIdentifierConfigRepository>());
+                sp.GetRequiredService<ControlHub.Application.Accounts.Interfaces.Repositories.IIdentifierConfigRepository>());
 
             // 6. Domain Services & Identifiers
             services.AddScoped<DynamicIdentifierValidator>();
@@ -123,10 +130,23 @@ namespace ControlHub
             services.AddScoped<IIdentifierValidator, PhoneIdentifierValidator>();
 
             // 7. Role & Permission Services
-            services.AddScoped<IRoleRepository, RoleRepository>();
+            services.AddScoped<RoleRepository>();
             services.AddScoped<IRoleQueries, RoleQueries>();
+            services.AddScoped<IRoleRepository>(provider =>
+            {
+                var baseRepo = provider.GetRequiredService<RoleRepository>();
+                var memoryCache = provider.GetRequiredService<IMemoryCache>();
 
-            services.AddScoped<IPermissionRepository, PermissionRepository>();
+                return new CachedRoleRepository(baseRepo, memoryCache);
+            });
+
+            services.AddScoped<ControlHub.Infrastructure.Permissions.Repositories.PermissionRepository>();
+            services.AddScoped<IPermissionRepository>(sp =>
+            {
+                var baseRepo = sp.GetRequiredService<ControlHub.Infrastructure.Permissions.Repositories.PermissionRepository>();
+                var memoryCache = sp.GetRequiredService<IMemoryCache>();
+                return new CachedPermissionRepository(baseRepo, memoryCache);
+            });
             services.AddScoped<IPermissionQueries, PermissionQueries>();
 
             services.AddScoped<CreateRoleWithPermissionsService>();
@@ -248,7 +268,11 @@ namespace ControlHub
             using (var scope = app.ApplicationServices.CreateScope())
             {
                 var db = scope.ServiceProvider.GetRequiredService<AppDbContext>();
-                db.Database.Migrate();
+                // Skip migration for InMemory database (used in tests)
+                if (db.Database.ProviderName != "Microsoft.EntityFrameworkCore.InMemory")
+                {
+                    db.Database.Migrate();
+                }
                 
                 try
                 {

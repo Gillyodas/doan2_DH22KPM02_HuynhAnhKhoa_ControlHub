@@ -6,7 +6,7 @@ using Microsoft.Extensions.Logging;
 
 namespace ControlHub.Infrastructure.Persistence
 {
-    public class UnitOfWork : IUnitOfWork
+    internal class UnitOfWork : IUnitOfWork
     {
         private readonly AppDbContext _dbContext;
         private readonly ILogger<UnitOfWork> _logger;

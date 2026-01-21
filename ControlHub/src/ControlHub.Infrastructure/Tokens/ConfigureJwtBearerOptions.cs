@@ -8,7 +8,7 @@ using Microsoft.IdentityModel.Tokens;
 namespace ControlHub.Infrastructure.Tokens
 {
     // ⚠️ CRITICAL: Must be IConfigureNamedOptions to support named schemes like "Bearer"
-    public class ConfigureJwtBearerOptions : IConfigureNamedOptions<JwtBearerOptions>
+    internal class ConfigureJwtBearerOptions : IConfigureNamedOptions<JwtBearerOptions>
     {
         private readonly IConfiguration _configuration;
         private readonly ILogger<ConfigureJwtBearerOptions> _logger;

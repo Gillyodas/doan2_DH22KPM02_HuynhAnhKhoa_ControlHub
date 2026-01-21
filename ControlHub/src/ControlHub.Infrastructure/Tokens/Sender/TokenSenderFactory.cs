@@ -3,7 +3,7 @@ using ControlHub.Domain.Accounts.Enums;
 
 namespace ControlHub.Infrastructure.Tokens.Sender
 {
-    public class TokenSenderFactory : ITokenSenderFactory
+    internal class TokenSenderFactory : ITokenSenderFactory
     {
         private readonly Dictionary<IdentifierType, ITokenSender> _map;
 
