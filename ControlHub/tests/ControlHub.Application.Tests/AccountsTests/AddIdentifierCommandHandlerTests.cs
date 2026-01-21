@@ -33,7 +33,10 @@ namespace ControlHub.Application.Tests.AccountsTests
                 .Returns((true, "normalized_value", null));
 
             // Khởi tạo Factory thật với Mock Validator
-            var identifierFactory = new IdentifierFactory(new[] { _validatorMock.Object });
+            var identifierFactory = new IdentifierFactory(
+                new[] { _validatorMock.Object },
+                new Mock<IIdentifierConfigRepository>().Object,
+                new DynamicIdentifierValidator());
 
             _handler = new AddIdentifierCommandHandler(
                 _loggerMock.Object,

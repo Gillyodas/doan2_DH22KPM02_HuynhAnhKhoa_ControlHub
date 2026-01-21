@@ -18,4 +18,10 @@
     <ProjectReference Include="..\ControlHub.SharedKernel\ControlHub.SharedKernel.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <InternalsVisibleTo Include="ControlHub.Domain.Tests" />
+    <InternalsVisibleTo Include="ControlHub.Application" />
+    <InternalsVisibleTo Include="ControlHub.Infrastructure" />
+  </ItemGroup>
+
 </Project>

@@ -1,0 +1,29 @@
+﻿  Determining projects to restore...
+  All projects are up-to-date for restore.
+  ControlHub.SharedKernel -> e:\Project\ControlHub\src\ControlHub.SharedKernel\bin\Debug\net8.0\ControlHub.SharedKernel.dll
+  ControlHub.Domain -> e:\Project\ControlHub\src\ControlHub.Domain\bin\Debug\net8.0\ControlHub.Domain.dll
+  ControlHub.Application -> e:\Project\ControlHub\src\ControlHub.Application\bin\Debug\net8.0\ControlHub.Application.dll
+  ControlHub.Infrastructure -> e:\Project\ControlHub\src\ControlHub.Infrastructure\bin\Debug\net8.0\ControlHub.Infrastructure.dll
+  ControlHub.API -> e:\Project\ControlHub\src\ControlHub.API\bin\Debug\net8.0\ControlHub.API.dll
+e:\Project\ControlHub\tests\ControlHub.Api.Tests\FunctionalTests\Permissions\PermissionTests.cs(31,9): warning CS8602: Dereference of a possibly null reference. [e:\Project\ControlHub\tests\ControlHub.Api.Tests\ControlHub.Api.Tests.csproj]
+  ControlHub.Api.Tests -> e:\Project\ControlHub\tests\ControlHub.Api.Tests\bin\Debug\net8.0\ControlHub.Api.Tests.dll
+Test run for e:\Project\ControlHub\tests\ControlHub.Api.Tests\bin\Debug\net8.0\ControlHub.Api.Tests.dll (.NETCoreApp,Version=v8.0)
+VSTest version 17.11.1 (x64)
+
+Starting test execution, please wait...
+A total of 1 test files matched the specified pattern.
+  Failed ControlHub.Api.Tests.FunctionalTests.Permissions.PermissionTests.CreatePermissions_ShouldReturnOk_WhenUserHasCorrectPluralPermission [258 ms]
+  Error Message:
+   Expected response.StatusCode to be HttpStatusCode.OK {value: 200} because Fail. Content: {"title":"Validation Error","status":400,"detail":"Permission code format is invalid.","code":"Permission.InvalidFormat","timestamp":"2026-01-18T09:11:38.6048576Z"}, but found HttpStatusCode.BadRequest {value: 400}.
+  Stack Trace:
+     at FluentAssertions.Execution.LateBoundTestFramework.Throw(String message)
+   at FluentAssertions.Execution.DefaultAssertionStrategy.HandleFailure(String message)
+   at FluentAssertions.Execution.AssertionScope.AddPreFormattedFailure(String formattedFailureMessage)
+   at FluentAssertions.Execution.AssertionChain.FailWith(Func`1 getFailureReason)
+   at FluentAssertions.Execution.AssertionChain.FailWith(Func`1 getFailureReason)
+   at FluentAssertions.Execution.AssertionChain.FailWith(String message, Object[] args)
+   at FluentAssertions.Primitives.EnumAssertions`2.Be(TEnum expected, String because, Object[] becauseArgs)
+   at ControlHub.Api.Tests.FunctionalTests.Permissions.PermissionTests.CreatePermissions_ShouldReturnOk_WhenUserHasCorrectPluralPermission() in e:\Project\ControlHub\tests\ControlHub.Api.Tests\FunctionalTests\Permissions\PermissionTests.cs:line 49
+--- End of stack trace from previous location ---
+
+Failed!  - Failed:     1, Passed:     3, Skipped:     0, Total:     4, Duration: 2 s - ControlHub.Api.Tests.dll (net8.0)

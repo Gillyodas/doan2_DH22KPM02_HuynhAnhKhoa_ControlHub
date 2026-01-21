@@ -48,7 +48,10 @@ namespace ControlHub.Application.Tests.AccountsTests
                           .Returns((true, "normalized@test.com", null));
 
             // Khởi tạo Factory thật
-            _identifierFactory = new IdentifierFactory(new[] { _validatorMock.Object });
+            _identifierFactory = new IdentifierFactory(
+                new[] { _validatorMock.Object },
+                new Mock<IIdentifierConfigRepository>().Object,
+                new DynamicIdentifierValidator());
 
             _handler = new SignInCommandHandler(
                 _loggerMock.Object,

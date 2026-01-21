@@ -1,0 +1,214 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TestRun id="44de93f2-6012-4900-9046-7d89ff69ca78" name="Gill@DESKTOP-3V98JDF 2026-01-18 14:57:54" runUser="DESKTOP-3V98JDF\Gill" xmlns="http://microsoft.com/schemas/VisualStudio/TeamTest/2010">
+  <Times creation="2026-01-18T14:57:54.5883388+07:00" queuing="2026-01-18T14:57:54.5883391+07:00" start="2026-01-18T14:57:51.2555435+07:00" finish="2026-01-18T14:57:54.5945932+07:00" />
+  <TestSettings name="default" id="6c22e6aa-71b4-4468-a969-529c227ed670">
+    <Deployment runDeploymentRoot="Gill_DESKTOP-3V98JDF_2026-01-18_14_57_54" />
+  </TestSettings>
+  <Results>
+    <UnitTestResult executionId="9ec5b5ec-61c8-49bb-a072-ba25da88d159" testId="c37f2f82-26d1-3eaf-ddab-1e3a5cbe2557" testName="ControlHub.Api.Tests.FunctionalTests.Accounts.RoleTests.CreateRoles_ShouldReturnForbidden_WhenNotSuperAdmin" computerName="DESKTOP-3V98JDF" duration="00:00:00.1672937" startTime="2026-01-18T14:57:54.2910823+07:00" endTime="2026-01-18T14:57:54.4539328+07:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="9ec5b5ec-61c8-49bb-a072-ba25da88d159" />
+    <UnitTestResult executionId="bae3e35f-b93d-4f92-b4bc-0cf6c1881151" testId="c802937c-efc8-c034-ed62-a5ba7cad7702" testName="ControlHub.Api.Tests.FunctionalTests.Accounts.RoleTests.CreateRoles_ShouldReturnOk_WhenRequestIsValid" computerName="DESKTOP-3V98JDF" duration="00:00:00.1276548" startTime="2026-01-18T14:57:54.1608721+07:00" endTime="2026-01-18T14:57:54.2865759+07:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Failed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="bae3e35f-b93d-4f92-b4bc-0cf6c1881151">
+      <Output>
+        <ErrorInfo>
+          <Message>Expected response.StatusCode to be HttpStatusCode.OK {value: 200}, but found HttpStatusCode.BadRequest {value: 400}.</Message>
+          <StackTrace>   at FluentAssertions.Execution.LateBoundTestFramework.Throw(String message)&#xD;
+   at FluentAssertions.Execution.DefaultAssertionStrategy.HandleFailure(String message)&#xD;
+   at FluentAssertions.Execution.AssertionScope.AddPreFormattedFailure(String formattedFailureMessage)&#xD;
+   at FluentAssertions.Execution.AssertionChain.FailWith(Func`1 getFailureReason)&#xD;
+   at FluentAssertions.Execution.AssertionChain.FailWith(Func`1 getFailureReason)&#xD;
+   at FluentAssertions.Execution.AssertionChain.FailWith(String message, Object[] args)&#xD;
+   at FluentAssertions.Primitives.EnumAssertions`2.Be(TEnum expected, String because, Object[] becauseArgs)&#xD;
+   at ControlHub.Api.Tests.FunctionalTests.Accounts.RoleTests.CreateRoles_ShouldReturnOk_WhenRequestIsValid() in e:\Project\ControlHub\tests\ControlHub.Api.Tests\FunctionalTests\Accounts\RoleTests.cs:line 41&#xD;
+--- End of stack trace from previous location ---</StackTrace>
+        </ErrorInfo>
+      </Output>
+    </UnitTestResult>
+    <UnitTestResult executionId="ef99567a-9954-45d3-9338-560aa6485e42" testId="3f9f7c79-7d25-e241-3a5c-e20637f14a07" testName="ControlHub.Api.Tests.FunctionalTests.Accounts.RoleTests.CreateRoles_ShouldBypassValidation_WhenNameIsEmpty_BecauseValidatorIsInternal" computerName="DESKTOP-3V98JDF" duration="00:00:02.3888108" startTime="2026-01-18T14:57:51.7567659+07:00" endTime="2026-01-18T14:57:54.1534117+07:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="ef99567a-9954-45d3-9338-560aa6485e42" />
+  </Results>
+  <TestDefinitions>
+    <UnitTest name="ControlHub.Api.Tests.FunctionalTests.Accounts.RoleTests.CreateRoles_ShouldBypassValidation_WhenNameIsEmpty_BecauseValidatorIsInternal" storage="e:\project\controlhub\tests\controlhub.api.tests\bin\debug\net8.0\controlhub.api.tests.dll" id="3f9f7c79-7d25-e241-3a5c-e20637f14a07">
+      <Execution id="ef99567a-9954-45d3-9338-560aa6485e42" />
+      <TestMethod codeBase="e:\Project\ControlHub\tests\ControlHub.Api.Tests\bin\Debug\net8.0\ControlHub.Api.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="ControlHub.Api.Tests.FunctionalTests.Accounts.RoleTests" name="CreateRoles_ShouldBypassValidation_WhenNameIsEmpty_BecauseValidatorIsInternal" />
+    </UnitTest>
+    <UnitTest name="ControlHub.Api.Tests.FunctionalTests.Accounts.RoleTests.CreateRoles_ShouldReturnForbidden_WhenNotSuperAdmin" storage="e:\project\controlhub\tests\controlhub.api.tests\bin\debug\net8.0\controlhub.api.tests.dll" id="c37f2f82-26d1-3eaf-ddab-1e3a5cbe2557">
+      <Execution id="9ec5b5ec-61c8-49bb-a072-ba25da88d159" />
+      <TestMethod codeBase="e:\Project\ControlHub\tests\ControlHub.Api.Tests\bin\Debug\net8.0\ControlHub.Api.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="ControlHub.Api.Tests.FunctionalTests.Accounts.RoleTests" name="CreateRoles_ShouldReturnForbidden_WhenNotSuperAdmin" />
+    </UnitTest>
+    <UnitTest name="ControlHub.Api.Tests.FunctionalTests.Accounts.RoleTests.CreateRoles_ShouldReturnOk_WhenRequestIsValid" storage="e:\project\controlhub\tests\controlhub.api.tests\bin\debug\net8.0\controlhub.api.tests.dll" id="c802937c-efc8-c034-ed62-a5ba7cad7702">
+      <Execution id="bae3e35f-b93d-4f92-b4bc-0cf6c1881151" />
+      <TestMethod codeBase="e:\Project\ControlHub\tests\ControlHub.Api.Tests\bin\Debug\net8.0\ControlHub.Api.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="ControlHub.Api.Tests.FunctionalTests.Accounts.RoleTests" name="CreateRoles_ShouldReturnOk_WhenRequestIsValid" />
+    </UnitTest>
+  </TestDefinitions>
+  <TestEntries>
+    <TestEntry testId="c37f2f82-26d1-3eaf-ddab-1e3a5cbe2557" executionId="9ec5b5ec-61c8-49bb-a072-ba25da88d159" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="c802937c-efc8-c034-ed62-a5ba7cad7702" executionId="bae3e35f-b93d-4f92-b4bc-0cf6c1881151" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="3f9f7c79-7d25-e241-3a5c-e20637f14a07" executionId="ef99567a-9954-45d3-9338-560aa6485e42" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+  </TestEntries>
+  <TestLists>
+    <TestList name="Results Not in a List" id="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestList name="All Loaded Results" id="19431567-8539-422a-85d7-44ee4e166bda" />
+  </TestLists>
+  <ResultSummary outcome="Failed">
+    <Counters total="3" executed="3" passed="2" failed="1" error="0" timeout="0" aborted="0" inconclusive="0" passedButRunAborted="0" notRunnable="0" notExecuted="0" disconnected="0" warning="0" completed="0" inProgress="0" pending="0" />
+    <Output>
+      <StdOut>[xUnit.net 00:00:00.00] xUnit.net VSTest Adapter v3.1.4+50e68bbb8b (64-bit .NET 8.0.22)&#xD;
+[xUnit.net 00:00:00.08]   Discovering: ControlHub.Api.Tests&#xD;
+[xUnit.net 00:00:00.11]   Discovered:  ControlHub.Api.Tests&#xD;
+[xUnit.net 00:00:00.13]   Starting:    ControlHub.Api.Tests&#xD;
+[14:57:52 INF] Saved 3 entities to in-memory store.&#xD;
+[14:57:52 INF] Saved 19 entities to in-memory store.&#xD;
+Seeded 5 identifier configs successfully.&#xD;
+[14:57:52 INF] Saved 32 entities to in-memory store.&#xD;
+Seeded 32 permissions successfully.&#xD;
+[14:57:53 INF] Saved 16 entities to in-memory store.&#xD;
+Seeded 4 test accounts successfully.&#xD;
+Database seeding completed successfully.&#xD;
+? ControlHub seeding completed successfully!&#xD;
+[14:57:53 INF] User profile is available. Using 'C:\Users\Gill\AppData\Local\ASP.NET\DataProtection-Keys' as key repository and Windows DPAPI to encrypt keys at rest.&#xD;
+[14:57:53 INF] Request starting HTTP/1.1 POST http://localhost/api/Auth/superadmins/register - application/json; charset=utf-8 98&#xD;
+[14:57:53 WRN] Failed to determine the https port for redirect.&#xD;
+[14:57:53 INF] ?? [JWT Config] Successfully loaded. Issuer: ControlHub&#xD;
+[14:57:53 INF] Executing endpoint 'ControlHub.API.Accounts.Controllers.AuthController.RegisterSuperAdmin (ControlHub.API)'&#xD;
+[14:57:53 INF] Route matched with {action = "RegisterSuperAdmin", controller = "Auth"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.IActionResult] RegisterSuperAdmin(ControlHub.API.Accounts.ViewModels.Request.RegisterSupperAdminRequest, System.Threading.CancellationToken) on controller ControlHub.API.Accounts.Controllers.AuthController (ControlHub.API).&#xD;
+[14:57:53 INF] Executing action method ControlHub.API.Accounts.Controllers.AuthController.RegisterSuperAdmin (ControlHub.API) - Validation state: Valid&#xD;
+[14:57:53 INF] Account.RegisterSupperAdmin.Started: Starting account creation for Ident superadmin@example.com&#xD;
+[14:57:53 INF] Account.RegisterSupperAdmin.Success: Account created successfully for AccountId 86e0fd19-4c79-419e-91b6-e338c599659e, Ident superadmin@example.com&#xD;
+[14:57:53 INF] Implicit transaction started at 01/18/2026 07:57:53&#xD;
+[14:57:53 INF] Saved 4 entities to in-memory store.&#xD;
+[14:57:53 INF] Transaction committed successfully with 4 changes.&#xD;
+[14:57:53 INF] Executed action method ControlHub.API.Accounts.Controllers.AuthController.RegisterSuperAdmin (ControlHub.API), returned result Microsoft.AspNetCore.Mvc.OkObjectResult in 148.0346ms.&#xD;
+[14:57:53 INF] Executing OkObjectResult, writing value of type 'ControlHub.API.Accounts.ViewModels.Response.RegisterSupperAdminResponse'.&#xD;
+[14:57:53 INF] Executed action ControlHub.API.Accounts.Controllers.AuthController.RegisterSuperAdmin (ControlHub.API) in 182.2842ms&#xD;
+[14:57:53 INF] Executed endpoint 'ControlHub.API.Accounts.Controllers.AuthController.RegisterSuperAdmin (ControlHub.API)'&#xD;
+[14:57:53 INF] Request finished HTTP/1.1 POST http://localhost/api/Auth/superadmins/register - 200 null application/json; charset=utf-8 250.0649ms&#xD;
+[14:57:53 INF] Request starting HTTP/1.1 POST http://localhost/api/Auth/auth/signin - application/json; charset=utf-8 74&#xD;
+[14:57:53 INF] Executing endpoint 'ControlHub.API.Accounts.Controllers.AuthController.SignIn (ControlHub.API)'&#xD;
+[14:57:53 INF] Route matched with {action = "SignIn", controller = "Auth"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.IActionResult] SignIn(ControlHub.API.Accounts.ViewModels.Request.SignInRequest, System.Threading.CancellationToken) on controller ControlHub.API.Accounts.Controllers.AuthController (ControlHub.API).&#xD;
+[14:57:53 INF] Executing action method ControlHub.API.Accounts.Controllers.AuthController.SignIn (ControlHub.API) - Validation state: Valid&#xD;
+[14:57:53 INF] Account.SignIn.Started: Starting sign-in process for Identifier superadmin@example.com&#xD;
+[14:57:54 INF] Implicit transaction started at 01/18/2026 07:57:54&#xD;
+[14:57:54 INF] Saved 2 entities to in-memory store.&#xD;
+[14:57:54 INF] Transaction committed successfully with 2 changes.&#xD;
+[14:57:54 INF] Account.SignIn.Success: User signed in successfully for AccountId 86e0fd19-4c79-419e-91b6-e338c599659e&#xD;
+[14:57:54 INF] Executed action method ControlHub.API.Accounts.Controllers.AuthController.SignIn (ControlHub.API), returned result Microsoft.AspNetCore.Mvc.OkObjectResult in 136.8563ms.&#xD;
+[14:57:54 INF] Executing OkObjectResult, writing value of type 'ControlHub.API.Accounts.ViewModels.Response.SignInResponse'.&#xD;
+[14:57:54 INF] Executed action ControlHub.API.Accounts.Controllers.AuthController.SignIn (ControlHub.API) in 141.0741ms&#xD;
+[14:57:54 INF] Executed endpoint 'ControlHub.API.Accounts.Controllers.AuthController.SignIn (ControlHub.API)'&#xD;
+[14:57:54 INF] Request finished HTTP/1.1 POST http://localhost/api/Auth/auth/signin - 200 null application/json; charset=utf-8 147.2323ms&#xD;
+[14:57:54 INF] Request starting HTTP/1.1 POST http://localhost/api/Role/roles - application/json; charset=utf-8 71&#xD;
+[14:57:54 INF] --- PermissionClaimsTransformation: Role super_admin kh�ng c� permission n�o. ---&#xD;
+[14:57:54 INF] Executing endpoint 'ControlHub.API.Roles.RoleController.CreateRoles (ControlHub.API)'&#xD;
+[14:57:54 INF] Route matched with {action = "CreateRoles", controller = "Role"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.IActionResult] CreateRoles(ControlHub.API.Roles.ViewModels.Requests.CreateRolesRequest, System.Threading.CancellationToken) on controller ControlHub.API.Roles.RoleController (ControlHub.API).&#xD;
+[14:57:54 INF] Executing action method ControlHub.API.Roles.RoleController.CreateRoles (ControlHub.API) - Validation state: Valid&#xD;
+[14:57:54 INF] Role.CreateRoles.Started: Starting role creation process. Count=1&#xD;
+[14:57:54 WRN] Role.CreateRoles.MissingPermissions: Role missing required permission IDs. Role=&#xD;
+[14:57:54 INF] Role.CreateRoles.NoPersist: No valid roles were persisted to database. No roles persisted.&#xD;
+[14:57:54 WRN] Client Error occurred: Validation Error (Code: Role.NoValidRolesCreated). Message: No valid roles were created. All provided roles were invalid or duplicate.&#xD;
+[14:57:54 INF] Executed action method ControlHub.API.Roles.RoleController.CreateRoles (ControlHub.API), returned result Microsoft.AspNetCore.Mvc.BadRequestObjectResult in 24.7059ms.&#xD;
+[14:57:54 INF] Executing BadRequestObjectResult, writing value of type 'Microsoft.AspNetCore.Mvc.ProblemDetails'.&#xD;
+[14:57:54 INF] Executed action ControlHub.API.Roles.RoleController.CreateRoles (ControlHub.API) in 38.2773ms&#xD;
+[14:57:54 INF] Executed endpoint 'ControlHub.API.Roles.RoleController.CreateRoles (ControlHub.API)'&#xD;
+[14:57:54 INF] Request finished HTTP/1.1 POST http://localhost/api/Role/roles - 400 null application/problem+json; charset=utf-8 82.6044ms&#xD;
+[14:57:54 INF] Request starting HTTP/1.1 POST http://localhost/api/Auth/superadmins/register - application/json; charset=utf-8 98&#xD;
+[14:57:54 INF] Executing endpoint 'ControlHub.API.Accounts.Controllers.AuthController.RegisterSuperAdmin (ControlHub.API)'&#xD;
+[14:57:54 INF] Route matched with {action = "RegisterSuperAdmin", controller = "Auth"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.IActionResult] RegisterSuperAdmin(ControlHub.API.Accounts.ViewModels.Request.RegisterSupperAdminRequest, System.Threading.CancellationToken) on controller ControlHub.API.Accounts.Controllers.AuthController (ControlHub.API).&#xD;
+[14:57:54 INF] Executing action method ControlHub.API.Accounts.Controllers.AuthController.RegisterSuperAdmin (ControlHub.API) - Validation state: Valid&#xD;
+[14:57:54 INF] Account.RegisterSupperAdmin.Started: Starting account creation for Ident superadmin@example.com&#xD;
+[14:57:54 WRN] Account.RegisterSupperAdmin.IdentifierExists: Identifier already exists for Ident superadmin@example.com&#xD;
+[14:57:54 WRN] Client Error occurred: Conflict (Code: Account.EmailAlreadyExists). Message: The email provided is already in use.&#xD;
+[14:57:54 INF] Executed action method ControlHub.API.Accounts.Controllers.AuthController.RegisterSuperAdmin (ControlHub.API), returned result Microsoft.AspNetCore.Mvc.ConflictObjectResult in 3.9877ms.&#xD;
+[14:57:54 INF] Executing ConflictObjectResult, writing value of type 'Microsoft.AspNetCore.Mvc.ProblemDetails'.&#xD;
+[14:57:54 INF] Executed action ControlHub.API.Accounts.Controllers.AuthController.RegisterSuperAdmin (ControlHub.API) in 5.0622ms&#xD;
+[14:57:54 INF] Executed endpoint 'ControlHub.API.Accounts.Controllers.AuthController.RegisterSuperAdmin (ControlHub.API)'&#xD;
+[14:57:54 INF] Request finished HTTP/1.1 POST http://localhost/api/Auth/superadmins/register - 409 null application/problem+json; charset=utf-8 5.9743ms&#xD;
+[14:57:54 INF] Request starting HTTP/1.1 POST http://localhost/api/Auth/auth/signin - application/json; charset=utf-8 74&#xD;
+[14:57:54 INF] Executing endpoint 'ControlHub.API.Accounts.Controllers.AuthController.SignIn (ControlHub.API)'&#xD;
+[14:57:54 INF] Route matched with {action = "SignIn", controller = "Auth"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.IActionResult] SignIn(ControlHub.API.Accounts.ViewModels.Request.SignInRequest, System.Threading.CancellationToken) on controller ControlHub.API.Accounts.Controllers.AuthController (ControlHub.API).&#xD;
+[14:57:54 INF] Executing action method ControlHub.API.Accounts.Controllers.AuthController.SignIn (ControlHub.API) - Validation state: Valid&#xD;
+[14:57:54 INF] Account.SignIn.Started: Starting sign-in process for Identifier superadmin@example.com&#xD;
+[14:57:54 INF] Implicit transaction started at 01/18/2026 07:57:54&#xD;
+[14:57:54 INF] Saved 2 entities to in-memory store.&#xD;
+[14:57:54 INF] Transaction committed successfully with 2 changes.&#xD;
+[14:57:54 INF] Account.SignIn.Success: User signed in successfully for AccountId 86e0fd19-4c79-419e-91b6-e338c599659e&#xD;
+[14:57:54 INF] Executed action method ControlHub.API.Accounts.Controllers.AuthController.SignIn (ControlHub.API), returned result Microsoft.AspNetCore.Mvc.OkObjectResult in 83.3398ms.&#xD;
+[14:57:54 INF] Executing OkObjectResult, writing value of type 'ControlHub.API.Accounts.ViewModels.Response.SignInResponse'.&#xD;
+[14:57:54 INF] Executed action ControlHub.API.Accounts.Controllers.AuthController.SignIn (ControlHub.API) in 83.9187ms&#xD;
+[14:57:54 INF] Executed endpoint 'ControlHub.API.Accounts.Controllers.AuthController.SignIn (ControlHub.API)'&#xD;
+[14:57:54 INF] Request finished HTTP/1.1 POST http://localhost/api/Auth/auth/signin - 200 null application/json; charset=utf-8 85.0342ms&#xD;
+[14:57:54 INF] Request starting HTTP/1.1 POST http://localhost/api/Role/roles - application/json; charset=utf-8 93&#xD;
+[14:57:54 INF] --- PermissionClaimsTransformation: Role super_admin kh�ng c� permission n�o. ---&#xD;
+[14:57:54 INF] Executing endpoint 'ControlHub.API.Roles.RoleController.CreateRoles (ControlHub.API)'&#xD;
+[14:57:54 INF] Route matched with {action = "CreateRoles", controller = "Role"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.IActionResult] CreateRoles(ControlHub.API.Roles.ViewModels.Requests.CreateRolesRequest, System.Threading.CancellationToken) on controller ControlHub.API.Roles.RoleController (ControlHub.API).&#xD;
+[14:57:54 INF] Executing action method ControlHub.API.Roles.RoleController.CreateRoles (ControlHub.API) - Validation state: Valid&#xD;
+[14:57:54 INF] Role.CreateRoles.Started: Starting role creation process. Count=1&#xD;
+[14:57:54 WRN] Role.CreateRoles.MissingPermissions: Role missing required permission IDs. Role=Test Role 4223760e&#xD;
+[14:57:54 INF] Role.CreateRoles.NoPersist: No valid roles were persisted to database. No roles persisted.&#xD;
+[14:57:54 WRN] Client Error occurred: Validation Error (Code: Role.NoValidRolesCreated). Message: No valid roles were created. All provided roles were invalid or duplicate.&#xD;
+[14:57:54 INF] Executed action method ControlHub.API.Roles.RoleController.CreateRoles (ControlHub.API), returned result Microsoft.AspNetCore.Mvc.BadRequestObjectResult in 1.5619ms.&#xD;
+[14:57:54 INF] Executing BadRequestObjectResult, writing value of type 'Microsoft.AspNetCore.Mvc.ProblemDetails'.&#xD;
+[14:57:54 INF] Executed action ControlHub.API.Roles.RoleController.CreateRoles (ControlHub.API) in 2.1873ms&#xD;
+[14:57:54 INF] Executed endpoint 'ControlHub.API.Roles.RoleController.CreateRoles (ControlHub.API)'&#xD;
+[14:57:54 INF] Request finished HTTP/1.1 POST http://localhost/api/Role/roles - 400 null application/problem+json; charset=utf-8 4.6624ms&#xD;
+     Warning:&#xD;
+     The component "Fluent Assertions" is governed by the rules defined in the Xceed License Agreement and&#xD;
+     the Xceed Fluent Assertions Community License. You may use Fluent Assertions free of charge for&#xD;
+     non-commercial use only. An active subscription is required to use Fluent Assertions for commercial use.&#xD;
+     Please contact Xceed Sales mailto:sales@xceed.com to acquire a subscription at a very low cost.&#xD;
+     A paid commercial license supports the development and continued increasing support of&#xD;
+     Fluent Assertions users under both commercial and community licenses. Help us&#xD;
+     keep Fluent Assertions at the forefront of unit testing.&#xD;
+     For more information, visit https://xceed.com/products/unit-testing/fluent-assertions/&#xD;
+[14:57:54 INF] Request starting HTTP/1.1 POST http://localhost/api/Auth/users/register - application/json; charset=utf-8 69&#xD;
+[14:57:54 INF] Executing endpoint 'ControlHub.API.Accounts.Controllers.AuthController.Register (ControlHub.API)'&#xD;
+[xUnit.net 00:00:02.68]       Expected response.StatusCode to be HttpStatusCode.OK {value: 200}, but found HttpStatusCode.BadRequest {value: 400}.&#xD;
+[xUnit.net 00:00:02.68]       Stack Trace:&#xD;
+[xUnit.net 00:00:02.68]            at FluentAssertions.Execution.LateBoundTestFramework.Throw(String message)&#xD;
+[xUnit.net 00:00:02.68]            at FluentAssertions.Execution.DefaultAssertionStrategy.HandleFailure(String message)&#xD;
+[xUnit.net 00:00:02.68]            at FluentAssertions.Execution.AssertionScope.AddPreFormattedFailure(String formattedFailureMessage)&#xD;
+[xUnit.net 00:00:02.68]            at FluentAssertions.Execution.AssertionChain.FailWith(Func`1 getFailureReason)&#xD;
+[xUnit.net 00:00:02.68]            at FluentAssertions.Execution.AssertionChain.FailWith(Func`1 getFailureReason)&#xD;
+[xUnit.net 00:00:02.68]            at FluentAssertions.Execution.AssertionChain.FailWith(String message, Object[] args)&#xD;
+[xUnit.net 00:00:02.68]            at FluentAssertions.Primitives.EnumAssertions`2.Be(TEnum expected, String because, Object[] becauseArgs)&#xD;
+[xUnit.net 00:00:02.68]         e:\Project\ControlHub\tests\ControlHub.Api.Tests\FunctionalTests\Accounts\RoleTests.cs(41,0): at ControlHub.Api.Tests.FunctionalTests.Accounts.RoleTests.CreateRoles_ShouldReturnOk_WhenRequestIsValid()&#xD;
+[xUnit.net 00:00:02.68]         --- End of stack trace from previous location ---&#xD;
+[14:57:54 INF] Route matched with {action = "Register", controller = "Auth"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.IActionResult] Register(ControlHub.API.Accounts.ViewModels.Request.RegisterUserRequest, System.Threading.CancellationToken) on controller ControlHub.API.Accounts.Controllers.AuthController (ControlHub.API).&#xD;
+[14:57:54 INF] Executing action method ControlHub.API.Accounts.Controllers.AuthController.Register (ControlHub.API) - Validation state: Valid&#xD;
+[14:57:54 INF] Account.RegisterUser.Started: Starting account creation for Ident test@example.com&#xD;
+[14:57:54 INF] Account.RegisterUser.Success: Account created successfully for AccountId 5b8b48b5-07e4-4124-9be3-7edb72a7e537, Ident test@example.com&#xD;
+[14:57:54 INF] Implicit transaction started at 01/18/2026 07:57:54&#xD;
+[14:57:54 INF] Saved 4 entities to in-memory store.&#xD;
+[14:57:54 INF] Transaction committed successfully with 4 changes.&#xD;
+[14:57:54 INF] Executed action method ControlHub.API.Accounts.Controllers.AuthController.Register (ControlHub.API), returned result Microsoft.AspNetCore.Mvc.OkObjectResult in 71.9041ms.&#xD;
+[14:57:54 INF] Executing OkObjectResult, writing value of type 'ControlHub.API.Accounts.ViewModels.Response.RegisterUserResponse'.&#xD;
+[14:57:54 INF] Executed action ControlHub.API.Accounts.Controllers.AuthController.Register (ControlHub.API) in 75.0062ms&#xD;
+[14:57:54 INF] Executed endpoint 'ControlHub.API.Accounts.Controllers.AuthController.Register (ControlHub.API)'&#xD;
+[14:57:54 INF] Request finished HTTP/1.1 POST http://localhost/api/Auth/users/register - 200 null application/json; charset=utf-8 78.8081ms&#xD;
+[14:57:54 INF] Request starting HTTP/1.1 POST http://localhost/api/Auth/auth/signin - application/json; charset=utf-8 69&#xD;
+[14:57:54 INF] Executing endpoint 'ControlHub.API.Accounts.Controllers.AuthController.SignIn (ControlHub.API)'&#xD;
+[14:57:54 INF] Route matched with {action = "SignIn", controller = "Auth"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.IActionResult] SignIn(ControlHub.API.Accounts.ViewModels.Request.SignInRequest, System.Threading.CancellationToken) on controller ControlHub.API.Accounts.Controllers.AuthController (ControlHub.API).&#xD;
+[14:57:54 INF] Executing action method ControlHub.API.Accounts.Controllers.AuthController.SignIn (ControlHub.API) - Validation state: Valid&#xD;
+[14:57:54 INF] Account.SignIn.Started: Starting sign-in process for Identifier test@example.com&#xD;
+[14:57:54 INF] Implicit transaction started at 01/18/2026 07:57:54&#xD;
+[14:57:54 INF] Saved 2 entities to in-memory store.&#xD;
+[14:57:54 INF] Transaction committed successfully with 2 changes.&#xD;
+[14:57:54 INF] Account.SignIn.Success: User signed in successfully for AccountId 5b8b48b5-07e4-4124-9be3-7edb72a7e537&#xD;
+[14:57:54 INF] Executed action method ControlHub.API.Accounts.Controllers.AuthController.SignIn (ControlHub.API), returned result Microsoft.AspNetCore.Mvc.OkObjectResult in 79.1941ms.&#xD;
+[14:57:54 INF] Executing OkObjectResult, writing value of type 'ControlHub.API.Accounts.ViewModels.Response.SignInResponse'.&#xD;
+[14:57:54 INF] Executed action ControlHub.API.Accounts.Controllers.AuthController.SignIn (ControlHub.API) in 79.8718ms&#xD;
+[14:57:54 INF] Executed endpoint 'ControlHub.API.Accounts.Controllers.AuthController.SignIn (ControlHub.API)'&#xD;
+[14:57:54 INF] Request finished HTTP/1.1 POST http://localhost/api/Auth/auth/signin - 200 null application/json; charset=utf-8 80.5416ms&#xD;
+[14:57:54 INF] Request starting HTTP/1.1 POST http://localhost/api/Role/roles - application/json; charset=utf-8 72&#xD;
+[14:57:54 INF] --- PermissionClaimsTransformation: Role user kh�ng c� permission n�o. ---&#xD;
+[14:57:54 INF] Authorization failed. These requirements were not met:&#xD;
+ControlHub.Application.Authorization.Requirements.PermissionRequirement&#xD;
+[14:57:54 INF] AuthenticationScheme: Bearer was forbidden.&#xD;
+[14:57:54 INF] Request finished HTTP/1.1 POST http://localhost/api/Role/roles - 403 null null 4.6987ms&#xD;
+[xUnit.net 00:00:02.85]   Finished:    ControlHub.Api.Tests&#xD;
+</StdOut>
+    </Output>
+    <RunInfos>
+      <RunInfo computerName="DESKTOP-3V98JDF" outcome="Error" timestamp="2026-01-18T14:57:54.2884615+07:00">
+        <Text>[xUnit.net 00:00:02.68]     ControlHub.Api.Tests.FunctionalTests.Accounts.RoleTests.CreateRoles_ShouldReturnOk_WhenRequestIsValid [FAIL]</Text>
+      </RunInfo>
+    </RunInfos>
+  </ResultSummary>
+</TestRun>

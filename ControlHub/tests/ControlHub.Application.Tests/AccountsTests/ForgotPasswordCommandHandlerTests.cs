@@ -53,10 +53,13 @@ namespace ControlHub.Application.Tests.AccountsTests
                           .Returns((true, "normalized_value", null));
 
             // Khởi tạo Factory thật với Mock Validator
-            _identifierFactory = new IdentifierFactory(new[] { _validatorMock.Object });
+            _identifierFactory = new IdentifierFactory(
+                new[] { _validatorMock.Object },
+                new Mock<IIdentifierConfigRepository>().Object,
+                new DynamicIdentifierValidator());
 
             // Setup Happy Path Config
-            _configMock.Setup(x => x["AppSettings:ClientBaseUrl"]).Returns(ValidBaseUrl);
+            _configMock.Setup(x => x["BaseUrl:DevBaseUrl"]).Returns(ValidBaseUrl);
 
             _handler = new ForgotPasswordCommandHandler(
                 _passwordResetTokenGeneratorMock.Object,
@@ -189,7 +192,7 @@ namespace ControlHub.Application.Tests.AccountsTests
             SetupHappyPathDependencies(command, account, "token123");
 
             // Setup Config trả về URL Production
-            _configMock.Setup(x => x["AppSettings:ClientBaseUrl"]).Returns("https://production-api.com");
+            _configMock.Setup(x => x["BaseUrl:DevBaseUrl"]).Returns("https://production-api.com");
 
             // Act
             await _handler.Handle(command, CancellationToken.None);
@@ -213,7 +216,7 @@ namespace ControlHub.Application.Tests.AccountsTests
             SetupHappyPathDependencies(command, account, "token123");
 
             // Giả lập quên cấu hình (trả về null hoặc rỗng)
-            _configMock.Setup(x => x["AppSettings:ClientBaseUrl"]).Returns((string?)null);
+            _configMock.Setup(x => x["BaseUrl:DevBaseUrl"]).Returns((string?)null);
 
             // Act
             var result = await _handler.Handle(command, CancellationToken.None);

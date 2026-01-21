@@ -11,6 +11,9 @@
 
   <ItemGroup>
     <PackageReference Include="coverlet.collector" Version="6.0.0" />
+    <PackageReference Include="FluentAssertions" Version="8.8.0" />
+    <PackageReference Include="Microsoft.AspNetCore.Mvc.Testing" Version="8.0.0" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.InMemory" Version="8.0.0" />
     <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.14.1" />
     <PackageReference Include="xunit" Version="2.9.3" />
     <PackageReference Include="xunit.runner.visualstudio" Version="3.1.4">
@@ -21,6 +24,13 @@
 
   <ItemGroup>
     <Using Include="Xunit" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\src\ControlHub.API\ControlHub.API.csproj" />
+    <ProjectReference Include="..\..\src\ControlHub.Domain\ControlHub.Domain.csproj" />
+    <ProjectReference Include="..\..\src\ControlHub.Infrastructure\ControlHub.Infrastructure.csproj" />
+    <ProjectReference Include="..\..\src\ControlHub.Application\ControlHub.Application.csproj" />
   </ItemGroup>
 
 </Project>

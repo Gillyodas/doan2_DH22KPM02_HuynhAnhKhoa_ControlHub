@@ -126,9 +126,9 @@ namespace ControlHub.Application.Tests.AccountsTests
 
             var expectedError = AccountErrors.InvalidEmail;
             _accountFactoryMock
-                .Setup(f => f.CreateWithUserAndIdentifier(
-                    It.IsAny<Guid>(), command.Value, command.Type, command.Password, It.IsAny<Guid>(), It.IsAny<string?>()))
-                .Returns(Result<Maybe<Account>>.Failure(expectedError));
+                .Setup(f => f.CreateWithUserAndIdentifierAsync(
+                    It.IsAny<Guid>(), command.Value, command.Type, command.Password, It.IsAny<Guid>(), It.IsAny<string?>(), It.IsAny<Guid?>()))
+                .ReturnsAsync(Result<Maybe<Account>>.Failure(expectedError));
 
             // Act
             var result = await _handler.Handle(command, CancellationToken.None);
@@ -157,14 +157,15 @@ namespace ControlHub.Application.Tests.AccountsTests
 
             // Setup Factory trả về Success chứa Account
             _accountFactoryMock
-                .Setup(f => f.CreateWithUserAndIdentifier(
+                .Setup(f => f.CreateWithUserAndIdentifierAsync(
                     It.IsAny<Guid>(),
                     command.Value,
                     command.Type,
                     command.Password,
                     Guid.Parse(_validRoleId), // Verify: Phải dùng đúng UserRoleId từ Config
-                    It.IsAny<string?>()))
-                .Returns((Guid id, string v, IdentifierType t, string p, Guid r, string? u) =>
+                    It.IsAny<string?>(),
+                    It.IsAny<Guid?>()))
+                .ReturnsAsync((Guid id, string v, IdentifierType t, string p, Guid r, string? u, Guid? cid) =>
                 {
                     var account = Account.Create(id, dummyPassword, r);
                     return Result<Maybe<Account>>.Success(Maybe<Account>.From(account));

@@ -129,14 +129,15 @@ namespace ControlHub.Application.Tests.AccountsTests
 
             var expectedError = AccountErrors.InvalidEmail;
             _accountFactoryMock
-                .Setup(f => f.CreateWithUserAndIdentifier(
+                .Setup(f => f.CreateWithUserAndIdentifierAsync(
                     It.IsAny<Guid>(),
                     command.Value,
                     command.Type,
                     command.Password,
                     It.IsAny<Guid>(),
-                    It.IsAny<string?>()))
-                .Returns(Result<Maybe<Account>>.Failure(expectedError));
+                    It.IsAny<string?>(),
+                    It.IsAny<Guid?>()))
+                .ReturnsAsync(Result<Maybe<Account>>.Failure(expectedError));
 
             // Act
             var result = await _handler.Handle(command, CancellationToken.None);
@@ -159,14 +160,15 @@ namespace ControlHub.Application.Tests.AccountsTests
             var dummyPassword = Password.From(new byte[32], new byte[16]);
 
             _accountFactoryMock
-                .Setup(f => f.CreateWithUserAndIdentifier(
+                .Setup(f => f.CreateWithUserAndIdentifierAsync(
                     It.IsAny<Guid>(),
                     command.Value,
                     command.Type,
                     command.Password,
                     It.IsAny<Guid>(),
-                    It.IsAny<string?>()))
-                .Returns((Guid id, string v, IdentifierType t, string p, Guid r, string? u) =>
+                    It.IsAny<string?>(),
+                    It.IsAny<Guid?>()))
+                .ReturnsAsync((Guid id, string v, IdentifierType t, string p, Guid r, string? u, Guid? cid) =>
                 {
                     var account = Account.Create(id, dummyPassword, r);
                     return Result<Maybe<Account>>.Success(Maybe<Account>.From(account));

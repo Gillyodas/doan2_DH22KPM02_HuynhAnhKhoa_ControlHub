@@ -1,0 +1,399 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TestRun id="2c452ea5-2f99-4bc1-9200-b7757fa04878" name="Gill@DESKTOP-3V98JDF 2026-01-18 14:36:26" runUser="DESKTOP-3V98JDF\Gill" xmlns="http://microsoft.com/schemas/VisualStudio/TeamTest/2010">
+  <Times creation="2026-01-18T14:36:26.4455868+07:00" queuing="2026-01-18T14:36:26.4455873+07:00" start="2026-01-18T14:36:23.0452883+07:00" finish="2026-01-18T14:36:31.1439566+07:00" />
+  <TestSettings name="default" id="396236ec-a2d3-46d1-a88a-5afb4343ea5d">
+    <Deployment runDeploymentRoot="Gill_DESKTOP-3V98JDF_2026-01-18_14_36_26" />
+  </TestSettings>
+  <Results>
+    <UnitTestResult executionId="47085462-3db4-4748-8cec-361afa6e2f04" testId="494cb6f0-cdd7-db36-0e92-ebd2fdea7e01" testName="ControlHub.Api.Tests.FunctionalTests.Accounts.RegistrationTests.Register_ShouldReturnBadRequest_WhenPasswordIsTooShort" computerName="DESKTOP-3V98JDF" duration="00:00:02.2418068" startTime="2026-01-18T14:36:23.5635466+07:00" endTime="2026-01-18T14:36:25.8246655+07:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="47085462-3db4-4748-8cec-361afa6e2f04" />
+    <UnitTestResult executionId="7935306e-aa35-469c-95c5-a496937adb49" testId="5fba55ed-8cd5-8701-6d4a-e4853281586f" testName="ControlHub.Api.Tests.FunctionalTests.Accounts.AuthTests.SignOut_ShouldReturnUnauthorized_WhenNotAuthenticated" computerName="DESKTOP-3V98JDF" duration="00:00:00.0114736" startTime="2026-01-18T14:36:26.4270998+07:00" endTime="2026-01-18T14:36:26.4271721+07:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="7935306e-aa35-469c-95c5-a496937adb49" />
+    <UnitTestResult executionId="eab04f60-a470-49cf-ace3-4c2178f5330c" testId="43f04a9b-e67b-eec7-b677-5cecfa95f40c" testName="ControlHub.Api.Tests.FunctionalTests.Accounts.LoginTests.Login_ShouldReturnBadRequest_WhenPasswordIsTooShort" computerName="DESKTOP-3V98JDF" duration="00:00:00.0097427" startTime="2026-01-18T14:36:26.2700369+07:00" endTime="2026-01-18T14:36:26.2797207+07:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="eab04f60-a470-49cf-ace3-4c2178f5330c" />
+    <UnitTestResult executionId="a529d377-a43d-4a6a-b241-13ecf6299eca" testId="a0acf902-031a-8077-580a-c94562166a95" testName="ControlHub.Api.Tests.FunctionalTests.Accounts.RegistrationTests.Register_ShouldReturnConflict_WhenUserAlreadyExists" computerName="DESKTOP-3V98JDF" duration="00:00:00.2178358" startTime="2026-01-18T14:36:26.0151044+07:00" endTime="2026-01-18T14:36:26.2329428+07:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="a529d377-a43d-4a6a-b241-13ecf6299eca" />
+    <UnitTestResult executionId="6922c4a9-ef2d-4e47-a0de-89be1cf3338a" testId="00940eb6-b705-7040-73fb-314dc99e91b5" testName="ControlHub.Api.Tests.FunctionalTests.Accounts.AuthTests.SignOut_ShouldReturnNoContent_WhenTokensAreValid" computerName="DESKTOP-3V98JDF" duration="00:00:02.8377619" startTime="2026-01-18T14:36:23.5635966+07:00" endTime="2026-01-18T14:36:26.4122418+07:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Failed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="6922c4a9-ef2d-4e47-a0de-89be1cf3338a">
+      <Output>
+        <ErrorInfo>
+          <Message>Expected response.StatusCode to be HttpStatusCode.NoContent {value: 204}, but found HttpStatusCode.Unauthorized {value: 401}.</Message>
+          <StackTrace>   at FluentAssertions.Execution.LateBoundTestFramework.Throw(String message)&#xD;
+   at FluentAssertions.Execution.DefaultAssertionStrategy.HandleFailure(String message)&#xD;
+   at FluentAssertions.Execution.AssertionScope.AddPreFormattedFailure(String formattedFailureMessage)&#xD;
+   at FluentAssertions.Execution.AssertionChain.FailWith(Func`1 getFailureReason)&#xD;
+   at FluentAssertions.Execution.AssertionChain.FailWith(Func`1 getFailureReason)&#xD;
+   at FluentAssertions.Execution.AssertionChain.FailWith(String message, Object[] args)&#xD;
+   at FluentAssertions.Primitives.EnumAssertions`2.Be(TEnum expected, String because, Object[] becauseArgs)&#xD;
+   at ControlHub.Api.Tests.FunctionalTests.Accounts.AuthTests.SignOut_ShouldReturnNoContent_WhenTokensAreValid() in e:\Project\ControlHub\tests\ControlHub.Api.Tests\FunctionalTests\Accounts\AuthTests.cs:line 54&#xD;
+--- End of stack trace from previous location ---</StackTrace>
+        </ErrorInfo>
+      </Output>
+    </UnitTestResult>
+    <UnitTestResult executionId="7a844abc-8480-47fe-bee6-a340a668d4f2" testId="bd1c0ae9-8082-b70d-99da-0e32c5cac791" testName="ControlHub.Api.Tests.FunctionalTests.Accounts.RegistrationTests.Register_ShouldReturnOk_WhenRequestIsValid" computerName="DESKTOP-3V98JDF" duration="00:00:00.1921453" startTime="2026-01-18T14:36:25.8370977+07:00" endTime="2026-01-18T14:36:26.0145318+07:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="7a844abc-8480-47fe-bee6-a340a668d4f2" />
+    <UnitTestResult executionId="9a4dcba1-7fd2-49b4-b6d1-1ee4edfbe1ac" testId="6e6dc730-1c13-76f4-f37b-f3480d320334" testName="ControlHub.Api.Tests.FunctionalTests.Accounts.TokenTests.RefreshToken_ShouldReturnNewTokens_WhenValid" computerName="DESKTOP-3V98JDF" duration="00:00:00.4713618" startTime="2026-01-18T14:36:25.8369675+07:00" endTime="2026-01-18T14:36:26.2938979+07:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="9a4dcba1-7fd2-49b4-b6d1-1ee4edfbe1ac" />
+    <UnitTestResult executionId="c42f0060-4973-49f1-a16f-c898e2ee5763" testId="17261639-49fb-4594-602b-1fd4851f3959" testName="ControlHub.Api.Tests.FunctionalTests.Accounts.LoginTests.Login_ShouldReturnUnauthorized_WhenPasswordIsWrong" computerName="DESKTOP-3V98JDF" duration="00:00:00.1600958" startTime="2026-01-18T14:36:26.2800670+07:00" endTime="2026-01-18T14:36:26.4402364+07:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="c42f0060-4973-49f1-a16f-c898e2ee5763" />
+    <UnitTestResult executionId="2f8a42f6-298a-4c37-ac11-50266f1dcb3c" testId="3589fe02-9f4c-829d-34e8-5a7b85406e64" testName="ControlHub.Api.Tests.FunctionalTests.Accounts.TokenTests.RefreshToken_ShouldReturnUnauthorized_WhenTokenIsInvalid" computerName="DESKTOP-3V98JDF" duration="00:00:02.2418022" startTime="2026-01-18T14:36:23.5635800+07:00" endTime="2026-01-18T14:36:25.8206821+07:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="2f8a42f6-298a-4c37-ac11-50266f1dcb3c" />
+    <UnitTestResult executionId="f31fbf50-8a86-449e-af4f-5aab9d0f2424" testId="48b15569-5cb4-e7ef-1799-00ac86158141" testName="ControlHub.Api.Tests.FunctionalTests.Accounts.LoginTests.Login_ShouldReturnOk_WhenCredentialsAreValid" computerName="DESKTOP-3V98JDF" duration="00:00:02.7022282" startTime="2026-01-18T14:36:23.5625502+07:00" endTime="2026-01-18T14:36:26.2695992+07:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="f31fbf50-8a86-449e-af4f-5aab9d0f2424" />
+  </Results>
+  <TestDefinitions>
+    <UnitTest name="ControlHub.Api.Tests.FunctionalTests.Accounts.RegistrationTests.Register_ShouldReturnBadRequest_WhenPasswordIsTooShort" storage="e:\project\controlhub\tests\controlhub.api.tests\bin\debug\net8.0\controlhub.api.tests.dll" id="494cb6f0-cdd7-db36-0e92-ebd2fdea7e01">
+      <Execution id="47085462-3db4-4748-8cec-361afa6e2f04" />
+      <TestMethod codeBase="e:\Project\ControlHub\tests\ControlHub.Api.Tests\bin\Debug\net8.0\ControlHub.Api.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="ControlHub.Api.Tests.FunctionalTests.Accounts.RegistrationTests" name="Register_ShouldReturnBadRequest_WhenPasswordIsTooShort" />
+    </UnitTest>
+    <UnitTest name="ControlHub.Api.Tests.FunctionalTests.Accounts.RegistrationTests.Register_ShouldReturnOk_WhenRequestIsValid" storage="e:\project\controlhub\tests\controlhub.api.tests\bin\debug\net8.0\controlhub.api.tests.dll" id="bd1c0ae9-8082-b70d-99da-0e32c5cac791">
+      <Execution id="7a844abc-8480-47fe-bee6-a340a668d4f2" />
+      <TestMethod codeBase="e:\Project\ControlHub\tests\ControlHub.Api.Tests\bin\Debug\net8.0\ControlHub.Api.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="ControlHub.Api.Tests.FunctionalTests.Accounts.RegistrationTests" name="Register_ShouldReturnOk_WhenRequestIsValid" />
+    </UnitTest>
+    <UnitTest name="ControlHub.Api.Tests.FunctionalTests.Accounts.RegistrationTests.Register_ShouldReturnConflict_WhenUserAlreadyExists" storage="e:\project\controlhub\tests\controlhub.api.tests\bin\debug\net8.0\controlhub.api.tests.dll" id="a0acf902-031a-8077-580a-c94562166a95">
+      <Execution id="a529d377-a43d-4a6a-b241-13ecf6299eca" />
+      <TestMethod codeBase="e:\Project\ControlHub\tests\ControlHub.Api.Tests\bin\Debug\net8.0\ControlHub.Api.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="ControlHub.Api.Tests.FunctionalTests.Accounts.RegistrationTests" name="Register_ShouldReturnConflict_WhenUserAlreadyExists" />
+    </UnitTest>
+    <UnitTest name="ControlHub.Api.Tests.FunctionalTests.Accounts.LoginTests.Login_ShouldReturnOk_WhenCredentialsAreValid" storage="e:\project\controlhub\tests\controlhub.api.tests\bin\debug\net8.0\controlhub.api.tests.dll" id="48b15569-5cb4-e7ef-1799-00ac86158141">
+      <Execution id="f31fbf50-8a86-449e-af4f-5aab9d0f2424" />
+      <TestMethod codeBase="e:\Project\ControlHub\tests\ControlHub.Api.Tests\bin\Debug\net8.0\ControlHub.Api.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="ControlHub.Api.Tests.FunctionalTests.Accounts.LoginTests" name="Login_ShouldReturnOk_WhenCredentialsAreValid" />
+    </UnitTest>
+    <UnitTest name="ControlHub.Api.Tests.FunctionalTests.Accounts.AuthTests.SignOut_ShouldReturnNoContent_WhenTokensAreValid" storage="e:\project\controlhub\tests\controlhub.api.tests\bin\debug\net8.0\controlhub.api.tests.dll" id="00940eb6-b705-7040-73fb-314dc99e91b5">
+      <Execution id="6922c4a9-ef2d-4e47-a0de-89be1cf3338a" />
+      <TestMethod codeBase="e:\Project\ControlHub\tests\ControlHub.Api.Tests\bin\Debug\net8.0\ControlHub.Api.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="ControlHub.Api.Tests.FunctionalTests.Accounts.AuthTests" name="SignOut_ShouldReturnNoContent_WhenTokensAreValid" />
+    </UnitTest>
+    <UnitTest name="ControlHub.Api.Tests.FunctionalTests.Accounts.AuthTests.SignOut_ShouldReturnUnauthorized_WhenNotAuthenticated" storage="e:\project\controlhub\tests\controlhub.api.tests\bin\debug\net8.0\controlhub.api.tests.dll" id="5fba55ed-8cd5-8701-6d4a-e4853281586f">
+      <Execution id="7935306e-aa35-469c-95c5-a496937adb49" />
+      <TestMethod codeBase="e:\Project\ControlHub\tests\ControlHub.Api.Tests\bin\Debug\net8.0\ControlHub.Api.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="ControlHub.Api.Tests.FunctionalTests.Accounts.AuthTests" name="SignOut_ShouldReturnUnauthorized_WhenNotAuthenticated" />
+    </UnitTest>
+    <UnitTest name="ControlHub.Api.Tests.FunctionalTests.Accounts.LoginTests.Login_ShouldReturnUnauthorized_WhenPasswordIsWrong" storage="e:\project\controlhub\tests\controlhub.api.tests\bin\debug\net8.0\controlhub.api.tests.dll" id="17261639-49fb-4594-602b-1fd4851f3959">
+      <Execution id="c42f0060-4973-49f1-a16f-c898e2ee5763" />
+      <TestMethod codeBase="e:\Project\ControlHub\tests\ControlHub.Api.Tests\bin\Debug\net8.0\ControlHub.Api.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="ControlHub.Api.Tests.FunctionalTests.Accounts.LoginTests" name="Login_ShouldReturnUnauthorized_WhenPasswordIsWrong" />
+    </UnitTest>
+    <UnitTest name="ControlHub.Api.Tests.FunctionalTests.Accounts.TokenTests.RefreshToken_ShouldReturnNewTokens_WhenValid" storage="e:\project\controlhub\tests\controlhub.api.tests\bin\debug\net8.0\controlhub.api.tests.dll" id="6e6dc730-1c13-76f4-f37b-f3480d320334">
+      <Execution id="9a4dcba1-7fd2-49b4-b6d1-1ee4edfbe1ac" />
+      <TestMethod codeBase="e:\Project\ControlHub\tests\ControlHub.Api.Tests\bin\Debug\net8.0\ControlHub.Api.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="ControlHub.Api.Tests.FunctionalTests.Accounts.TokenTests" name="RefreshToken_ShouldReturnNewTokens_WhenValid" />
+    </UnitTest>
+    <UnitTest name="ControlHub.Api.Tests.FunctionalTests.Accounts.TokenTests.RefreshToken_ShouldReturnUnauthorized_WhenTokenIsInvalid" storage="e:\project\controlhub\tests\controlhub.api.tests\bin\debug\net8.0\controlhub.api.tests.dll" id="3589fe02-9f4c-829d-34e8-5a7b85406e64">
+      <Execution id="2f8a42f6-298a-4c37-ac11-50266f1dcb3c" />
+      <TestMethod codeBase="e:\Project\ControlHub\tests\ControlHub.Api.Tests\bin\Debug\net8.0\ControlHub.Api.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="ControlHub.Api.Tests.FunctionalTests.Accounts.TokenTests" name="RefreshToken_ShouldReturnUnauthorized_WhenTokenIsInvalid" />
+    </UnitTest>
+    <UnitTest name="ControlHub.Api.Tests.FunctionalTests.Accounts.LoginTests.Login_ShouldReturnBadRequest_WhenPasswordIsTooShort" storage="e:\project\controlhub\tests\controlhub.api.tests\bin\debug\net8.0\controlhub.api.tests.dll" id="43f04a9b-e67b-eec7-b677-5cecfa95f40c">
+      <Execution id="eab04f60-a470-49cf-ace3-4c2178f5330c" />
+      <TestMethod codeBase="e:\Project\ControlHub\tests\ControlHub.Api.Tests\bin\Debug\net8.0\ControlHub.Api.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="ControlHub.Api.Tests.FunctionalTests.Accounts.LoginTests" name="Login_ShouldReturnBadRequest_WhenPasswordIsTooShort" />
+    </UnitTest>
+  </TestDefinitions>
+  <TestEntries>
+    <TestEntry testId="494cb6f0-cdd7-db36-0e92-ebd2fdea7e01" executionId="47085462-3db4-4748-8cec-361afa6e2f04" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="5fba55ed-8cd5-8701-6d4a-e4853281586f" executionId="7935306e-aa35-469c-95c5-a496937adb49" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="43f04a9b-e67b-eec7-b677-5cecfa95f40c" executionId="eab04f60-a470-49cf-ace3-4c2178f5330c" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="a0acf902-031a-8077-580a-c94562166a95" executionId="a529d377-a43d-4a6a-b241-13ecf6299eca" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="00940eb6-b705-7040-73fb-314dc99e91b5" executionId="6922c4a9-ef2d-4e47-a0de-89be1cf3338a" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="bd1c0ae9-8082-b70d-99da-0e32c5cac791" executionId="7a844abc-8480-47fe-bee6-a340a668d4f2" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="6e6dc730-1c13-76f4-f37b-f3480d320334" executionId="9a4dcba1-7fd2-49b4-b6d1-1ee4edfbe1ac" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="17261639-49fb-4594-602b-1fd4851f3959" executionId="c42f0060-4973-49f1-a16f-c898e2ee5763" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="3589fe02-9f4c-829d-34e8-5a7b85406e64" executionId="2f8a42f6-298a-4c37-ac11-50266f1dcb3c" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="48b15569-5cb4-e7ef-1799-00ac86158141" executionId="f31fbf50-8a86-449e-af4f-5aab9d0f2424" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+  </TestEntries>
+  <TestLists>
+    <TestList name="Results Not in a List" id="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestList name="All Loaded Results" id="19431567-8539-422a-85d7-44ee4e166bda" />
+  </TestLists>
+  <ResultSummary outcome="Failed">
+    <Counters total="10" executed="10" passed="9" failed="1" error="0" timeout="0" aborted="0" inconclusive="0" passedButRunAborted="0" notRunnable="0" notExecuted="0" disconnected="0" warning="0" completed="0" inProgress="0" pending="0" />
+    <Output>
+      <StdOut>[xUnit.net 00:00:00.00] xUnit.net VSTest Adapter v3.1.4+50e68bbb8b (64-bit .NET 8.0.22)&#xD;
+[xUnit.net 00:00:00.08]   Discovering: ControlHub.Api.Tests&#xD;
+[xUnit.net 00:00:00.11]   Discovered:  ControlHub.Api.Tests&#xD;
+[xUnit.net 00:00:00.12]   Starting:    ControlHub.Api.Tests&#xD;
+[14:36:24 INF] Saved 3 entities to in-memory store.&#xD;
+[14:36:24 INF] Saved 3 entities to in-memory store.&#xD;
+[14:36:24 INF] Saved 3 entities to in-memory store.&#xD;
+[14:36:24 INF] Saved 3 entities to in-memory store.&#xD;
+[14:36:24 INF] Saved 19 entities to in-memory store.&#xD;
+[14:36:24 INF] Saved 19 entities to in-memory store.&#xD;
+[14:36:24 INF] Saved 19 entities to in-memory store.&#xD;
+[14:36:24 INF] Saved 19 entities to in-memory store.&#xD;
+Seeded 5 identifier configs successfully.&#xD;
+Seeded 5 identifier configs successfully.&#xD;
+Seeded 5 identifier configs successfully.&#xD;
+Seeded 5 identifier configs successfully.&#xD;
+[14:36:24 INF] Saved 32 entities to in-memory store.&#xD;
+[14:36:24 INF] Saved 32 entities to in-memory store.&#xD;
+[14:36:24 INF] Saved 32 entities to in-memory store.&#xD;
+[14:36:24 INF] Saved 32 entities to in-memory store.&#xD;
+Seeded 32 permissions successfully.&#xD;
+Seeded 32 permissions successfully.&#xD;
+Seeded 32 permissions successfully.&#xD;
+Seeded 32 permissions successfully.&#xD;
+[14:36:25 INF] Saved 16 entities to in-memory store.&#xD;
+[14:36:25 INF] Saved 16 entities to in-memory store.&#xD;
+[14:36:25 INF] Saved 16 entities to in-memory store.&#xD;
+[14:36:25 INF] Saved 16 entities to in-memory store.&#xD;
+Seeded 4 test accounts successfully.&#xD;
+Database seeding completed successfully.&#xD;
+? ControlHub seeding completed successfully!&#xD;
+Seeded 4 test accounts successfully.&#xD;
+Seeded 4 test accounts successfully.&#xD;
+Database seeding completed successfully.&#xD;
+Database seeding completed successfully.&#xD;
+? ControlHub seeding completed successfully!&#xD;
+? ControlHub seeding completed successfully!&#xD;
+Seeded 4 test accounts successfully.&#xD;
+Database seeding completed successfully.&#xD;
+? ControlHub seeding completed successfully!&#xD;
+[14:36:25 INF] User profile is available. Using 'C:\Users\Gill\AppData\Local\ASP.NET\DataProtection-Keys' as key repository and Windows DPAPI to encrypt keys at rest.&#xD;
+[14:36:25 INF] User profile is available. Using 'C:\Users\Gill\AppData\Local\ASP.NET\DataProtection-Keys' as key repository and Windows DPAPI to encrypt keys at rest.&#xD;
+[14:36:25 INF] User profile is available. Using 'C:\Users\Gill\AppData\Local\ASP.NET\DataProtection-Keys' as key repository and Windows DPAPI to encrypt keys at rest.&#xD;
+[14:36:25 INF] User profile is available. Using 'C:\Users\Gill\AppData\Local\ASP.NET\DataProtection-Keys' as key repository and Windows DPAPI to encrypt keys at rest.&#xD;
+[14:36:25 INF] Request starting HTTP/1.1 POST http://localhost/api/Auth/users/register - application/json; charset=utf-8 102&#xD;
+[14:36:25 INF] Request starting HTTP/1.1 POST http://localhost/api/Auth/auth/refresh - application/json; charset=utf-8 97&#xD;
+[14:36:25 INF] Request starting HTTP/1.1 POST http://localhost/api/Auth/users/register - application/json; charset=utf-8 83&#xD;
+[14:36:25 INF] Request starting HTTP/1.1 POST http://localhost/api/Auth/users/register - application/json; charset=utf-8 100&#xD;
+[14:36:25 WRN] Failed to determine the https port for redirect.&#xD;
+[14:36:25 WRN] Failed to determine the https port for redirect.&#xD;
+[14:36:25 WRN] Failed to determine the https port for redirect.&#xD;
+[14:36:25 WRN] Failed to determine the https port for redirect.&#xD;
+[14:36:25 INF] ?? [JWT Config] Successfully loaded. Issuer: ControlHub&#xD;
+[14:36:25 INF] ?? [JWT Config] Successfully loaded. Issuer: ControlHub&#xD;
+[14:36:25 INF] ?? [JWT Config] Successfully loaded. Issuer: ControlHub&#xD;
+[14:36:25 INF] ?? [JWT Config] Successfully loaded. Issuer: ControlHub&#xD;
+[14:36:25 INF] Executing endpoint 'ControlHub.API.Accounts.Controllers.AuthController.Refresh (ControlHub.API)'&#xD;
+[14:36:25 INF] Executing endpoint 'ControlHub.API.Accounts.Controllers.AuthController.Register (ControlHub.API)'&#xD;
+[14:36:25 INF] Executing endpoint 'ControlHub.API.Accounts.Controllers.AuthController.Register (ControlHub.API)'&#xD;
+[14:36:25 INF] Executing endpoint 'ControlHub.API.Accounts.Controllers.AuthController.Register (ControlHub.API)'&#xD;
+[14:36:25 INF] Route matched with {action = "Refresh", controller = "Auth"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.IActionResult] Refresh(ControlHub.API.Accounts.ViewModels.Request.RefreshAccessTokenRequest, System.Threading.CancellationToken) on controller ControlHub.API.Accounts.Controllers.AuthController (ControlHub.API).&#xD;
+[14:36:25 INF] Route matched with {action = "Register", controller = "Auth"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.IActionResult] Register(ControlHub.API.Accounts.ViewModels.Request.RegisterUserRequest, System.Threading.CancellationToken) on controller ControlHub.API.Accounts.Controllers.AuthController (ControlHub.API).&#xD;
+[14:36:25 INF] Route matched with {action = "Register", controller = "Auth"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.IActionResult] Register(ControlHub.API.Accounts.ViewModels.Request.RegisterUserRequest, System.Threading.CancellationToken) on controller ControlHub.API.Accounts.Controllers.AuthController (ControlHub.API).&#xD;
+[14:36:25 INF] Route matched with {action = "Register", controller = "Auth"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.IActionResult] Register(ControlHub.API.Accounts.ViewModels.Request.RegisterUserRequest, System.Threading.CancellationToken) on controller ControlHub.API.Accounts.Controllers.AuthController (ControlHub.API).&#xD;
+[14:36:25 INF] Executing action method ControlHub.API.Accounts.Controllers.AuthController.Register (ControlHub.API) - Validation state: Valid&#xD;
+[14:36:25 INF] Executing action method ControlHub.API.Accounts.Controllers.AuthController.Register (ControlHub.API) - Validation state: Valid&#xD;
+[14:36:25 INF] Executing action method ControlHub.API.Accounts.Controllers.AuthController.Register (ControlHub.API) - Validation state: Valid&#xD;
+[14:36:25 INF] Executing action method ControlHub.API.Accounts.Controllers.AuthController.Refresh (ControlHub.API) - Validation state: Valid&#xD;
+[14:36:25 WRN] Client Error occurred: Validation Error (Code: Validation.Failed). Message: Password is too short.; Password must contain at least one uppercase letter.; Password must contain at least one lowercase letter.; Password must contain at least one special character (!@#$%^&amp;*()).&#xD;
+[14:36:25 INF] Account.RegisterUser.Started: Starting account creation for Ident loginuser@example.com&#xD;
+[14:36:25 INF] Account.RegisterUser.Started: Starting account creation for Ident signoutuser@example.com&#xD;
+[14:36:25 INF] Token.Refresh.Started: Starting refresh access token process for RefreshToken invalid&#xD;
+[14:36:25 INF] Executed action method ControlHub.API.Accounts.Controllers.AuthController.Register (ControlHub.API), returned result Microsoft.AspNetCore.Mvc.BadRequestObjectResult in 23.9533ms.&#xD;
+[14:36:25 INF] Executing BadRequestObjectResult, writing value of type 'Microsoft.AspNetCore.Mvc.ProblemDetails'.&#xD;
+[14:36:25 WRN] Token.Refresh.NotFound: Refresh token not found for Token invalid&#xD;
+[14:36:25 WRN] Client Error occurred: Resource Not Found (Code: Token.NotFound). Message: Token is not found.&#xD;
+[14:36:25 INF] Executed action method ControlHub.API.Accounts.Controllers.AuthController.Refresh (ControlHub.API), returned result Microsoft.AspNetCore.Mvc.NotFoundObjectResult in 43.2004ms.&#xD;
+[14:36:25 INF] Executing NotFoundObjectResult, writing value of type 'Microsoft.AspNetCore.Mvc.ProblemDetails'.&#xD;
+[14:36:25 INF] Executed action ControlHub.API.Accounts.Controllers.AuthController.Refresh (ControlHub.API) in 71.4295ms&#xD;
+[14:36:25 INF] Executed action ControlHub.API.Accounts.Controllers.AuthController.Register (ControlHub.API) in 71.4269ms&#xD;
+[14:36:25 INF] Executed endpoint 'ControlHub.API.Accounts.Controllers.AuthController.Register (ControlHub.API)'&#xD;
+[14:36:25 INF] Executed endpoint 'ControlHub.API.Accounts.Controllers.AuthController.Refresh (ControlHub.API)'&#xD;
+[14:36:25 INF] Request finished HTTP/1.1 POST http://localhost/api/Auth/users/register - 400 null application/problem+json; charset=utf-8 148.1285ms&#xD;
+[14:36:25 INF] Request finished HTTP/1.1 POST http://localhost/api/Auth/auth/refresh - 404 null application/problem+json; charset=utf-8 149.4011ms&#xD;
+[14:36:25 INF] Request starting HTTP/1.1 POST http://localhost/api/Auth/users/register - application/json; charset=utf-8 98&#xD;
+[14:36:25 INF] Request starting HTTP/1.1 POST http://localhost/api/Auth/users/register - application/json; charset=utf-8 100&#xD;
+[14:36:25 INF] Executing endpoint 'ControlHub.API.Accounts.Controllers.AuthController.Register (ControlHub.API)'&#xD;
+[14:36:25 INF] Executing endpoint 'ControlHub.API.Accounts.Controllers.AuthController.Register (ControlHub.API)'&#xD;
+[14:36:25 INF] Route matched with {action = "Register", controller = "Auth"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.IActionResult] Register(ControlHub.API.Accounts.ViewModels.Request.RegisterUserRequest, System.Threading.CancellationToken) on controller ControlHub.API.Accounts.Controllers.AuthController (ControlHub.API).&#xD;
+[14:36:25 INF] Executing action method ControlHub.API.Accounts.Controllers.AuthController.Register (ControlHub.API) - Validation state: Valid&#xD;
+[14:36:25 INF] Account.RegisterUser.Started: Starting account creation for Ident newuser@example.com&#xD;
+[14:36:25 INF] Route matched with {action = "Register", controller = "Auth"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.IActionResult] Register(ControlHub.API.Accounts.ViewModels.Request.RegisterUserRequest, System.Threading.CancellationToken) on controller ControlHub.API.Accounts.Controllers.AuthController (ControlHub.API).&#xD;
+[14:36:25 INF] Executing action method ControlHub.API.Accounts.Controllers.AuthController.Register (ControlHub.API) - Validation state: Valid&#xD;
+[14:36:25 INF] Account.RegisterUser.Started: Starting account creation for Ident tokenuser@example.com&#xD;
+[14:36:25 INF] Account.RegisterUser.Success: Account created successfully for AccountId 8ac08d4d-bfb5-4b51-b676-d933db5fb376, Ident loginuser@example.com&#xD;
+[14:36:25 INF] Implicit transaction started at 01/18/2026 07:36:25&#xD;
+[14:36:25 INF] Saved 4 entities to in-memory store.&#xD;
+[14:36:25 INF] Transaction committed successfully with 4 changes.&#xD;
+[14:36:25 INF] Executed action method ControlHub.API.Accounts.Controllers.AuthController.Register (ControlHub.API), returned result Microsoft.AspNetCore.Mvc.OkObjectResult in 209.6787ms.&#xD;
+[14:36:25 INF] Executing OkObjectResult, writing value of type 'ControlHub.API.Accounts.ViewModels.Response.RegisterUserResponse'.&#xD;
+[14:36:25 INF] Account.RegisterUser.Success: Account created successfully for AccountId 08aef4ee-d4c1-4c0e-9f3e-55da15fe7e42, Ident signoutuser@example.com&#xD;
+[14:36:25 INF] Implicit transaction started at 01/18/2026 07:36:25&#xD;
+[14:36:25 INF] Saved 4 entities to in-memory store.&#xD;
+[14:36:25 INF] Transaction committed successfully with 4 changes.&#xD;
+[14:36:25 INF] Executed action method ControlHub.API.Accounts.Controllers.AuthController.Register (ControlHub.API), returned result Microsoft.AspNetCore.Mvc.OkObjectResult in 229.5458ms.&#xD;
+[14:36:25 INF] Executing OkObjectResult, writing value of type 'ControlHub.API.Accounts.ViewModels.Response.RegisterUserResponse'.&#xD;
+[14:36:25 INF] Executed action ControlHub.API.Accounts.Controllers.AuthController.Register (ControlHub.API) in 249.2948ms&#xD;
+[14:36:25 INF] Executed endpoint 'ControlHub.API.Accounts.Controllers.AuthController.Register (ControlHub.API)'&#xD;
+[14:36:25 INF] Request finished HTTP/1.1 POST http://localhost/api/Auth/users/register - 200 null application/json; charset=utf-8 320.0907ms&#xD;
+[14:36:25 INF] Executed action ControlHub.API.Accounts.Controllers.AuthController.Register (ControlHub.API) in 253.9867ms&#xD;
+[14:36:25 INF] Executed endpoint 'ControlHub.API.Accounts.Controllers.AuthController.Register (ControlHub.API)'&#xD;
+[14:36:25 INF] Request finished HTTP/1.1 POST http://localhost/api/Auth/users/register - 200 null application/json; charset=utf-8 324.6621ms&#xD;
+[14:36:25 INF] Request starting HTTP/1.1 POST http://localhost/api/Auth/auth/signin - application/json; charset=utf-8 100&#xD;
+[14:36:25 INF] Executing endpoint 'ControlHub.API.Accounts.Controllers.AuthController.SignIn (ControlHub.API)'&#xD;
+[14:36:25 INF] Route matched with {action = "SignIn", controller = "Auth"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.IActionResult] SignIn(ControlHub.API.Accounts.ViewModels.Request.SignInRequest, System.Threading.CancellationToken) on controller ControlHub.API.Accounts.Controllers.AuthController (ControlHub.API).&#xD;
+[14:36:25 INF] Executing action method ControlHub.API.Accounts.Controllers.AuthController.SignIn (ControlHub.API) - Validation state: Valid&#xD;
+[14:36:25 INF] Request starting HTTP/1.1 POST http://localhost/api/Auth/auth/signin - application/json; charset=utf-8 102&#xD;
+[14:36:25 INF] Executing endpoint 'ControlHub.API.Accounts.Controllers.AuthController.SignIn (ControlHub.API)'&#xD;
+[14:36:25 INF] Account.SignIn.Started: Starting sign-in process for Identifier loginuser@example.com&#xD;
+[14:36:26 INF] Route matched with {action = "SignIn", controller = "Auth"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.IActionResult] SignIn(ControlHub.API.Accounts.ViewModels.Request.SignInRequest, System.Threading.CancellationToken) on controller ControlHub.API.Accounts.Controllers.AuthController (ControlHub.API).&#xD;
+[14:36:26 INF] Executing action method ControlHub.API.Accounts.Controllers.AuthController.SignIn (ControlHub.API) - Validation state: Valid&#xD;
+[14:36:26 INF] Account.SignIn.Started: Starting sign-in process for Identifier signoutuser@example.com&#xD;
+[14:36:26 INF] Account.RegisterUser.Success: Account created successfully for AccountId 96d91347-ec0d-4db7-88f2-dec1228c1082, Ident newuser@example.com&#xD;
+[14:36:26 INF] Implicit transaction started at 01/18/2026 07:36:26&#xD;
+[14:36:26 INF] Saved 4 entities to in-memory store.&#xD;
+[14:36:26 INF] Transaction committed successfully with 4 changes.&#xD;
+[14:36:26 INF] Executed action method ControlHub.API.Accounts.Controllers.AuthController.Register (ControlHub.API), returned result Microsoft.AspNetCore.Mvc.OkObjectResult in 181.774ms.&#xD;
+[14:36:26 INF] Executing OkObjectResult, writing value of type 'ControlHub.API.Accounts.ViewModels.Response.RegisterUserResponse'.&#xD;
+[14:36:26 INF] Executed action ControlHub.API.Accounts.Controllers.AuthController.Register (ControlHub.API) in 184.2906ms&#xD;
+[14:36:26 INF] Executed endpoint 'ControlHub.API.Accounts.Controllers.AuthController.Register (ControlHub.API)'&#xD;
+[14:36:26 INF] Request finished HTTP/1.1 POST http://localhost/api/Auth/users/register - 200 null application/json; charset=utf-8 188.7292ms&#xD;
+[14:36:26 INF] Request starting HTTP/1.1 POST http://localhost/api/Auth/users/register - application/json; charset=utf-8 100&#xD;
+[14:36:26 INF] Executing endpoint 'ControlHub.API.Accounts.Controllers.AuthController.Register (ControlHub.API)'&#xD;
+[14:36:26 INF] Route matched with {action = "Register", controller = "Auth"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.IActionResult] Register(ControlHub.API.Accounts.ViewModels.Request.RegisterUserRequest, System.Threading.CancellationToken) on controller ControlHub.API.Accounts.Controllers.AuthController (ControlHub.API).&#xD;
+[14:36:26 INF] Executing action method ControlHub.API.Accounts.Controllers.AuthController.Register (ControlHub.API) - Validation state: Valid&#xD;
+[14:36:26 INF] Account.RegisterUser.Success: Account created successfully for AccountId ec94a365-5f64-4cac-b2c2-efdfe653cd9f, Ident tokenuser@example.com&#xD;
+[14:36:26 INF] Implicit transaction started at 01/18/2026 07:36:26&#xD;
+[14:36:26 INF] Saved 4 entities to in-memory store.&#xD;
+[14:36:26 INF] Transaction committed successfully with 4 changes.&#xD;
+[14:36:26 INF] Executed action method ControlHub.API.Accounts.Controllers.AuthController.Register (ControlHub.API), returned result Microsoft.AspNetCore.Mvc.OkObjectResult in 179.1017ms.&#xD;
+[14:36:26 INF] Executing OkObjectResult, writing value of type 'ControlHub.API.Accounts.ViewModels.Response.RegisterUserResponse'.&#xD;
+[14:36:26 INF] Account.RegisterUser.Started: Starting account creation for Ident duplicate@example.com&#xD;
+[14:36:26 INF] Executed action ControlHub.API.Accounts.Controllers.AuthController.Register (ControlHub.API) in 188.5882ms&#xD;
+[14:36:26 INF] Executed endpoint 'ControlHub.API.Accounts.Controllers.AuthController.Register (ControlHub.API)'&#xD;
+[14:36:26 INF] Request finished HTTP/1.1 POST http://localhost/api/Auth/users/register - 200 null application/json; charset=utf-8 196.4641ms&#xD;
+[14:36:26 INF] Request starting HTTP/1.1 POST http://localhost/api/Auth/auth/signin - application/json; charset=utf-8 100&#xD;
+[14:36:26 INF] Executing endpoint 'ControlHub.API.Accounts.Controllers.AuthController.SignIn (ControlHub.API)'&#xD;
+[14:36:26 INF] Route matched with {action = "SignIn", controller = "Auth"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.IActionResult] SignIn(ControlHub.API.Accounts.ViewModels.Request.SignInRequest, System.Threading.CancellationToken) on controller ControlHub.API.Accounts.Controllers.AuthController (ControlHub.API).&#xD;
+[14:36:26 INF] Executing action method ControlHub.API.Accounts.Controllers.AuthController.SignIn (ControlHub.API) - Validation state: Valid&#xD;
+[14:36:26 INF] Account.SignIn.Started: Starting sign-in process for Identifier tokenuser@example.com&#xD;
+[14:36:26 INF] Account.RegisterUser.Success: Account created successfully for AccountId 5d3d8718-3446-4c82-bbbd-c8c0d41638a7, Ident duplicate@example.com&#xD;
+[14:36:26 INF] Implicit transaction started at 01/18/2026 07:36:26&#xD;
+[14:36:26 INF] Saved 4 entities to in-memory store.&#xD;
+[14:36:26 INF] Transaction committed successfully with 4 changes.&#xD;
+[14:36:26 INF] Executed action method ControlHub.API.Accounts.Controllers.AuthController.Register (ControlHub.API), returned result Microsoft.AspNetCore.Mvc.OkObjectResult in 161.1819ms.&#xD;
+[14:36:26 INF] Executing OkObjectResult, writing value of type 'ControlHub.API.Accounts.ViewModels.Response.RegisterUserResponse'.&#xD;
+[14:36:26 INF] Executed action ControlHub.API.Accounts.Controllers.AuthController.Register (ControlHub.API) in 165.0605ms&#xD;
+[14:36:26 INF] Executed endpoint 'ControlHub.API.Accounts.Controllers.AuthController.Register (ControlHub.API)'&#xD;
+[14:36:26 INF] Request finished HTTP/1.1 POST http://localhost/api/Auth/users/register - 200 null application/json; charset=utf-8 169.5583ms&#xD;
+[14:36:26 INF] Request starting HTTP/1.1 POST http://localhost/api/Auth/users/register - application/json; charset=utf-8 100&#xD;
+[14:36:26 INF] Executing endpoint 'ControlHub.API.Accounts.Controllers.AuthController.Register (ControlHub.API)'&#xD;
+[14:36:26 INF] Route matched with {action = "Register", controller = "Auth"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.IActionResult] Register(ControlHub.API.Accounts.ViewModels.Request.RegisterUserRequest, System.Threading.CancellationToken) on controller ControlHub.API.Accounts.Controllers.AuthController (ControlHub.API).&#xD;
+[14:36:26 INF] Executing action method ControlHub.API.Accounts.Controllers.AuthController.Register (ControlHub.API) - Validation state: Valid&#xD;
+[14:36:26 INF] Account.RegisterUser.Started: Starting account creation for Ident duplicate@example.com&#xD;
+[14:36:26 WRN] Account.RegisterUser.IdentifierExists: Identifier already exists for Ident duplicate@example.com&#xD;
+[14:36:26 WRN] Client Error occurred: Conflict (Code: Account.EmailAlreadyExists). Message: The email provided is already in use.&#xD;
+[14:36:26 INF] Executed action method ControlHub.API.Accounts.Controllers.AuthController.Register (ControlHub.API), returned result Microsoft.AspNetCore.Mvc.ConflictObjectResult in 11.3103ms.&#xD;
+[14:36:26 INF] Executing ConflictObjectResult, writing value of type 'Microsoft.AspNetCore.Mvc.ProblemDetails'.&#xD;
+[14:36:26 INF] Executed action ControlHub.API.Accounts.Controllers.AuthController.Register (ControlHub.API) in 12.6754ms&#xD;
+[14:36:26 INF] Executed endpoint 'ControlHub.API.Accounts.Controllers.AuthController.Register (ControlHub.API)'&#xD;
+[14:36:26 INF] Request finished HTTP/1.1 POST http://localhost/api/Auth/users/register - 409 null application/problem+json; charset=utf-8 14.0286ms&#xD;
+[14:36:26 INF] Implicit transaction started at 01/18/2026 07:36:26&#xD;
+[14:36:26 INF] Implicit transaction started at 01/18/2026 07:36:26&#xD;
+[14:36:26 INF] Implicit transaction started at 01/18/2026 07:36:26&#xD;
+[14:36:26 INF] Saved 2 entities to in-memory store.&#xD;
+[14:36:26 INF] Saved 2 entities to in-memory store.&#xD;
+[14:36:26 INF] Saved 2 entities to in-memory store.&#xD;
+[14:36:26 INF] Transaction committed successfully with 2 changes.&#xD;
+[14:36:26 INF] Transaction committed successfully with 2 changes.&#xD;
+[14:36:26 INF] Transaction committed successfully with 2 changes.&#xD;
+[14:36:26 INF] Account.SignIn.Success: User signed in successfully for AccountId 08aef4ee-d4c1-4c0e-9f3e-55da15fe7e42&#xD;
+[14:36:26 INF] Account.SignIn.Success: User signed in successfully for AccountId ec94a365-5f64-4cac-b2c2-efdfe653cd9f&#xD;
+[14:36:26 INF] Account.SignIn.Success: User signed in successfully for AccountId 8ac08d4d-bfb5-4b51-b676-d933db5fb376&#xD;
+[14:36:26 INF] Executed action method ControlHub.API.Accounts.Controllers.AuthController.SignIn (ControlHub.API), returned result Microsoft.AspNetCore.Mvc.OkObjectResult in 226.6236ms.&#xD;
+[14:36:26 INF] Executed action method ControlHub.API.Accounts.Controllers.AuthController.SignIn (ControlHub.API), returned result Microsoft.AspNetCore.Mvc.OkObjectResult in 272.4898ms.&#xD;
+[14:36:26 INF] Executed action method ControlHub.API.Accounts.Controllers.AuthController.SignIn (ControlHub.API), returned result Microsoft.AspNetCore.Mvc.OkObjectResult in 254.9398ms.&#xD;
+[14:36:26 INF] Executing OkObjectResult, writing value of type 'ControlHub.API.Accounts.ViewModels.Response.SignInResponse'.&#xD;
+[14:36:26 INF] Executing OkObjectResult, writing value of type 'ControlHub.API.Accounts.ViewModels.Response.SignInResponse'.&#xD;
+[14:36:26 INF] Executing OkObjectResult, writing value of type 'ControlHub.API.Accounts.ViewModels.Response.SignInResponse'.&#xD;
+[14:36:26 INF] Executed action ControlHub.API.Accounts.Controllers.AuthController.SignIn (ControlHub.API) in 277.9034ms&#xD;
+[14:36:26 INF] Executed action ControlHub.API.Accounts.Controllers.AuthController.SignIn (ControlHub.API) in 229.6213ms&#xD;
+[14:36:26 INF] Executed action ControlHub.API.Accounts.Controllers.AuthController.SignIn (ControlHub.API) in 258.3395ms&#xD;
+[14:36:26 INF] Executed endpoint 'ControlHub.API.Accounts.Controllers.AuthController.SignIn (ControlHub.API)'&#xD;
+[14:36:26 INF] Executed endpoint 'ControlHub.API.Accounts.Controllers.AuthController.SignIn (ControlHub.API)'&#xD;
+[14:36:26 INF] Executed endpoint 'ControlHub.API.Accounts.Controllers.AuthController.SignIn (ControlHub.API)'&#xD;
+[14:36:26 INF] Request finished HTTP/1.1 POST http://localhost/api/Auth/auth/signin - 200 null application/json; charset=utf-8 287.2243ms&#xD;
+[14:36:26 INF] Request finished HTTP/1.1 POST http://localhost/api/Auth/auth/signin - 200 null application/json; charset=utf-8 266.0838ms&#xD;
+[14:36:26 INF] Request finished HTTP/1.1 POST http://localhost/api/Auth/auth/signin - 200 null application/json; charset=utf-8 237.1012ms&#xD;
+[14:36:26 INF] Request starting HTTP/1.1 POST http://localhost/api/Auth/auth/refresh - application/json; charset=utf-8 868&#xD;
+[14:36:26 INF] Executing endpoint 'ControlHub.API.Accounts.Controllers.AuthController.Refresh (ControlHub.API)'&#xD;
+[14:36:26 INF] Route matched with {action = "Refresh", controller = "Auth"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.IActionResult] Refresh(ControlHub.API.Accounts.ViewModels.Request.RefreshAccessTokenRequest, System.Threading.CancellationToken) on controller ControlHub.API.Accounts.Controllers.AuthController (ControlHub.API).&#xD;
+[14:36:26 INF] Executing action method ControlHub.API.Accounts.Controllers.AuthController.Refresh (ControlHub.API) - Validation state: Valid&#xD;
+[14:36:26 INF] Request starting HTTP/1.1 POST http://localhost/api/Auth/auth/signout - application/json; charset=utf-8 823&#xD;
+[14:36:26 INF] Token.Refresh.Started: Starting refresh access token process for RefreshToken Xyd1TBU2Ldlq1DZJQBk0ap2CDP+PfVhLQw+aT8XPgnW/2c9ODa5RjqTpiMEyXndjxV2kewXT4o030HL5zNsErQ==&#xD;
+     Warning:&#xD;
+     The component "Fluent Assertions" is governed by the rules defined in the Xceed License Agreement and&#xD;
+     the Xceed Fluent Assertions Community License. You may use Fluent Assertions free of charge for&#xD;
+     non-commercial use only. An active subscription is required to use Fluent Assertions for commercial use.&#xD;
+     Please contact Xceed Sales mailto:sales@xceed.com to acquire a subscription at a very low cost.&#xD;
+     A paid commercial license supports the development and continued increasing support of&#xD;
+     Fluent Assertions users under both commercial and community licenses. Help us&#xD;
+     keep Fluent Assertions at the forefront of unit testing.&#xD;
+     For more information, visit https://xceed.com/products/unit-testing/fluent-assertions/&#xD;
+[14:36:26 INF] Request starting HTTP/1.1 POST http://localhost/api/Auth/auth/signin - application/json; charset=utf-8 79&#xD;
+[14:36:26 INF] Executing endpoint 'ControlHub.API.Accounts.Controllers.AuthController.SignIn (ControlHub.API)'&#xD;
+[14:36:26 INF] Route matched with {action = "SignIn", controller = "Auth"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.IActionResult] SignIn(ControlHub.API.Accounts.ViewModels.Request.SignInRequest, System.Threading.CancellationToken) on controller ControlHub.API.Accounts.Controllers.AuthController (ControlHub.API).&#xD;
+[14:36:26 INF] Executing action method ControlHub.API.Accounts.Controllers.AuthController.SignIn (ControlHub.API) - Validation state: Valid&#xD;
+[14:36:26 WRN] Client Error occurred: Validation Error (Code: Validation.Failed). Message: Password is too short.; Password must contain at least one uppercase letter.; Password must contain at least one lowercase letter.; Password must contain at least one special character (!@#$%^&amp;*()).&#xD;
+[14:36:26 INF] Executed action method ControlHub.API.Accounts.Controllers.AuthController.SignIn (ControlHub.API), returned result Microsoft.AspNetCore.Mvc.BadRequestObjectResult in 0.6652ms.&#xD;
+[14:36:26 INF] Executing BadRequestObjectResult, writing value of type 'Microsoft.AspNetCore.Mvc.ProblemDetails'.&#xD;
+[14:36:26 INF] Executed action ControlHub.API.Accounts.Controllers.AuthController.SignIn (ControlHub.API) in 4.3726ms&#xD;
+[14:36:26 INF] Executed endpoint 'ControlHub.API.Accounts.Controllers.AuthController.SignIn (ControlHub.API)'&#xD;
+[14:36:26 INF] Request finished HTTP/1.1 POST http://localhost/api/Auth/auth/signin - 400 null application/problem+json; charset=utf-8 7.6271ms&#xD;
+[14:36:26 INF] Token.Refresh.Valid: Refresh token validated successfully for AccountId ec94a365-5f64-4cac-b2c2-efdfe653cd9f&#xD;
+[14:36:26 INF] Request starting HTTP/1.1 POST http://localhost/api/Auth/users/register - application/json; charset=utf-8 100&#xD;
+[14:36:26 INF] Executing endpoint 'ControlHub.API.Accounts.Controllers.AuthController.Register (ControlHub.API)'&#xD;
+[14:36:26 INF] Route matched with {action = "Register", controller = "Auth"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.IActionResult] Register(ControlHub.API.Accounts.ViewModels.Request.RegisterUserRequest, System.Threading.CancellationToken) on controller ControlHub.API.Accounts.Controllers.AuthController (ControlHub.API).&#xD;
+[14:36:26 INF] Executing action method ControlHub.API.Accounts.Controllers.AuthController.Register (ControlHub.API) - Validation state: Valid&#xD;
+[14:36:26 INF] Implicit transaction started at 01/18/2026 07:36:26&#xD;
+[14:36:26 INF] Saved 2 entities to in-memory store.&#xD;
+[14:36:26 INF] Transaction committed successfully with 2 changes.&#xD;
+[14:36:26 INF] Account.RegisterUser.Started: Starting account creation for Ident wrongpass@example.com&#xD;
+[14:36:26 INF] Token.Refresh.Success: Access and refresh tokens generated successfully for AccountId ec94a365-5f64-4cac-b2c2-efdfe653cd9f. NewAccess: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJlYzk0YTM2NS01ZjY0LTRjYWMtYjJjMi1lZmRmZTY1M2NkOWYiLCJodHRwOi8vc2NoZW1hcy54bWxzb2FwLm9yZy93cy8yMDA1LzA1L2lkZW50aXR5L2NsYWltcy9uYW1laWRlbnRpZmllciI6ImVjOTRhMzY1LTVmNjQtNGNhYy1iMmMyLWVmZGZlNjUzY2Q5ZiIsImh0dHA6Ly9zY2hlbWFzLnhtbHNvYXAub3JnL3dzLzIwMDUvMDUvaWRlbnRpdHkvY2xhaW1zL25hbWUiOiJFbWFpbDp0b2tlbnVzZXJAZXhhbXBsZS5jb20iLCJqdGkiOiJjNzEyNDk3Yi0xM2Q3LTRiMmItOWUyNS1hOGUyOTU5YjMyY2EiLCJodHRwOi8vc2NoZW1hcy5taWNyb3NvZnQuY29tL3dzLzIwMDgvMDYvaWRlbnRpdHkvY2xhaW1zL3JvbGUiOiI4Y2Y5NGI0MS01YWQ4LTQ4OTMtODJiMi1iMTkzYzkxNzE3YWYiLCJleHAiOjE3Njg3MjI2ODYsImlzcyI6IkNvbnRyb2xIdWIiLCJhdWQiOiJDb250cm9sSHViVXNlcnMifQ._rP3yqhxnqLdzjSIjq3g0pS3h1y0beQY814wu3H2b_Q, NewRefresh: X8p0QF1JLyAGerFHjzriULtmacLP6GPFPgDCQTusUxqmQfBiD8XcbAuK8KxMXy8vVq6fc7neN2MYxwNUJdUPCA==&#xD;
+[14:36:26 INF] Executed action method ControlHub.API.Accounts.Controllers.AuthController.Refresh (ControlHub.API), returned result Microsoft.AspNetCore.Mvc.OkObjectResult in 19.2746ms.&#xD;
+[14:36:26 INF] Executing OkObjectResult, writing value of type 'ControlHub.API.Accounts.ViewModels.Response.RefreshAccessTokenReponse'.&#xD;
+[14:36:26 INF] Executed action ControlHub.API.Accounts.Controllers.AuthController.Refresh (ControlHub.API) in 21.4692ms&#xD;
+[14:36:26 INF] Executed endpoint 'ControlHub.API.Accounts.Controllers.AuthController.Refresh (ControlHub.API)'&#xD;
+[14:36:26 INF] Request finished HTTP/1.1 POST http://localhost/api/Auth/auth/refresh - 200 null application/json; charset=utf-8 22.843ms&#xD;
+[14:36:26 INF] --- PermissionClaimsTransformation: Role user kh�ng c� permission n�o. ---&#xD;
+[14:36:26 INF] Executing endpoint 'ControlHub.API.Accounts.Controllers.AuthController.SignOut (ControlHub.API)'&#xD;
+[14:36:26 INF] Route matched with {action = "SignOut", controller = "Auth"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.IActionResult] SignOut(ControlHub.API.Accounts.ViewModels.Request.SignOutRequest, System.Threading.CancellationToken) on controller ControlHub.API.Accounts.Controllers.AuthController (ControlHub.API).&#xD;
+[14:36:26 INF] Executing action method ControlHub.API.Accounts.Controllers.AuthController.SignOut (ControlHub.API) - Validation state: Valid&#xD;
+[14:36:26 INF] Account.SignOut.Started: Starting sign-out process for AccessToken eyJhbGciOi&#xD;
+[14:36:26 INF] Account.RegisterUser.Success: Account created successfully for AccountId 6b926c1d-0f9d-4eb0-970d-36b583d935c1, Ident wrongpass@example.com&#xD;
+[14:36:26 INF] Implicit transaction started at 01/18/2026 07:36:26&#xD;
+[14:36:26 INF] Saved 4 entities to in-memory store.&#xD;
+[14:36:26 INF] Transaction committed successfully with 4 changes.&#xD;
+[14:36:26 INF] Executed action method ControlHub.API.Accounts.Controllers.AuthController.Register (ControlHub.API), returned result Microsoft.AspNetCore.Mvc.OkObjectResult in 80.848ms.&#xD;
+[14:36:26 INF] Executing OkObjectResult, writing value of type 'ControlHub.API.Accounts.ViewModels.Response.RegisterUserResponse'.&#xD;
+[14:36:26 INF] Executed action ControlHub.API.Accounts.Controllers.AuthController.Register (ControlHub.API) in 81.7059ms&#xD;
+[14:36:26 INF] Executed endpoint 'ControlHub.API.Accounts.Controllers.AuthController.Register (ControlHub.API)'&#xD;
+[14:36:26 INF] Request finished HTTP/1.1 POST http://localhost/api/Auth/users/register - 200 null application/json; charset=utf-8 82.505ms&#xD;
+[14:36:26 INF] Request starting HTTP/1.1 POST http://localhost/api/Auth/auth/signin - application/json; charset=utf-8 99&#xD;
+[14:36:26 INF] Executing endpoint 'ControlHub.API.Accounts.Controllers.AuthController.SignIn (ControlHub.API)'&#xD;
+[14:36:26 INF] Route matched with {action = "SignIn", controller = "Auth"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.IActionResult] SignIn(ControlHub.API.Accounts.ViewModels.Request.SignInRequest, System.Threading.CancellationToken) on controller ControlHub.API.Accounts.Controllers.AuthController (ControlHub.API).&#xD;
+[14:36:26 INF] Executing action method ControlHub.API.Accounts.Controllers.AuthController.SignIn (ControlHub.API) - Validation state: Valid&#xD;
+[14:36:26 WRN] Account.SignOut.InvalidAccountId: Invalid account ID extracted from token - invalid AccountId format:null&#xD;
+[14:36:26 INF] Claim: http://schemas.xmlsoap.org/ws/2005/05/identity/claims/nameidentifier = 08aef4ee-d4c1-4c0e-9f3e-55da15fe7e42&#xD;
+[14:36:26 INF] Claim: http://schemas.xmlsoap.org/ws/2005/05/identity/claims/nameidentifier = 08aef4ee-d4c1-4c0e-9f3e-55da15fe7e42&#xD;
+[14:36:26 INF] Claim: http://schemas.xmlsoap.org/ws/2005/05/identity/claims/name = Email:signoutuser@example.com&#xD;
+[14:36:26 INF] Claim: jti = 3937c012-9924-4e65-a11f-5f64b1902a83&#xD;
+[14:36:26 INF] Claim: http://schemas.microsoft.com/ws/2008/06/identity/claims/role = 8cf94b41-5ad8-4893-82b2-b193c91717af&#xD;
+[14:36:26 INF] Claim: exp = 1768722686&#xD;
+[14:36:26 INF] Claim: iss = ControlHub&#xD;
+[14:36:26 INF] Claim: aud = ControlHubUsers&#xD;
+[14:36:26 WRN] Client Error occurred: Unauthorized (Code: Token.Invalid). Message: Token is invalid.&#xD;
+[14:36:26 INF] Executed action method ControlHub.API.Accounts.Controllers.AuthController.SignOut (ControlHub.API), returned result Microsoft.AspNetCore.Mvc.UnauthorizedObjectResult in 20.7905ms.&#xD;
+[14:36:26 INF] Executing UnauthorizedObjectResult, writing value of type 'Microsoft.AspNetCore.Mvc.ProblemDetails'.&#xD;
+[14:36:26 INF] Account.SignIn.Started: Starting sign-in process for Identifier wrongpass@example.com&#xD;
+[14:36:26 INF] Executed action ControlHub.API.Accounts.Controllers.AuthController.SignOut (ControlHub.API) in 24.8068ms&#xD;
+[14:36:26 INF] Executed endpoint 'ControlHub.API.Accounts.Controllers.AuthController.SignOut (ControlHub.API)'&#xD;
+[14:36:26 INF] Request finished HTTP/1.1 POST http://localhost/api/Auth/auth/signout - 401 null application/problem+json; charset=utf-8 104.0229ms&#xD;
+[14:36:26 INF] Request starting HTTP/1.1 POST http://localhost/api/Auth/auth/signout - application/json; charset=utf-8 42&#xD;
+[xUnit.net 00:00:03.00]       Expected response.StatusCode to be HttpStatusCode.NoContent {value: 204}, but found HttpStatusCode.Unauthorized {value: 401}.&#xD;
+[xUnit.net 00:00:03.00]       Stack Trace:&#xD;
+[xUnit.net 00:00:03.00]            at FluentAssertions.Execution.LateBoundTestFramework.Throw(String message)&#xD;
+[xUnit.net 00:00:03.00]            at FluentAssertions.Execution.DefaultAssertionStrategy.HandleFailure(String message)&#xD;
+[xUnit.net 00:00:03.00]            at FluentAssertions.Execution.AssertionScope.AddPreFormattedFailure(String formattedFailureMessage)&#xD;
+[xUnit.net 00:00:03.00]            at FluentAssertions.Execution.AssertionChain.FailWith(Func`1 getFailureReason)&#xD;
+[xUnit.net 00:00:03.00]            at FluentAssertions.Execution.AssertionChain.FailWith(Func`1 getFailureReason)&#xD;
+[xUnit.net 00:00:03.00]            at FluentAssertions.Execution.AssertionChain.FailWith(String message, Object[] args)&#xD;
+[xUnit.net 00:00:03.00]            at FluentAssertions.Primitives.EnumAssertions`2.Be(TEnum expected, String because, Object[] becauseArgs)&#xD;
+[14:36:26 INF] Authorization failed. These requirements were not met:&#xD;
+DenyAnonymousAuthorizationRequirement: Requires an authenticated user.&#xD;
+[xUnit.net 00:00:03.00]         e:\Project\ControlHub\tests\ControlHub.Api.Tests\FunctionalTests\Accounts\AuthTests.cs(54,0): at ControlHub.Api.Tests.FunctionalTests.Accounts.AuthTests.SignOut_ShouldReturnNoContent_WhenTokensAreValid()&#xD;
+[xUnit.net 00:00:03.00]         --- End of stack trace from previous location ---&#xD;
+[14:36:26 INF] AuthenticationScheme: Bearer was challenged.&#xD;
+[14:36:26 INF] Request finished HTTP/1.1 POST http://localhost/api/Auth/auth/signout - 401 null null 7.2107ms&#xD;
+[14:36:26 WRN] Account.SignIn.InvalidPassword: Invalid password for AccountId 6b926c1d-0f9d-4eb0-970d-36b583d935c1&#xD;
+[14:36:26 WRN] Client Error occurred: Unauthorized (Code: Auth.InvalidCredentials). Message: Invalid email or password.&#xD;
+[14:36:26 INF] Executed action method ControlHub.API.Accounts.Controllers.AuthController.SignIn (ControlHub.API), returned result Microsoft.AspNetCore.Mvc.UnauthorizedObjectResult in 74.1838ms.&#xD;
+[14:36:26 INF] Executing UnauthorizedObjectResult, writing value of type 'Microsoft.AspNetCore.Mvc.ProblemDetails'.&#xD;
+[14:36:26 INF] Executed action ControlHub.API.Accounts.Controllers.AuthController.SignIn (ControlHub.API) in 74.8004ms&#xD;
+[14:36:26 INF] Executed endpoint 'ControlHub.API.Accounts.Controllers.AuthController.SignIn (ControlHub.API)'&#xD;
+[14:36:26 INF] Request finished HTTP/1.1 POST http://localhost/api/Auth/auth/signin - 401 null application/problem+json; charset=utf-8 75.4351ms&#xD;
+[xUnit.net 00:00:07.57]   Finished:    ControlHub.Api.Tests&#xD;
+</StdOut>
+    </Output>
+    <RunInfos>
+      <RunInfo computerName="DESKTOP-3V98JDF" outcome="Error" timestamp="2026-01-18T14:36:26.4156098+07:00">
+        <Text>[xUnit.net 00:00:03.00]     ControlHub.Api.Tests.FunctionalTests.Accounts.AuthTests.SignOut_ShouldReturnNoContent_WhenTokensAreValid [FAIL]</Text>
+      </RunInfo>
+    </RunInfos>
+  </ResultSummary>
+</TestRun>

@@ -1,0 +1,173 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TestRun id="6e0c8998-d9d5-4cd4-9cc9-d64ab69fe425" name="Gill@DESKTOP-3V98JDF 2026-01-18 14:57:11" runUser="DESKTOP-3V98JDF\Gill" xmlns="http://microsoft.com/schemas/VisualStudio/TeamTest/2010">
+  <Times creation="2026-01-18T14:57:11.3832694+07:00" queuing="2026-01-18T14:57:11.3832698+07:00" start="2026-01-18T14:57:08.7327700+07:00" finish="2026-01-18T14:57:11.3919490+07:00" />
+  <TestSettings name="default" id="dd0c882e-c44d-4c84-9d55-f8d48aec04ce">
+    <Deployment runDeploymentRoot="Gill_DESKTOP-3V98JDF_2026-01-18_14_57_11" />
+  </TestSettings>
+  <Results>
+    <UnitTestResult executionId="c5e1ed9f-65cd-46f1-9f3f-9c33f583487d" testId="3f9f7c79-7d25-e241-3a5c-e20637f14a07" testName="ControlHub.Api.Tests.FunctionalTests.Accounts.RoleTests.CreateRoles_ShouldBypassValidation_WhenNameIsEmpty_BecauseValidatorIsInternal" computerName="DESKTOP-3V98JDF" duration="00:00:01.7800413" startTime="2026-01-18T14:57:09.2255353+07:00" endTime="2026-01-18T14:57:11.0177336+07:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Failed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="c5e1ed9f-65cd-46f1-9f3f-9c33f583487d">
+      <Output>
+        <ErrorInfo>
+          <Message>System.Exception : SuperAdmin login failed: {"title":"Unauthorized","status":401,"detail":"Invalid email or password.","code":"Auth.InvalidCredentials","timestamp":"2026-01-18T07:57:10.9902356Z"}</Message>
+          <StackTrace>   at ControlHub.Api.Tests.Abstractions.BaseIntegrationTest.AuthenticateAsSuperAdminAsync(String email, String password) in e:\Project\ControlHub\tests\ControlHub.Api.Tests\Abstractions\BaseIntegrationTest.cs:line 70&#xD;
+   at ControlHub.Api.Tests.FunctionalTests.Accounts.RoleTests.CreateRoles_ShouldBypassValidation_WhenNameIsEmpty_BecauseValidatorIsInternal() in e:\Project\ControlHub\tests\ControlHub.Api.Tests\FunctionalTests\Accounts\RoleTests.cs:line 55&#xD;
+--- End of stack trace from previous location ---</StackTrace>
+        </ErrorInfo>
+      </Output>
+    </UnitTestResult>
+    <UnitTestResult executionId="5e2a7227-577c-4c3e-9be1-2a78660d8a57" testId="c37f2f82-26d1-3eaf-ddab-1e3a5cbe2557" testName="ControlHub.Api.Tests.FunctionalTests.Accounts.RoleTests.CreateRoles_ShouldReturnForbidden_WhenNotSuperAdmin" computerName="DESKTOP-3V98JDF" duration="00:00:00.2289447" startTime="2026-01-18T14:57:11.0328529+07:00" endTime="2026-01-18T14:57:11.2618096+07:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Failed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="5e2a7227-577c-4c3e-9be1-2a78660d8a57">
+      <Output>
+        <ErrorInfo>
+          <Message>Microsoft.CSharp.RuntimeBinder.RuntimeBinderException : 'System.Text.Json.JsonElement' does not contain a definition for 'accessToken'</Message>
+          <StackTrace>   at CallSite.Target(Closure, CallSite, Object)&#xD;
+   at System.Dynamic.UpdateDelegates.UpdateAndExecute1[T0,TRet](CallSite site, T0 arg0)&#xD;
+   at ControlHub.Api.Tests.Abstractions.BaseIntegrationTest.AuthenticateAsync(String email, String password) in e:\Project\ControlHub\tests\ControlHub.Api.Tests\Abstractions\BaseIntegrationTest.cs:line 44&#xD;
+   at ControlHub.Api.Tests.FunctionalTests.Accounts.RoleTests.CreateRoles_ShouldReturnForbidden_WhenNotSuperAdmin() in e:\Project\ControlHub\tests\ControlHub.Api.Tests\FunctionalTests\Accounts\RoleTests.cs:line 83&#xD;
+--- End of stack trace from previous location ---</StackTrace>
+        </ErrorInfo>
+      </Output>
+    </UnitTestResult>
+    <UnitTestResult executionId="f6252bc7-b43d-48f6-be95-71c5ff01e802" testId="c802937c-efc8-c034-ed62-a5ba7cad7702" testName="ControlHub.Api.Tests.FunctionalTests.Accounts.RoleTests.CreateRoles_ShouldReturnOk_WhenRequestIsValid" computerName="DESKTOP-3V98JDF" duration="00:00:00.0122302" startTime="2026-01-18T14:57:11.0282328+07:00" endTime="2026-01-18T14:57:11.0315264+07:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Failed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="f6252bc7-b43d-48f6-be95-71c5ff01e802">
+      <Output>
+        <ErrorInfo>
+          <Message>System.Exception : SuperAdmin login failed: {"title":"Unauthorized","status":401,"detail":"Invalid email or password.","code":"Auth.InvalidCredentials","timestamp":"2026-01-18T07:57:11.0289985Z"}</Message>
+          <StackTrace>   at ControlHub.Api.Tests.Abstractions.BaseIntegrationTest.AuthenticateAsSuperAdminAsync(String email, String password) in e:\Project\ControlHub\tests\ControlHub.Api.Tests\Abstractions\BaseIntegrationTest.cs:line 70&#xD;
+   at ControlHub.Api.Tests.FunctionalTests.Accounts.RoleTests.CreateRoles_ShouldReturnOk_WhenRequestIsValid() in e:\Project\ControlHub\tests\ControlHub.Api.Tests\FunctionalTests\Accounts\RoleTests.cs:line 22&#xD;
+--- End of stack trace from previous location ---</StackTrace>
+        </ErrorInfo>
+      </Output>
+    </UnitTestResult>
+  </Results>
+  <TestDefinitions>
+    <UnitTest name="ControlHub.Api.Tests.FunctionalTests.Accounts.RoleTests.CreateRoles_ShouldBypassValidation_WhenNameIsEmpty_BecauseValidatorIsInternal" storage="e:\project\controlhub\tests\controlhub.api.tests\bin\debug\net8.0\controlhub.api.tests.dll" id="3f9f7c79-7d25-e241-3a5c-e20637f14a07">
+      <Execution id="c5e1ed9f-65cd-46f1-9f3f-9c33f583487d" />
+      <TestMethod codeBase="e:\Project\ControlHub\tests\ControlHub.Api.Tests\bin\Debug\net8.0\ControlHub.Api.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="ControlHub.Api.Tests.FunctionalTests.Accounts.RoleTests" name="CreateRoles_ShouldBypassValidation_WhenNameIsEmpty_BecauseValidatorIsInternal" />
+    </UnitTest>
+    <UnitTest name="ControlHub.Api.Tests.FunctionalTests.Accounts.RoleTests.CreateRoles_ShouldReturnForbidden_WhenNotSuperAdmin" storage="e:\project\controlhub\tests\controlhub.api.tests\bin\debug\net8.0\controlhub.api.tests.dll" id="c37f2f82-26d1-3eaf-ddab-1e3a5cbe2557">
+      <Execution id="5e2a7227-577c-4c3e-9be1-2a78660d8a57" />
+      <TestMethod codeBase="e:\Project\ControlHub\tests\ControlHub.Api.Tests\bin\Debug\net8.0\ControlHub.Api.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="ControlHub.Api.Tests.FunctionalTests.Accounts.RoleTests" name="CreateRoles_ShouldReturnForbidden_WhenNotSuperAdmin" />
+    </UnitTest>
+    <UnitTest name="ControlHub.Api.Tests.FunctionalTests.Accounts.RoleTests.CreateRoles_ShouldReturnOk_WhenRequestIsValid" storage="e:\project\controlhub\tests\controlhub.api.tests\bin\debug\net8.0\controlhub.api.tests.dll" id="c802937c-efc8-c034-ed62-a5ba7cad7702">
+      <Execution id="f6252bc7-b43d-48f6-be95-71c5ff01e802" />
+      <TestMethod codeBase="e:\Project\ControlHub\tests\ControlHub.Api.Tests\bin\Debug\net8.0\ControlHub.Api.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="ControlHub.Api.Tests.FunctionalTests.Accounts.RoleTests" name="CreateRoles_ShouldReturnOk_WhenRequestIsValid" />
+    </UnitTest>
+  </TestDefinitions>
+  <TestEntries>
+    <TestEntry testId="3f9f7c79-7d25-e241-3a5c-e20637f14a07" executionId="c5e1ed9f-65cd-46f1-9f3f-9c33f583487d" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="c37f2f82-26d1-3eaf-ddab-1e3a5cbe2557" executionId="5e2a7227-577c-4c3e-9be1-2a78660d8a57" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="c802937c-efc8-c034-ed62-a5ba7cad7702" executionId="f6252bc7-b43d-48f6-be95-71c5ff01e802" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+  </TestEntries>
+  <TestLists>
+    <TestList name="Results Not in a List" id="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestList name="All Loaded Results" id="19431567-8539-422a-85d7-44ee4e166bda" />
+  </TestLists>
+  <ResultSummary outcome="Failed">
+    <Counters total="3" executed="3" passed="0" failed="3" error="0" timeout="0" aborted="0" inconclusive="0" passedButRunAborted="0" notRunnable="0" notExecuted="0" disconnected="0" warning="0" completed="0" inProgress="0" pending="0" />
+    <Output>
+      <StdOut>[xUnit.net 00:00:00.00] xUnit.net VSTest Adapter v3.1.4+50e68bbb8b (64-bit .NET 8.0.22)&#xD;
+[xUnit.net 00:00:00.07]   Discovering: ControlHub.Api.Tests&#xD;
+[xUnit.net 00:00:00.10]   Discovered:  ControlHub.Api.Tests&#xD;
+[xUnit.net 00:00:00.12]   Starting:    ControlHub.Api.Tests&#xD;
+[14:57:09 INF] Saved 3 entities to in-memory store.&#xD;
+[14:57:10 INF] Saved 19 entities to in-memory store.&#xD;
+Seeded 5 identifier configs successfully.&#xD;
+[14:57:10 INF] Saved 32 entities to in-memory store.&#xD;
+Seeded 32 permissions successfully.&#xD;
+[14:57:10 INF] Saved 16 entities to in-memory store.&#xD;
+Seeded 4 test accounts successfully.&#xD;
+Database seeding completed successfully.&#xD;
+? ControlHub seeding completed successfully!&#xD;
+[14:57:10 INF] User profile is available. Using 'C:\Users\Gill\AppData\Local\ASP.NET\DataProtection-Keys' as key repository and Windows DPAPI to encrypt keys at rest.&#xD;
+[14:57:10 INF] Request starting HTTP/1.1 POST http://localhost/api/Auth/auth/super-admin/register - application/json; charset=utf-8 98&#xD;
+[14:57:10 WRN] Failed to determine the https port for redirect.&#xD;
+[14:57:10 INF] ?? [JWT Config] Successfully loaded. Issuer: ControlHub&#xD;
+[14:57:10 INF] Request finished HTTP/1.1 POST http://localhost/api/Auth/auth/super-admin/register - 404 null null 50.7216ms&#xD;
+[14:57:10 INF] Request starting HTTP/1.1 POST http://localhost/api/Auth/auth/signin - application/json; charset=utf-8 74&#xD;
+[14:57:10 INF] Request reached the end of the middleware pipeline without being handled by application code. Request path: POST http://localhost/api/Auth/auth/super-admin/register, Response status code: 404&#xD;
+[14:57:10 INF] Executing endpoint 'ControlHub.API.Accounts.Controllers.AuthController.SignIn (ControlHub.API)'&#xD;
+[14:57:10 INF] Route matched with {action = "SignIn", controller = "Auth"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.IActionResult] SignIn(ControlHub.API.Accounts.ViewModels.Request.SignInRequest, System.Threading.CancellationToken) on controller ControlHub.API.Accounts.Controllers.AuthController (ControlHub.API).&#xD;
+[14:57:10 INF] Executing action method ControlHub.API.Accounts.Controllers.AuthController.SignIn (ControlHub.API) - Validation state: Valid&#xD;
+[14:57:10 INF] Account.SignIn.Started: Starting sign-in process for Identifier superadmin@example.com&#xD;
+[14:57:10 WRN] Account.SignIn.AccountNotFound: Account not found for Identifier superadmin@example.com&#xD;
+[14:57:10 WRN] Client Error occurred: Unauthorized (Code: Auth.InvalidCredentials). Message: Invalid email or password.&#xD;
+[14:57:10 INF] Executed action method ControlHub.API.Accounts.Controllers.AuthController.SignIn (ControlHub.API), returned result Microsoft.AspNetCore.Mvc.UnauthorizedObjectResult in 79.6004ms.&#xD;
+[14:57:10 INF] Executing UnauthorizedObjectResult, writing value of type 'Microsoft.AspNetCore.Mvc.ProblemDetails'.&#xD;
+[14:57:11 INF] Executed action ControlHub.API.Accounts.Controllers.AuthController.SignIn (ControlHub.API) in 113.435ms&#xD;
+[14:57:11 INF] Executed endpoint 'ControlHub.API.Accounts.Controllers.AuthController.SignIn (ControlHub.API)'&#xD;
+[14:57:11 INF] Request finished HTTP/1.1 POST http://localhost/api/Auth/auth/signin - 401 null application/problem+json; charset=utf-8 129.8209ms&#xD;
+[xUnit.net 00:00:01.93]       System.Exception : SuperAdmin login failed: {"title":"Unauthorized","status":401,"detail":"Invalid email or password.","code":"Auth.InvalidCredentials","timestamp":"2026-01-18T07:57:10.9902356Z"}&#xD;
+[xUnit.net 00:00:01.93]       Stack Trace:&#xD;
+[14:57:11 INF] Request starting HTTP/1.1 POST http://localhost/api/Auth/auth/super-admin/register - application/json; charset=utf-8 98&#xD;
+[xUnit.net 00:00:01.93]         e:\Project\ControlHub\tests\ControlHub.Api.Tests\Abstractions\BaseIntegrationTest.cs(70,0): at ControlHub.Api.Tests.Abstractions.BaseIntegrationTest.AuthenticateAsSuperAdminAsync(String email, String password)&#xD;
+[xUnit.net 00:00:01.93]         e:\Project\ControlHub\tests\ControlHub.Api.Tests\FunctionalTests\Accounts\RoleTests.cs(55,0): at ControlHub.Api.Tests.FunctionalTests.Accounts.RoleTests.CreateRoles_ShouldBypassValidation_WhenNameIsEmpty_BecauseValidatorIsInternal()&#xD;
+[xUnit.net 00:00:01.93]         --- End of stack trace from previous location ---&#xD;
+[14:57:11 INF] Request finished HTTP/1.1 POST http://localhost/api/Auth/auth/super-admin/register - 404 null null 2.2806ms&#xD;
+[14:57:11 INF] Request reached the end of the middleware pipeline without being handled by application code. Request path: POST http://localhost/api/Auth/auth/super-admin/register, Response status code: 404&#xD;
+[14:57:11 INF] Request starting HTTP/1.1 POST http://localhost/api/Auth/auth/signin - application/json; charset=utf-8 74&#xD;
+[14:57:11 INF] Executing endpoint 'ControlHub.API.Accounts.Controllers.AuthController.SignIn (ControlHub.API)'&#xD;
+[14:57:11 INF] Route matched with {action = "SignIn", controller = "Auth"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.IActionResult] SignIn(ControlHub.API.Accounts.ViewModels.Request.SignInRequest, System.Threading.CancellationToken) on controller ControlHub.API.Accounts.Controllers.AuthController (ControlHub.API).&#xD;
+[14:57:11 INF] Executing action method ControlHub.API.Accounts.Controllers.AuthController.SignIn (ControlHub.API) - Validation state: Valid&#xD;
+[14:57:11 INF] Account.SignIn.Started: Starting sign-in process for Identifier superadmin@example.com&#xD;
+[14:57:11 WRN] Account.SignIn.AccountNotFound: Account not found for Identifier superadmin@example.com&#xD;
+[14:57:11 WRN] Client Error occurred: Unauthorized (Code: Auth.InvalidCredentials). Message: Invalid email or password.&#xD;
+[14:57:11 INF] Executed action method ControlHub.API.Accounts.Controllers.AuthController.SignIn (ControlHub.API), returned result Microsoft.AspNetCore.Mvc.UnauthorizedObjectResult in 3.9023ms.&#xD;
+[14:57:11 INF] Executing UnauthorizedObjectResult, writing value of type 'Microsoft.AspNetCore.Mvc.ProblemDetails'.&#xD;
+[14:57:11 INF] Executed action ControlHub.API.Accounts.Controllers.AuthController.SignIn (ControlHub.API) in 5.3073ms&#xD;
+[14:57:11 INF] Executed endpoint 'ControlHub.API.Accounts.Controllers.AuthController.SignIn (ControlHub.API)'&#xD;
+[14:57:11 INF] Request finished HTTP/1.1 POST http://localhost/api/Auth/auth/signin - 401 null application/problem+json; charset=utf-8 6.0754ms&#xD;
+[xUnit.net 00:00:01.94]       System.Exception : SuperAdmin login failed: {"title":"Unauthorized","status":401,"detail":"Invalid email or password.","code":"Auth.InvalidCredentials","timestamp":"2026-01-18T07:57:11.0289985Z"}&#xD;
+[xUnit.net 00:00:01.94]       Stack Trace:&#xD;
+[xUnit.net 00:00:01.94]         e:\Project\ControlHub\tests\ControlHub.Api.Tests\Abstractions\BaseIntegrationTest.cs(70,0): at ControlHub.Api.Tests.Abstractions.BaseIntegrationTest.AuthenticateAsSuperAdminAsync(String email, String password)&#xD;
+[xUnit.net 00:00:01.94]         e:\Project\ControlHub\tests\ControlHub.Api.Tests\FunctionalTests\Accounts\RoleTests.cs(22,0): at ControlHub.Api.Tests.FunctionalTests.Accounts.RoleTests.CreateRoles_ShouldReturnOk_WhenRequestIsValid()&#xD;
+[xUnit.net 00:00:01.94]         --- End of stack trace from previous location ---&#xD;
+[14:57:11 INF] Request starting HTTP/1.1 POST http://localhost/api/Auth/users/register - application/json; charset=utf-8 69&#xD;
+[14:57:11 INF] Executing endpoint 'ControlHub.API.Accounts.Controllers.AuthController.Register (ControlHub.API)'&#xD;
+[14:57:11 INF] Route matched with {action = "Register", controller = "Auth"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.IActionResult] Register(ControlHub.API.Accounts.ViewModels.Request.RegisterUserRequest, System.Threading.CancellationToken) on controller ControlHub.API.Accounts.Controllers.AuthController (ControlHub.API).&#xD;
+[14:57:11 INF] Executing action method ControlHub.API.Accounts.Controllers.AuthController.Register (ControlHub.API) - Validation state: Valid&#xD;
+[14:57:11 INF] Account.RegisterUser.Started: Starting account creation for Ident test@example.com&#xD;
+[14:57:11 INF] Account.RegisterUser.Success: Account created successfully for AccountId 6bd4a518-058f-4597-8431-16251fb329c6, Ident test@example.com&#xD;
+[14:57:11 INF] Implicit transaction started at 01/18/2026 07:57:11&#xD;
+[14:57:11 INF] Saved 4 entities to in-memory store.&#xD;
+[14:57:11 INF] Transaction committed successfully with 4 changes.&#xD;
+[14:57:11 INF] Executed action method ControlHub.API.Accounts.Controllers.AuthController.Register (ControlHub.API), returned result Microsoft.AspNetCore.Mvc.OkObjectResult in 82.5835ms.&#xD;
+[14:57:11 INF] Executing OkObjectResult, writing value of type 'ControlHub.API.Accounts.ViewModels.Response.RegisterUserResponse'.&#xD;
+[14:57:11 INF] Executed action ControlHub.API.Accounts.Controllers.AuthController.Register (ControlHub.API) in 88.3489ms&#xD;
+[14:57:11 INF] Executed endpoint 'ControlHub.API.Accounts.Controllers.AuthController.Register (ControlHub.API)'&#xD;
+[14:57:11 INF] Request finished HTTP/1.1 POST http://localhost/api/Auth/users/register - 200 null application/json; charset=utf-8 92.3576ms&#xD;
+[14:57:11 INF] Request starting HTTP/1.1 POST http://localhost/api/Auth/auth/signin - application/json; charset=utf-8 69&#xD;
+[14:57:11 INF] Executing endpoint 'ControlHub.API.Accounts.Controllers.AuthController.SignIn (ControlHub.API)'&#xD;
+[14:57:11 INF] Route matched with {action = "SignIn", controller = "Auth"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.IActionResult] SignIn(ControlHub.API.Accounts.ViewModels.Request.SignInRequest, System.Threading.CancellationToken) on controller ControlHub.API.Accounts.Controllers.AuthController (ControlHub.API).&#xD;
+[14:57:11 INF] Executing action method ControlHub.API.Accounts.Controllers.AuthController.SignIn (ControlHub.API) - Validation state: Valid&#xD;
+[14:57:11 INF] Account.SignIn.Started: Starting sign-in process for Identifier test@example.com&#xD;
+[14:57:11 INF] Implicit transaction started at 01/18/2026 07:57:11&#xD;
+[14:57:11 INF] Saved 2 entities to in-memory store.&#xD;
+[14:57:11 INF] Transaction committed successfully with 2 changes.&#xD;
+[14:57:11 INF] Account.SignIn.Success: User signed in successfully for AccountId 6bd4a518-058f-4597-8431-16251fb329c6&#xD;
+[14:57:11 INF] Executed action method ControlHub.API.Accounts.Controllers.AuthController.SignIn (ControlHub.API), returned result Microsoft.AspNetCore.Mvc.OkObjectResult in 116.4913ms.&#xD;
+[14:57:11 INF] Executing OkObjectResult, writing value of type 'ControlHub.API.Accounts.ViewModels.Response.SignInResponse'.&#xD;
+[14:57:11 INF] Executed action ControlHub.API.Accounts.Controllers.AuthController.SignIn (ControlHub.API) in 118.0037ms&#xD;
+[14:57:11 INF] Executed endpoint 'ControlHub.API.Accounts.Controllers.AuthController.SignIn (ControlHub.API)'&#xD;
+[14:57:11 INF] Request finished HTTP/1.1 POST http://localhost/api/Auth/auth/signin - 200 null application/json; charset=utf-8 118.6272ms&#xD;
+[xUnit.net 00:00:02.17]       Microsoft.CSharp.RuntimeBinder.RuntimeBinderException : 'System.Text.Json.JsonElement' does not contain a definition for 'accessToken'&#xD;
+[xUnit.net 00:00:02.18]       Stack Trace:&#xD;
+[xUnit.net 00:00:02.18]            at CallSite.Target(Closure, CallSite, Object)&#xD;
+[xUnit.net 00:00:02.18]            at System.Dynamic.UpdateDelegates.UpdateAndExecute1[T0,TRet](CallSite site, T0 arg0)&#xD;
+[xUnit.net 00:00:02.18]         e:\Project\ControlHub\tests\ControlHub.Api.Tests\Abstractions\BaseIntegrationTest.cs(44,0): at ControlHub.Api.Tests.Abstractions.BaseIntegrationTest.AuthenticateAsync(String email, String password)&#xD;
+[xUnit.net 00:00:02.18]         e:\Project\ControlHub\tests\ControlHub.Api.Tests\FunctionalTests\Accounts\RoleTests.cs(83,0): at ControlHub.Api.Tests.FunctionalTests.Accounts.RoleTests.CreateRoles_ShouldReturnForbidden_WhenNotSuperAdmin()&#xD;
+[xUnit.net 00:00:02.18]         --- End of stack trace from previous location ---&#xD;
+[xUnit.net 00:00:02.18]   Finished:    ControlHub.Api.Tests&#xD;
+</StdOut>
+    </Output>
+    <RunInfos>
+      <RunInfo computerName="DESKTOP-3V98JDF" outcome="Error" timestamp="2026-01-18T14:57:11.0198713+07:00">
+        <Text>[xUnit.net 00:00:01.93]     ControlHub.Api.Tests.FunctionalTests.Accounts.RoleTests.CreateRoles_ShouldBypassValidation_WhenNameIsEmpty_BecauseValidatorIsInternal [FAIL]</Text>
+      </RunInfo>
+      <RunInfo computerName="DESKTOP-3V98JDF" outcome="Error" timestamp="2026-01-18T14:57:11.0320081+07:00">
+        <Text>[xUnit.net 00:00:01.94]     ControlHub.Api.Tests.FunctionalTests.Accounts.RoleTests.CreateRoles_ShouldReturnOk_WhenRequestIsValid [FAIL]</Text>
+      </RunInfo>
+      <RunInfo computerName="DESKTOP-3V98JDF" outcome="Error" timestamp="2026-01-18T14:57:11.2624929+07:00">
+        <Text>[xUnit.net 00:00:02.17]     ControlHub.Api.Tests.FunctionalTests.Accounts.RoleTests.CreateRoles_ShouldReturnForbidden_WhenNotSuperAdmin [FAIL]</Text>
+      </RunInfo>
+    </RunInfos>
+  </ResultSummary>
+</TestRun>
