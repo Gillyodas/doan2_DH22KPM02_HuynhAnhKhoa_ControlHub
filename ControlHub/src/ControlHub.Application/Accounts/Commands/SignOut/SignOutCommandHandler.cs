@@ -1,4 +1,5 @@
 ﻿using System.IdentityModel.Tokens.Jwt;
+using System.Security.Claims;
 using ControlHub.Application.Common.Persistence;
 using ControlHub.Application.Tokens.Interfaces;
 using ControlHub.Application.Tokens.Interfaces.Repositories;
@@ -37,7 +38,7 @@ namespace ControlHub.Application.Accounts.Commands.SignOut
             _logger.LogInformation("{Code}: {Message} for AccessToken {AccessToken}",
                 AccountLogs.SignOut_Started.Code,
                 AccountLogs.SignOut_Started.Message,
-                request.accessToken[..10]); // log 1 phần token để tránh lộ full
+                request.accessToken[..Math.Min(10, request.accessToken.Length)]); // log 1 phần token để tránh lộ full
 
             var claim = _tokenVerifier.Verify(request.accessToken);
             if (claim == null)
@@ -61,7 +62,8 @@ namespace ControlHub.Application.Accounts.Commands.SignOut
                 return Result.Failure(TokenErrors.TokenNotFound);
             }
 
-            var accIdString = claim.Claims.FirstOrDefault(c => c.Type == JwtRegisteredClaimNames.Sub)?.Value;
+            var accIdString = claim.Claims.FirstOrDefault(c => c.Type == JwtRegisteredClaimNames.Sub)?.Value
+                            ?? claim.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier)?.Value;
             if (!Guid.TryParse(accIdString, out var accId))
             {
                 _logger.LogWarning("{Code}: {Message} - invalid AccountId format:{id}",

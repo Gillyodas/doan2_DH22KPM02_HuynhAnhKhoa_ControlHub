@@ -15,6 +15,10 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <FrameworkReference Include="Microsoft.AspNetCore.App" />
+  </ItemGroup>
+
+  <ItemGroup>
     <Compile Remove="Accounts\DTOs\CommandDTOs\**" />
     <EmbeddedResource Remove="Accounts\DTOs\CommandDTOs\**" />
     <None Remove="Accounts\DTOs\CommandDTOs\**" />
@@ -42,6 +46,13 @@
   <ItemGroup>
     <ProjectReference Include="..\ControlHub.Domain\ControlHub.Domain.csproj" />
     <ProjectReference Include="..\ControlHub.SharedKernel\ControlHub.SharedKernel.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <InternalsVisibleTo Include="ControlHub.Application.Tests" />
+    <InternalsVisibleTo Include="ControlHub.Infrastructure" />
+    <InternalsVisibleTo Include="ControlHub.API" />
+    <InternalsVisibleTo Include="DynamicProxyGenAssembly2" />
   </ItemGroup>
 
 </Project>

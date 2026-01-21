@@ -29,6 +29,7 @@ namespace ControlHub.Application.Permissions.Commands.CreatePermissions
 
         public async Task<Result> Handle(CreatePermissionsCommand request, CancellationToken cancellationToken)
         {
+            _logger.LogInformation("--- DEBUG: CreatePermissionsCommandHandler.Handle HIT ---");
             _logger.LogInformation("{Code}: {Message}. Count={Count}",
                 PermissionLogs.CreatePermissions_Started.Code,
                 PermissionLogs.CreatePermissions_Started.Message,

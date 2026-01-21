@@ -1,6 +1,11 @@
-﻿namespace ControlHub.Application.Users.Commands.UpdateUsername
+﻿using FluentValidation;
+
+namespace ControlHub.Application.Users.Commands.UpdateUsername
 {
-    internal class UpdateUsernameCommandValidator
+    public class UpdateUsernameCommandValidator : AbstractValidator<UpdateUsernameCommand>
     {
+        public UpdateUsernameCommandValidator()
+        {
+        }
     }
 }

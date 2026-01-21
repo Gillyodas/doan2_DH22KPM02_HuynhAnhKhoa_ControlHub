@@ -15,7 +15,7 @@ namespace ControlHub.Application.Accounts.Commands.RefreshAccessToken
                 .NotEmpty().WithMessage(AccountErrors.AccountIdRequired.Message);
 
             RuleFor(x => x.accessValue)
-                .NotEmpty().WithMessage(AccountErrors.AccountIdRequired.Message);
+                .NotEmpty().WithMessage(TokenErrors.TokenRequired.Message);
         }
     }
 }

@@ -1,6 +1,11 @@
-﻿namespace ControlHub.Application.Accounts.Commands.AddIdentifier
+﻿using FluentValidation;
+
+namespace ControlHub.Application.Accounts.Commands.AddIdentifier
 {
-    internal class AddIdentifierCommandValidator
+    public class AddIdentifierCommandValidator : AbstractValidator<AddIdentifierCommand>
     {
+        public AddIdentifierCommandValidator()
+        {
+        }
     }
 }
