@@ -3,10 +3,12 @@ using ControlHub.API.Controllers;
 using ControlHub.Application.Accounts.Commands.ChangePassword;
 using ControlHub.Application.Accounts.Commands.ForgotPassword;
 using ControlHub.Application.Accounts.Commands.ResetPassword;
+using ControlHub.Application.Accounts.Queries.GetAdminAccounts;
 using ControlHub.Application.Authorization.Requirements;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using ControlHub.Domain.Permissions;
 
 namespace ControlHub.API.Accounts.Controllers
 {
@@ -87,6 +89,16 @@ namespace ControlHub.API.Accounts.Controllers
             }
 
             return Ok();
+        }
+
+        [Authorize(Policy = Policies.CanViewUsers)]
+        [HttpGet("admins")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        public async Task<IActionResult> GetAdmins(CancellationToken cancellationToken)
+        {
+            var query = new GetAdminAccountsQuery();
+            var result = await Mediator.Send(query, cancellationToken);
+            return HandleFailure(result) ?? Ok(result.Value);
         }
     }
 }

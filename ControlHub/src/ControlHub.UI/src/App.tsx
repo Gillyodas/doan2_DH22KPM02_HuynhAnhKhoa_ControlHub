@@ -12,6 +12,7 @@ import { RolesPage } from "@/pages/roles-page"
 import { SettingsPage } from "@/pages/settings-page"
 import { UsersPage } from "@/pages/users-page"
 import IdentifiersPage from "@/pages/identifiers-page"
+import { AdminAccountsPage } from "@/pages/admin-accounts-page"
 import AiAuditPage from "@/pages/AiAuditPage"
 import { BrowserRouter, Navigate, Route, Routes } from "react-router-dom"
 
@@ -27,6 +28,7 @@ export default function App() {
             <Route element={<MainLayout />}>
               <Route index element={<DashboardPage />} />
               <Route path="users" element={<UsersPage />} />
+              <Route path="admin-accounts" element={<AdminAccountsPage />} />
               <Route path="roles" element={<RolesPage />} />
               <Route path="identifiers" element={<IdentifiersPage />} />
               <Route path="apis" element={<ApiExplorerPage />} />

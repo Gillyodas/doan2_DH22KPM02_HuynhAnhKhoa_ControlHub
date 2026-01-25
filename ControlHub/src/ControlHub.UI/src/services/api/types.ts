@@ -29,6 +29,8 @@ export type RegisterRequest = {
   type: IdentifierType
 }
 
+export type RegisterAdminRequest = RegisterRequest
+
 export type RegisterSuperAdminRequest = RegisterRequest & {
   masterKey: string
 }
@@ -114,4 +116,11 @@ export type AddPermissionsForRoleResponse = {
   successCount: number
   failureCount: number
   failedRoles?: string[]
+}
+
+export type AccountDto = {
+  id: string
+  username: string
+  roleName: string
+  isActive: boolean
 }

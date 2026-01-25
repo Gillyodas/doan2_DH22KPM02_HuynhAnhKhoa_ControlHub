@@ -56,6 +56,16 @@ namespace ControlHub.Infrastructure.Logging
             return logs.OrderByDescending(x => x.Timestamp).Take(count).ToList();
         }
 
+        public async Task<List<LogEntry>> GetLogsByTimeRangeAsync(DateTime startTime, DateTime endTime)
+        {
+            var logs = await ReadAllLogsAsync();
+
+            // Simple optimization: only process logs if needed
+            return logs.Where(l => l.Timestamp >= startTime && l.Timestamp <= endTime)
+                       .OrderBy(l => l.Timestamp)
+                       .ToList();
+        }
+
         private async Task<List<LogEntry>> ReadAllLogsAsync()
         {
             var result = new List<LogEntry>();

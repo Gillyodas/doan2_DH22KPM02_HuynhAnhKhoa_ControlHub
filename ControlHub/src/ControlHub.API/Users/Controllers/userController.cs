@@ -20,7 +20,6 @@ namespace ControlHub.API.Users.Controllers
             _logger = logger;
         }
 
-        [Authorize(Policy = "Permission:users.update_username")]
         [HttpPatch("users/{id}/username")]
         [ProducesResponseType(typeof(UpdateUsernameResponse), StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
@@ -36,7 +35,7 @@ namespace ControlHub.API.Users.Controllers
                 return HandleFailure(result);
             }
 
-            return Ok(new UpdateUsernameResponse { Username = result.Value }); // Sửa tên property thành PascalCase nếu DTO đã sửa
+            return Ok(new UpdateUsernameResponse { Username = result.Value });
         }
     }
 }

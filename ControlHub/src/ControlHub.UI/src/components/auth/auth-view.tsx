@@ -25,7 +25,8 @@ function mapIdentifierType(name: string): IdentifierType {
   }
 }
 
-const ROLE_OPTIONS: RegisterRole[] = ["User", "Admin", "SupperAdmin"]
+
+// const ROLE_OPTIONS: RegisterRole[] = ["User", "Admin", "SupperAdmin"]
 
 function inputClassName(hasError: boolean) {
   return [
@@ -58,7 +59,8 @@ export function AuthView() {
   const [regConfirmPassword, setRegConfirmPassword] = React.useState("")
   const [showRegPassword, setShowRegPassword] = React.useState(false)
   const [showRegConfirmPassword, setShowRegConfirmPassword] = React.useState(false)
-  const [regRole, setRegRole] = React.useState<RegisterRole>("User")
+  // const [regRole, setRegRole] = React.useState<RegisterRole>("SupperAdmin") 
+  const regRole: RegisterRole = "SupperAdmin"
   const [regMasterKey, setRegMasterKey] = React.useState("")
 
   const [error, setError] = React.useState<string | null>(null)
@@ -108,10 +110,10 @@ export function AuthView() {
   }, [regConfirmPassword, regPassword, t])
 
   const regMasterKeyError = React.useMemo(() => {
-    if (regRole !== "SupperAdmin") return null
+    // Only SupperAdmin registration is allowed now
     if (!regMasterKey.trim()) return t('auth.validation.masterKeyRequired')
     return null
-  }, [regMasterKey, regRole, t])
+  }, [regMasterKey, t])
 
   const canRegister = !regIdentifyError && !regPasswordError && !regConfirmError && !regMasterKeyError
 
@@ -352,38 +354,19 @@ export function AuthView() {
                 {touched.regValue && regIdentifyError ? <p className="mt-1 text-xs text-red-300">{regIdentifyError}</p> : null}
               </div>
 
-              <div>
-                <label className="block text-sm text-zinc-300 mb-1">{t('auth.role')}</label>
-                <select
-                  value={regRole}
-                  onChange={(e) => setRegRole(e.target.value as RegisterRole)}
-                  onBlur={() => setTouched((p) => ({ ...p, regRole: true }))}
-                  className={inputClassName(false)}
-                >
-                  {ROLE_OPTIONS.map((r) => (
-                    <option key={r} value={r} className="bg-zinc-950">
-                      {r}
-                    </option>
-                  ))}
-                </select>
-                {regRole === "Admin" ? (
-                  <p className="mt-1 text-xs text-zinc-500">{t('auth.hints.adminRegistration')}</p>
-                ) : null}
-              </div>
+              {/* Role selection removed - Defaults to SupperAdmin */}
 
-              {regRole === "SupperAdmin" ? (
-                <div>
-                  <label className="block text-sm text-zinc-300 mb-1">{t('auth.masterKey')}</label>
-                  <input
-                    value={regMasterKey}
-                    onChange={(e) => setRegMasterKey(e.target.value)}
-                    onBlur={() => setTouched((p) => ({ ...p, regMasterKey: true }))}
-                    placeholder={t('auth.masterKeyPlaceholder')}
-                    className={inputClassName(Boolean(touched.regMasterKey && regMasterKeyError))}
-                  />
-                  {touched.regMasterKey && regMasterKeyError ? <p className="mt-1 text-xs text-red-300">{regMasterKeyError}</p> : null}
-                </div>
-              ) : null}
+              <div>
+                <label className="block text-sm text-zinc-300 mb-1">{t('auth.masterKey')}</label>
+                <input
+                  value={regMasterKey}
+                  onChange={(e) => setRegMasterKey(e.target.value)}
+                  onBlur={() => setTouched((p) => ({ ...p, regMasterKey: true }))}
+                  placeholder={t('auth.masterKeyPlaceholder')}
+                  className={inputClassName(Boolean(touched.regMasterKey && regMasterKeyError))}
+                />
+                {touched.regMasterKey && regMasterKeyError ? <p className="mt-1 text-xs text-red-300">{regMasterKeyError}</p> : null}
+              </div>
 
               <div>
                 <label className="block text-sm text-zinc-300 mb-1">{t('auth.password')}</label>

@@ -21,7 +21,7 @@ namespace ControlHub.API.Permissions
             _logger = logger;
         }
 
-        [Authorize(Policy = "Permission:permissions.create")]
+        [Authorize(Policy = Policies.CanCreatePermission)]
         [HttpPost("permissions")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
@@ -41,7 +41,7 @@ namespace ControlHub.API.Permissions
             return Ok();
         }
 
-        [Authorize(Policy = "Permission:permissions.view")]
+        [Authorize(Policy = Policies.CanViewPermissions)]
         [HttpGet]
         [ProducesResponseType(typeof(PagedResult<Permission>), StatusCodes.Status200OK)]
         public async Task<IActionResult> GetPermissions(

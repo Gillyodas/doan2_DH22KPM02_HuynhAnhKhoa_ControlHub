@@ -21,11 +21,11 @@ namespace ControlHub.API.Controllers
         /// <summary>
         /// Tự động ánh xạ từ Domain Error sang HTTP Status Code chuẩn
         /// </summary>
-        protected IActionResult HandleFailure(Result result)
+        protected IActionResult? HandleFailure(Result result)
         {
             if (result.IsSuccess)
             {
-                throw new InvalidOperationException("Cannot handle failure for a successful result.");
+                return null;
             }
 
             return result.Error.Type switch

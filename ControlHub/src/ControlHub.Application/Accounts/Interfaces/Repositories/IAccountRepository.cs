@@ -12,5 +12,7 @@ namespace ControlHub.Application.Accounts.Interfaces.Repositories
             IdentifierType identifierType,
             string normalizedValue,
             CancellationToken cancellationToken);
+
+        Task<List<Account>> GetByRoleIdAsync(Guid roleId, CancellationToken cancellationToken);
     }
 }

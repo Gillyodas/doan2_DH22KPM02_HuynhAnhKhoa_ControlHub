@@ -7,7 +7,6 @@ import { CreatePermissionsDialog } from "@/components/permissions/create-permiss
 import { PermissionsTable } from "@/components/permissions/permissions-table"
 import { permissionsApi, type Permission, type PagedResult } from "@/services/api"
 import { useAuth } from "@/auth/use-auth"
-import { toast } from "sonner"
 import { Plus, Search } from "lucide-react"
 
 export function PermissionsPage() {
@@ -45,7 +44,8 @@ export function PermissionsPage() {
       )
       setPermissions(result)
     } catch (error) {
-      toast.error(error instanceof Error ? error.message : "Failed to load permissions")
+      console.error(error)
+      // toast.error(error instanceof Error ? error.message : "Failed to load permissions")
     } finally {
       setIsLoading(false)
     }

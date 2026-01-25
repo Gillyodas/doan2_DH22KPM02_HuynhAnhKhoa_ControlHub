@@ -86,6 +86,7 @@ namespace ControlHub
 
             // 3. Token Management
             services.Configure<TokenSettings>(configuration.GetSection("TokenSettings"));
+            services.Configure<ControlHub.Application.Common.Settings.RoleSettings>(configuration.GetSection("RoleSettings"));
 
             services.AddScoped<IAccessTokenGenerator, AccessTokenGenerator>();
             services.AddScoped<IRefreshTokenGenerator, RefreshTokenGenerator>();

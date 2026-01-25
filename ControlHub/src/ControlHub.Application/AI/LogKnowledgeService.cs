@@ -107,19 +107,104 @@ namespace ControlHub.Application.AI
                 }
             }
 
-            // Bước 2.2: Build Prompt
+            // Bước 2.2: Optimize & Build Prompt
             var prompt = new StringBuilder();
-            prompt.AppendLine("You are an expert system troubleshooter.");
-            prompt.AppendLine($"Please respond in the following language: {lang}."); // Thêm chỉ dẫn ngôn ngữ
-            prompt.AppendLine(contextBuilder.ToString()); // Inject Context tìm được
-            prompt.AppendLine("\nAnalyze the following log sequence and identify the root cause:");
             
-            foreach (var log in logs)
+            // Map Language Code to Full Name
+            string languageName = lang.ToLower() switch
             {
-                prompt.AppendLine($"[{log.Timestamp:HH:mm:ss}] [{log.Level}] {log.LogCode?.Code ?? "NoCode"}: {log.Message}");
+                "vi" => "Vietnamese",
+                "vn" => "Vietnamese", // Handle common mistake
+                "ja" => "Japanese",
+                "ko" => "Korean",
+                "zh" => "Chinese",
+                "fr" => "French",
+                "es" => "Spanish",
+                "de" => "German",
+                _ => "English"
+            };
+
+            prompt.AppendLine("You are an expert system troubleshooter assistant.");
+            prompt.AppendLine($"IMPORTANT: You MUST respond in {languageName}.");
+            prompt.AppendLine("IMPORTANT: The Context Log Definitions may contain templates with placeholders (e.g. {Code}, {UserId}). You MUST replace them with the actual values found in the Log Sequence.");
+            prompt.AppendLine("If a log entry does not have a matching definition, analyze it based on the message content.");
+            prompt.AppendLine("\nContext Logs:");
+
+            // OPTIMIZATION: Filter & Truncate
+            // 1. Prioritize Errors & Warnings
+            var criticalLogs = logs.Where(l => l.Level == "Error" || l.Level == "Warning").ToList();
+            
+            // 2. Get recent Context (Information) - Max 20 last entries
+            var infoLogs = logs.Where(l => l.Level != "Error" && l.Level != "Warning")
+                               .TakeLast(20)
+                               .ToList();
+
+            // 3. Combine & Sort by Timestamp
+            var logsToAnalyze = criticalLogs.Concat(infoLogs)
+                                            .OrderBy(l => l.Timestamp)
+                                            .TakeLast(50) // Absolute Hard Cap
+                                            .ToList();
+
+            foreach (var log in logsToAnalyze)
+            {
+                // Truncate message to avoid massive stack traces (Max 500 chars)
+                var cleanMessage = log.Message?.Length > 500 
+                    ? log.Message.Substring(0, 500) + "...[TRUNCATED]" 
+                    : log.Message;
+
+                // FIX: Don't print "NoCode" if LogCode is missing. 
+                var codeDisplay = log.LogCode?.Code != null ? $" {log.LogCode.Code}:" : "";
+
+                prompt.AppendLine($"[{log.Timestamp:HH:mm:ss}] [{log.Level}]{codeDisplay} {cleanMessage}");
             }
 
             // Bước 2.3: Gọi AI
+            return await _aiService.AnalyzeLogsAsync(prompt.ToString());
+        }
+
+        // 3. CHAT WITH LOGS: Hỏi đáp với log
+        public async Task<string> ChatWithLogsAsync(string userQuestion, List<LogEntry> logs, string lang = "en")
+        {
+            var prompt = new StringBuilder();
+
+            // Map Language Code to Full Name
+            string languageName = lang.ToLower() switch
+            {
+                "vi" => "Vietnamese",
+                "vn" => "Vietnamese", 
+                "ja" => "Japanese",
+                "ko" => "Korean",
+                "zh" => "Chinese",
+                "fr" => "French",
+                "es" => "Spanish",
+                "de" => "German",
+                _ => "English"
+            };
+
+            prompt.AppendLine("You are an expert system troubleshooter assistant.");
+            prompt.AppendLine($"IMPORTANT: You MUST respond in {languageName}.");
+            prompt.AppendLine("\nContext Logs:");
+
+            // Filter & Truncate for Chat Context
+            // Prioritize recent logs (last 50) regarding constraints
+            var logsToAnalyze = logs.OrderBy(l => l.Timestamp)
+                                    .TakeLast(50) 
+                                    .ToList();
+
+            foreach (var log in logsToAnalyze)
+            {
+                 // Handling "NoCode" gracefully: If LogCode is null, don't show it.
+                 var codeDisplay = log.LogCode?.Code != null ? $"[{log.LogCode.Code}] " : "";
+                 var cleanMessage = log.Message?.Length > 300 
+                    ? log.Message.Substring(0, 300) + "..." 
+                    : log.Message;
+
+                prompt.AppendLine($"[{log.Timestamp:HH:mm:ss}] [{log.Level}] {codeDisplay}{cleanMessage}");
+            }
+
+            prompt.AppendLine($"\nUser Question: {userQuestion}");
+            prompt.AppendLine("Answer based on the logs provided above:");
+
             return await _aiService.AnalyzeLogsAsync(prompt.ToString());
         }
     }

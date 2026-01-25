@@ -31,7 +31,7 @@ namespace ControlHub.API.Accounts.Controllers
         /// </summary>
         /// <returns>List of identifier configurations</returns>
         [HttpGet]
-        [Authorize(Policy = "Permission:identifiers.view")]
+        [Authorize(Policy = Policies.CanViewIdentifierConfigs)]
         [ProducesResponseType(typeof(List<IdentifierConfigDto>), StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
@@ -59,7 +59,7 @@ namespace ControlHub.API.Accounts.Controllers
         /// <param name="command">Identifier configuration creation request</param>
         /// <returns>Created identifier configuration ID</returns>
         [HttpPost]
-        [Authorize(Policy = "Permission:identifiers.create")]
+        [Authorize(Policy = Policies.CanCreateIdentifierConfig)]
         [ProducesResponseType(typeof(Guid), StatusCodes.Status201Created)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
@@ -122,7 +122,7 @@ namespace ControlHub.API.Accounts.Controllers
         /// <param name="request">Toggle request with isActive flag</param>
         /// <returns>Success result</returns>
         [HttpPatch("{id}/toggle-active")]
-        [Authorize(Policy = "Permission:identifiers.toggle")]
+        [Authorize(Policy = Policies.CanToggleIdentifierConfig)]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
@@ -151,7 +151,7 @@ namespace ControlHub.API.Accounts.Controllers
         /// <param name="command">Update request</param>
         /// <returns>Success result</returns>
         [HttpPut("{id}")]
-        [Authorize(Policy = "Permission:identifiers.update")]
+        [Authorize(Policy = Policies.CanUpdateIdentifierConfig)]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]

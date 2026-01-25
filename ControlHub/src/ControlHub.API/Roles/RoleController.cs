@@ -25,7 +25,7 @@ namespace ControlHub.API.Roles
             _logger = logger;
         }
 
-        [Authorize(Policy = "Permission:permissions.assign")]
+        [Authorize(Policy = Policies.CanAssignPermission)]
         [HttpPost("roles/{roleId}/permissions")]
         [ProducesResponseType(typeof(AddPermissonsForRoleResponse), StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
@@ -63,7 +63,7 @@ namespace ControlHub.API.Roles
             });
         }
 
-        [Authorize(Policy = "Permission:roles.create")]
+        [Authorize(Policy = Policies.CanCreateRole)]
         [HttpPost("roles")]
         [ProducesResponseType(typeof(CreateRolesResponse), StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
@@ -99,7 +99,7 @@ namespace ControlHub.API.Roles
             });
         }
 
-        [Authorize(Policy = "Permission:roles.view")]
+        [Authorize(Policy = Policies.CanViewRoles)]
         [HttpGet]
         [ProducesResponseType(typeof(PagedResult<Role>), StatusCodes.Status200OK)]
         public async Task<IActionResult> GetRoles(

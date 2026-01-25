@@ -33,4 +33,10 @@
     <ProjectReference Include="..\..\src\ControlHub.Application\ControlHub.Application.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Content Include="appsettings.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+  </ItemGroup>
+
 </Project>

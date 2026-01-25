@@ -8,7 +8,6 @@ import { RolesTable } from "@/components/roles/roles-table"
 import { AssignPermissionsDialog } from "@/components/roles/assign-permissions-dialog"
 import { rolesApi, type Role, type PagedResult } from "@/services/api"
 import { useAuth } from "@/auth/use-auth"
-import { toast } from "sonner"
 import { Plus, Search } from "lucide-react"
 
 export function RolesManagementPage() {
@@ -48,7 +47,8 @@ export function RolesManagementPage() {
       )
       setRoles(result)
     } catch (error) {
-      toast.error(error instanceof Error ? error.message : "Failed to load roles")
+      console.error(error)
+      // toast.error(error instanceof Error ? error.message : "Failed to load roles")
     } finally {
       setIsLoading(false)
     }

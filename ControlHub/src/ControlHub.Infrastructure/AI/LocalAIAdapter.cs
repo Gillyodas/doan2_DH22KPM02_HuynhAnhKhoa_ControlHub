@@ -13,6 +13,7 @@ namespace ControlHub.Infrastructure.AI
         public LocalAIAdapter(HttpClient httpClient, Microsoft.Extensions.Configuration.IConfiguration configuration)
         {
             _httpClient = httpClient;
+            _httpClient.Timeout = TimeSpan.FromMinutes(5);
             _ollamaUrl = configuration["AI:OllamaUrl"] ?? "http://localhost:11434/api/generate";
             _modelName = configuration["AI:ModelName"] ?? "llama3";
         }
@@ -24,7 +25,8 @@ namespace ControlHub.Infrastructure.AI
             {
                 model = _modelName,
                 prompt = prompt,
-                stream = false
+                stream = false,
+                keep_alive = "10m"
             };
 
             var content = new StringContent(JsonSerializer.Serialize(requestBody), Encoding.UTF8, "application/json");

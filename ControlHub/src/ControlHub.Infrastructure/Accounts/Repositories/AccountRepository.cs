@@ -49,5 +49,14 @@ namespace ControlHub.Infrastructure.Accounts.Repositories
                 .Where(a => a.Identifiers.Any(i => i.Type == identifierType && i.NormalizedValue == normalizedValue))
                 .FirstOrDefaultAsync(cancellationToken);
         }
+
+        public async Task<List<Account>> GetByRoleIdAsync(Guid roleId, CancellationToken cancellationToken)
+        {
+            return await _db.Accounts
+                .Include(a => a.User)
+                .Include(a => a.Role)
+                .Where(a => a.RoleId == roleId)
+                .ToListAsync(cancellationToken);
+        }
     }
 }

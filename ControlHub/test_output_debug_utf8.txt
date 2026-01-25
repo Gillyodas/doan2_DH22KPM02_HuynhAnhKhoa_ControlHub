@@ -1,0 +1,66 @@
+﻿  Determining projects to restore...
+  All projects are up-to-date for restore.
+  ControlHub.SharedKernel -> e:\Project\ControlHub\src\ControlHub.SharedKernel\bin\Debug\net8.0\ControlHub.SharedKernel.dll
+  ControlHub.Domain -> e:\Project\ControlHub\src\ControlHub.Domain\bin\Debug\net8.0\ControlHub.Domain.dll
+  ControlHub.Application -> e:\Project\ControlHub\src\ControlHub.Application\bin\Debug\net8.0\ControlHub.Application.dll
+  ControlHub.Infrastructure -> e:\Project\ControlHub\src\ControlHub.Infrastructure\bin\Debug\net8.0\ControlHub.Infrastructure.dll
+  ControlHub.API -> e:\Project\ControlHub\src\ControlHub.API\bin\Debug\net8.0\ControlHub.API.dll
+e:\Project\ControlHub\tests\ControlHub.Api.Tests\FunctionalTests\Users\UserTests.cs(26,9): warning CS8602: Dereference of a possibly null reference. [e:\Project\ControlHub\tests\ControlHub.Api.Tests\ControlHub.Api.Tests.csproj]
+e:\Project\ControlHub\tests\ControlHub.Api.Tests\FunctionalTests\Users\UserTests.cs(46,59): warning CS8602: Dereference of a possibly null reference. [e:\Project\ControlHub\tests\ControlHub.Api.Tests\ControlHub.Api.Tests.csproj]
+e:\Project\ControlHub\tests\ControlHub.Api.Tests\FunctionalTests\Permissions\PermissionTests.cs(31,9): warning CS8602: Dereference of a possibly null reference. [e:\Project\ControlHub\tests\ControlHub.Api.Tests\ControlHub.Api.Tests.csproj]
+e:\Project\ControlHub\tests\ControlHub.Api.Tests\FunctionalTests\Identifiers\IdentifierTests.cs(29,9): warning CS8602: Dereference of a possibly null reference. [e:\Project\ControlHub\tests\ControlHub.Api.Tests\ControlHub.Api.Tests.csproj]
+e:\Project\ControlHub\tests\ControlHub.Api.Tests\FunctionalTests\Identifiers\IdentifierTests.cs(129,9): warning CS8602: Dereference of a possibly null reference. [e:\Project\ControlHub\tests\ControlHub.Api.Tests\ControlHub.Api.Tests.csproj]
+  ControlHub.Api.Tests -> e:\Project\ControlHub\tests\ControlHub.Api.Tests\bin\Debug\net8.0\ControlHub.Api.Tests.dll
+Test run for e:\Project\ControlHub\tests\ControlHub.Api.Tests\bin\Debug\net8.0\ControlHub.Api.Tests.dll (.NETCoreApp,Version=v8.0)
+VSTest version 17.11.1 (x64)
+
+Starting test execution, please wait...
+A total of 1 test files matched the specified pattern.
+  Failed ControlHub.Api.Tests.FunctionalTests.Accounts.AdminAccountTests.GetAdmins_ShouldReturnList_WhenAuthorizedAsSuperAdmin [5 s]
+  Error Message:
+   System.Net.Http.HttpRequestException : Response status code does not indicate success: 400 (Bad Request).
+  Stack Trace:
+     at System.Net.Http.HttpResponseMessage.EnsureSuccessStatusCode()
+   at ControlHub.Api.Tests.FunctionalTests.Accounts.AdminAccountTests.GetAdmins_ShouldReturnList_WhenAuthorizedAsSuperAdmin() in e:\Project\ControlHub\tests\ControlHub.Api.Tests\FunctionalTests\Accounts\AdminAccountTests.cs:line 56
+--- End of stack trace from previous location ---
+  Failed ControlHub.Api.Tests.FunctionalTests.Accounts.RoleTests.CreateRoles_ShouldReturnOk_AndCorrectlyReportDuplicates_WhenRoleAlreadyExists [5 s]
+  Error Message:
+   Expected response.StatusCode to be HttpStatusCode.OK {value: 200}, but found HttpStatusCode.InternalServerError {value: 500}.
+  Stack Trace:
+     at FluentAssertions.Execution.LateBoundTestFramework.Throw(String message)
+   at FluentAssertions.Execution.DefaultAssertionStrategy.HandleFailure(String message)
+   at FluentAssertions.Execution.AssertionScope.AddPreFormattedFailure(String formattedFailureMessage)
+   at FluentAssertions.Execution.AssertionChain.FailWith(Func`1 getFailureReason)
+   at FluentAssertions.Execution.AssertionChain.FailWith(Func`1 getFailureReason)
+   at FluentAssertions.Execution.AssertionChain.FailWith(String message, Object[] args)
+   at FluentAssertions.Primitives.EnumAssertions`2.Be(TEnum expected, String because, Object[] becauseArgs)
+   at ControlHub.Api.Tests.FunctionalTests.Accounts.RoleTests.CreateRoles_ShouldReturnOk_AndCorrectlyReportDuplicates_WhenRoleAlreadyExists() in e:\Project\ControlHub\tests\ControlHub.Api.Tests\FunctionalTests\Accounts\RoleTests.cs:line 162
+--- End of stack trace from previous location ---
+  Failed ControlHub.Api.Tests.FunctionalTests.Accounts.RoleTests.CreateRoles_ShouldReturnOk_WithPartialSuccess_WhenOneRoleIsInvalid [284 ms]
+  Error Message:
+   Expected response.StatusCode to be HttpStatusCode.OK {value: 200}, but found HttpStatusCode.InternalServerError {value: 500}.
+  Stack Trace:
+     at FluentAssertions.Execution.LateBoundTestFramework.Throw(String message)
+   at FluentAssertions.Execution.DefaultAssertionStrategy.HandleFailure(String message)
+   at FluentAssertions.Execution.AssertionScope.AddPreFormattedFailure(String formattedFailureMessage)
+   at FluentAssertions.Execution.AssertionChain.FailWith(Func`1 getFailureReason)
+   at FluentAssertions.Execution.AssertionChain.FailWith(Func`1 getFailureReason)
+   at FluentAssertions.Execution.AssertionChain.FailWith(String message, Object[] args)
+   at FluentAssertions.Primitives.EnumAssertions`2.Be(TEnum expected, String because, Object[] becauseArgs)
+   at ControlHub.Api.Tests.FunctionalTests.Accounts.RoleTests.CreateRoles_ShouldReturnOk_WithPartialSuccess_WhenOneRoleIsInvalid() in e:\Project\ControlHub\tests\ControlHub.Api.Tests\FunctionalTests\Accounts\RoleTests.cs:line 127
+--- End of stack trace from previous location ---
+  Failed ControlHub.Api.Tests.FunctionalTests.Accounts.RoleTests.CreateRoles_ShouldReturnOk_WhenRequestIsValid [237 ms]
+  Error Message:
+   Expected response.StatusCode to be HttpStatusCode.OK {value: 200}, but found HttpStatusCode.InternalServerError {value: 500}.
+  Stack Trace:
+     at FluentAssertions.Execution.LateBoundTestFramework.Throw(String message)
+   at FluentAssertions.Execution.DefaultAssertionStrategy.HandleFailure(String message)
+   at FluentAssertions.Execution.AssertionScope.AddPreFormattedFailure(String formattedFailureMessage)
+   at FluentAssertions.Execution.AssertionChain.FailWith(Func`1 getFailureReason)
+   at FluentAssertions.Execution.AssertionChain.FailWith(Func`1 getFailureReason)
+   at FluentAssertions.Execution.AssertionChain.FailWith(String message, Object[] args)
+   at FluentAssertions.Primitives.EnumAssertions`2.Be(TEnum expected, String because, Object[] becauseArgs)
+   at ControlHub.Api.Tests.FunctionalTests.Accounts.RoleTests.CreateRoles_ShouldReturnOk_WhenRequestIsValid() in e:\Project\ControlHub\tests\ControlHub.Api.Tests\FunctionalTests\Accounts\RoleTests.cs:line 44
+--- End of stack trace from previous location ---
+
+Failed!  - Failed:     4, Passed:    30, Skipped:     0, Total:    34, Duration: 6 s - ControlHub.Api.Tests.dll (net8.0)

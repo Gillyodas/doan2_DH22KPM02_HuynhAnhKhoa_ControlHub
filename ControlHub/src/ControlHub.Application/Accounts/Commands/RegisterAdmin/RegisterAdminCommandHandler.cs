@@ -8,6 +8,7 @@ using ControlHub.SharedKernel.Results;
 using MediatR;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
+using ControlHub.SharedKernel.Constants;
 
 namespace ControlHub.Application.Accounts.Commands.RegisterAdmin
 {
@@ -56,8 +57,8 @@ namespace ControlHub.Application.Accounts.Commands.RegisterAdmin
             var roleIdString = _config["RoleSettings:AdminRoleId"];
             if (!Guid.TryParse(roleIdString, out var userRoleId))
             {
-                _logger.LogError("{@LogCode} | Value: {Value}", CommonLogs.System_InvalidConfiguration, roleIdString);
-                return Result<Guid>.Failure(CommonErrors.SystemConfigurationError);
+                _logger.LogInformation("{@LogCode} | Key: {Key}", CommonLogs.System_ConfigFallback, "RoleSettings:AdminRoleId");
+                userRoleId = ControlHubDefaults.Roles.AdminId;
             }
 
             var accountResult = await _accountFactory.CreateWithUserAndIdentifierAsync(
