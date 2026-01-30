@@ -6,10 +6,22 @@ import { LoadingState } from "@/components/ui/loading-state"
 import { CreateRolesDialog } from "@/components/roles/create-roles-dialog"
 import { RolesTable } from "@/components/roles/roles-table"
 import { AssignPermissionsDialog } from "@/components/roles/assign-permissions-dialog"
+import { EditRoleDialog } from "@/components/roles/edit-role-dialog"
+import { DeleteRoleDialog } from "@/components/roles/delete-role-dialog"
 import { rolesApi, type Role, type PagedResult } from "@/services/api"
 import { useAuth } from "@/auth/use-auth"
-import { Plus, Search } from "lucide-react"
+import { Plus, Search, Shield } from "lucide-react"
 
+/**
+ * RolesManagementPage - Full CRUD for role management
+ * 
+ * Features:
+ * - View roles with pagination
+ * - Create new roles
+ * - Edit role name/description
+ * - Delete roles
+ * - Manage role permissions
+ */
 export function RolesManagementPage() {
   const { auth } = useAuth()
   const [roles, setRoles] = useState<PagedResult<Role>>({
@@ -23,9 +35,13 @@ export function RolesManagementPage() {
   })
   const [searchTerm, setSearchTerm] = useState("")
   const [isLoading, setIsLoading] = useState(false)
+
+  // Dialog states
   const [createDialogOpen, setCreateDialogOpen] = useState(false)
   const [selectedRole, setSelectedRole] = useState<Role | null>(null)
   const [permissionsDialogOpen, setPermissionsDialogOpen] = useState(false)
+  const [editDialogOpen, setEditDialogOpen] = useState(false)
+  const [deleteDialogOpen, setDeleteDialogOpen] = useState(false)
 
   useEffect(() => {
     loadRoles()
@@ -47,8 +63,7 @@ export function RolesManagementPage() {
       )
       setRoles(result)
     } catch (error) {
-      console.error(error)
-      // toast.error(error instanceof Error ? error.message : "Failed to load roles")
+      console.error("Failed to load roles:", error)
     } finally {
       setIsLoading(false)
     }
@@ -68,13 +83,30 @@ export function RolesManagementPage() {
     setPermissionsDialogOpen(true)
   }
 
+  const handleEdit = (role: Role) => {
+    setSelectedRole(role)
+    setEditDialogOpen(true)
+  }
+
+  const handleDelete = (role: Role) => {
+    setSelectedRole(role)
+    setDeleteDialogOpen(true)
+  }
+
   return (
     <div className="space-y-6">
-      <div>
-        <h1 className="text-3xl font-bold">Roles</h1>
-        <p className="text-muted-foreground">Manage system roles and their permissions</p>
+      {/* Page Header */}
+      <div className="flex items-center gap-3">
+        <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-primary/10">
+          <Shield className="h-5 w-5 text-primary" />
+        </div>
+        <div>
+          <h1 className="text-3xl font-bold">Roles</h1>
+          <p className="text-muted-foreground">Manage system roles and their permissions</p>
+        </div>
       </div>
 
+      {/* Search & Actions */}
       <div className="flex items-center justify-between gap-4">
         <div className="flex items-center gap-2 flex-1 max-w-md">
           <div className="relative flex-1">
@@ -93,22 +125,31 @@ export function RolesManagementPage() {
         </Button>
       </div>
 
+      {/* Roles Table */}
       {isLoading ? (
         <LoadingState message="Loading roles..." />
       ) : (
         <div className="space-y-4">
-          <RolesTable roles={roles.items} onManagePermissions={handleManagePermissions} />
-          <Pagination
-            currentPage={roles.pageIndex}
-            totalPages={roles.totalPages}
-            totalCount={roles.totalCount}
-            onPageChange={handlePageChange}
-            hasPreviousPage={roles.hasPreviousPage}
-            hasNextPage={roles.hasNextPage}
+          <RolesTable
+            roles={roles.items}
+            onManagePermissions={handleManagePermissions}
+            onEdit={handleEdit}
+            onDelete={handleDelete}
           />
+          {roles.totalPages > 1 && (
+            <Pagination
+              currentPage={roles.pageIndex}
+              totalPages={roles.totalPages}
+              totalCount={roles.totalCount}
+              onPageChange={handlePageChange}
+              hasPreviousPage={roles.hasPreviousPage}
+              hasNextPage={roles.hasNextPage}
+            />
+          )}
         </div>
       )}
 
+      {/* Dialogs */}
       {auth && (
         <>
           <CreateRolesDialog
@@ -122,6 +163,20 @@ export function RolesManagementPage() {
             accessToken={auth.accessToken}
             open={permissionsDialogOpen}
             onOpenChange={setPermissionsDialogOpen}
+            onSuccess={loadRoles}
+          />
+          <EditRoleDialog
+            role={selectedRole}
+            accessToken={auth.accessToken}
+            open={editDialogOpen}
+            onOpenChange={setEditDialogOpen}
+            onSuccess={loadRoles}
+          />
+          <DeleteRoleDialog
+            role={selectedRole}
+            accessToken={auth.accessToken}
+            open={deleteDialogOpen}
+            onOpenChange={setDeleteDialogOpen}
             onSuccess={loadRoles}
           />
         </>

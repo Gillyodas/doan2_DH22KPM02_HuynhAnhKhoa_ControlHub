@@ -206,6 +206,28 @@ await accountApi.changePassword(
 - **Error Handling**: Comprehensive error messages from API
 - **Type Safety**: Full TypeScript support for all API calls
 
+## React Hooks
+
+### `useUserManagement`
+Located in `src/hooks/use-user-management.ts`.
+Encapsulates all user CRUD logic, pagination, and search state.
+
+**Returns:**
+- `users`: List of users
+- `pagination`: Pagination metadata
+- `isLoading`: Loading state
+- `searchTerm`: Current search term (auto-debounced)
+- `actions`: `updateUser`, `deleteUser`, `assignRole`, `removeRole`
+
+### `useProfile`
+Located in `src/hooks/use-profile.ts`.
+Handles fetching and updating the current user's profile.
+
+**Returns:**
+- `profile`: Current user profile data
+- `updateProfile(data)`: Function to update profile
+- `isUpdating`: Loading state for updates
+
 ## Next Steps
 
 Potential enhancements:

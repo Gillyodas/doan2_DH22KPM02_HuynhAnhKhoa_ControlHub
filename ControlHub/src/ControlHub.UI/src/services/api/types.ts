@@ -124,3 +124,62 @@ export type AccountDto = {
   roleName: string
   isActive: boolean
 }
+
+// ============================================
+// User Management Types
+// ============================================
+
+export type User = {
+  id: string
+  accountId: string
+  username: string
+  email?: string
+  roles: Role[]
+  isActive: boolean
+  createdAt: string
+  updatedAt?: string
+}
+
+export type GetUsersParams = {
+  pageIndex?: number
+  pageSize?: number
+  searchTerm?: string
+}
+
+export type UpdateUserRequest = {
+  username?: string
+  email?: string
+}
+
+export type AssignRoleRequest = {
+  roleId: string
+}
+
+// ============================================
+// Profile Types
+// ============================================
+
+export type Profile = {
+  id: string
+  accountId: string
+  username: string
+  email?: string
+  displayName?: string
+  avatarUrl?: string
+  createdAt: string
+  updatedAt?: string
+}
+
+export type UpdateProfileRequest = {
+  displayName?: string
+  email?: string
+}
+
+// ============================================
+// Role Management Extended Types
+// ============================================
+
+export type UpdateRoleRequest = {
+  name: string
+  description?: string
+}

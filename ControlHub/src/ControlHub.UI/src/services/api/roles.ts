@@ -6,8 +6,13 @@ import type {
   CreateRolesResponse,
   AddPermissionsForRoleRequest,
   AddPermissionsForRoleResponse,
+  UpdateRoleRequest,
 } from "./types"
 
+/**
+ * Create new roles
+ * Endpoint: POST /api/role/roles
+ */
 export async function createRoles(
   req: CreateRolesRequest,
   accessToken: string
@@ -19,18 +24,10 @@ export async function createRoles(
   })
 }
 
-export async function addPermissionsForRole(
-  roleId: string,
-  req: AddPermissionsForRoleRequest,
-  accessToken: string
-): Promise<AddPermissionsForRoleResponse> {
-  return fetchJson<AddPermissionsForRoleResponse>(`/api/Role/roles/${roleId}/permissions`, {
-    method: "POST",
-    body: req,
-    accessToken,
-  })
-}
-
+/**
+ * Get paginated list of roles
+ * Endpoint: GET /api/role
+ */
 export async function getRoles(
   params: {
     pageIndex?: number
@@ -49,6 +46,66 @@ export async function getRoles(
 
   return fetchJson<PagedResult<Role>>(url, {
     method: "GET",
+    accessToken,
+  })
+}
+
+/**
+ * Get role by ID
+ * Endpoint: GET /api/role/{id}
+ */
+export async function getRoleById(
+  roleId: string,
+  accessToken: string
+): Promise<Role> {
+  return fetchJson<Role>(`/api/Role/${roleId}`, {
+    method: "GET",
+    accessToken,
+  })
+}
+
+/**
+ * Update role
+ * Endpoint: PUT /api/role/{id}
+ */
+export async function updateRole(
+  roleId: string,
+  data: UpdateRoleRequest,
+  accessToken: string
+): Promise<Role> {
+  return fetchJson<Role>(`/api/Role/${roleId}`, {
+    method: "PUT",
+    body: data,
+    accessToken,
+  })
+}
+
+/**
+ * Delete role
+ * Endpoint: DELETE /api/role/{id}
+ */
+export async function deleteRole(
+  roleId: string,
+  accessToken: string
+): Promise<void> {
+  return fetchJson<void>(`/api/Role/${roleId}`, {
+    method: "DELETE",
+    accessToken,
+  })
+}
+
+/**
+ * Add permissions to a role
+ * Endpoint: POST /api/role/roles/{id}/permissions
+ */
+export async function addPermissionsForRole(
+  roleId: string,
+  req: AddPermissionsForRoleRequest,
+  accessToken: string
+): Promise<AddPermissionsForRoleResponse> {
+  return fetchJson<AddPermissionsForRoleResponse>(`/api/Role/roles/${roleId}/permissions`, {
+    method: "POST",
+    body: req,
     accessToken,
   })
 }

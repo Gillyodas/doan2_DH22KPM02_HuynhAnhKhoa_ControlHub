@@ -2,7 +2,6 @@ using AppIdentifierConfigRepository = ControlHub.Application.Accounts.Interfaces
 using ControlHub.Application.Common.Persistence;
 using ControlHub.SharedKernel.Common.Errors;
 using ControlHub.SharedKernel.Results;
-using ControlHub.SharedKernel.Results;
 using MediatR;
 using Microsoft.Extensions.Logging;
 using ControlHub.SharedKernel.Accounts;

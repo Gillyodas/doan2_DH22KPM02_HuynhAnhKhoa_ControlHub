@@ -10,37 +10,37 @@ namespace ControlHub.Infrastructure.Migrations
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
         {
-            migrationBuilder.AddColumn<string>(
-                name: "FirstName",
-                schema: "ControlHub",
-                table: "Users",
-                type: "nvarchar(100)",
-                maxLength: 100,
-                nullable: true);
+            // Idempotent check for FirstName
+            migrationBuilder.Sql(@"
+                IF NOT EXISTS(SELECT * FROM sys.columns WHERE Name = N'FirstName' AND Object_ID = Object_ID(N'[ControlHub].[Users]'))
+                BEGIN
+                    ALTER TABLE [ControlHub].[Users] ADD [FirstName] nvarchar(100) NULL;
+                END
+            ");
 
-            migrationBuilder.AddColumn<string>(
-                name: "LastName",
-                schema: "ControlHub",
-                table: "Users",
-                type: "nvarchar(100)",
-                maxLength: 100,
-                nullable: true);
+            // Idempotent check for LastName
+            migrationBuilder.Sql(@"
+                IF NOT EXISTS(SELECT * FROM sys.columns WHERE Name = N'LastName' AND Object_ID = Object_ID(N'[ControlHub].[Users]'))
+                BEGIN
+                    ALTER TABLE [ControlHub].[Users] ADD [LastName] nvarchar(100) NULL;
+                END
+            ");
 
-            migrationBuilder.AddColumn<string>(
-                name: "PhoneNumber",
-                schema: "ControlHub",
-                table: "Users",
-                type: "nvarchar(20)",
-                maxLength: 20,
-                nullable: true);
+            // Idempotent check for PhoneNumber
+            migrationBuilder.Sql(@"
+                IF NOT EXISTS(SELECT * FROM sys.columns WHERE Name = N'PhoneNumber' AND Object_ID = Object_ID(N'[ControlHub].[Users]'))
+                BEGIN
+                    ALTER TABLE [ControlHub].[Users] ADD [PhoneNumber] nvarchar(20) NULL;
+                END
+            ");
 
-            migrationBuilder.AddColumn<bool>(
-                name: "IsDeleted",
-                schema: "ControlHub",
-                table: "Roles",
-                type: "bit",
-                nullable: false,
-                defaultValue: false);
+            // Idempotent check for IsDeleted in Roles
+            migrationBuilder.Sql(@"
+                IF NOT EXISTS(SELECT * FROM sys.columns WHERE Name = N'IsDeleted' AND Object_ID = Object_ID(N'[ControlHub].[Roles]'))
+                BEGIN
+                    ALTER TABLE [ControlHub].[Roles] ADD [IsDeleted] bit NOT NULL DEFAULT CAST(0 AS BIT);
+                END
+            ");
         }
 
         /// <inheritdoc />

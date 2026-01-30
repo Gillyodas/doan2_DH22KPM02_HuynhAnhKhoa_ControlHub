@@ -11,6 +11,7 @@ import { ResetPasswordPage } from "@/pages/reset-password-page"
 import { RolesPage } from "@/pages/roles-page"
 import { SettingsPage } from "@/pages/settings-page"
 import { UsersPage } from "@/pages/users-page"
+import { ProfilePage } from "@/pages/profile-page"
 import IdentifiersPage from "@/pages/identifiers-page"
 import { AdminAccountsPage } from "@/pages/admin-accounts-page"
 import AiAuditPage from "@/pages/AiAuditPage"
@@ -34,6 +35,7 @@ export default function App() {
               <Route path="apis" element={<ApiExplorerPage />} />
               <Route path="ai-audit" element={<AiAuditPage />} />
               <Route path="settings" element={<SettingsPage />} />
+              <Route path="profile" element={<ProfilePage />} />
               <Route path="*" element={<Navigate to="/" replace />} />
             </Route>
           </Route>

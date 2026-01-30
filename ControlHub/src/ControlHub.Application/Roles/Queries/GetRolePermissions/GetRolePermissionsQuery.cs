@@ -3,6 +3,7 @@ using ControlHub.Application.Roles.Interfaces.Repositories;
 using ControlHub.SharedKernel.Results;
 using ControlHub.SharedKernel.Roles;
 using MediatR;
+using Microsoft.Extensions.Logging;
 
 namespace ControlHub.Application.Roles.Queries.GetRolePermissions
 {
