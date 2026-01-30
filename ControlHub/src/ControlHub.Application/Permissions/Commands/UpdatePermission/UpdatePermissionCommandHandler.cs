@@ -25,11 +25,13 @@ namespace ControlHub.Application.Permissions.Commands.UpdatePermission
 
         public async Task<Result> Handle(UpdatePermissionCommand request, CancellationToken cancellationToken)
         {
+            _logger.LogInformation("{@LogCode} | PermissionId: {PermissionId}", PermissionLogs.UpdatePermission_Started, request.Id);
+
             var permission = await _permissionRepository.GetByIdAsync(request.Id, cancellationToken);
 
             if (permission == null)
             {
-                _logger.LogWarning("Permission with ID {PermissionId} not found for update.", request.Id);
+                _logger.LogWarning("{@LogCode} | PermissionId: {PermissionId}", PermissionLogs.UpdatePermission_NotFound, request.Id);
                 return Result.Failure(PermissionErrors.PermissionNotFound);
             }
 
@@ -37,12 +39,16 @@ namespace ControlHub.Application.Permissions.Commands.UpdatePermission
 
             if (updateResult.IsFailure)
             {
+                _logger.LogWarning("{@LogCode} | PermissionId: {PermissionId}, Error: {Error}", 
+                    PermissionLogs.UpdatePermission_Started, // Re-using started or domain error? Reference used domain error but maybe simple started update info.
+                    request.Id, 
+                    updateResult.Error.Code);
                 return updateResult;
             }
 
             await _uow.CommitAsync(cancellationToken);
 
-            _logger.LogInformation("Permission {PermissionId} updated successfully to {Code}.", request.Id, request.Code);
+            _logger.LogInformation("{@LogCode} | PermissionId: {PermissionId}, Code: {Code}", PermissionLogs.UpdatePermission_Success, request.Id, request.Code);
 
             return Result.Success();
         }

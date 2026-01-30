@@ -183,5 +183,12 @@ namespace ControlHub.SharedKernel.Accounts
 
         public static readonly LogCode AddIdentifier_Success =
             new("Account.AddIdentifier.Success", "Identifier added to account successfully");
+
+        // GetAdmins
+        public static readonly LogCode GetAdmins_Started =
+            new("Account.GetAdmins.Started", "Fetching all admin accounts");
+
+        public static readonly LogCode GetAdmins_Success =
+            new("Account.GetAdmins.Success", "Admin accounts retrieved successfully");
     }
 }

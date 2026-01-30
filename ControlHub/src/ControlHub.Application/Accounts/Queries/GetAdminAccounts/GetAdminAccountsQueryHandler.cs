@@ -4,6 +4,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using ControlHub.Application.Accounts.DTOs;
 using ControlHub.Application.Accounts.Interfaces.Repositories;
+using ControlHub.SharedKernel.Accounts;
 using ControlHub.SharedKernel.Results;
 using ControlHub.Application.Common.Settings;
 using MediatR;
@@ -37,7 +38,7 @@ namespace ControlHub.Application.Accounts.Queries.GetAdminAccounts
                 adminRoleId = ControlHub.SharedKernel.Constants.ControlHubDefaults.Roles.AdminId;
             }
 
-            _logger.LogInformation("Fetching admin accounts with RoleId: {RoleId}", adminRoleId);
+            _logger.LogInformation("{@LogCode} | RoleId: {RoleId}", AccountLogs.GetAdmins_Started, adminRoleId);
 
             var accounts = await _accountRepository.GetByRoleIdAsync(adminRoleId, cancellationToken);
             
@@ -47,6 +48,8 @@ namespace ControlHub.Application.Accounts.Queries.GetAdminAccounts
                 a.Role?.Name ?? "Admin",
                 a.IsActive
             )).ToList();
+
+            _logger.LogInformation("{@LogCode} | Count: {Count}", AccountLogs.GetAdmins_Success, dtos.Count);
 
             return Result<List<AccountDto>>.Success(dtos);
         }

@@ -31,6 +31,8 @@ namespace ControlHub.Application.Users.Commands.UpdateMyProfile
         {
             var userId = _currentUserService.UserId;
 
+            _logger.LogInformation("{@LogCode} | AccountId: {AccountId}", UserLogs.UpdateMyProfile_Started, userId);
+
             if (userId == Guid.Empty)
             {
                 return Result.Failure(UserErrors.NotFound);
@@ -46,7 +48,7 @@ namespace ControlHub.Application.Users.Commands.UpdateMyProfile
 
             await _uow.CommitAsync(cancellationToken);
 
-            _logger.LogInformation("Profile updated for user ID: {UserId}", userId);
+            _logger.LogInformation("{@LogCode} | AccountId: {AccountId}", UserLogs.UpdateMyProfile_Success, userId);
 
             return Result.Success();
         }

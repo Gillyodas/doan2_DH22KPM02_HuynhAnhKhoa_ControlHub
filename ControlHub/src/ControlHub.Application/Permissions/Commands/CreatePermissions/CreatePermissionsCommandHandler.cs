@@ -29,10 +29,8 @@ namespace ControlHub.Application.Permissions.Commands.CreatePermissions
 
         public async Task<Result> Handle(CreatePermissionsCommand request, CancellationToken cancellationToken)
         {
-            _logger.LogInformation("--- DEBUG: CreatePermissionsCommandHandler.Handle HIT ---");
-            _logger.LogInformation("{Code}: {Message}. Count={Count}",
-                PermissionLogs.CreatePermissions_Started.Code,
-                PermissionLogs.CreatePermissions_Started.Message,
+            _logger.LogInformation("{@LogCode} | Count: {Count}",
+                PermissionLogs.CreatePermissions_Started,
                 request.Permissions.Count());
 
             // 1. Kiểm tra trùng Code (Giữ nguyên)
@@ -43,9 +41,8 @@ namespace ControlHub.Application.Permissions.Commands.CreatePermissions
 
             if (duplicates.Any())
             {
-                _logger.LogWarning("{Code}: {Message}. Duplicates={Codes}",
-                    PermissionLogs.CreatePermissions_Duplicate.Code,
-                    PermissionLogs.CreatePermissions_Duplicate.Message,
+                _logger.LogWarning("{@LogCode} | Duplicates: {Codes}",
+                    PermissionLogs.CreatePermissions_Duplicate,
                     string.Join(", ", duplicates.Select(d => d.Code)));
 
                 return Result.Failure(PermissionErrors.PermissionCodeAlreadyExists);
@@ -59,10 +56,10 @@ namespace ControlHub.Application.Permissions.Commands.CreatePermissions
 
                 if (permissionResult.IsFailure)
                 {
-                    _logger.LogWarning("Domain validation failed for code '{Code}': {ErrorCode} - {ErrorMessage}",
+                    _logger.LogWarning("{@LogCode} | Code: {Code}, Error: {Error}",
+                        PermissionLogs.CreatePermissions_DomainError,
                         p.Code,
-                        permissionResult.Error.Code,
-                        permissionResult.Error.Message);
+                        permissionResult.Error.Code);
 
                     return Result.Failure(permissionResult.Error);
                 }
@@ -73,9 +70,8 @@ namespace ControlHub.Application.Permissions.Commands.CreatePermissions
             await _permissionRepository.AddRangeAsync(validPermissions, cancellationToken);
             await _uow.CommitAsync(cancellationToken);
 
-            _logger.LogInformation("{Code}: {Message}. Created={Count}",
-                PermissionLogs.CreatePermissions_Success.Code,
-                PermissionLogs.CreatePermissions_Success.Message,
+            _logger.LogInformation("{@LogCode} | Created: {Count}",
+                PermissionLogs.CreatePermissions_Success,
                 validPermissions.Count);
 
             return Result.Success();

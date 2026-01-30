@@ -24,5 +24,25 @@ namespace ControlHub.SharedKernel.Permissions
 
         public static readonly LogCode SearchPermissions_Success =
             new("Permission.Search.Success", "Permission search completed successfully");
+
+        // Update Permission
+        public static readonly LogCode UpdatePermission_Started =
+            new("Permission.Update.Started", "Starting permission update process");
+
+        public static readonly LogCode UpdatePermission_NotFound =
+            new("Permission.Update.NotFound", "Permission not found for update");
+
+        public static readonly LogCode UpdatePermission_Success =
+            new("Permission.Update.Success", "Permission updated successfully");
+
+        // Delete Permission
+        public static readonly LogCode DeletePermission_Started =
+            new("Permission.Delete.Started", "Starting permission deletion process");
+
+        public static readonly LogCode DeletePermission_NotFound =
+            new("Permission.Delete.NotFound", "Permission not found for deletion");
+
+        public static readonly LogCode DeletePermission_Success =
+            new("Permission.Delete.Success", "Permission deleted successfully");
     }
 }

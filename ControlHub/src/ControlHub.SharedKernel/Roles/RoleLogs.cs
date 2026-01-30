@@ -98,5 +98,12 @@ namespace ControlHub.SharedKernel.Roles
 
         public static readonly LogCode DeleteRole_Success =
             new("Role.DeleteRole.Success", "Role deleted successfully");
+
+        // Get Role Permissions
+        public static readonly LogCode GetRolePermissions_Started =
+            new("Role.GetRolePermissions.Started", "Fetching permissions for role");
+
+        public static readonly LogCode GetRolePermissions_Success =
+            new("Role.GetRolePermissions.Success", "Role permissions retrieved successfully");
     }
 }

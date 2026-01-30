@@ -30,7 +30,7 @@ namespace ControlHub.Application.Users.Queries.GetMyProfile
         {
             var userId = _currentUserService.UserId;
 
-            _logger.LogInformation("Getting profile for user ID: {UserId}", userId);
+            _logger.LogInformation("{@LogCode} | AccountId: {AccountId}", UserLogs.GetMyProfile_Started, userId);
 
             if (userId == Guid.Empty)
             {
@@ -42,8 +42,11 @@ namespace ControlHub.Application.Users.Queries.GetMyProfile
 
             if (userDto == null)
             {
+                _logger.LogWarning("{@LogCode} | AccountId: {AccountId}", UserLogs.GetMyProfile_NotFound, userId);
                 return Result<UserDto>.Failure(UserErrors.NotFound);
             }
+
+            _logger.LogInformation("{@LogCode} | AccountId: {AccountId}", UserLogs.GetMyProfile_Success, userId);
 
             return Result<UserDto>.Success(userDto);
         }

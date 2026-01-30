@@ -25,18 +25,20 @@ namespace ControlHub.Application.Permissions.Commands.DeletePermission
 
         public async Task<Result> Handle(DeletePermissionCommand request, CancellationToken cancellationToken)
         {
+            _logger.LogInformation("{@LogCode} | PermissionId: {PermissionId}", PermissionLogs.DeletePermission_Started, request.Id);
+
             var permission = await _permissionRepository.GetByIdAsync(request.Id, cancellationToken);
 
             if (permission == null)
             {
-                _logger.LogWarning("Permission with ID {PermissionId} not found for deletion.", request.Id);
+                _logger.LogWarning("{@LogCode} | PermissionId: {PermissionId}", PermissionLogs.DeletePermission_NotFound, request.Id);
                 return Result.Failure(PermissionErrors.PermissionNotFound);
             }
 
             await _permissionRepository.DeleteAsync(permission, cancellationToken);
             await _uow.CommitAsync(cancellationToken);
 
-            _logger.LogInformation("Permission {PermissionId} deleted successfully.", request.Id);
+            _logger.LogInformation("{@LogCode} | PermissionId: {PermissionId}", PermissionLogs.DeletePermission_Success, request.Id);
 
             return Result.Success();
         }

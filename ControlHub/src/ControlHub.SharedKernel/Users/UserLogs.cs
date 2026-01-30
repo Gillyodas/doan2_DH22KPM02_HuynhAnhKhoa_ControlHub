@@ -49,5 +49,21 @@ namespace ControlHub.SharedKernel.Users
             new("User.GetUsers.Started", "Fetching paginated users");
         public static readonly LogCode GetUsers_Success =
             new("User.GetUsers.Success", "Users retrieved successfully");
+
+        // Profile Management
+        public static readonly LogCode GetMyProfile_Started =
+            new("User.GetMyProfile.Started", "Fetching current user profile");
+
+        public static readonly LogCode GetMyProfile_NotFound =
+            new("User.GetMyProfile.NotFound", "Current user profile not found");
+
+        public static readonly LogCode GetMyProfile_Success =
+            new("User.GetMyProfile.Success", "Current user profile retrieved successfully");
+
+        public static readonly LogCode UpdateMyProfile_Started =
+            new("User.UpdateMyProfile.Started", "Starting update own profile process");
+
+        public static readonly LogCode UpdateMyProfile_Success =
+            new("User.UpdateMyProfile.Success", "Own profile updated successfully");
     }
 }

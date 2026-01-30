@@ -91,8 +91,8 @@ Sau khi phân tích toàn bộ codebase hiện tại, bao gồm các Controller 
 |---------|-------------------|--------------|---------|--------|
 | View Permissions | ✅ `permissions.view` | ✅ `GET /api/permission` | ✅ `permissions-page.tsx` | ✅ Complete |
 | Create Permission | ✅ `permissions.create` | ✅ `POST /api/permission/permissions` | ✅ | ✅ Complete |
-| Update Permission | ✅ `permissions.update` | ❌ **MISSING** | ❌ | � Low Priority |
-| Delete Permission | ✅ `permissions.delete` | ❌ **MISSING** | ❌ | � Low Priority |
+| Update Permission | ✅ `permissions.update` | ✅ `PUT /api/permission/{id}` | ❌ |  Low Priority |
+| Delete Permission | ✅ `permissions.delete` | ✅ `DELETE /api/permission/{id}` | ❌ |  Low Priority |
 
 **Score: 50%** (Acceptable for MVP)
 
