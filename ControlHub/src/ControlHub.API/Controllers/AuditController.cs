@@ -116,29 +116,50 @@ namespace ControlHub.API.Controllers
             });
         }
 
-        // Endpoint 3: Chat với Logs
+        // Endpoint 3: Chat với Logs (Hybrid V1/2.5)
         [Authorize(Policy = "Permission:system.view_logs")]
         [HttpPost("chat")]
-        public async Task<IActionResult> Chat([FromBody] ChatRequest request, [FromQuery] string lang = "en")
+        public async Task<IActionResult> Chat([FromBody] Application.Common.Interfaces.AI.ChatRequest request, [FromQuery] string lang = "en")
         {
-             // Auto-detect language
+            // ─────────────────────────────────────────────────────────
+            // Auto-detect language from header
+            // ─────────────────────────────────────────────────────────
             if (lang == "en" && Request.Headers.ContainsKey("Accept-Language"))
             {
                 var header = Request.Headers["Accept-Language"].ToString();
-                var firstLang = header.Split(',')[0].Split(';')[0]; 
+                var firstLang = header.Split(',')[0].Split(';')[0];
                 lang = firstLang.Contains('-') ? firstLang.Split('-')[0] : firstLang;
             }
 
-            // V2.5 Chat (Scoped to session or general?)
-            // For now, let's keep V1 logic for general time-range chat unless we implement Agentic Chat.
-            // But if correlationId is provided in request, we can use Agent.
-            
-            // Assume V1 logic for now for backward compat
+            // ─────────────────────────────────────────────────────────
+            // V2.5 Path: Use Agentic Service if available
+            // ─────────────────────────────────────────────────────────
+            if (_agentService != null)
+            {
+                var chatResult = await _agentService.ChatAsync(request, lang);
+                
+                return Ok(new
+                {
+                    Question = request.Question,
+                    Answer = chatResult.Answer,
+                    LogCount = chatResult.LogCount,
+                    ToolsUsed = chatResult.ToolsUsed,
+                    Version = "V2.5"
+                });
+            }
+
+            // ─────────────────────────────────────────────────────────
+            // V1 Fallback: Use LogKnowledgeService
+            // ─────────────────────────────────────────────────────────
             var endTime = request.EndTime ?? DateTime.UtcNow;
             var startTime = request.StartTime ?? endTime.AddHours(-24);
 
             var logs = await _logReader.GetLogsByTimeRangeAsync(startTime, endTime);
-            if (logs.Count == 0) return Ok(new { Answer = "No logs found." });
+            
+            if (logs.Count == 0)
+            {
+                return Ok(new { Answer = "No logs found." });
+            }
 
             var answer = await _knowledgeService.ChatWithLogsAsync(request.Question, logs, lang);
 
@@ -146,9 +167,11 @@ namespace ControlHub.API.Controllers
             {
                 Question = request.Question,
                 Answer = answer,
-                LogCount = logs.Count
+                LogCount = logs.Count,
+                Version = "V1"
             });
         }
+
         
         // Endpoint: Get Templates (Debug/UI)
         [Authorize(Policy = "Permission:system.view_logs")]

@@ -23,6 +23,15 @@ project.assets.json
 *.log
 ControlHub/src/ControlHub.API/Logs/
 
+# Database / Vector Store
+**/qdrant_storage/
+**/App_Data/
+
+# Local Configurations & Secrets
+appsettings.json
+appsettings.Development.json
+appsettings.Local.json
+
 # Others
 *.DS_Store
 Thumbs.db

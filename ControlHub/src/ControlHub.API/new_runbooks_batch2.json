@@ -1,0 +1,142 @@
+[
+    {
+        "LogCode": "IdentifierConfig.Create.DuplicateName",
+        "Problem": "Identifier configuration name already exists",
+        "Solution": "1. Check existing configurations to ensure the name is truly unique. 2. If the previous configuration was deleted, ensure it's not a soft-delete conflict. 3. Use a more specific naming convention (e.g., [Project]_[Type]_ID).",
+        "Tags": [
+            "Identifier",
+            "Configuration",
+            "Validation"
+        ]
+    },
+    {
+        "LogCode": "IdentifierConfig.Create.RuleFailed",
+        "Problem": "Failed to add validation rule to configuration (possibly invalid regex or logic)",
+        "Solution": "1. Test the regex pattern independently using a tool like Regex101. 2. Verify that min/max bounds are logical (min <= max). 3. Check if the validator type selected supports the provided parameters. 4. Ensure no conflicting rules are applied to the same identifier.",
+        "Tags": [
+            "Identifier",
+            "Validation",
+            "Regex"
+        ]
+    },
+    {
+        "LogCode": "IdentifierConfig.Update.NotFound",
+        "Problem": "Attempted to update an identifier configuration that does not exist",
+        "Solution": "1. Refresh the configuration list in the UI to ensure you are working with the latest data. 2. Check if another administrator deleted the configuration recently. 3. Verify the Configuration ID in the API request if performing manual updates.",
+        "Tags": [
+            "Identifier",
+            "Admin",
+            "NotFound"
+        ]
+    },
+    {
+        "LogCode": "Permission.Create.Duplicate",
+        "Problem": "Duplicate permission codes found during creation",
+        "Solution": "1. All permission codes (e.g., 'users.view') must be unique system-wide. 2. Search for existing permissions with the same code or prefix. 3. If migrating, filter out duplicates before bulk ingestion. 4. Use the SearchPermissions API to verify existence.",
+        "Tags": [
+            "Permission",
+            "Security",
+            "Validation"
+        ]
+    },
+    {
+        "LogCode": "Permission.Delete.NotFound",
+        "Problem": "Permission not found for deletion",
+        "Solution": "1. The permission might have been already removed. 2. Verify the permission code or ID. 3. Check if the permission is part of a system-protected set that cannot be deleted. 4. Refresh the Permissions Vault UI.",
+        "Tags": [
+            "Permission",
+            "Admin",
+            "NotFound"
+        ]
+    },
+    {
+        "LogCode": "Role.CreateRoles.MissingPermissions",
+        "Problem": "Role creation failed because no permission IDs were provided",
+        "Solution": "1. Every role must have at least one permission to be functional. 2. Ensure you have selected permissions from the 'Permissions Vault' before saving the role. 3. Check the UI/API payload to ensure the Permissions array is not empty.",
+        "Tags": [
+            "Role",
+            "Permission",
+            "Security"
+        ]
+    },
+    {
+        "LogCode": "Role.CreateRoles.NoValidPermissionFound",
+        "Problem": "None of the provided permission IDs exist in the database",
+        "Solution": "1. This usually indicates a sync issue or using legacy permission IDs. 2. Verify that the permissions haven't been renamed or deleted. 3. Check database consistency for the Permissions table. 4. Fetch the latest permissions list before attempting role creation.",
+        "Tags": [
+            "Role",
+            "Permission",
+            "Database"
+        ]
+    },
+    {
+        "LogCode": "Role.UpdateRole.Conflict",
+        "Problem": "Role name conflict detected during update",
+        "Solution": "1. Another role is already using the name you are trying to set. 2. Choose a unique name for the role. 3. Check if you are accidentally trying to rename a role to match an existing system role (e.g., 'admin', 'super_admin').",
+        "Tags": [
+            "Role",
+            "Conflict",
+            "Admin"
+        ]
+    },
+    {
+        "LogCode": "Role.DeleteRole.NotFound",
+        "Problem": "Role to delete was not found in the database",
+        "Solution": "1. The role might have been deleted by another process. 2. Verify the Role ID in the request. 3. Ensure you are not trying to delete a 'Virtual Role' or hardcoded role that doesn't exist in the DB.",
+        "Tags": [
+            "Role",
+            "Admin",
+            "NotFound"
+        ]
+    },
+    {
+        "LogCode": "User.UpdateUser.NotFound",
+        "Problem": "User profile not found for update",
+        "Solution": "1. Verify the User ID (GUID). 2. Check if the user was recently deleted. 3. Ensure the User record exists in the 'Users' table even if the 'Account' exists (User and Account are separate entities).",
+        "Tags": [
+            "User",
+            "Profile",
+            "NotFound"
+        ]
+    },
+    {
+        "LogCode": "User.DeleteUser.NotFound",
+        "Problem": "User not found for deletion",
+        "Solution": "1. User may have been already deleted. 2. If using soft-delete, check if the record is still present with IsDeleted=true. 3. Verify the consistency between Identity Provider and local User database.",
+        "Tags": [
+            "User",
+            "Admin",
+            "NotFound"
+        ]
+    },
+    {
+        "LogCode": "System.InvalidConfiguration",
+        "Problem": "Invalid system configuration value detected in appsettings.json",
+        "Solution": "1. Check 'appsettings.json' or Environment Variables for syntax errors or invalid types. 2. Ensure all required fields for AuditAI, JWT, or DB connection are present. 3. Validate that numeric values (like timeouts) are within reasonable ranges.",
+        "Tags": [
+            "System",
+            "Configuration",
+            "Critical"
+        ]
+    },
+    {
+        "LogCode": "System.ConfigFallback",
+        "Problem": "Configuration invalid or missing, using default fallback value",
+        "Solution": "1. Identify which configuration item is missing from the log details. 2. Explicitly add this configuration to 'appsettings.json' to avoid unpredictable behavior. 3. Check if the environment-specific config (e.g., appsettings.Development.json) is overriding values incorrectly.",
+        "Tags": [
+            "System",
+            "Configuration",
+            "Warning"
+        ]
+    },
+    {
+        "LogCode": "Account.AddIdentifier.Failed",
+        "Problem": "Failed to add identifier to account (possibly duplicate or validation rejection)",
+        "Solution": "1. Check if the identifier is already linked to this or another account. 2. Verify the identifier matches the rules defined in 'IdentifierConfig'. 3. Ensure the account status is 'Active' before attempting to link new identifiers.",
+        "Tags": [
+            "Account",
+            "Identifier",
+            "Validation"
+        ]
+    }
+]

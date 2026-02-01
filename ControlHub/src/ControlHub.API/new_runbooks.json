@@ -1,0 +1,152 @@
+[
+    {
+        "LogCode": "Account.SignIn.InvalidPassword",
+        "Problem": "User login failed due to incorrect password",
+        "Solution": "1. Verify if the user is entering the correct credentials. 2. Check 'AuditLogs' for repeated failed attempts from the same IP (potential brute force). 3. If user forgot password, guide them to use 'ForgotPassword' feature. 4. Consider implementing account lockout after N failed attempts.",
+        "Tags": [
+            "Authentication",
+            "Security",
+            "Login"
+        ]
+    },
+    {
+        "LogCode": "Account.SignIn.AccountNotFound",
+        "Problem": "Login attempt with identifier that does not exist in system",
+        "Solution": "1. Confirm the identifier (email/username) is entered correctly. 2. Check if the account was deleted or disabled in the Admin panel. 3. If legitimate user, guide to registration flow. 4. Monitor for enumeration attacks if pattern is repeated.",
+        "Tags": [
+            "Authentication",
+            "UserManagement",
+            "Security"
+        ]
+    },
+    {
+        "LogCode": "Token.Refresh.TokenInvalid",
+        "Problem": "Refresh token is expired or has already been used",
+        "Solution": "1. This is expected behavior for expired sessions - user should re-login. 2. If user reports frequent logouts, check 'RefreshTokenExpirationDays' in appsettings.json. 3. Verify client is not reusing old tokens (check frontend token refresh logic). 4. For suspicious activity, check if token was revoked due to security event.",
+        "Tags": [
+            "Token",
+            "Session",
+            "Authentication"
+        ]
+    },
+    {
+        "LogCode": "Token.Refresh.NotFound",
+        "Problem": "Refresh token not found in database during token refresh",
+        "Solution": "1. Token may have been revoked or cleaned up - user needs to re-login. 2. Check if token cleanup job is running too aggressively. 3. Verify the refresh token is being sent correctly from client (check request headers/cookies). 4. If persistent issue, check database connectivity.",
+        "Tags": [
+            "Token",
+            "Database",
+            "Authentication"
+        ]
+    },
+    {
+        "LogCode": "Account.ResetPassword.TokenInvalid",
+        "Problem": "Password reset token is invalid or expired",
+        "Solution": "1. Check 'PasswordResetTokenExpirationMinutes' in configuration - may be too short. 2. User may have requested multiple reset emails - only latest token is valid. 3. Verify email links are not being modified by email security scanners. 4. Guide user to request new reset email.",
+        "Tags": [
+            "Password",
+            "Token",
+            "UserExperience"
+        ]
+    },
+    {
+        "LogCode": "Role.AssignRole.UserNotFound",
+        "Problem": "Cannot assign role because user does not exist",
+        "Solution": "1. Verify the UserID is correct and user has not been deleted. 2. Check if user was created in different tenant/context. 3. Refresh the user list in Admin panel before assignment. 4. Check database consistency between Users and Accounts tables.",
+        "Tags": [
+            "Role",
+            "UserManagement",
+            "Admin"
+        ]
+    },
+    {
+        "LogCode": "Role.CreateRoles.DuplicateNames",
+        "Problem": "Attempted to create roles with duplicate names",
+        "Solution": "1. Role names must be unique - check existing roles before creation. 2. Consider using a naming convention (e.g., 'Department_RoleName'). 3. If migrating roles, clean up duplicates in source data. 4. Use SearchRoles API to find existing role with same name.",
+        "Tags": [
+            "Role",
+            "Validation",
+            "Admin"
+        ]
+    },
+    {
+        "LogCode": "Role.DeleteRole.InUse",
+        "Problem": "Cannot delete role because it is currently assigned to users",
+        "Solution": "1. List all users with this role using GetUserRoles API. 2. Either reassign users to a different role or remove role from users first. 3. Consider soft-delete or disabling role instead of hard delete. 4. If bulk operation needed, use batch role reassignment endpoint.",
+        "Tags": [
+            "Role",
+            "UserManagement",
+            "Admin"
+        ]
+    },
+    {
+        "LogCode": "System.ConfigMissing",
+        "Problem": "Master Key is missing in AppSettings configuration",
+        "Solution": "1. CRITICAL: Add 'MasterKey' to appsettings.json or environment variables immediately. 2. This blocks super admin registration - system is incomplete. 3. Generate secure key using cryptographic random generator. 4. Store key securely (Azure Key Vault, AWS Secrets Manager for production).",
+        "Tags": [
+            "Configuration",
+            "Security",
+            "Critical"
+        ]
+    },
+    {
+        "LogCode": "Auth.InvalidMasterKey",
+        "Problem": "Invalid Master Key provided during admin registration attempt",
+        "Solution": "1. SECURITY ALERT: Potential unauthorized admin registration attempt. 2. Check AuditLogs for source IP and user agent. 3. If repeated attempts, consider rate limiting registration endpoint. 4. Verify Master Key has not been compromised - rotate if necessary. 5. Block IP if malicious intent confirmed.",
+        "Tags": [
+            "Security",
+            "Authentication",
+            "Critical"
+        ]
+    },
+    {
+        "LogCode": "Account.ChangePassword.PasswordSameAsOld",
+        "Problem": "User attempted to change password to current password",
+        "Solution": "1. This is a security policy enforcement - password must be different. 2. Inform user through UI that new password cannot match current password. 3. Consider implementing password history check to prevent cycling. 4. Provide password strength guidelines to encourage better passwords.",
+        "Tags": [
+            "Password",
+            "Security",
+            "Validation"
+        ]
+    },
+    {
+        "LogCode": "User.UpdateUser.IdentifierConflict",
+        "Problem": "Cannot update user because new identifier already exists",
+        "Solution": "1. The email/username being set is already used by another account. 2. Search for existing account with that identifier. 3. If duplicate account exists, consider merging or cleanup. 4. Inform user to choose a different identifier.",
+        "Tags": [
+            "User",
+            "Validation",
+            "Conflict"
+        ]
+    },
+    {
+        "LogCode": "Account.RegisterUser.IdentifierExists",
+        "Problem": "Registration failed because identifier (email/username) already exists",
+        "Solution": "1. Normal case - account already exists, guide user to login. 2. If user claims they don't have account, check for typos in identifier. 3. May indicate account created via different auth provider (OAuth). 4. Consider implementing 'Forgot Password' suggestion in UI.",
+        "Tags": [
+            "Registration",
+            "Validation",
+            "UserExperience"
+        ]
+    },
+    {
+        "LogCode": "Account.SignOut.TokenAlreadyRevoked",
+        "Problem": "Token was already revoked before logout attempt",
+        "Solution": "1. This may indicate concurrent logout or session terminated elsewhere. 2. Check if user logged in from multiple devices - one device's logout affects others. 3. If unexpected, verify no unauthorized access to account. 4. Clear local tokens on client side regardless.",
+        "Tags": [
+            "Session",
+            "Token",
+            "Security"
+        ]
+    },
+    {
+        "LogCode": "Role.SetPermissions.RoleNotFound",
+        "Problem": "Cannot set permissions because role does not exist",
+        "Solution": "1. Verify the RoleID is correct and role was not deleted. 2. Refresh role list before permission assignment. 3. Check for race condition if role was recently created. 4. Ensure role creation completed successfully before setting permissions.",
+        "Tags": [
+            "Role",
+            "Permission",
+            "Admin"
+        ]
+    }
+]

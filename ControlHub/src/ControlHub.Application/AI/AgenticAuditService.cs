@@ -91,24 +91,142 @@ namespace ControlHub.Application.AI
             return new AuditResult(aiResponse, parsedTemplates, toolsUsed);
         }
 
-        public async Task<string> ChatAsync(string question, string correlationId, string lang = "en")
+        public async Task<ChatResult> ChatAsync(ChatRequest request, string lang = "en")
         {
-            // Simplified Chat: Just dump context + question
-            var rawLogs = await _logReader.GetLogsByCorrelationIdAsync(correlationId);
+            var toolsUsed = new List<string>();
+
+            // ─────────────────────────────────────────────────────────
+            // Step 1: Fetch Logs
+            // ─────────────────────────────────────────────────────────
+            var rawLogs = await FetchLogsForChatAsync(request);
+            
+            if (!rawLogs.Any())
+            {
+                return new ChatResult(
+                    "No logs found for the specified criteria.", 
+                    0, 
+                    toolsUsed
+                );
+            }
+
+            // ─────────────────────────────────────────────────────────
+            // Step 2: Parse & Sample
+            // ─────────────────────────────────────────────────────────
             var parseResult = await _parserService.ParseLogsAsync(rawLogs);
             var sampledTemplates = _samplingStrategy.Sample(parseResult.Templates, 30);
             
-            var prompt = new StringBuilder();
-            prompt.AppendLine($"Using the following log summary, answer the user question in {lang}.");
-            prompt.AppendLine("Logs (Template View):");
-            foreach(var t in sampledTemplates)
-            {
-                prompt.AppendLine($"[{t.Severity}] x{t.Count} {t.Pattern}");
-            }
-            prompt.AppendLine($"\nUser Question: {question}");
+            toolsUsed.Add("Drain3Parser");
+            toolsUsed.Add("WeightedReservoirSampling");
+
+            // ─────────────────────────────────────────────────────────
+            // Step 3: Runbook Lookup for Error Templates
+            // ─────────────────────────────────────────────────────────
+            var errorTemplates = sampledTemplates
+                .Where(t => t.Severity == "Error" || t.Severity == "Fatal")
+                .Take(3)
+                .ToList();
+
+            var runbookContext = new StringBuilder();
             
-            return await _aiService.AnalyzeLogsAsync(prompt.ToString());
+            if (errorTemplates.Any())
+            {
+                toolsUsed.Add("RunbookLookup");
+                
+                foreach (var tmpl in errorTemplates)
+                {
+                    var runbooks = await _runbookService.FindRelatedRunbooksAsync(tmpl.Pattern);
+                    
+                    foreach (var rb in runbooks)
+                    {
+                        runbookContext.AppendLine($"[Pattern: {tmpl.Pattern}]");
+                        runbookContext.AppendLine($"  Problem: {rb.Problem}");
+                        runbookContext.AppendLine($"  Solution: {rb.Solution}");
+                    }
+                }
+            }
+
+            // ─────────────────────────────────────────────────────────
+            // Step 4: Build Prompt & Call LLM
+            // ─────────────────────────────────────────────────────────
+            var prompt = BuildChatPromptV2(
+                sampledTemplates, 
+                runbookContext.ToString(), 
+                request.Question, 
+                lang
+            );
+            
+            var aiResponse = await _aiService.AnalyzeLogsAsync(prompt);
+
+            return new ChatResult(aiResponse, rawLogs.Count, toolsUsed);
         }
+
+        /// <summary>
+        /// Fetches logs based on ChatRequest (prioritizes CorrelationId over TimeRange).
+        /// </summary>
+        private async Task<List<LogEntry>> FetchLogsForChatAsync(ChatRequest request)
+        {
+            // Priority 1: If CorrelationId is provided, use it
+            if (!string.IsNullOrEmpty(request.CorrelationId))
+            {
+                return await _logReader.GetLogsByCorrelationIdAsync(request.CorrelationId);
+            }
+
+            // Priority 2: Use TimeRange
+            var endTime = request.EndTime ?? DateTime.UtcNow;
+            var startTime = request.StartTime ?? endTime.AddHours(-24);
+
+            return await _logReader.GetLogsByTimeRangeAsync(startTime, endTime);
+        }
+
+        /// <summary>
+        /// Builds the V2.5 chat prompt with templates and runbook context.
+        /// </summary>
+        private string BuildChatPromptV2(
+            List<LogTemplate> templates, 
+            string runbookContext, 
+            string question, 
+            string lang)
+        {
+            var sb = new StringBuilder();
+            
+            // Language mapping
+            string languageName = lang.ToLower() switch
+            {
+                "vi" or "vn" => "Vietnamese",
+                _ => "English"
+            };
+
+            // System instruction
+            sb.AppendLine("You are an expert SRE assistant.");
+            sb.AppendLine($"Task: Answer the user's question based on log data. Respond in {languageName}.");
+            
+            // Runbook context (if any)
+            if (!string.IsNullOrEmpty(runbookContext))
+            {
+                sb.AppendLine("\n=== KNOWLEDGE BASE ===");
+                sb.AppendLine(runbookContext);
+            }
+            
+            // Log summary
+            sb.AppendLine("\n=== LOG SUMMARY ===");
+            sb.AppendLine("Format: [Severity] [Count] Template");
+            foreach (var t in templates)
+            {
+                sb.AppendLine($"[{t.Severity}] [x{t.Count}] {t.Pattern}");
+            }
+            
+            // User question
+            sb.AppendLine("\n=== USER QUESTION ===");
+            sb.AppendLine(question);
+            
+            sb.AppendLine("\n=== INSTRUCTIONS ===");
+            sb.AppendLine("1. Focus on answering the specific question.");
+            sb.AppendLine("2. Reference relevant log patterns.");
+            sb.AppendLine("3. Suggest actionable next steps if applicable.");
+            
+            return sb.ToString();
+        }
+
 
         private string BuildPrompt(List<LogTemplate> templates, string runbookContext, string lang)
         {
