@@ -52,12 +52,16 @@ namespace ControlHub.Application.AI.V3.Agentic.Nodes
                 ? $"{query} (CorrelationId: {correlationId})" 
                 : query;
 
+            // Get pre-retrieved docs if available
+            var preRetrievedDocs = clone.GetContext<List<Common.Interfaces.AI.V3.RAG.RankedDocument>>("pre_retrieval_docs") 
+                                  ?? new List<Common.Interfaces.AI.V3.RAG.RankedDocument>();
+
             // Use reasoning model to create plan
             var context = new ReasoningContext(
                 Query: $"Create a detailed technical investigation plan for: {enhancedQuery}. " +
                        "IMPORTANT: The plan MUST conclude with a final step named 'Root Cause Synthesis and Recommendations' " +
                        "that aggregates all findings into a developer-friendly report.",
-                RetrievedDocs: new List<Common.Interfaces.AI.V3.RAG.RankedDocument>()
+                RetrievedDocs: preRetrievedDocs
             );
 
             var result = await _reasoningModel.ReasonAsync(context, new ReasoningOptions(EnableCoT: true), ct);

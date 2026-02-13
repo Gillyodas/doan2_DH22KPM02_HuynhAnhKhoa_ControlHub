@@ -1,0 +1,241 @@
+📋 Execution Plan (5 steps)
+Step 1: Gather relevant logs: Collect all available logs related to the specified CorrelationId, including application logs, database logs, and system logs.
+Step 2: Review log contents: Analyze the collected logs to identify any patterns, errors, or unusual behavior that may be related to the CorrelationId.
+Step 3: Identify potential causes: Based on the log analysis, identify potential causes for the issue, such as code errors, configuration issues, or system resource constraints.
+Step 4: Verify assumptions: Verify the identified potential causes by reviewing additional logs, checking system metrics, and conducting basic troubleshooting steps.
+Step 5: Root Cause Synthesis and Recommendations: Aggregate all findings to identify the root cause of the issue. Provide developer-friendly recommendations for resolving or mitigating the problem.
+📝 Answer
+🔍 Final Investigation Diagnosis
+Step 5: Step 5: Root Cause Synthesis and Recommendations: Aggregate all findings to identify the root cause of the issue. Provide developer-friendly recommendations for resolving or mitigating the problem. No relevant information available to identify root cause. (Source: 10 logs via SingleHop)
+
+📋 Execution Details
+Step 1: Step 1: Gather relevant logs: Collect all available logs related to the specified CorrelationId, including application logs, database logs, and system logs.
+The gathered logs are all low-scoring (Score: 0.01) and do not provide any relevant information for the task step 'Step 1: Gather relevant logs'. (Source: 10 logs via SingleHop)
+
+Step 2: Step 2: Review log contents: Analyze the collected logs to identify any patterns, errors, or unusual behavior that may be related to the CorrelationId.
+No unusual patterns, errors, or behavior found in the collected logs. (Source: 10 logs via SingleHop)
+
+Step 3: Step 3: Identify potential causes: Based on the log analysis, identify potential causes for the issue, such as code errors, configuration issues, or system resource constraints.
+The potential causes for the issue are unclear due to the lack of relevant log data. (Source: 10 logs via SingleHop)
+
+Step 4: Step 4: Verify assumptions: Verify the identified potential causes by reviewing additional logs, checking system metrics, and conducting basic troubleshooting steps.
+No potential causes identified due to all logs having a score of 0.00. (Source: 10 logs via SingleHop)
+
+Step 5: Step 5: Root Cause Synthesis and Recommendations: Aggregate all findings to identify the root cause of the issue. Provide developer-friendly recommendations for resolving or mitigating the problem.
+No relevant information available to identify root cause. (Source: 10 logs via SingleHop)
+
+Verification Status: ✅ PASSED (Confidence: 95%)
+
+
+
+
+
+
+
+
+
+
+
+
+[19:16:11 INF] Request starting HTTP/2 POST https://localhost:7110/api/audit/v3/investigate - application/json 93
+[19:16:11 INF] CORS policy execution failed.
+[19:16:11 INF] Request origin https://localhost:7110 does not have permission to access the resource.
+[19:16:11 INF] --- PermissionClaimsTransformation: Da thêm 4 quy?n cho Role super_admin. Danh sách: identifiers.create, auth.forgot_password, auth.refresh, auth.change_password ---
+[PermissionAuthorizationHandler] Checking permission: system.view_logs
+[PermissionAuthorizationHandler] Role claim found: 9ba459e9-2a98-43c4-8530-392a63c66f1b
+[PermissionAuthorizationHandler] SuperAdmin ID: 9ba459e9-2a98-43c4-8530-392a63c66f1b
+[PermissionAuthorizationHandler] ? SuperAdmin detected! Bypassing permission check.
+[19:16:11 INF] Executing endpoint 'ControlHub.API.Controllers.AuditController.InvestigateV3 (ControlHub.API)'
+[19:16:11 INF] Route matched with {action = "InvestigateV3", controller = "Audit"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.IActionResult] InvestigateV3(ControlHub.API.Controllers.V3InvestigateRequest) on controller ControlHub.API.Controllers.AuditController (ControlHub.API).
+[19:16:11 INF] Executing action method ControlHub.API.Controllers.AuditController.InvestigateV3 (ControlHub.API) - Validation state: Valid
+[19:16:11 INF] AuditAgentV3 starting investigation: phân tích logs c?a id này
+[19:16:11 INF] Graph execution started
+[19:16:11 INF] Executing node: Planner (iteration 1)
+[19:16:11 INF] ?? Node 'Planner' started (iteration 1)
+info: ControlHub.Application.AI.V3.Agentic.Nodes.PlannerNode[0]
+      Planning for query: phân tích logs c?a id này
+[19:16:11 INF] Reasoning for query: Create a detailed technical investigation plan for: phân tích logs c?a id này (CorrelationId: 6b2532dfccf00538b2cb47c9a3f41c5b). IMPORTANT: The plan MUST conclude with a final step named 'Root Cause Synthesis and Recommendations' that aggregates all findings into a developer-friendly report.
+[19:16:11 INF] Start processing HTTP request POST http://localhost:11434/api/generate
+[19:16:11 INF] Sending HTTP request POST http://localhost:11434/api/generate
+[19:18:02 INF] Received HTTP response headers after 110804.4775ms - 200
+[19:18:02 INF] End processing HTTP request after 110814.6901ms - 200
+[19:18:02 INF] Reasoning completed: 5 steps, confidence 0.95
+info: ControlHub.Application.AI.V3.Agentic.Nodes.PlannerNode[0]
+      Plan created with 5 steps
+[19:18:02 INF] ? Node 'Planner' completed in 110857ms
+[19:18:02 INF] Executing node: Executor (iteration 2)
+[19:18:02 INF] ?? Node 'Executor' started (iteration 2)
+info: ControlHub.Application.AI.V3.Agentic.Nodes.ExecutorNode[0]
+      Executing step 1/5: Step 1: Gather relevant logs: Collect all available logs related to the specified CorrelationId, including application logs, database logs, and system logs.
+[19:18:02 INF] Query complexity: 0.600 (threshold: 0.500), CorrelationId: 6b2532dfccf00538b2cb47c9a3f41c5b
+[19:18:02 INF] CorrelationId provided, forcing SingleHop strategy for log file reading
+[19:18:02 INF] Using single-hop strategy for query: Step 1: Gather relevant logs: Collect all available logs related to the specified CorrelationId, including application logs, database logs, and system logs., CorrelationId: 6b2532dfccf00538b2cb47c9a3f41c5b
+[19:18:02 INF] Reading logs for correlationId: 6b2532dfccf00538b2cb47c9a3f41c5b
+[19:18:03 INF] LogReader: Read 11244 total logs from E:\Project\ControlHub\src\ControlHub.API\Logs. Searching for 6b2532dfccf00538b2cb47c9a3f41c5b
+[19:18:03 INF] LogReader: Found 31 matches for 6b2532dfccf00538b2cb47c9a3f41c5b
+[19:18:03 INF] Found 31 log entries for correlationId: 6b2532dfccf00538b2cb47c9a3f41c5b
+[19:18:03 INF] Searching vector DB collection 'Runbooks' for knowledge/runbooks: Step 1: Gather relevant logs: Collect all available logs related to the specified CorrelationId, including application logs, database logs, and system logs.
+[19:18:03 INF] Start processing HTTP request POST http://localhost:11434/api/embeddings
+[19:18:03 INF] Sending HTTP request POST http://localhost:11434/api/embeddings
+[19:18:03 INF] Received HTTP response headers after 585.6866ms - 200
+[19:18:03 INF] End processing HTTP request after 588.3238ms - 200
+[19:18:03 INF] Start processing HTTP request POST http://localhost:6333/collections/Runbooks/points/search
+[19:18:03 INF] Sending HTTP request POST http://localhost:6333/collections/Runbooks/points/search
+[19:18:03 INF] Received HTTP response headers after 75.9678ms - 200
+[19:18:03 INF] End processing HTTP request after 86.8431ms - 200
+[19:18:04 INF] Reranked 41 candidates to top 10 (Best Score: 0.0136, ModelLoaded: True)
+[19:18:04 INF] Reasoning for query: Based on the following retrieved logs, provide a concise summary of the findings for the task step: 'Step 1: Gather relevant logs: Collect all available logs related to the specified CorrelationId, including application logs, database logs, and system logs.'
+[19:18:04 INF] Start processing HTTP request POST http://localhost:11434/api/generate
+[19:18:04 INF] Sending HTTP request POST http://localhost:11434/api/generate
+[19:18:41 INF] Received HTTP response headers after 36649.8274ms - 200
+[19:18:41 INF] End processing HTTP request after 36652.5803ms - 200
+[19:18:41 INF] Reasoning completed: 3 steps, confidence 0.85
+[19:18:41 INF] ? Node 'Executor' completed in 38691ms
+[19:18:41 INF] Executing node: Executor (iteration 3)
+[19:18:41 INF] ?? Node 'Executor' started (iteration 3)
+info: ControlHub.Application.AI.V3.Agentic.Nodes.ExecutorNode[0]
+      Executing step 2/5: Step 2: Review log contents: Analyze the collected logs to identify any patterns, errors, or unusual behavior that may be related to the CorrelationId.
+[19:18:41 INF] Query complexity: 0.600 (threshold: 0.500), CorrelationId: 6b2532dfccf00538b2cb47c9a3f41c5b
+[19:18:41 INF] CorrelationId provided, forcing SingleHop strategy for log file reading
+[19:18:41 INF] Using single-hop strategy for query: Step 2: Review log contents: Analyze the collected logs to identify any patterns, errors, or unusual behavior that may be related to the CorrelationId., CorrelationId: 6b2532dfccf00538b2cb47c9a3f41c5b
+[19:18:41 INF] Reading logs for correlationId: 6b2532dfccf00538b2cb47c9a3f41c5b
+[19:18:41 INF] LogReader: Read 11270 total logs from E:\Project\ControlHub\src\ControlHub.API\Logs. Searching for 6b2532dfccf00538b2cb47c9a3f41c5b
+[19:18:41 INF] LogReader: Found 33 matches for 6b2532dfccf00538b2cb47c9a3f41c5b
+[19:18:41 INF] Found 33 log entries for correlationId: 6b2532dfccf00538b2cb47c9a3f41c5b
+[19:18:41 INF] Searching vector DB collection 'Runbooks' for knowledge/runbooks: Step 2: Review log contents: Analyze the collected logs to identify any patterns, errors, or unusual behavior that may be related to the CorrelationId.
+[19:18:41 INF] Start processing HTTP request POST http://localhost:11434/api/embeddings
+[19:18:41 INF] Sending HTTP request POST http://localhost:11434/api/embeddings
+[19:18:41 INF] Received HTTP response headers after 16.0428ms - 200
+[19:18:41 INF] End processing HTTP request after 18.4699ms - 200
+[19:18:41 INF] Start processing HTTP request POST http://localhost:6333/collections/Runbooks/points/search
+[19:18:41 INF] Sending HTTP request POST http://localhost:6333/collections/Runbooks/points/search
+[19:18:41 INF] Received HTTP response headers after 15.9416ms - 200
+[19:18:41 INF] End processing HTTP request after 18.2298ms - 200
+[19:18:42 INF] Reranked 43 candidates to top 10 (Best Score: 0.0015, ModelLoaded: True)
+[19:18:42 INF] Reasoning for query: Based on the following retrieved logs, provide a concise summary of the findings for the task step: 'Step 2: Review log contents: Analyze the collected logs to identify any patterns, errors, or unusual behavior that may be related to the CorrelationId.'
+[19:18:42 INF] Start processing HTTP request POST http://localhost:11434/api/generate
+[19:18:42 INF] Sending HTTP request POST http://localhost:11434/api/generate
+[19:19:18 INF] Received HTTP response headers after 36450.7361ms - 200
+[19:19:18 INF] End processing HTTP request after 36453.3053ms - 200
+[19:19:18 INF] Reasoning completed: 3 steps, confidence 0.85
+[19:19:18 INF] ? Node 'Executor' completed in 37574ms
+[19:19:18 INF] Executing node: Executor (iteration 4)
+[19:19:18 INF] ?? Node 'Executor' started (iteration 4)
+info: ControlHub.Application.AI.V3.Agentic.Nodes.ExecutorNode[0]
+      Executing step 3/5: Step 3: Identify potential causes: Based on the log analysis, identify potential causes for the issue, such as code errors, configuration issues, or system resource constraints.
+[19:19:18 INF] Query complexity: 1.000 (threshold: 0.500), CorrelationId: 6b2532dfccf00538b2cb47c9a3f41c5b
+[19:19:18 INF] CorrelationId provided, forcing SingleHop strategy for log file reading
+[19:19:18 INF] Using single-hop strategy for query: Step 3: Identify potential causes: Based on the log analysis, identify potential causes for the issue, such as code errors, configuration issues, or system resource constraints., CorrelationId: 6b2532dfccf00538b2cb47c9a3f41c5b
+[19:19:18 INF] Reading logs for correlationId: 6b2532dfccf00538b2cb47c9a3f41c5b
+[19:19:19 INF] LogReader: Read 11296 total logs from E:\Project\ControlHub\src\ControlHub.API\Logs. Searching for 6b2532dfccf00538b2cb47c9a3f41c5b
+[19:19:19 INF] LogReader: Found 35 matches for 6b2532dfccf00538b2cb47c9a3f41c5b
+[19:19:19 INF] Found 35 log entries for correlationId: 6b2532dfccf00538b2cb47c9a3f41c5b
+[19:19:19 INF] Searching vector DB collection 'Runbooks' for knowledge/runbooks: Step 3: Identify potential causes: Based on the log analysis, identify potential causes for the issue, such as code errors, configuration issues, or system resource constraints.
+[19:19:19 INF] Start processing HTTP request POST http://localhost:11434/api/embeddings
+[19:19:19 INF] Sending HTTP request POST http://localhost:11434/api/embeddings
+[19:19:19 INF] Received HTTP response headers after 16.8418ms - 200
+[19:19:19 INF] End processing HTTP request after 19.236ms - 200
+[19:19:19 INF] Start processing HTTP request POST http://localhost:6333/collections/Runbooks/points/search
+[19:19:19 INF] Sending HTTP request POST http://localhost:6333/collections/Runbooks/points/search
+[19:19:19 INF] Received HTTP response headers after 23.3064ms - 200
+[19:19:19 INF] End processing HTTP request after 25.9786ms - 200
+[19:19:19 INF] Reranked 45 candidates to top 10 (Best Score: 0.0036, ModelLoaded: True)
+[19:19:19 INF] Reasoning for query: Based on the following retrieved logs, provide a concise summary of the findings for the task step: 'Step 3: Identify potential causes: Based on the log analysis, identify potential causes for the issue, such as code errors, configuration issues, or system resource constraints.'
+[19:19:19 INF] Start processing HTTP request POST http://localhost:11434/api/generate
+[19:19:19 INF] Sending HTTP request POST http://localhost:11434/api/generate
+[19:19:54 INF] Received HTTP response headers after 34534.5921ms - 200
+[19:19:54 INF] End processing HTTP request after 34538.0729ms - 200
+[19:19:54 INF] Reasoning completed: 3 steps, confidence 0.85
+[19:19:54 INF] ? Node 'Executor' completed in 35737ms
+[19:19:54 INF] Executing node: Executor (iteration 5)
+[19:19:54 INF] ?? Node 'Executor' started (iteration 5)
+info: ControlHub.Application.AI.V3.Agentic.Nodes.ExecutorNode[0]
+      Executing step 4/5: Step 4: Verify assumptions: Verify the identified potential causes by reviewing additional logs, checking system metrics, and conducting basic troubleshooting steps.
+[19:19:54 INF] Query complexity: 1.000 (threshold: 0.500), CorrelationId: 6b2532dfccf00538b2cb47c9a3f41c5b
+[19:19:54 INF] CorrelationId provided, forcing SingleHop strategy for log file reading
+[19:19:54 INF] Using single-hop strategy for query: Step 4: Verify assumptions: Verify the identified potential causes by reviewing additional logs, checking system metrics, and conducting basic troubleshooting steps., CorrelationId: 6b2532dfccf00538b2cb47c9a3f41c5b
+[19:19:54 INF] Reading logs for correlationId: 6b2532dfccf00538b2cb47c9a3f41c5b
+[19:19:55 INF] LogReader: Read 11322 total logs from E:\Project\ControlHub\src\ControlHub.API\Logs. Searching for 6b2532dfccf00538b2cb47c9a3f41c5b
+[19:19:55 INF] LogReader: Found 37 matches for 6b2532dfccf00538b2cb47c9a3f41c5b
+[19:19:55 INF] Found 37 log entries for correlationId: 6b2532dfccf00538b2cb47c9a3f41c5b
+[19:19:55 INF] Searching vector DB collection 'Runbooks' for knowledge/runbooks: Step 4: Verify assumptions: Verify the identified potential causes by reviewing additional logs, checking system metrics, and conducting basic troubleshooting steps.
+[19:19:55 INF] Start processing HTTP request POST http://localhost:11434/api/embeddings
+[19:19:55 INF] Sending HTTP request POST http://localhost:11434/api/embeddings
+[19:19:55 INF] Received HTTP response headers after 15.0558ms - 200
+[19:19:55 INF] End processing HTTP request after 16.9362ms - 200
+[19:19:55 INF] Start processing HTTP request POST http://localhost:6333/collections/Runbooks/points/search
+[19:19:55 INF] Sending HTTP request POST http://localhost:6333/collections/Runbooks/points/search
+[19:19:55 INF] Received HTTP response headers after 25.2107ms - 200
+[19:19:55 INF] End processing HTTP request after 27.3905ms - 200
+[19:19:55 INF] Reranked 47 candidates to top 10 (Best Score: 0.0011, ModelLoaded: True)
+[19:19:55 INF] Reasoning for query: Based on the following retrieved logs, provide a concise summary of the findings for the task step: 'Step 4: Verify assumptions: Verify the identified potential causes by reviewing additional logs, checking system metrics, and conducting basic troubleshooting steps.'
+[19:19:55 INF] Start processing HTTP request POST http://localhost:11434/api/generate
+[19:19:55 INF] Sending HTTP request POST http://localhost:11434/api/generate
+[19:20:30 INF] Received HTTP response headers after 34981.568ms - 200
+[19:20:30 INF] End processing HTTP request after 34984.3685ms - 200
+[19:20:30 INF] Reasoning completed: 3 steps, confidence 0.85
+[19:20:30 INF] ? Node 'Executor' completed in 36186ms
+[19:20:30 INF] Executing node: Executor (iteration 6)
+[19:20:30 INF] ?? Node 'Executor' started (iteration 6)
+info: ControlHub.Application.AI.V3.Agentic.Nodes.ExecutorNode[0]
+      Executing step 5/5: Step 5: Root Cause Synthesis and Recommendations: Aggregate all findings to identify the root cause of the issue. Provide developer-friendly recommendations for resolving or mitigating the problem.
+[19:20:30 INF] Query complexity: 1.000 (threshold: 0.500), CorrelationId: 6b2532dfccf00538b2cb47c9a3f41c5b
+[19:20:30 INF] CorrelationId provided, forcing SingleHop strategy for log file reading
+[19:20:30 INF] Using single-hop strategy for query: Step 5: Root Cause Synthesis and Recommendations: Aggregate all findings to identify the root cause of the issue. Provide developer-friendly recommendations for resolving or mitigating the problem., CorrelationId: 6b2532dfccf00538b2cb47c9a3f41c5b
+[19:20:30 INF] Reading logs for correlationId: 6b2532dfccf00538b2cb47c9a3f41c5b
+[19:20:31 INF] LogReader: Read 11348 total logs from E:\Project\ControlHub\src\ControlHub.API\Logs. Searching for 6b2532dfccf00538b2cb47c9a3f41c5b
+[19:20:31 INF] LogReader: Found 39 matches for 6b2532dfccf00538b2cb47c9a3f41c5b
+[19:20:31 INF] Found 39 log entries for correlationId: 6b2532dfccf00538b2cb47c9a3f41c5b
+[19:20:31 INF] Searching vector DB collection 'Runbooks' for knowledge/runbooks: Step 5: Root Cause Synthesis and Recommendations: Aggregate all findings to identify the root cause of the issue. Provide developer-friendly recommendations for resolving or mitigating the problem.
+[19:20:31 INF] Start processing HTTP request POST http://localhost:11434/api/embeddings
+[19:20:31 INF] Sending HTTP request POST http://localhost:11434/api/embeddings
+[19:20:31 INF] Received HTTP response headers after 18.2115ms - 200
+[19:20:31 INF] End processing HTTP request after 20.2955ms - 200
+[19:20:31 INF] Start processing HTTP request POST http://localhost:6333/collections/Runbooks/points/search
+[19:20:31 INF] Sending HTTP request POST http://localhost:6333/collections/Runbooks/points/search
+[19:20:31 INF] Received HTTP response headers after 35.7208ms - 200
+[19:20:31 INF] End processing HTTP request after 38.3819ms - 200
+[19:20:31 INF] Reranked 49 candidates to top 10 (Best Score: 0.0019, ModelLoaded: True)
+[19:20:31 INF] Reasoning for query: Based on the following retrieved logs, provide a concise summary of the findings for the task step: 'Step 5: Root Cause Synthesis and Recommendations: Aggregate all findings to identify the root cause of the issue. Provide developer-friendly recommendations for resolving or mitigating the problem.'
+[19:20:31 INF] Start processing HTTP request POST http://localhost:11434/api/generate
+[19:20:31 INF] Sending HTTP request POST http://localhost:11434/api/generate
+[19:21:17 INF] Received HTTP response headers after 46207.2232ms - 200
+[19:21:17 INF] End processing HTTP request after 46209.8591ms - 200
+[19:21:17 INF] Reasoning completed: 0 steps, confidence 0.95
+[19:21:17 INF] ? Node 'Executor' completed in 47400ms
+[19:21:17 INF] Executing node: Verifier (iteration 7)
+[19:21:17 INF] ?? Node 'Verifier' started (iteration 7)
+info: ControlHub.Application.AI.V3.Agentic.Nodes.VerifierNode[0]
+      Checking 5 execution results for retrieved docs
+info: ControlHub.Application.AI.V3.Agentic.Nodes.VerifierNode[0]
+      hasRetrievedDocs = True, correlationId = 6b2532dfccf00538b2cb47c9a3f41c5b
+info: ControlHub.Application.AI.V3.Agentic.Nodes.VerifierNode[0]
+      Verifying 5 execution results
+info: ControlHub.Application.AI.V3.Agentic.Nodes.VerifierNode[0]
+      Total retrieved docs from all steps: 50
+info: ControlHub.Application.AI.V3.Agentic.Nodes.VerifierNode[0]
+      Verification PASSED: 0.95 (50 docs)
+[19:21:17 INF] ? Node 'Verifier' completed in 7ms
+[19:21:17 INF] Reached END node
+[19:21:17 INF] ?? Graph completed in 306471ms (7 iterations)
+[19:21:17 INF] Graph execution completed in 7 iterations
+[19:21:17 INF] Investigation complete: PASSED, 7 iterations
+[19:21:17 INF] Executed action method ControlHub.API.Controllers.AuditController.InvestigateV3 (ControlHub.API), returned result Microsoft.AspNetCore.Mvc.OkObjectResult in 306485.5599ms.
+[19:21:17 INF] Executing OkObjectResult, writing value of type 'ControlHub.API.Controllers.V3InvestigateResponse'.
+[19:21:18 INF] Executed action ControlHub.API.Controllers.AuditController.InvestigateV3 (ControlHub.API) in 306579.4909ms
+[19:21:18 INF] Executed endpoint 'ControlHub.API.Controllers.AuditController.InvestigateV3 (ControlHub.API)'
+[19:21:18 INF] Request finished HTTP/2 POST https://localhost:7110/api/audit/v3/investigate - 200 null application/json; charset=utf-8 306606.2702ms
+[19:21:18 INF] Request starting HTTP/2 GET https://localhost:7110/api/audit/v3/trace - application/json null
+[19:21:18 INF] --- PermissionClaimsTransformation: Da thêm 4 quy?n cho Role super_admin. Danh sách: identifiers.create, auth.forgot_password, auth.refresh, auth.change_password ---
+[PermissionAuthorizationHandler] Checking permission: system.view_logs
+[PermissionAuthorizationHandler] Role claim found: 9ba459e9-2a98-43c4-8530-392a63c66f1b
+[PermissionAuthorizationHandler] SuperAdmin ID: 9ba459e9-2a98-43c4-8530-392a63c66f1b
+[PermissionAuthorizationHandler] ? SuperAdmin detected! Bypassing permission check.
+[19:21:18 INF] Executing endpoint 'ControlHub.API.Controllers.AuditController.GetAgentTrace (ControlHub.API)'
+[19:21:18 INF] Route matched with {action = "GetAgentTrace", controller = "Audit"}. Executing controller action with signature Microsoft.AspNetCore.Mvc.IActionResult GetAgentTrace() on controller ControlHub.API.Controllers.AuditController (ControlHub.API).
+[19:21:18 INF] Executing action method ControlHub.API.Controllers.AuditController.GetAgentTrace (ControlHub.API) - Validation state: Valid
+[19:21:18 INF] Executed action method ControlHub.API.Controllers.AuditController.GetAgentTrace (ControlHub.API), returned result Microsoft.AspNetCore.Mvc.OkObjectResult in 1.4607ms.
+[19:21:18 INF] Executing OkObjectResult, writing value of type '<>f__AnonymousType9`2[[System.Collections.Generic.IReadOnlyList`1[[ControlHub.Application.Common.Interfaces.AI.V3.Observability.AgentEvent, ControlHub.Application, Version=1.0.2.0, Culture=neutral, PublicKeyToken=null]], System.Private.CoreLib, Version=8.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e],[System.String, System.Private.CoreLib, Version=8.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]]'.
+[19:21:18 INF] Executed action ControlHub.API.Controllers.AuditController.GetAgentTrace (ControlHub.API) in 23.7245ms
+[19:21:18 INF] Executed endpoint 'ControlHub.API.Controllers.AuditController.GetAgentTrace (ControlHub.API)'
+[19:21:18 INF] Request finished HTTP/2 GET https://localhost:7110/api/audit/v3/trace - 200 null application/json; charset=utf-8 161.5285ms

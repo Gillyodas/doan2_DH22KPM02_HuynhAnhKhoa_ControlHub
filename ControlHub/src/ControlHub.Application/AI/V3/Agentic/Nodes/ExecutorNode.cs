@@ -50,53 +50,88 @@ namespace ControlHub.Application.AI.V3.Agentic.Nodes
                 return clone;
             }
 
-            if (currentStep >= plan.Count)
+            // Phase 4 & 5: Batch Execution - Nếu currentStep > 0 nghĩa là đã thực hiện batch rồi
+            if (currentStep > 0)
             {
-                // All steps completed
+                _logger.LogInformation("Batch execution already completed. Skipping Executor loop.");
                 clone.Context["execution_complete"] = true;
-                _logger.LogInformation("All {Count} steps executed", plan.Count);
                 return clone;
             }
 
-            var step = plan[currentStep];
-            _logger.LogInformation("Executing step {StepNum}/{Total}: {Step}", 
-                currentStep + 1, plan.Count, step);
+            _logger.LogInformation("Starting BATCH execution for {Count} steps", plan.Count);
 
             // Get correlationId from state (if provided)
             var correlationId = clone.GetContext<string>("correlationId");
+            var originalQuery = clone.GetContext<string>("query") ?? "IT Investigation";
 
-            // Use RAG to gather relevant information
-            var ragOptions = new AgenticRAGOptions(CorrelationId: correlationId);
-            var ragResult = await _agenticRag.RetrieveAsync(step, ragOptions, ct);
+            // Step 1: Use pre-retrieved docs or call RAG once with the combined query
+            var preRetrievedDocs = clone.GetContext<List<RankedDocument>>("pre_retrieval_docs");
+            List<RankedDocument> evidence;
 
-            string stepResult;
-            if (ragResult.Documents.Any())
+            if (preRetrievedDocs != null && preRetrievedDocs.Any())
             {
-                // Use reasoning model to interpret and summarize the findings for THIS step
-                var analysisContext = new ReasoningContext(
-                    Query: $"Based on the following retrieved logs, provide a concise summary of the findings for the task step: '{step}'",
-                    RetrievedDocs: ragResult.Documents
-                );
-
-                var analysis = await _reasoningModel.ReasonAsync(analysisContext, new ReasoningOptions(Temperature: 0.3f), ct);
-                stepResult = $"Step {currentStep + 1}: {step}\n{analysis.Solution}\n_(Source: {ragResult.Documents.Count} logs via {ragResult.StrategyUsed})_";
+                _logger.LogInformation("Executor: Using {Count} pre-retrieved evidence documents", preRetrievedDocs.Count);
+                evidence = preRetrievedDocs;
             }
             else
             {
-                stepResult = $"Step {currentStep + 1}: {step}\nNo relevant log entries found for this step.";
+                _logger.LogInformation("Executor: No pre-retrieval docs found, performing batch retrieval");
+                var ragOptions = new AgenticRAGOptions(CorrelationId: correlationId);
+                var ragResult = await _agenticRag.RetrieveAsync(originalQuery, ragOptions, ct);
+                evidence = ragResult.Documents;
             }
 
-            // Store execution result
-            var executionResults = clone.GetContext<List<string>>("execution_results") ?? new List<string>();
-            executionResults.Add(stepResult);
-            clone.Context["execution_results"] = executionResults;
+            // Step 2: Build batch execution prompt
+            var planText = string.Join("\n", plan.Select((s, i) => $"{i + 1}. {s}"));
+            var batchPrompt = 
+                $"You are executing a technical investigation plan gộp (batch execution).\n\n" +
+                $"## Original Query:\n{originalQuery}\n\n" +
+                $"## Investigation Plan:\n{planText}\n\n" +
+                $"## Tasks:\n" +
+                $"Analyze the provided evidence and provide detailed findings for EACH step of the plan. " +
+                $"Format your response as a numbered list of findings corresponding to the plan steps.\n" +
+                $"IMPORTANT: Your output for each step MUST start with 'Step X: [Step Name]' followed by the findings.";
 
-            // Move to next step
-            clone.Context["current_step"] = currentStep + 1;
+            var batchContext = new ReasoningContext(
+                Query: batchPrompt,
+                RetrievedDocs: evidence
+            );
+
+            // Step 3: Single LLM call for the entire plan
+            var analysis = await _reasoningModel.ReasonAsync(
+                batchContext, 
+                new ReasoningOptions(Temperature: 0.2f, MaxTokens: 4096), // Lower temp for factual accuracy
+                ct
+            );
+
+            // Step 4: Parse and store results
+            var executionResults = new List<string>();
+            
+            // If the LLM returned structured steps in its response, use them. 
+            // Otherwise, we'll use its 'solution' text which contains the findings.
+            if (analysis.Steps.Any() && analysis.Steps.Count >= plan.Count)
+            {
+                for (int i = 0; i < plan.Count; i++)
+                {
+                    var findings = analysis.Steps[i];
+                    executionResults.Add($"Step {i + 1}: {plan[i]}\n{findings}\n_(Source: {evidence.Count} logs via BatchExecution)_");
+                }
+            }
+            else
+            {
+                // Fallback: Use the whole solution text if it couldn't be parsed into steps
+                // We'll split by "Step X:" manually if needed, or just use the whole thing for the last step
+                _logger.LogWarning("LLM did not return structured steps for batch execution, using fallback parsing");
+                executionResults.Add($"Batch Findings for all {plan.Count} steps:\n{analysis.Solution}\n_(Source: {evidence.Count} logs via BatchExecution)_");
+            }
+
+            clone.Context["execution_results"] = executionResults;
+            clone.Context["current_step"] = plan.Count; // Mark all steps as complete
+            clone.Context["execution_complete"] = true;
 
             clone.Messages.Add(new AgentMessage(
-                "tool",
-                $"Executed step {currentStep + 1}: {step}",
+                "assistant",
+                $"Executed all {plan.Count} steps in batch mode: {analysis.Solution.Take(100)}...",
                 "Executor"
             ));
 

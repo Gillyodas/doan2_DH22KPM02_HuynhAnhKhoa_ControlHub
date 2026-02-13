@@ -77,7 +77,6 @@ namespace ControlHub.Application.Accounts.Commands.RegisterSupperAdmin
             Guid superAdminRoleId;
             if (!Guid.TryParse(roleIdConfig, out superAdminRoleId))
             {
-                // 2. Nếu Config thiếu hoặc sai -> Fallback về ID mặc định của thư viện
                 _logger.LogInformation("RoleSettings:SuperAdminRoleId is missing or invalid. Using Default ID.");
                 superAdminRoleId = ControlHubDefaults.Roles.SuperAdminId;
             }

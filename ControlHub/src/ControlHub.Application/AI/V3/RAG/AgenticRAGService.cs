@@ -26,6 +26,10 @@ namespace ControlHub.Application.AI.V3.RAG
         private readonly ILogReaderService _logReader;
         private readonly IConfiguration _config;
         private readonly ILogger<AgenticRAGService> _logger;
+        
+        // Cache per-investigation (Scoped lifetime)
+        private List<RetrievedDocument>? _cachedLogDocs;
+        private string? _cachedCorrelationId;
 
         public AgenticRAGService(
             IVectorDatabase vectorDb,
@@ -93,26 +97,67 @@ namespace ControlHub.Application.AI.V3.RAG
 
             var candidates = new List<RetrievedDocument>();
 
-            // Step 1: If correlationId provided, read from log files
+            // Step 1: If correlationId provided, read from log files (with caching)
             if (!string.IsNullOrEmpty(options.CorrelationId))
             {
-                _logger.LogInformation("Reading logs for correlationId: {Id}", options.CorrelationId);
-                
-                var logEntries = await _logReader.GetLogsByCorrelationIdAsync(options.CorrelationId);
-                
-                _logger.LogInformation("Found {Count} log entries for correlationId: {Id}", 
-                    logEntries.Count, options.CorrelationId);
+                if (_cachedCorrelationId == options.CorrelationId && _cachedLogDocs != null)
+                {
+                    _logger.LogInformation("Using cached log entries for correlationId: {Id} ({Count} docs)", 
+                        options.CorrelationId, _cachedLogDocs.Count);
+                    candidates.AddRange(_cachedLogDocs);
+                }
+                else
+                {
+                    _logger.LogInformation("Reading logs for correlationId: {Id}", options.CorrelationId);
+                    
+                    var logEntries = await _logReader.GetLogsByCorrelationIdAsync(options.CorrelationId);
+                    
+                    _logger.LogInformation("Found {Count} log entries for correlationId: {Id}", 
+                        logEntries.Count, options.CorrelationId);
 
-                // Convert log entries to documents
-                foreach (var entry in logEntries)
+                    var logDocs = new List<RetrievedDocument>();
+                    // Convert log entries to documents
+                    foreach (var entry in logEntries)
+                    {
+                        var content = $"[{entry.Timestamp:yyyy-MM-dd HH:mm:ss}] [{entry.Level}] {entry.Message}";
+                        logDocs.Add(new RetrievedDocument(
+                            content,
+                            0.95f, // High score for direct matches
+                            new Dictionary<string, string> 
+                            { 
+                                ["source"] = "log_file",
+                                ["timestamp"] = entry.Timestamp.ToString("o"),
+                                ["level"] = entry.Level
+                            }
+                        ));
+                    }
+                    
+                    _cachedLogDocs = logDocs;
+                    _cachedCorrelationId = options.CorrelationId;
+                    candidates.AddRange(logDocs);
+                }
+            }
+            // Step 1b: If NO correlationId, read recent logs for general context
+            else
+            {
+                _logger.LogInformation("No correlationId, fetching recent Warning/Error logs for context");
+                var recentLogs = await _logReader.GetRecentLogsAsync(100);
+                
+                var importantLogs = recentLogs.Where(l => 
+                    l.Level == "Warning" || l.Level == "Error" || l.Level == "Fatal" || l.Level == "Critical"
+                ).ToList();
+
+                _logger.LogInformation("Found {Count} important entries in recent logs", importantLogs.Count);
+
+                foreach (var entry in importantLogs)
                 {
                     var content = $"[{entry.Timestamp:yyyy-MM-dd HH:mm:ss}] [{entry.Level}] {entry.Message}";
                     candidates.Add(new RetrievedDocument(
                         content,
-                        0.95f, // High score for direct matches
+                        0.7f, // Medium score for context logs
                         new Dictionary<string, string> 
                         { 
-                            ["source"] = "log_file",
+                            ["source"] = "recent_logs",
                             ["timestamp"] = entry.Timestamp.ToString("o"),
                             ["level"] = entry.Level
                         }

@@ -74,22 +74,18 @@ namespace ControlHub.Application.AI.V3.Agentic.Nodes
                 }
             }
 
-            // Case 2: Has execution results - check if docs were retrieved
-            _logger.LogInformation("Checking {Count} execution results for retrieved docs", executionResults.Count);
+            // Case 2: Has execution results - check if docs were retrieved (Phase 6: Structured Verification)
+            var preRetrievedDocs = clone.GetContext<List<Common.Interfaces.AI.V3.RAG.RankedDocument>>("pre_retrieval_docs");
+            var totalRetrievedDocs = preRetrievedDocs?.Count ?? 0;
+            var hasRetrievedDocs = totalRetrievedDocs > 0;
             
-            // Flexible detection for both "Retrieved X" and "Source: X logs" formats
-            var hasRetrievedDocs = executionResults.Any(r => 
-                (r.Contains("Retrieved") && !r.Contains("Retrieved 0")) ||
-                (r.Contains("Source:") && !r.Contains("Source: 0 logs"))
-            );
-            
-            _logger.LogInformation("hasRetrievedDocs = {Value}, correlationId = {Id}", 
-                hasRetrievedDocs, correlationId ?? "null");
+            _logger.LogInformation("Structured Verification: totalRetrievedDocs = {Count}, correlationId = {Id}", 
+                totalRetrievedDocs, correlationId ?? "null");
 
             // Only fail if we have a correlationId but NO docs were retrieved
             if (!hasRetrievedDocs && !string.IsNullOrEmpty(correlationId))
             {
-                _logger.LogWarning("No documents retrieved for correlationId: {Id}", correlationId);
+                _logger.LogWarning("Verification FAILED: No documents retrieved for correlationId: {Id}", correlationId);
                 
                 clone.Context["verification_passed"] = false;
                 clone.Context["verification_score"] = 0f;
@@ -103,31 +99,15 @@ namespace ControlHub.Application.AI.V3.Agentic.Nodes
                 return clone;
             }
 
-            _logger.LogInformation("Verifying {Count} execution results", executionResults.Count);
-
-            // Parse execution results to count retrieved docs
-            var totalRetrievedDocs = 0;
-            foreach (var result in executionResults)
-            {
-                // Support both: "Retrieved (\d+) relevant docs" AND "Source: (\d+) logs"
-                var match = System.Text.RegularExpressions.Regex.Match(result, @"(Retrieved|Source:)\s+(\d+)");
-                if (match.Success && int.TryParse(match.Groups[2].Value, out var count))
-                {
-                    totalRetrievedDocs += count;
-                }
-            }
-
-            _logger.LogInformation("Total retrieved docs from all steps: {Count}", totalRetrievedDocs);
-
             // If we have retrieved docs, verification passes with good confidence
-            if (totalRetrievedDocs > 0)
+            if (hasRetrievedDocs)
             {
                 // Calculate confidence based on number of docs retrieved
                 var confidence = Math.Min(0.5f + (totalRetrievedDocs * 0.05f), 0.95f);
                 
                 clone.Context["verification_passed"] = true;
                 clone.Context["verification_score"] = confidence;
-                clone.Context["verification_reason"] = $"Found {totalRetrievedDocs} relevant log entries";
+                clone.Context["verification_reason"] = $"Found {totalRetrievedDocs} relevant documents (Logs/Knowledge)";
 
                 clone.Messages.Add(new AgentMessage(
                     "assistant",

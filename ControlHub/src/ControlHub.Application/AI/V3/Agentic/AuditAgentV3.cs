@@ -66,15 +66,7 @@ namespace ControlHub.Application.AI.V3.Agentic
             // Executor loops until all steps done
             _graph.AddConditionalEdges("Executor", state =>
             {
-                var clone = state as AgentState;
-                var plan = clone?.GetContext<List<string>>("plan");
-                var currentStep = clone?.GetContextValue("current_step", 0) ?? 0;
-                
-                // If more steps, continue executing
-                if (plan != null && currentStep < plan.Count)
-                    return "Executor";
-                
-                // All steps done, go to verifier
+                // Sau khi Batch Execution xong (current_step = plan.Count), đi thẳng Verifier
                 return "Verifier";
             });
 
@@ -124,6 +116,14 @@ namespace ControlHub.Application.AI.V3.Agentic
 
             initialState.Messages.Add(new AgentMessage("user", query));
 
+            // Phase 3: Pre-Retrieval - Lấy evidence trước khi plan để LLM không bị "mù"
+            _logger.LogInformation("AgenticRAG: Performing pre-retrieval for query: {Query}", query);
+            var ragOptions = new AgenticRAGOptions(CorrelationId: correlationId);
+            var ragResult = await _agenticRag.RetrieveAsync(query, ragOptions, ct);
+            
+            initialState.Context["pre_retrieval_docs"] = ragResult.Documents;
+            initialState.Context["pre_retrieval_strategy"] = ragResult.StrategyUsed.ToString();
+
             // Run graph
             var finalState = (AgentState)await _graph.RunAsync(initialState, ct);
 
@@ -160,7 +160,8 @@ namespace ControlHub.Application.AI.V3.Agentic
             // 1. FINAL DIAGNOSIS (If available from synthesis step)
             var results = state.GetContext<List<string>>("execution_results") ?? new List<string>();
             var synthesis = results.LastOrDefault(r => r.Contains("Root Cause Synthesis", StringComparison.OrdinalIgnoreCase) 
-                                                     || r.Contains("ID_", StringComparison.OrdinalIgnoreCase));
+                                                     || r.Contains("ID_", StringComparison.OrdinalIgnoreCase)
+                                                     || r.Contains("BatchExecution", StringComparison.OrdinalIgnoreCase));
 
             if (!string.IsNullOrEmpty(synthesis))
             {
