@@ -1,0 +1,92 @@
+{
+    "SystemKnowledge": {
+        "architecture": {
+            "description": "ASP.NET Core Clean Architecture: API → Application → Domain → Infrastructure",
+            "database": "SQL Server via Entity Framework Core",
+            "auth": "JWT Bearer tokens via ASP.NET Core Identity",
+            "logging": "Serilog with structured JSON format"
+        },
+        "modules": {
+            "Permission": {
+                "description": "Manages system permissions and access control",
+                "validation_rules": [
+                    "Permission code must match regex: ^[a-z][a-z0-9_.]*$",
+                    "Code must be lowercase English alphanumeric with dots and underscores only",
+                    "Unicode characters (e.g., Vietnamese diacritics) are not allowed in codes"
+                ],
+                "error_codes": {
+                    "Permission.InvalidFormat": "Permission code contains invalid characters or format",
+                    "Permission.NotFound": "Permission with specified ID/code does not exist",
+                    "Permission.DuplicateCode": "Permission code already exists in the system"
+                },
+                "endpoints": [
+                    "POST /api/Permission/permissions — Create new permission",
+                    "GET /api/Permission/permissions — List all permissions",
+                    "PUT /api/Permission/permissions/{id} — Update existing permission",
+                    "DELETE /api/Permission/permissions/{id} — Delete permission"
+                ]
+            },
+            "Auth": {
+                "description": "Authentication and authorization module",
+                "validation_rules": [
+                    "JWT token expiry: 5 minutes (access), 7 days (refresh)",
+                    "Password minimum length: 6 characters",
+                    "Account lockout after 5 failed attempts"
+                ],
+                "error_codes": {
+                    "Auth.InvalidCredentials": "Username or password is incorrect",
+                    "Auth.TokenExpired": "JWT access token has expired, use refresh token",
+                    "Auth.AccountLocked": "Account is locked due to repeated failed login attempts",
+                    "Auth.RefreshTokenExpired": "Refresh token has expired, user must login again"
+                },
+                "endpoints": [
+                    "POST /api/Auth/login — User login",
+                    "POST /api/Auth/refresh — Refresh access token",
+                    "POST /api/Auth/change-password — Change user password"
+                ]
+            },
+            "Role": {
+                "description": "Role management module",
+                "validation_rules": [
+                    "Role name must be unique",
+                    "SuperAdmin role cannot be modified or deleted"
+                ],
+                "error_codes": {
+                    "Role.NotFound": "Role with specified ID does not exist",
+                    "Role.DuplicateName": "Role name already exists",
+                    "Role.CannotModifySuperAdmin": "SuperAdmin role is read-only"
+                },
+                "endpoints": [
+                    "POST /api/Role — Create new role",
+                    "GET /api/Role — List all roles",
+                    "PUT /api/Role/{id} — Update role"
+                ]
+            },
+            "User": {
+                "description": "User management module",
+                "error_codes": {
+                    "User.NotFound": "User with specified ID does not exist",
+                    "User.DuplicateEmail": "Email address already in use",
+                    "User.InvalidEmail": "Email format is invalid"
+                },
+                "endpoints": [
+                    "GET /api/User — List users",
+                    "POST /api/User — Create user",
+                    "PUT /api/User/{id} — Update user"
+                ]
+            },
+            "Identifier": {
+                "description": "System identifier/code management",
+                "error_codes": {
+                    "Identifier.NotFound": "Identifier does not exist",
+                    "Identifier.DuplicateCode": "Identifier code already exists"
+                }
+            }
+        },
+        "infrastructure_notes": [
+            "CORS policy logs at INFO level are normal framework behavior — not errors",
+            "PermissionClaimsTransformation adds permissions to SuperAdmin automatically",
+            "PermissionAuthorizationHandler bypasses checks for SuperAdmin role"
+        ]
+    }
+}

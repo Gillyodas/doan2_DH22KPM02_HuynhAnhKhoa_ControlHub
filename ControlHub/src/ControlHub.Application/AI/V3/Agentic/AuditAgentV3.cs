@@ -22,6 +22,7 @@ namespace ControlHub.Application.AI.V3.Agentic
         private readonly IReasoningModel _reasoningModel;
         private readonly IAgenticRAG _agenticRag;
         private readonly IConfidenceScorer _confidenceScorer;
+        private readonly ISystemKnowledgeProvider _knowledgeProvider;
         private readonly IAgentObserver _observer;
         private readonly ILoggerFactory _loggerFactory;
         private readonly ILogger<AuditAgentV3> _logger;
@@ -31,6 +32,7 @@ namespace ControlHub.Application.AI.V3.Agentic
             IReasoningModel reasoningModel,
             IAgenticRAG agenticRag,
             IConfidenceScorer confidenceScorer,
+            ISystemKnowledgeProvider knowledgeProvider,
             IAgentObserver observer,
             ILoggerFactory loggerFactory,
             ILogger<AuditAgentV3> logger)
@@ -39,6 +41,7 @@ namespace ControlHub.Application.AI.V3.Agentic
             _reasoningModel = reasoningModel;
             _agenticRag = agenticRag;
             _confidenceScorer = confidenceScorer;
+            _knowledgeProvider = knowledgeProvider;
             _observer = observer;
             _loggerFactory = loggerFactory;
             _logger = logger;
@@ -51,7 +54,7 @@ namespace ControlHub.Application.AI.V3.Agentic
         {
             // Create nodes using the shared logger factory
             var plannerNode = new PlannerNode(_reasoningModel, _observer, _loggerFactory.CreateLogger<PlannerNode>());
-            var executorNode = new ExecutorNode(_agenticRag, _reasoningModel, _observer, _loggerFactory.CreateLogger<ExecutorNode>());
+            var executorNode = new ExecutorNode(_agenticRag, _reasoningModel, _knowledgeProvider, _observer, _loggerFactory.CreateLogger<ExecutorNode>());
             var verifierNode = new VerifierNode(_confidenceScorer, _observer, _loggerFactory.CreateLogger<VerifierNode>());
             var reflectorNode = new ReflectorNode(_reasoningModel, _observer, _loggerFactory.CreateLogger<ReflectorNode>());
 

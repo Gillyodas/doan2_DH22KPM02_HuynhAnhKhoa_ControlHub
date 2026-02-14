@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
+using ControlHub.Application.Common.Interfaces.AI.V3;
 using ControlHub.Application.Common.Interfaces.AI.V3.Agentic;
 using ControlHub.Application.Common.Interfaces.AI.V3.RAG;
 using ControlHub.Application.Common.Interfaces.AI.V3.Reasoning;
@@ -17,6 +18,7 @@ namespace ControlHub.Application.AI.V3.Agentic.Nodes
     {
         private readonly IAgenticRAG _agenticRag;
         private readonly IReasoningModel _reasoningModel;
+        private readonly ISystemKnowledgeProvider _knowledgeProvider;
         private readonly IAgentObserver? _observer;
         private readonly ILogger<ExecutorNode> _logger;
 
@@ -26,11 +28,13 @@ namespace ControlHub.Application.AI.V3.Agentic.Nodes
         public ExecutorNode(
             IAgenticRAG agenticRag, 
             IReasoningModel reasoningModel,
+            ISystemKnowledgeProvider knowledgeProvider,
             IAgentObserver? observer, 
             ILogger<ExecutorNode> logger)
         {
             _agenticRag = agenticRag;
             _reasoningModel = reasoningModel;
+            _knowledgeProvider = knowledgeProvider;
             _observer = observer;
             _logger = logger;
         }
@@ -100,6 +104,16 @@ namespace ControlHub.Application.AI.V3.Agentic.Nodes
                 sb.AppendLine();
                 sb.AppendLine("IMPORTANT: Use EXACTLY these values in your diagnosis. Do NOT hallucinate different endpoints or error codes.");
                 evidenceSection = sb.ToString();
+
+                // Inject system knowledge for the detected error code
+                if (logMeta.ErrorCode != null)
+                {
+                    var knowledge = _knowledgeProvider.GetKnowledgeForErrorCode(logMeta.ErrorCode);
+                    if (!string.IsNullOrEmpty(knowledge))
+                    {
+                        evidenceSection += "\n" + knowledge;
+                    }
+                }
             }
 
             // Step 3: Build batch execution prompt — demands diagnosis, not step echo

@@ -14,6 +14,9 @@ namespace ControlHub.API
         {
             var builder = WebApplication.CreateBuilder(args);
 
+            // Load AI system knowledge config
+            builder.Configuration.AddJsonFile("AI/system_knowledge.json", optional: true, reloadOnChange: true);
+
             // =========================================================================
             // 1. HOST CONFIGURATION (Logging, Metrics, Tracing)
             // Phần này thuộc về "Ứng dụng chứa" (Host App). 

@@ -33,6 +33,7 @@ using ControlHub.Infrastructure.AI;
 using ControlHub.Infrastructure.AI.V3.ML;
 using ControlHub.Infrastructure.AI.V3.RAG;
 using ControlHub.Infrastructure.AI.V3.Reasoning;
+using ControlHub.Infrastructure.AI.V3;
 using ControlHub.Application.AI.V3;
 using ControlHub.Application.AI.V3.RAG;
 using ControlHub.Application.AI.V3.Reasoning;
@@ -234,6 +235,7 @@ namespace ControlHub
                 services.AddScoped<IMultiHopRetriever, MultiHopRetriever>();
                 services.AddScoped<IAgenticRAG, AgenticRAGService>();
                 services.AddScoped<ILogEvidenceProcessor, LogEvidenceProcessor>();
+                services.AddSingleton<ISystemKnowledgeProvider, SystemKnowledgeProvider>();
                 
                 // V3 Phase 3: Reasoning Integration
                 services.AddHttpClient<IReasoningModel, ReasoningModelClient>(client =>
