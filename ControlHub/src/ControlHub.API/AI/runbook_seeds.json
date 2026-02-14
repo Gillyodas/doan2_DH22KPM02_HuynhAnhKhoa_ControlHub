@@ -1,0 +1,79 @@
+[
+    {
+        "error_pattern": "Permission.InvalidFormat",
+        "title": "Invalid Permission Code Format",
+        "symptoms": [
+            "HTTP 400 BadRequest",
+            "InvalidFormat error code"
+        ],
+        "root_cause": "User input contains invalid characters. Permission code must match regex ^[a-z][a-z0-9_.]*$ — no Unicode, spaces, or uppercase allowed. Common cause: pasting from Word or typing Vietnamese characters.",
+        "solution": "1. Validate input on frontend before submitting: ensure code matches ^[a-z][a-z0-9_.]*$\n2. Add client-side regex validation on permission code input field\n3. Show user-friendly error: 'Chỉ cho phép chữ thường, số, dấu chấm và gạch dưới'",
+        "prevention": "Add input validation middleware that rejects non-ASCII permission codes at API gateway level.",
+        "severity": "Low",
+        "related_modules": [
+            "Permission",
+            "Role"
+        ]
+    },
+    {
+        "error_pattern": "Auth.InvalidCredentials",
+        "title": "Invalid Login Credentials",
+        "symptoms": [
+            "HTTP 401 Unauthorized",
+            "Invalid username or password"
+        ],
+        "root_cause": "User provided incorrect username or password combination. May indicate: typo in credentials, capslock on, or brute force attempt.",
+        "solution": "1. Verify username exists in database\n2. Check if account is locked (failed attempts >= 5)\n3. If legitimate user: reset password via forgot password flow\n4. If suspicious: check for multiple failed attempts from same IP",
+        "prevention": "Enable account lockout policy. Monitor failed login patterns for security.",
+        "severity": "Medium",
+        "related_modules": [
+            "Auth",
+            "User"
+        ]
+    },
+    {
+        "error_pattern": "Auth.TokenExpired",
+        "title": "JWT Access Token Expired",
+        "symptoms": [
+            "HTTP 401 Unauthorized",
+            "Token has expired"
+        ],
+        "root_cause": "JWT access token has exceeded its 5-minute TTL. This is NORMAL behavior — the client should automatically refresh using the refresh token endpoint.",
+        "solution": "1. Client calls POST /api/Auth/refresh with the refresh token\n2. If refresh token also expired (7 days), user must login again\n3. Check if frontend has automatic token refresh interceptor",
+        "prevention": "Implement axios/fetch interceptor that detects 401 and automatically calls refresh endpoint before retrying the original request.",
+        "severity": "Low",
+        "related_modules": [
+            "Auth"
+        ]
+    },
+    {
+        "error_pattern": "Role.NotFound",
+        "title": "Role Not Found",
+        "symptoms": [
+            "HTTP 404 NotFound",
+            "Role does not exist"
+        ],
+        "root_cause": "Requested role ID does not exist in database. May be deleted or wrong UUID provided.",
+        "solution": "1. Verify the role ID in the request\n2. Check if role was recently deleted\n3. List available roles via GET /api/Role",
+        "prevention": "Frontend should validate role selection against available roles list.",
+        "severity": "Low",
+        "related_modules": [
+            "Role"
+        ]
+    },
+    {
+        "error_pattern": "User.DuplicateEmail",
+        "title": "Duplicate Email Address",
+        "symptoms": [
+            "HTTP 409 Conflict",
+            "Email already in use"
+        ],
+        "root_cause": "Another user account already exists with the provided email address.",
+        "solution": "1. Search for existing user with the email\n2. If same person: update existing account instead of creating new\n3. If different person: use a different email",
+        "prevention": "Frontend should check email availability before form submission.",
+        "severity": "Low",
+        "related_modules": [
+            "User"
+        ]
+    }
+]

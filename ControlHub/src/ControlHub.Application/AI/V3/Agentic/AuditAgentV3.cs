@@ -208,6 +208,24 @@ namespace ControlHub.Application.AI.V3.Agentic
                 sb.AppendLine("> **Agent Reflexion:** " + analysis);
             }
 
+            // 4. RUNBOOK SUGGESTION — detect new error patterns
+            var ragMeta = state.GetContext<Dictionary<string, object>>("rag_metadata");
+            if (ragMeta != null && ragMeta.TryGetValue("evidence_metadata", out var eMeta) && eMeta is LogMetadata meta && meta.ErrorCode != null)
+            {
+                // Check if any runbook was retrieved for this error code
+                var docs = state.GetContext<List<RankedDocument>>("pre_retrieval_docs") ?? new List<RankedDocument>();
+                var hasRunbook = docs.Any(d => 
+                    d.Metadata.GetValueOrDefault("is_runbook") == "true" && 
+                    d.Content.Contains(meta.ErrorCode, System.StringComparison.OrdinalIgnoreCase));
+
+                if (!hasRunbook)
+                {
+                    sb.AppendLine();
+                    sb.AppendLine("---");
+                    sb.AppendLine($"> 💡 **New pattern detected**: No existing runbook for `{meta.ErrorCode}`. Consider adding a runbook for faster resolution next time.");
+                }
+            }
+
             return sb.ToString();
         }
     }
