@@ -1,5 +1,5 @@
-using ControlHub.Domain.Permissions;
-using ControlHub.Domain.Roles;
+using ControlHub.Domain.AccessControl.Entities;
+using ControlHub.Domain.AccessControl.Aggregates;
 
 namespace ControlHub.Infrastructure.RolePermissions
 {

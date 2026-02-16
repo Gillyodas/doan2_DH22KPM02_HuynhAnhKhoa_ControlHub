@@ -1,5 +1,5 @@
 using ControlHub.Application.Permissions.Interfaces.Repositories;
-using ControlHub.Domain.Permissions;
+using ControlHub.Domain.AccessControl.Entities;
 using Microsoft.Extensions.Caching.Memory;
 
 namespace ControlHub.Infrastructure.Permissions.Repositories;

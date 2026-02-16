@@ -1,4 +1,4 @@
-using ControlHub.Domain.Permissions;
+using ControlHub.Domain.AccessControl.Entities;
 using ControlHub.SharedKernel.Permissions;
 using FluentValidation;
 

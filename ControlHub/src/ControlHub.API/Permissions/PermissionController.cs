@@ -3,7 +3,7 @@ using ControlHub.API.Permissions.ViewModels.Requests;
 using ControlHub.Application.Common.DTOs;
 using ControlHub.Application.Permissions.Commands.CreatePermissions;
 using ControlHub.Application.Permissions.Queries.SearchPermissions;
-using ControlHub.Domain.Permissions;
+using ControlHub.Domain.AccessControl.Entities;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;

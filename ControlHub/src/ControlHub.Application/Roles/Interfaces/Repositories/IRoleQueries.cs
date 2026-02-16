@@ -1,5 +1,5 @@
 using ControlHub.Application.Common.DTOs;
-using ControlHub.Domain.Roles;
+using ControlHub.Domain.AccessControl.Aggregates;
 
 namespace ControlHub.Application.Roles.Interfaces.Repositories
 {

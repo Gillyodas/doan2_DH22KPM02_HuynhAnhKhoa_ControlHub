@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using ControlHub.Application.Roles.Interfaces.Repositories;
-using ControlHub.Domain.Roles;
+using ControlHub.Domain.AccessControl.Aggregates;
 using Microsoft.Extensions.Caching.Memory;
 
 namespace ControlHub.Infrastructure.Roles.Repositories

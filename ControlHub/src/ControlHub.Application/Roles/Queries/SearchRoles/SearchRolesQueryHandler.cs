@@ -1,6 +1,6 @@
 using ControlHub.Application.Common.DTOs;
 using ControlHub.Application.Roles.Interfaces.Repositories;
-using ControlHub.Domain.Roles;
+using ControlHub.Domain.AccessControl.Aggregates;
 using ControlHub.SharedKernel.Results;
 using ControlHub.SharedKernel.Roles;
 using MediatR;

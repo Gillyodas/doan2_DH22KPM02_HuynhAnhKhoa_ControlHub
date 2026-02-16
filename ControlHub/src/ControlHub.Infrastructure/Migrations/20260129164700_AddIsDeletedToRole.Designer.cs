@@ -113,7 +113,7 @@ namespace ControlHub.Infrastructure.Migrations
                     b.ToTable("OutboxMessages", "ControlHub");
                 });
 
-            modelBuilder.Entity("ControlHub.Domain.Permissions.Permission", b =>
+            modelBuilder.Entity("ControlHub.Domain.AccessControl.Entities.Permission", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
@@ -137,7 +137,7 @@ namespace ControlHub.Infrastructure.Migrations
                     b.ToTable("Permissions", "ControlHub");
                 });
 
-            modelBuilder.Entity("ControlHub.Domain.Roles.Role", b =>
+            modelBuilder.Entity("ControlHub.Domain.AccessControl.Aggregates.Role", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
@@ -254,7 +254,7 @@ namespace ControlHub.Infrastructure.Migrations
 
             modelBuilder.Entity("ControlHub.Domain.Identity.Aggregates.Account", b =>
                 {
-                    b.HasOne("ControlHub.Domain.Roles.Role", "Role")
+                    b.HasOne("ControlHub.Domain.AccessControl.Aggregates.Role", "Role")
                         .WithMany()
                         .HasForeignKey("RoleId")
                         .OnDelete(DeleteBehavior.Restrict)
@@ -401,13 +401,13 @@ namespace ControlHub.Infrastructure.Migrations
 
             modelBuilder.Entity("ControlHub.Infrastructure.RolePermissions.RolePermissionEntity", b =>
                 {
-                    b.HasOne("ControlHub.Domain.Permissions.Permission", "Permission")
+                    b.HasOne("ControlHub.Domain.AccessControl.Entities.Permission", "Permission")
                         .WithMany()
                         .HasForeignKey("PermissionId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("ControlHub.Domain.Roles.Role", "Role")
+                    b.HasOne("ControlHub.Domain.AccessControl.Aggregates.Role", "Role")
                         .WithMany()
                         .HasForeignKey("RoleId")
                         .OnDelete(DeleteBehavior.Cascade)

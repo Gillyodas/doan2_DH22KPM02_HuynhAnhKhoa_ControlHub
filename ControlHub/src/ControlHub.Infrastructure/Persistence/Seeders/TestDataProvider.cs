@@ -3,10 +3,10 @@ using ControlHub.Domain.Identity.Enums;
 using ControlHub.Domain.Identity.Identifiers;
 using ControlHub.Domain.Identity.Security;
 using ControlHub.Domain.Identity.ValueObjects;
-using ControlHub.Domain.Roles;
+using ControlHub.Domain.AccessControl.Aggregates;
 using ControlHub.Domain.Identity.Entities;
 using ControlHub.SharedKernel.Constants;
-using ControlHub.Domain.Permissions;
+using ControlHub.Domain.AccessControl.Entities;
 using ControlHub.Infrastructure.Accounts.Security;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
@@ -198,7 +198,7 @@ namespace ControlHub.Infrastructure.Persistence.Seeders
 
                 var permissionEntities = allPermissions.Select(p => 
                 {
-                    var result = Domain.Permissions.Permission.Create(Guid.NewGuid(), p, GetPermissionDescription(p));
+                    var result = Domain.AccessControl.Entities.Permission.Create(Guid.NewGuid(), p, GetPermissionDescription(p));
                     if (result.IsFailure)
                         throw new InvalidOperationException($"Failed to create permission {p}: {result.Error}");
                     return result.Value;

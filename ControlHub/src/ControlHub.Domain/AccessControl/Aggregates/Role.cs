@@ -1,9 +1,9 @@
-using ControlHub.Domain.Permissions;
+using ControlHub.Domain.AccessControl.Entities;
 using ControlHub.SharedKernel.Results;
 using ControlHub.SharedKernel.Roles;
 // using ControlHub.SharedKernel.Roles; // (Gi? s? b?n có RoleErrors ? dây)
 
-namespace ControlHub.Domain.Roles
+namespace ControlHub.Domain.AccessControl.Aggregates
 {
     public class Role
     {

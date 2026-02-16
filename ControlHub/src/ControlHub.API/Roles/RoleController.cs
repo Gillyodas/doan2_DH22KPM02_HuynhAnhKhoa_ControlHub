@@ -8,7 +8,7 @@ using ControlHub.Application.Roles.Commands.CreateRoles;
 using ControlHub.Application.Roles.Commands.SetRolePermissions;
 using ControlHub.Application.Roles.Queries.GetRolePermissions;
 using ControlHub.Application.Roles.Queries.SearchRoles;
-using ControlHub.Domain.Roles;
+using ControlHub.Domain.AccessControl.Aggregates;
 using ControlHub.SharedKernel.Results;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;

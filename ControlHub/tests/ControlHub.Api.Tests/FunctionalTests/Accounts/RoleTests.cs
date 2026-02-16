@@ -22,7 +22,7 @@ public class RoleTests : BaseIntegrationTest
     {
         // Arrange
         await AuthenticateAsSuperAdminAsync();
-        var permissionId = (await DbContext.Set<ControlHub.Domain.Permissions.Permission>().FirstAsync()).Id;
+        var permissionId = (await DbContext.Set<ControlHub.Domain.AccessControl.Entities.Permission>().FirstAsync()).Id;
 
         var request = new CreateRolesRequest
         {
@@ -56,7 +56,7 @@ public class RoleTests : BaseIntegrationTest
         
         // Arrange
         await AuthenticateAsSuperAdminAsync();
-        var permissionId = (await DbContext.Set<ControlHub.Domain.Permissions.Permission>().FirstAsync()).Id;
+        var permissionId = (await DbContext.Set<ControlHub.Domain.AccessControl.Entities.Permission>().FirstAsync()).Id;
 
         var request = new CreateRolesRequest
         {
@@ -108,7 +108,7 @@ public class RoleTests : BaseIntegrationTest
     {
         // Arrange
         await AuthenticateAsSuperAdminAsync();
-        var permissionId = (await DbContext.Set<ControlHub.Domain.Permissions.Permission>().FirstAsync()).Id;
+        var permissionId = (await DbContext.Set<ControlHub.Domain.AccessControl.Entities.Permission>().FirstAsync()).Id;
 
         var request = new CreateRolesRequest
         {
@@ -136,7 +136,7 @@ public class RoleTests : BaseIntegrationTest
         // This is a test for the fix of the "silent filtering" bug.
         // Arrange
         await AuthenticateAsSuperAdminAsync();
-        var permissionId = (await DbContext.Set<ControlHub.Domain.Permissions.Permission>().FirstAsync()).Id;
+        var permissionId = (await DbContext.Set<ControlHub.Domain.AccessControl.Entities.Permission>().FirstAsync()).Id;
         string duplicateName = "Duplicate Role " + Guid.NewGuid().ToString().Substring(0, 8);
 
         // First creation

@@ -22,7 +22,7 @@ namespace ControlHub.Infrastructure.Permissions.Repositories
             _logger = logger;
         }
 
-        public async Task AddAsync(ControlHub.Domain.Permissions.Permission permission, CancellationToken cancellationToken)
+        public async Task AddAsync(ControlHub.Domain.AccessControl.Entities.Permission permission, CancellationToken cancellationToken)
         {
             try
             {
@@ -35,7 +35,7 @@ namespace ControlHub.Infrastructure.Permissions.Repositories
             }
         }
 
-        public async Task AddRangeAsync(IEnumerable<ControlHub.Domain.Permissions.Permission> permissions, CancellationToken cancellationToken)
+        public async Task AddRangeAsync(IEnumerable<ControlHub.Domain.AccessControl.Entities.Permission> permissions, CancellationToken cancellationToken)
         {
             try
             {
@@ -48,7 +48,7 @@ namespace ControlHub.Infrastructure.Permissions.Repositories
             }
         }
 
-        public async Task DeleteAsync(ControlHub.Domain.Permissions.Permission permission, CancellationToken cancellationToken)
+        public async Task DeleteAsync(ControlHub.Domain.AccessControl.Entities.Permission permission, CancellationToken cancellationToken)
         {
             try
             {
@@ -62,7 +62,7 @@ namespace ControlHub.Infrastructure.Permissions.Repositories
             }
         }
 
-        public async Task DeleteRangeAsync(IEnumerable<ControlHub.Domain.Permissions.Permission> permissions, CancellationToken cancellationToken)
+        public async Task DeleteRangeAsync(IEnumerable<ControlHub.Domain.AccessControl.Entities.Permission> permissions, CancellationToken cancellationToken)
         {
             try
             {
@@ -76,14 +76,14 @@ namespace ControlHub.Infrastructure.Permissions.Repositories
             }
         }
 
-        public async Task<IEnumerable<ControlHub.Domain.Permissions.Permission>> GetByIdsAsync(IEnumerable<Guid> permissionIds, CancellationToken cancellationToken)
+        public async Task<IEnumerable<ControlHub.Domain.AccessControl.Entities.Permission>> GetByIdsAsync(IEnumerable<Guid> permissionIds, CancellationToken cancellationToken)
         {
             return await _db.Permissions
                 .Where(p => permissionIds.Contains(p.Id))
                 .ToListAsync(cancellationToken);
         }
 
-        public async Task<ControlHub.Domain.Permissions.Permission?> GetByIdAsync(Guid id, CancellationToken cancellationToken)
+        public async Task<ControlHub.Domain.AccessControl.Entities.Permission?> GetByIdAsync(Guid id, CancellationToken cancellationToken)
         {
             return await _db.Permissions
                 .FirstOrDefaultAsync(p => p.Id == id, cancellationToken);

@@ -2,7 +2,7 @@ using System.Text.RegularExpressions;
 using ControlHub.SharedKernel.Permissions;
 using ControlHub.SharedKernel.Results;
 
-namespace ControlHub.Domain.Permissions
+namespace ControlHub.Domain.AccessControl.Entities
 {
     public class Permission
     {

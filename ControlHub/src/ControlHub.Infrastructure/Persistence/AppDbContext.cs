@@ -1,8 +1,8 @@
 using ControlHub.Domain.Identity.Aggregates;
 using ControlHub.Domain.Identity.Identifiers;
 using ControlHub.Domain.Outboxs;
-using ControlHub.Domain.Permissions;
-using ControlHub.Domain.Roles;
+using ControlHub.Domain.AccessControl.Entities;
+using ControlHub.Domain.AccessControl.Aggregates;
 using ControlHub.Domain.Tokens;
 using ControlHub.Domain.Identity.Entities;
 using ControlHub.Infrastructure.RolePermissions;

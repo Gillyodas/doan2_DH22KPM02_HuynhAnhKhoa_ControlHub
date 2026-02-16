@@ -3,7 +3,7 @@ using ControlHub.Domain.Identity.Enums;
 using ControlHub.Domain.Identity.Identifiers;
 using ControlHub.Domain.Identity.Security;
 using ControlHub.Domain.Identity.ValueObjects;
-using ControlHub.Domain.Roles;
+using ControlHub.Domain.AccessControl.Aggregates;
 using ControlHub.Domain.Identity.Entities;
 using ControlHub.SharedKernel.Constants;
 using Microsoft.EntityFrameworkCore;

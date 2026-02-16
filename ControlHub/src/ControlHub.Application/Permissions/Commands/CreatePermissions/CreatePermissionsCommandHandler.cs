@@ -1,6 +1,6 @@
 using ControlHub.Application.Common.Persistence;
 using ControlHub.Application.Permissions.Interfaces.Repositories;
-using ControlHub.Domain.Permissions;
+using ControlHub.Domain.AccessControl.Entities;
 using ControlHub.SharedKernel.Permissions;
 using ControlHub.SharedKernel.Results;
 using MediatR;

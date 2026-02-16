@@ -1,5 +1,5 @@
 using ControlHub.Application.Roles.DTOs;
-using ControlHub.Domain.Roles;
+using ControlHub.Domain.AccessControl.Aggregates;
 using ControlHub.SharedKernel.Results;
 using MediatR;
 
