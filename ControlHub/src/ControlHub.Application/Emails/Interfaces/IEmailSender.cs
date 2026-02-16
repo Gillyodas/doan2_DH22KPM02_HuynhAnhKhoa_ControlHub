@@ -1,4 +1,4 @@
-﻿namespace ControlHub.Application.Emails.Interfaces
+namespace ControlHub.Application.Emails.Interfaces
 {
     public interface IEmailSender
     {

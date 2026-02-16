@@ -1,4 +1,4 @@
-﻿using ControlHub.API.Controllers;
+using ControlHub.API.Controllers;
 using ControlHub.API.Users.ViewModels.Request;
 using ControlHub.API.Users.ViewModels.Response;
 using ControlHub.Application.Users.Commands.UpdateUsername;

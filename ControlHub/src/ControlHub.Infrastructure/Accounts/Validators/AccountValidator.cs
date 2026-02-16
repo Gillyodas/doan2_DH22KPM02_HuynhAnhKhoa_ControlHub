@@ -1,6 +1,6 @@
-﻿using ControlHub.Application.Accounts.Interfaces;
+using ControlHub.Application.Accounts.Interfaces;
 using ControlHub.Application.Accounts.Interfaces.Repositories;
-using ControlHub.Domain.Accounts.Enums;
+using ControlHub.Domain.Identity.Enums;
 
 namespace ControlHub.Infrastructure.Accounts.Validators
 {

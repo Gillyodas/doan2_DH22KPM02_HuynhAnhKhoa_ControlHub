@@ -3,7 +3,7 @@ using System.Net.Http.Json;
 using ControlHub.Api.Tests.Abstractions;
 using ControlHub.Application.Accounts.Commands.CreateIdentifier;
 using ControlHub.Application.Accounts.DTOs;
-using ControlHub.Domain.Accounts.Enums;
+using ControlHub.Domain.Identity.Enums;
 using FluentAssertions;
 using Microsoft.EntityFrameworkCore;
 using Xunit;

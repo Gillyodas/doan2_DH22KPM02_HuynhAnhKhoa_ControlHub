@@ -1,11 +1,11 @@
-﻿using ControlHub.Application.Accounts.Commands.CreateAccount;
+using ControlHub.Application.Accounts.Commands.CreateAccount;
 using ControlHub.Application.Accounts.Commands.RegisterUser;
 using ControlHub.Application.Accounts.Interfaces;
 using ControlHub.Application.Accounts.Interfaces.Repositories;
 using ControlHub.Application.Common.Persistence;
-using ControlHub.Domain.Accounts;
-using ControlHub.Domain.Accounts.Enums;
-using ControlHub.Domain.Accounts.ValueObjects;
+using ControlHub.Domain.Identity.Aggregates;
+using ControlHub.Domain.Identity.Enums;
+using ControlHub.Domain.Identity.ValueObjects;
 using ControlHub.SharedKernel.Accounts;
 using ControlHub.SharedKernel.Common.Errors;
 using ControlHub.SharedKernel.Results;
@@ -29,7 +29,7 @@ namespace ControlHub.Application.Tests.AccountsTests
 
         public RegisterUserCommandHandlerTests()
         {
-            // Setup Happy Path: Config mặc định đúng
+            // Setup Happy Path: Config m?c d?nh d�ng
             _configMock.Setup(x => x["RoleSettings:UserRoleId"]).Returns(_validRoleId);
 
             _handler = new RegisterUserCommandHandler(
@@ -43,15 +43,15 @@ namespace ControlHub.Application.Tests.AccountsTests
         }
 
         // =================================================================================
-        // NHÓM 1: BUG HUNTING - CẤU HÌNH & HỆ THỐNG (CONFIGURATION)
-        // Mục tiêu: Bắt lỗi Handler bị Crash khi config thiếu hoặc sai.
+        // NH�M 1: BUG HUNTING - C?U H�NH & H? TH?NG (CONFIGURATION)
+        // M?c ti�u: B?t l?i Handler b? Crash khi config thi?u ho?c sai.
         // =================================================================================
 
         [Fact]
         public async Task Handle_ShouldReturnFailure_WhenUserRoleIdConfigIsMissing()
         {
-            // 🐛 BUG HUNT: Nếu code dùng Guid.Parse(_config[...]) trực tiếp sẽ bị Crash (ArgumentNullException).
-            // Test này ép buộc Handler phải dùng Guid.TryParse và check null.
+            // ?? BUG HUNT: N?u code d�ng Guid.Parse(_config[...]) tr?c ti?p s? b? Crash (ArgumentNullException).
+            // Test n�y �p bu?c Handler ph?i d�ng Guid.TryParse v� check null.
 
             // Arrange
             _configMock.Setup(x => x["RoleSettings:UserRoleId"]).Returns((string?)null);
@@ -61,7 +61,7 @@ namespace ControlHub.Application.Tests.AccountsTests
             var result = await _handler.Handle(command, CancellationToken.None);
 
             // Assert
-            Assert.True(result.IsFailure, "LỖI CRASH: Handler bị sập (Exception) do thiếu config UserRoleId.");
+            Assert.True(result.IsFailure, "L?I CRASH: Handler b? s?p (Exception) do thi?u config UserRoleId.");
             Assert.Equal(CommonErrors.SystemConfigurationError, result.Error);
 
             // Verify Log
@@ -73,13 +73,13 @@ namespace ControlHub.Application.Tests.AccountsTests
                     It.IsAny<Exception>(),
                     It.IsAny<Func<It.IsAnyType, Exception?, string>>()),
                 Times.Once,
-                "LỖI: Không ghi log Error khi cấu hình hệ thống bị sai.");
+                "L?I: Kh�ng ghi log Error khi c?u h�nh h? th?ng b? sai.");
         }
 
         [Fact]
         public async Task Handle_ShouldReturnFailure_WhenUserRoleIdConfigIsInvalidFormat()
         {
-            // 🐛 BUG HUNT: Nếu config có giá trị nhưng không phải GUID -> Crash FormatException.
+            // ?? BUG HUNT: N?u config c� gi� tr? nhung kh�ng ph?i GUID -> Crash FormatException.
 
             // Arrange
             _configMock.Setup(x => x["RoleSettings:UserRoleId"]).Returns("invalid-guid-string");
@@ -89,12 +89,12 @@ namespace ControlHub.Application.Tests.AccountsTests
             var result = await _handler.Handle(command, CancellationToken.None);
 
             // Assert
-            Assert.True(result.IsFailure, "LỖI CRASH: Handler bị sập (Exception) do format UserRoleId sai.");
+            Assert.True(result.IsFailure, "L?I CRASH: Handler b? s?p (Exception) do format UserRoleId sai.");
             Assert.Equal(CommonErrors.SystemConfigurationError, result.Error);
         }
 
         // =================================================================================
-        // NHÓM 2: LOGIC NGHIỆP VỤ (BUSINESS LOGIC)
+        // NH�M 2: LOGIC NGHI?P V? (BUSINESS LOGIC)
         // =================================================================================
 
         [Fact]
@@ -140,7 +140,7 @@ namespace ControlHub.Application.Tests.AccountsTests
         }
 
         // =================================================================================
-        // NHÓM 3: LUỒNG THÀNH CÔNG (HAPPY PATH)
+        // NH�M 3: LU?NG TH�NH C�NG (HAPPY PATH)
         // =================================================================================
 
         [Fact]
@@ -155,14 +155,14 @@ namespace ControlHub.Application.Tests.AccountsTests
 
             var dummyPassword = Password.From(new byte[32], new byte[16]);
 
-            // Setup Factory trả về Success chứa Account
+            // Setup Factory tr? v? Success ch?a Account
             _accountFactoryMock
                 .Setup(f => f.CreateWithUserAndIdentifierAsync(
                     It.IsAny<Guid>(),
                     command.Value,
                     command.Type,
                     command.Password,
-                    Guid.Parse(_validRoleId), // Verify: Phải dùng đúng UserRoleId từ Config
+                    Guid.Parse(_validRoleId), // Verify: Ph?i d�ng d�ng UserRoleId t? Config
                     It.IsAny<string?>(),
                     It.IsAny<Guid?>()))
                 .ReturnsAsync((Guid id, string v, IdentifierType t, string p, Guid r, string? u, Guid? cid) =>

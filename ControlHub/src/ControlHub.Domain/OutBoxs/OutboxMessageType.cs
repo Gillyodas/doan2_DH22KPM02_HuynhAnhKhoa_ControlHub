@@ -1,4 +1,4 @@
-﻿namespace ControlHub.Domain.Outboxs
+namespace ControlHub.Domain.Outboxs
 {
     public enum OutboxMessageType
     {

@@ -1,4 +1,4 @@
-﻿using ControlHub.Domain.Permissions;
+using ControlHub.Domain.Permissions;
 using ControlHub.Domain.Roles;
 using ControlHub.SharedKernel.Permissions;
 using ControlHub.SharedKernel.Results;

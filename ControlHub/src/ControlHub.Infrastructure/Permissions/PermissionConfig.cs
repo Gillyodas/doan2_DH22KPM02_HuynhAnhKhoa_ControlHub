@@ -1,4 +1,4 @@
-﻿using ControlHub.Domain.Permissions;
+using ControlHub.Domain.Permissions;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 

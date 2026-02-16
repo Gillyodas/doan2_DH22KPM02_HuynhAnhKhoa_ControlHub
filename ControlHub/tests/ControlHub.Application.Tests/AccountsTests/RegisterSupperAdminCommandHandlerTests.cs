@@ -1,14 +1,14 @@
-﻿using ControlHub.Application.Accounts.Commands.RegisterSupperAdmin;
+using ControlHub.Application.Accounts.Commands.RegisterSupperAdmin;
 using ControlHub.Application.Accounts.Commands.RegisterUser;
 using ControlHub.Application.Accounts.Interfaces;
 using ControlHub.Application.Accounts.Interfaces.Repositories;
 using ControlHub.Application.Common.Persistence;
-using ControlHub.Domain.Accounts;
-using ControlHub.Domain.Accounts.Enums;
-using ControlHub.Domain.Accounts.ValueObjects;
+using ControlHub.Domain.Identity.Aggregates;
+using ControlHub.Domain.Identity.Enums;
+using ControlHub.Domain.Identity.ValueObjects;
 using ControlHub.SharedKernel.Accounts;
 using ControlHub.SharedKernel.Common.Errors;
-using ControlHub.SharedKernel.Common.Logs; // Import namespace chứa CommonLogs
+using ControlHub.SharedKernel.Common.Logs; // Import namespace ch?a CommonLogs
 using ControlHub.SharedKernel.Results;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
@@ -20,7 +20,7 @@ namespace ControlHub.Application.Tests.AccountsTests
     {
         private readonly Mock<IAccountValidator> _accountValidatorMock = new();
         private readonly Mock<IAccountRepository> _accountRepositoryMock = new();
-        // Mock Logger khớp với loại được inject trong Handler
+        // Mock Logger kh?p v?i lo?i du?c inject trong Handler
         private readonly Mock<ILogger<RegisterSupperAdminCommandHandler>> _loggerMock = new();
         private readonly Mock<IAccountFactory> _accountFactoryMock = new();
         private readonly Mock<IConfiguration> _configMock = new();
@@ -32,7 +32,7 @@ namespace ControlHub.Application.Tests.AccountsTests
 
         public RegisterSupperAdminCommandHandlerTests()
         {
-            // 1. Setup Config mặc định hợp lệ
+            // 1. Setup Config m?c d?nh h?p l?
             _configMock.Setup(x => x["AppPassword:MasterKey"]).Returns(ValidMasterKey);
             _configMock.Setup(x => x["RoleSettings:SuperAdminRoleId"]).Returns(Guid.NewGuid().ToString());
 
@@ -63,7 +63,7 @@ namespace ControlHub.Application.Tests.AccountsTests
             Assert.Equal(CommonErrors.SystemConfigurationError, result.Error);
 
             // Verify
-            // SỬA LỖI: Dùng CommonLogs.System_ConfigMissing.Code thay vì chuỗi cứng dễ sai sót
+            // S?A L?I: D�ng CommonLogs.System_ConfigMissing.Code thay v� chu?i c?ng d? sai s�t
             _loggerMock.Verify(
                 x => x.Log(
                     LogLevel.Error,
@@ -88,7 +88,7 @@ namespace ControlHub.Application.Tests.AccountsTests
             Assert.Equal(CommonErrors.InvalidMasterKey, result.Error);
 
             // Verify
-            // SỬA LỖI: Dùng CommonLogs.Auth_InvalidMasterKey.Code
+            // S?A L?I: D�ng CommonLogs.Auth_InvalidMasterKey.Code
             _loggerMock.Verify(
                 x => x.Log(
                     LogLevel.Warning,

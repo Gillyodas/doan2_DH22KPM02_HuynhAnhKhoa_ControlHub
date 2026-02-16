@@ -1,6 +1,6 @@
 using ControlHub.SharedKernel.Results;
 
-namespace ControlHub.Domain.Accounts.Identifiers
+namespace ControlHub.Domain.Identity.Identifiers
 {
     public interface IIdentifierConfigRepository
     {

@@ -1,7 +1,7 @@
-﻿using ControlHub.Application.Accounts.Interfaces.Repositories;
+using ControlHub.Application.Accounts.Interfaces.Repositories;
 using ControlHub.Application.Common.Persistence;
-using ControlHub.Domain.Accounts.Identifiers.Services;
-using ControlHub.SharedKernel.Accounts; // Chứa AccountLogs, AccountErrors
+using ControlHub.Domain.Identity.Identifiers.Services;
+using ControlHub.SharedKernel.Accounts; // Ch?a AccountLogs, AccountErrors
 using ControlHub.SharedKernel.Results;
 using MediatR;
 using Microsoft.Extensions.Logging;
@@ -33,7 +33,7 @@ namespace ControlHub.Application.Accounts.Commands.AddIdentifier
                  AccountLogs.AddIdentifier_Started,
                  request.id);
 
-            // 1. Lấy Aggregate Root (Có Tracking)
+            // 1. L?y Aggregate Root (C� Tracking)
             var acc = await _accountRepository.GetWithoutUserByIdAsync(request.id, cancellationToken);
 
             if (acc is null)
@@ -44,7 +44,7 @@ namespace ControlHub.Application.Accounts.Commands.AddIdentifier
                 return Result.Failure(AccountErrors.AccountNotFound);
             }
 
-            // 2. Kiểm tra trạng thái Account
+            // 2. Ki?m tra tr?ng th�i Account
             if (acc.IsDeleted)
             {
                 _logger.LogWarning("{@LogCode} | AccountId: {AccountId}",
@@ -61,7 +61,7 @@ namespace ControlHub.Application.Accounts.Commands.AddIdentifier
                 return Result.Failure(AccountErrors.AccountDisabled);
             }
 
-            // 3. Tạo Identifier Value Object (Thông qua Domain Service)
+            // 3. T?o Identifier Value Object (Th�ng qua Domain Service)
             var createIdentResult = _identifierFactory.Create(request.type, request.value);
 
             if (createIdentResult.IsFailure)
@@ -73,7 +73,7 @@ namespace ControlHub.Application.Accounts.Commands.AddIdentifier
                 return Result.Failure(createIdentResult.Error);
             }
 
-            // 4. Gọi Domain Logic trên Aggregate Root
+            // 4. G?i Domain Logic tr�n Aggregate Root
             var addResult = acc.AddIdentifier(createIdentResult.Value);
 
             if (addResult.IsFailure)
@@ -85,7 +85,7 @@ namespace ControlHub.Application.Accounts.Commands.AddIdentifier
                 return Result.Failure(addResult.Error);
             }
 
-            // 5. Commit (EF Core tự động Insert vào bảng AccountIdentifiers nhờ OwnsMany)
+            // 5. Commit (EF Core t? d?ng Insert v�o b?ng AccountIdentifiers nh? OwnsMany)
             await _uow.CommitAsync(cancellationToken);
 
             _logger.LogInformation("{@LogCode} | AccountId: {AccountId}",

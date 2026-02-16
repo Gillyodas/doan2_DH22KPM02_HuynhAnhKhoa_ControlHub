@@ -1,5 +1,5 @@
-﻿using ControlHub.Domain.Accounts.Security;
-using ControlHub.Domain.Accounts.ValueObjects;
+using ControlHub.Domain.Identity.Security;
+using ControlHub.Domain.Identity.ValueObjects;
 using ControlHub.SharedKernel.Accounts;
 using Moq;
 
@@ -11,12 +11,12 @@ namespace ControlHub.Domain.Tests.Accounts.ValueObjects
 
         public PasswordTests()
         {
-            // Setup mặc định: Hasher trả về hash hợp lệ (để test logic validation của Domain)
+            // Setup m?c d?nh: Hasher tr? v? hash h?p l? (d? test logic validation c?a Domain)
             _hasherMock.Setup(x => x.Hash(It.IsAny<string>()))
                 .Returns(Password.From(new byte[32], new byte[16])); // 32 bytes hash, 16 bytes salt
         }
 
-        // --- NHÓM 1: BUG HUNTING - ĐỘ MẠNH MẬT KHẨU (COMPLEXITY) ---
+        // --- NH�M 1: BUG HUNTING - �? M?NH M?T KH?U (COMPLEXITY) ---
 
         [Theory]
         [InlineData(null)]
@@ -31,25 +31,25 @@ namespace ControlHub.Domain.Tests.Accounts.ValueObjects
         }
 
         [Theory]
-        [InlineData("1234567")]           // < 8 ký tự
-        [InlineData("Abcdef1")]           // Thiếu ký tự đặc biệt
-        [InlineData("abcdef1@")]          // Thiếu chữ Hoa
-        [InlineData("ABCDEF1@")]          // Thiếu chữ thường
-        [InlineData("Abcdefgh@")]         // Thiếu số
+        [InlineData("1234567")]           // < 8 k� t?
+        [InlineData("Abcdef1")]           // Thi?u k� t? d?c bi?t
+        [InlineData("abcdef1@")]          // Thi?u ch? Hoa
+        [InlineData("ABCDEF1@")]          // Thi?u ch? thu?ng
+        [InlineData("Abcdefgh@")]         // Thi?u s?
         public void Create_ShouldFail_WhenPasswordIsWeak(string weakPass)
         {
             // Act
             var result = Password.Create(weakPass, _hasherMock.Object);
 
             // Assert
-            Assert.True(result.IsFailure, $"BUG: Domain chấp nhận mật khẩu yếu: '{weakPass}'");
+            Assert.True(result.IsFailure, $"BUG: Domain ch?p nh?n m?t kh?u y?u: '{weakPass}'");
             Assert.Equal(AccountErrors.PasswordIsWeak, result.Error);
         }
 
         [Fact]
         public void Create_ShouldSucceed_WhenPasswordIsStrong()
         {
-            // Arrange: Đủ 8 ký tự, Hoa, Thường, Số, Đặc biệt
+            // Arrange: �? 8 k� t?, Hoa, Thu?ng, S?, �?c bi?t
             var strongPass = "StrongP@ss1";
 
             // Act
@@ -59,23 +59,23 @@ namespace ControlHub.Domain.Tests.Accounts.ValueObjects
             Assert.True(result.IsSuccess);
         }
 
-        // --- NHÓM 2: BUG HUNTING - INTEGRITY (TOÀN VẸN DỮ LIỆU HASH) ---
+        // --- NH�M 2: BUG HUNTING - INTEGRITY (TO�N V?N D? LI?U HASH) ---
 
         [Fact]
         public void Create_ShouldFail_WhenHasherReturnsInvalidHashLength()
         {
-            // BUG HUNT: Giả sử Hasher bị lỗi, trả về mảng byte rỗng hoặc quá ngắn.
-            // Domain Password phải chặn lại để không lưu rác vào DB.
+            // BUG HUNT: Gi? s? Hasher b? l?i, tr? v? m?ng byte r?ng ho?c qu� ng?n.
+            // Domain Password ph?i ch?n l?i d? kh�ng luu r�c v�o DB.
 
             // Arrange
             _hasherMock.Setup(x => x.Hash(It.IsAny<string>()))
-                .Returns(Password.From(new byte[0], new byte[16])); // Hash rỗng (Invalid)
+                .Returns(Password.From(new byte[0], new byte[16])); // Hash r?ng (Invalid)
 
             // Act
             var result = Password.Create("ValidP@ss1", _hasherMock.Object);
 
             // Assert
-            Assert.True(result.IsFailure, "BUG: Domain chấp nhận Hash rỗng (Length=0).");
+            Assert.True(result.IsFailure, "BUG: Domain ch?p nh?n Hash r?ng (Length=0).");
             Assert.Equal(AccountErrors.PasswordHashFailed, result.Error);
         }
 
@@ -84,13 +84,13 @@ namespace ControlHub.Domain.Tests.Accounts.ValueObjects
         {
             // Arrange
             _hasherMock.Setup(x => x.Hash(It.IsAny<string>()))
-                .Returns(Password.From(new byte[32], new byte[5])); // Salt quá ngắn (< 16 bytes)
+                .Returns(Password.From(new byte[32], new byte[5])); // Salt qu� ng?n (< 16 bytes)
 
             // Act
             var result = Password.Create("ValidP@ss1", _hasherMock.Object);
 
             // Assert
-            Assert.True(result.IsFailure, "BUG: Domain chấp nhận Salt quá ngắn.");
+            Assert.True(result.IsFailure, "BUG: Domain ch?p nh?n Salt qu� ng?n.");
             Assert.Equal(AccountErrors.PasswordHashFailed, result.Error);
         }
     }

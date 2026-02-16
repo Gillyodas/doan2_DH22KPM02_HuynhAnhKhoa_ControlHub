@@ -1,4 +1,4 @@
-﻿using ControlHub.Application.Permissions.DTOs;
+using ControlHub.Application.Permissions.DTOs;
 using ControlHub.SharedKernel.Results;
 using MediatR;
 

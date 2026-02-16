@@ -1,4 +1,4 @@
-﻿using ControlHub.Domain.Outboxs;
+using ControlHub.Domain.Outboxs;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
@@ -12,7 +12,7 @@ namespace ControlHub.Infrastructure.Outboxs
 
             builder.HasKey(x => x.Id);
 
-            // Lưu Enum dưới dạng String để dễ đọc trong DB (và khớp với MaxLength cũ)
+            // Luu Enum du?i d?ng String d? d? d?c trong DB (v� kh?p v?i MaxLength cu)
             builder.Property(x => x.Type)
                 .HasConversion<string>()
                 .HasMaxLength(100)
@@ -24,9 +24,9 @@ namespace ControlHub.Infrastructure.Outboxs
             builder.Property(x => x.Processed)
                 .IsRequired();
 
-            // Có thể thêm Index cho Processed để worker job tìm nhanh hơn
+            // C� th? th�m Index cho Processed d? worker job t�m nhanh hon
             builder.HasIndex(x => x.Processed)
-                .HasFilter("[Processed] = 0"); // Chỉ index những cái chưa xử lý (SQL Server)
+                .HasFilter("[Processed] = 0"); // Ch? index nh?ng c�i chua x? l� (SQL Server)
         }
     }
 }

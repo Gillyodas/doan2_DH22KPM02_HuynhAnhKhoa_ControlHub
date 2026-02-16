@@ -1,4 +1,4 @@
-﻿namespace ControlHub.Application.OutBoxs.Repositories
+namespace ControlHub.Application.OutBoxs.Repositories
 {
     public interface IOutboxQueries
     {

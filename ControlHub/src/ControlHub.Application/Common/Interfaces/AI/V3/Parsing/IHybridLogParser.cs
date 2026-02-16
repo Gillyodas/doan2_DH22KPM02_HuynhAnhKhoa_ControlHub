@@ -1,22 +1,22 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
 using ControlHub.Application.Common.Logging;
 namespace ControlHub.Application.Common.Interfaces.AI.V3.Parsing
 {
     /// <summary>
-    /// Hybrid parser kết hợp Drain3 (fast, rule-based) và Semantic Classifier (slow, ML-based).
-    /// Strategy: Dùng Drain3 trước, nếu confidence thấp thì dùng Semantic Classifier.
+    /// Hybrid parser k?t h?p Drain3 (fast, rule-based) v� Semantic Classifier (slow, ML-based).
+    /// Strategy: D�ng Drain3 tru?c, n?u confidence th?p th� d�ng Semantic Classifier.
     /// </summary>
     public interface IHybridLogParser
     {
         /// <summary>
-        /// Parse danh sách logs với hybrid strategy.
+        /// Parse danh s�ch logs v?i hybrid strategy.
         /// </summary>
         /// <param name="logs">Raw log entries</param>
         /// <param name="options">Parsing options (confidence threshold, fallback behavior)</param>
         /// <param name="ct">Cancellation token</param>
-        /// <returns>Parsed result với templates và metadata</returns>
+        /// <returns>Parsed result v?i templates v� metadata</returns>
         Task<HybridParseResult> ParseLogsAsync(
             List<LogEntry> logs,
             HybridParsingOptions? options = null,
@@ -24,44 +24,44 @@ namespace ControlHub.Application.Common.Interfaces.AI.V3.Parsing
         );
 
         /// <summary>
-        /// Parse một log line đơn lẻ (dùng cho real-time processing).
+        /// Parse m?t log line don l? (d�ng cho real-time processing).
         /// </summary>
         Task<ParsedLog> ParseSingleAsync(string logLine, CancellationToken ct = default);
     }
     /// <summary>
-    /// Kết quả parsing với metadata về strategy được dùng.
+    /// K?t qu? parsing v?i metadata v? strategy du?c d�ng.
     /// </summary>
     public record HybridParseResult(
-        /// <summary>Danh sách templates (giống V2.5)</summary>
+        /// <summary>Danh s�ch templates (gi?ng V2.5)</summary>
         List<LogTemplate> Templates,
 
-        /// <summary>Mapping từ template ID → raw logs</summary>
+        /// <summary>Mapping t? template ID ? raw logs</summary>
         Dictionary<string, List<LogEntry>> TemplateToLogs,
 
-        /// <summary>Metadata về parsing strategy</summary>
+        /// <summary>Metadata v? parsing strategy</summary>
         ParsingMetadata Metadata
     );
     /// <summary>
-    /// Metadata về quá trình parsing.
+    /// Metadata v? qu� tr�nh parsing.
     /// </summary>
     public record ParsingMetadata(
-        /// <summary>Số logs được parse bởi Drain3</summary>
+        /// <summary>S? logs du?c parse b?i Drain3</summary>
         int Drain3Count,
 
-        /// <summary>Số logs được parse bởi Semantic Classifier</summary>
+        /// <summary>S? logs du?c parse b?i Semantic Classifier</summary>
         int SemanticCount,
 
-        /// <summary>Số logs failed (không parse được)</summary>
+        /// <summary>S? logs failed (kh�ng parse du?c)</summary>
         int FailedCount,
 
         /// <summary>Average confidence score</summary>
         float AverageConfidence,
 
-        /// <summary>Thời gian xử lý (milliseconds)</summary>
+        /// <summary>Th?i gian x? l� (milliseconds)</summary>
         long ProcessingTimeMs
     );
     /// <summary>
-    /// Kết quả parse một log line.
+    /// K?t qu? parse m?t log line.
     /// </summary>
     public record ParsedLog(
         string OriginalLine,
@@ -71,7 +71,7 @@ namespace ControlHub.Application.Common.Interfaces.AI.V3.Parsing
         float Confidence
     );
     /// <summary>
-    /// Method được dùng để parse log.
+    /// Method du?c d�ng d? parse log.
     /// </summary>
     public enum ParsingMethod
     {
@@ -83,16 +83,16 @@ namespace ControlHub.Application.Common.Interfaces.AI.V3.Parsing
     /// Options cho hybrid parsing.
     /// </summary>
     public record HybridParsingOptions(
-        /// <summary>Confidence threshold để fallback sang Semantic (default: 0.7)</summary>
+        /// <summary>Confidence threshold d? fallback sang Semantic (default: 0.7)</summary>
         float ConfidenceThreshold = 0.7f,
 
-        /// <summary>Có enable Semantic Classifier không (default: true)</summary>
+        /// <summary>C� enable Semantic Classifier kh�ng (default: true)</summary>
         bool EnableSemantic = true,
 
-        /// <summary>Có enable Drain3 không (default: true)</summary>
+        /// <summary>C� enable Drain3 kh�ng (default: true)</summary>
         bool EnableDrain3 = true,
 
-        /// <summary>Max logs để xử lý bằng Semantic (tránh quá chậm, default: 100)</summary>
+        /// <summary>Max logs d? x? l� b?ng Semantic (tr�nh qu� ch?m, default: 100)</summary>
         int MaxSemanticLogs = 100
     );
 }

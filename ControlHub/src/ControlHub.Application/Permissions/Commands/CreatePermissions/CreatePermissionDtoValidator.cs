@@ -1,4 +1,4 @@
-﻿using ControlHub.Application.Permissions.DTOs;
+using ControlHub.Application.Permissions.DTOs;
 using FluentValidation;
 
 namespace ControlHub.Application.Permissions.Commands.CreatePermissions

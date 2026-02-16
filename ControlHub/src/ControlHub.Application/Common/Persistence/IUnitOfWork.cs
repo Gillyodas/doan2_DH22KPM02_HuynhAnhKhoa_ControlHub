@@ -1,4 +1,4 @@
-﻿using Microsoft.EntityFrameworkCore.Storage;
+using Microsoft.EntityFrameworkCore.Storage;
 
 namespace ControlHub.Application.Common.Persistence
 {

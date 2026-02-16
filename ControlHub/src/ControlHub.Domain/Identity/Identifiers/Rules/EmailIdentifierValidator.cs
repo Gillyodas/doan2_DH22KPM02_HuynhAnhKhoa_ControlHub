@@ -1,9 +1,9 @@
-﻿using ControlHub.Domain.Accounts.Enums;
-using ControlHub.Domain.Accounts.ValueObjects;
+using ControlHub.Domain.Identity.Enums;
+using ControlHub.Domain.Identity.ValueObjects;
 using ControlHub.SharedKernel.Accounts;
 using ControlHub.SharedKernel.Common.Errors;
 
-namespace ControlHub.Domain.Accounts.Identifiers.Rules
+namespace ControlHub.Domain.Identity.Identifiers.Rules
 {
     public class EmailIdentifierValidator : IIdentifierValidator
     {

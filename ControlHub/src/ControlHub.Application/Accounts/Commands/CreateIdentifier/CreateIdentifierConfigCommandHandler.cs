@@ -1,6 +1,6 @@
-﻿using AppIdentifierConfigRepository = ControlHub.Application.Accounts.Interfaces.Repositories.IIdentifierConfigRepository;
+using AppIdentifierConfigRepository = ControlHub.Application.Accounts.Interfaces.Repositories.IIdentifierConfigRepository;
 using ControlHub.Application.Common.Persistence;
-using ControlHub.Domain.Accounts.Identifiers;
+using ControlHub.Domain.Identity.Identifiers;
 using ControlHub.SharedKernel.Common.Errors;
 using ControlHub.SharedKernel.Results;
 using MediatR;

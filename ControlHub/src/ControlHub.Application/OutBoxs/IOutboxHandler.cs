@@ -1,4 +1,4 @@
-﻿using ControlHub.Domain.Outboxs;
+using ControlHub.Domain.Outboxs;
 
 namespace ControlHub.Application.OutBoxs
 {

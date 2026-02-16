@@ -1,4 +1,4 @@
-﻿namespace ControlHub.API.Accounts.ViewModels.Response
+namespace ControlHub.API.Accounts.ViewModels.Response
 {
     public class RegisterAdminResponse
     {

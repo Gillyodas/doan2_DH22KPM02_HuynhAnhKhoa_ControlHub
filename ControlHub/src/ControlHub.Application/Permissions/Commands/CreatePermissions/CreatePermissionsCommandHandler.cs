@@ -1,4 +1,4 @@
-﻿using ControlHub.Application.Common.Persistence;
+using ControlHub.Application.Common.Persistence;
 using ControlHub.Application.Permissions.Interfaces.Repositories;
 using ControlHub.Domain.Permissions;
 using ControlHub.SharedKernel.Permissions;
@@ -33,7 +33,7 @@ namespace ControlHub.Application.Permissions.Commands.CreatePermissions
                 PermissionLogs.CreatePermissions_Started,
                 request.Permissions.Count());
 
-            // 1. Kiểm tra trùng Code (Giữ nguyên)
+            // 1. Ki?m tra tr�ng Code (Gi? nguy�n)
             var existing = await _permissionQueries.GetAllAsync(cancellationToken);
             var duplicates = request.Permissions
                 .Where(p => existing.Any(e => e.Code.Equals(p.Code, StringComparison.OrdinalIgnoreCase)))

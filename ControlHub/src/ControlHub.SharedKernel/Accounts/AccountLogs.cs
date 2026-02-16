@@ -1,4 +1,4 @@
-﻿using ControlHub.SharedKernel.Common.Logs;
+using ControlHub.SharedKernel.Common.Logs;
 
 namespace ControlHub.SharedKernel.Accounts
 {

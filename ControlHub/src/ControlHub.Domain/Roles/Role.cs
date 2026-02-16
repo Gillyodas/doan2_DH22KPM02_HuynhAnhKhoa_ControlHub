@@ -1,7 +1,7 @@
-﻿using ControlHub.Domain.Permissions;
+using ControlHub.Domain.Permissions;
 using ControlHub.SharedKernel.Results;
 using ControlHub.SharedKernel.Roles;
-// using ControlHub.SharedKernel.Roles; // (Giả sử bạn có RoleErrors ở đây)
+// using ControlHub.SharedKernel.Roles; // (Gi? s? b?n c� RoleErrors ? d�y)
 
 namespace ControlHub.Domain.Roles
 {
@@ -17,7 +17,7 @@ namespace ControlHub.Domain.Roles
 
         public IReadOnlyCollection<Permission> Permissions => _permissions.AsReadOnly();
 
-        // Navigation Property (Optional): Nếu bạn muốn truy cập ngược lại từ Role -> Accounts
+        // Navigation Property (Optional): N?u b?n mu?n truy c?p ngu?c l?i t? Role -> Accounts
         // public IReadOnlyCollection<Account> Accounts => _accounts.AsReadOnly();
         // private readonly List<Account> _accounts = new();
 
@@ -55,9 +55,9 @@ namespace ControlHub.Domain.Roles
         public Result AddPermission(Permission permission)
         {
             if (permission == null)
-                return Result.Failure(RoleErrors.PermissionNotFound); // Hoặc lỗi Null
+                return Result.Failure(RoleErrors.PermissionNotFound); // Ho?c l?i Null
 
-            // Kiểm tra trùng lặp trong list hiện tại
+            // Ki?m tra tr�ng l?p trong list hi?n t?i
             if (_permissions.Any(p => p.Code == permission.Code))
             {
                 return Result.Failure(RoleErrors.PermissionAlreadyExists);

@@ -1,4 +1,4 @@
-﻿using ControlHub.Domain.Users;
+using ControlHub.Domain.Identity.Entities;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
@@ -30,18 +30,18 @@ namespace ControlHub.Infrastructure.Users
             builder.Property(u => u.AccId)
                 .IsRequired();
 
-            // --- CẤU HÌNH RELATIONSHIP VỚI ACCOUNT ---
-            // User thuộc về Account (1 Account có 1 hoặc nhiều User, tùy logic của bạn)
-            // Giả sử 1 Account có 1 User (One-to-One) hoặc 1 Account có nhiều User (One-to-Many)
+            // --- C?U H�NH RELATIONSHIP V?I ACCOUNT ---
+            // User thu?c v? Account (1 Account c� 1 ho?c nhi?u User, t�y logic c?a b?n)
+            // Gi? s? 1 Account c� 1 User (One-to-One) ho?c 1 Account c� nhi?u User (One-to-Many)
 
-            // Nếu bạn định nghĩa Navigation Property bên phía Account (ví dụ: Account.Users)
-            // Bạn có thể cấu hình ở đây hoặc bên AccountConfig.
+            // N?u b?n d?nh nghia Navigation Property b�n ph�a Account (v� d?: Account.Users)
+            // B?n c� th? c?u h�nh ? d�y ho?c b�n AccountConfig.
 
-            // Ví dụ cấu hình cơ bản (nếu User là Aggregate riêng lẻ):
-            // builder.HasOne<Account>() // Có 1 Account
-            //     .WithMany()           // Account có nhiều User (hoặc WithOne nếu 1-1)
+            // V� d? c?u h�nh co b?n (n?u User l� Aggregate ri�ng l?):
+            // builder.HasOne<Account>() // C� 1 Account
+            //     .WithMany()           // Account c� nhi?u User (ho?c WithOne n?u 1-1)
             //     .HasForeignKey(u => u.AccId)
-            //     .OnDelete(DeleteBehavior.Cascade); // Xóa Account thì xóa User
+            //     .OnDelete(DeleteBehavior.Cascade); // X�a Account th� x�a User
         }
     }
 }

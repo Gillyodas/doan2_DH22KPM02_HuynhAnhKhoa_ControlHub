@@ -1,48 +1,48 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
 namespace ControlHub.Application.Common.Interfaces.AI.V3.Parsing
 {
     /// <summary>
-    /// Semantic log classifier sử dụng ML model để phân loại log dựa trên ngữ nghĩa.
-    /// Khác với Drain3 (rule-based pattern matching), classifier này hiểu "ý nghĩa" của log.
+    /// Semantic log classifier s? d?ng ML model d? ph�n lo?i log d?a tr�n ng? nghia.
+    /// Kh�c v?i Drain3 (rule-based pattern matching), classifier n�y hi?u "� nghia" c?a log.
     /// </summary>
     public interface ISemanticLogClassifier
     {
         /// <summary>
-        /// Phân loại một dòng log thành category/subcategory.
+        /// Ph�n lo?i m?t d�ng log th�nh category/subcategory.
         /// </summary>
-        /// <param name="logLine">Raw log line (ví dụ: "User authentication failed: Invalid password")</param>
+        /// <param name="logLine">Raw log line (v� d?: "User authentication failed: Invalid password")</param>
         /// <param name="ct">Cancellation token</param>
-        /// <returns>LogClassification với category, confidence score, và extracted fields</returns>
+        /// <returns>LogClassification v?i category, confidence score, v� extracted fields</returns>
         Task<LogClassification> ClassifyAsync(string logLine, CancellationToken ct = default);
 
         /// <summary>
-        /// Tính confidence score cho một category cụ thể.
-        /// Dùng để verify prediction hoặc so sánh với threshold.
+        /// T�nh confidence score cho m?t category c? th?.
+        /// D�ng d? verify prediction ho?c so s�nh v?i threshold.
         /// </summary>
         /// <param name="logLine">Raw log line</param>
-        /// <param name="expectedCategory">Category cần kiểm tra (ví dụ: "auth_failure")</param>
+        /// <param name="expectedCategory">Category c?n ki?m tra (v� d?: "auth_failure")</param>
         /// <param name="ct">Cancellation token</param>
-        /// <returns>Confidence score từ 0.0 đến 1.0</returns>
+        /// <returns>Confidence score t? 0.0 d?n 1.0</returns>
         Task<float> GetConfidenceAsync(string logLine, string expectedCategory, CancellationToken ct = default);
     }
     /// <summary>
-    /// Kết quả phân loại log.
+    /// K?t qu? ph�n lo?i log.
     /// </summary>
     public record LogClassification(
-        /// <summary>Category chính (ví dụ: "authentication", "database", "network")</summary>
+        /// <summary>Category ch�nh (v� d?: "authentication", "database", "network")</summary>
         string Category,
 
-        /// <summary>SubCategory chi tiết (ví dụ: "mfa_timeout", "connection_pool_exhausted")</summary>
+        /// <summary>SubCategory chi ti?t (v� d?: "mfa_timeout", "connection_pool_exhausted")</summary>
         string SubCategory,
 
-        /// <summary>Confidence score (0.0 - 1.0). Nếu < 0.7 nên fallback sang Drain3</summary>
+        /// <summary>Confidence score (0.0 - 1.0). N?u < 0.7 n�n fallback sang Drain3</summary>
         float Confidence,
 
         /// <summary>
-        /// Các fields được extract từ log (ví dụ: {"user": "admin@corp.com", "ip": "192.168.1.1"})
+        /// C�c fields du?c extract t? log (v� d?: {"user": "admin@corp.com", "ip": "192.168.1.1"})
         /// </summary>
         Dictionary<string, string> ExtractedFields
     );

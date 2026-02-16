@@ -1,4 +1,4 @@
-﻿namespace ControlHub.Application.Tokens.Interfaces.Generate
+namespace ControlHub.Application.Tokens.Interfaces.Generate
 {
     public interface IAccessTokenGenerator
     {

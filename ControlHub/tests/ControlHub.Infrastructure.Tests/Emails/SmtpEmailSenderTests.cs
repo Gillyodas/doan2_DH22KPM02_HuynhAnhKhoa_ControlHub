@@ -1,4 +1,4 @@
-﻿using System.Net.Mail;
+using System.Net.Mail;
 using ControlHub.Infrastructure.Emails;
 using Microsoft.Extensions.Configuration;
 
@@ -6,7 +6,7 @@ namespace ControlHub.Infrastructure.Tests.Emails
 {
     public class SmtpEmailSenderTests
     {
-        // Helper: Tạo IConfiguration mock với values hợp lệ
+        // Helper: T?o IConfiguration mock v?i values h?p l?
         private IConfiguration CreateValidConfig()
         {
             var inMemorySettings = new Dictionary<string, string>
@@ -23,7 +23,7 @@ namespace ControlHub.Infrastructure.Tests.Emails
                 .Build();
         }
 
-        // --- NHÓM 1: BUG HUNTING - NULL/MISSING CONFIG VALUES ---
+        // --- NH�M 1: BUG HUNTING - NULL/MISSING CONFIG VALUES ---
 
         [Fact]
         public async Task SendEmailAsync_ShouldThrowException_WhenHostIsNull()
@@ -36,7 +36,7 @@ namespace ControlHub.Infrastructure.Tests.Emails
                     {"Smtp:Username", "test@test.com"},
                     {"Smtp:Password", "testpass"},
                     {"Smtp:From", "from@test.com"}
-                    // Host bị thiếu
+                    // Host b? thi?u
                 }!)
                 .Build();
 
@@ -55,7 +55,7 @@ namespace ControlHub.Infrastructure.Tests.Emails
                 .AddInMemoryCollection(new Dictionary<string, string>
                 {
                     {"Smtp:Host", "smtp.gmail.com"},
-                    // Port bị thiếu -> sẽ dùng default "25"
+                    // Port b? thi?u -> s? d�ng default "25"
                     {"Smtp:Username", "test@test.com"},
                     {"Smtp:Password", "testpass"},
                     {"Smtp:From", "from@test.com"}
@@ -65,8 +65,8 @@ namespace ControlHub.Infrastructure.Tests.Emails
             var sender = new SmtpEmailSender(config, Microsoft.Extensions.Logging.Abstractions.NullLogger<SmtpEmailSender>.Instance);
 
             // Act & Assert
-            // BUG: Code hiện tại sẽ dùng port 25 thay vì throw error
-            // Nhưng nếu connect thực tế sẽ fail
+            // BUG: Code hi?n t?i s? d�ng port 25 thay v� throw error
+            // Nhung n?u connect th?c t? s? fail
             await Assert.ThrowsAnyAsync<Exception>(async () =>
                 await sender.SendEmailAsync("to@test.com", "Subject", "Body"));
         }
@@ -79,7 +79,7 @@ namespace ControlHub.Infrastructure.Tests.Emails
                 .AddInMemoryCollection(new Dictionary<string, string>
                 {
                     {"Smtp:Host", "smtp.gmail.com"},
-                    {"Smtp:Port", "invalid_port"}, // BUG: int.Parse sẽ throw
+                    {"Smtp:Port", "invalid_port"}, // BUG: int.Parse s? throw
                     {"Smtp:Username", "test@test.com"},
                     {"Smtp:Password", "testpass"},
                     {"Smtp:From", "from@test.com"}
@@ -159,7 +159,7 @@ namespace ControlHub.Infrastructure.Tests.Emails
                 await sender.SendEmailAsync("to@test.com", "Subject", "Body"));
         }
 
-        // --- NHÓM 2: BUG HUNTING - INVALID EMAIL ADDRESSES ---
+        // --- NH�M 2: BUG HUNTING - INVALID EMAIL ADDRESSES ---
 
         [Theory]
         [InlineData("")]
@@ -188,7 +188,7 @@ namespace ControlHub.Infrastructure.Tests.Emails
                 await sender.SendEmailAsync("invalid-email", "Subject", "Body"));
         }
 
-        // --- NHÓM 3: BUG HUNTING - SMTP CONNECTION ERRORS ---
+        // --- NH�M 3: BUG HUNTING - SMTP CONNECTION ERRORS ---
 
         [Fact]
         public async Task SendEmailAsync_ShouldThrowException_WhenHostIsUnreachable()
@@ -252,12 +252,12 @@ namespace ControlHub.Infrastructure.Tests.Emails
             var sender = new SmtpEmailSender(config, Microsoft.Extensions.Logging.Abstractions.NullLogger<SmtpEmailSender>.Instance);
 
             // Act & Assert
-            // BUG: Code không validate credentials trước khi send
+            // BUG: Code kh�ng validate credentials tru?c khi send
             await Assert.ThrowsAsync<SmtpException>(async () =>
                 await sender.SendEmailAsync("to@test.com", "Subject", "Body"));
         }
 
-        // --- NHÓM 4: BUG HUNTING - EDGE CASES ---
+        // --- NH�M 4: BUG HUNTING - EDGE CASES ---
 
         [Fact]
         public async Task SendEmailAsync_ShouldThrowException_WhenSubjectIsNull()
@@ -292,7 +292,7 @@ namespace ControlHub.Infrastructure.Tests.Emails
             var longSubject = new string('A', 10000);
 
             // Act & Assert
-            // BUG: Không giới hạn độ dài subject
+            // BUG: Kh�ng gi?i h?n d? d�i subject
             await Assert.ThrowsAnyAsync<Exception>(async () =>
                 await sender.SendEmailAsync("to@test.com", longSubject, "Body"));
         }
@@ -306,12 +306,12 @@ namespace ControlHub.Infrastructure.Tests.Emails
             var longBody = new string('B', 100000);
 
             // Act & Assert
-            // BUG: Không giới hạn độ dài body
+            // BUG: Kh�ng gi?i h?n d? d�i body
             await Assert.ThrowsAnyAsync<Exception>(async () =>
                 await sender.SendEmailAsync("to@test.com", "Subject", longBody));
         }
 
-        // --- NHÓM 5: BUG HUNTING - SSL/TLS HARDCODED ---
+        // --- NH�M 5: BUG HUNTING - SSL/TLS HARDCODED ---
 
         [Fact]
         public async Task SendEmailAsync_ShouldUseHardcodedEnableSsl()
@@ -321,13 +321,13 @@ namespace ControlHub.Infrastructure.Tests.Emails
             var sender = new SmtpEmailSender(config, Microsoft.Extensions.Logging.Abstractions.NullLogger<SmtpEmailSender>.Instance);
 
             // Act & Assert
-            // BUG: EnableSsl = true luôn luôn, không config được
-            // Test này chỉ document bug, không có cách verify trực tiếp
-            // Cần refactor để inject SmtpClient hoặc expose config
+            // BUG: EnableSsl = true lu�n lu�n, kh�ng config du?c
+            // Test n�y ch? document bug, kh�ng c� c�ch verify tr?c ti?p
+            // C?n refactor d? inject SmtpClient ho?c expose config
             Assert.True(true, "BUG DOCUMENTED: EnableSsl is hardcoded to true, not configurable");
         }
 
-        // --- NHÓM 6: BUG HUNTING - CONCURRENT CALLS ---
+        // --- NH�M 6: BUG HUNTING - CONCURRENT CALLS ---
 
         [Fact]
         public async Task SendEmailAsync_ShouldHandleConcurrentCalls()
@@ -341,12 +341,12 @@ namespace ControlHub.Infrastructure.Tests.Emails
                 sender.SendEmailAsync($"to{i}@test.com", $"Subject {i}", $"Body {i}"));
 
             // Assert
-            // BUG: SmtpClient có thể không thread-safe
+            // BUG: SmtpClient c� th? kh�ng thread-safe
             await Assert.ThrowsAnyAsync<Exception>(async () =>
                 await Task.WhenAll(tasks));
         }
 
-        // --- NHÓM 7: BUG HUNTING - DISPOSAL ---
+        // --- NH�M 7: BUG HUNTING - DISPOSAL ---
 
         [Fact]
         public async Task SendEmailAsync_ShouldDisposeSmtpClient()
@@ -370,7 +370,7 @@ namespace ControlHub.Infrastructure.Tests.Emails
             }
 
             // Assert
-            // BUG: Nếu có resource leak, test này sẽ slow hoặc fail
+            // BUG: N?u c� resource leak, test n�y s? slow ho?c fail
             Assert.True(true, "No obvious resource leak detected");
         }
     }

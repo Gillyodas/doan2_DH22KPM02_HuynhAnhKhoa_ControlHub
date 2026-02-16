@@ -1,4 +1,4 @@
-﻿using ControlHub.Application.Common.DTOs;
+using ControlHub.Application.Common.DTOs;
 using ControlHub.Domain.Permissions;
 
 namespace ControlHub.Application.Permissions.Interfaces.Repositories

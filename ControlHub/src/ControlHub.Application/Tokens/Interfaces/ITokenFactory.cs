@@ -1,4 +1,4 @@
-﻿using ControlHub.Domain.Tokens;
+using ControlHub.Domain.Tokens;
 using ControlHub.Domain.Tokens.Enums;
 
 namespace ControlHub.Application.Tokens.Interfaces

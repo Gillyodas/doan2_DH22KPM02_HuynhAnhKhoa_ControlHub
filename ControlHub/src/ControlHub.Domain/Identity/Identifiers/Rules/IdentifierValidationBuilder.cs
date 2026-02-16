@@ -1,8 +1,8 @@
-﻿using System.Text.RegularExpressions;
+using System.Text.RegularExpressions;
 using ControlHub.SharedKernel.Common.Errors;
 using ControlHub.SharedKernel.Results;
 
-namespace ControlHub.Domain.Accounts.Identifiers.Rules
+namespace ControlHub.Domain.Identity.Identifiers.Rules
 {
     public class IdentifierValidationBuilder
     {

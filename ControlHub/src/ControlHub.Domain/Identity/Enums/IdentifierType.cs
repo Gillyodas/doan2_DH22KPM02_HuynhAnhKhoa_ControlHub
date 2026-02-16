@@ -1,4 +1,4 @@
-﻿namespace ControlHub.Domain.Accounts.Enums
+namespace ControlHub.Domain.Identity.Enums
 {
     public enum IdentifierType
     {

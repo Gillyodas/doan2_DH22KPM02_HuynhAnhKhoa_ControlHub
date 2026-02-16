@@ -1,6 +1,6 @@
-﻿using System.Security.Claims;
+using System.Security.Claims;
 using ControlHub.Application.Roles.Interfaces.Repositories;
-using ControlHub.Application.Tokens; // Chứa AppClaimTypes
+using ControlHub.Application.Tokens; // Ch?a AppClaimTypes
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
@@ -22,49 +22,49 @@ namespace ControlHub.Infrastructure.Authorization.Permissions
 
         public async Task<ClaimsPrincipal> TransformAsync(ClaimsPrincipal principal)
         {
-            // 1. Kiểm tra xác thực cơ bản
+            // 1. Ki?m tra x�c th?c co b?n
             if (principal.Identity?.IsAuthenticated != true)
             {
-                // User chưa đăng nhập, không cần làm gì
+                // User chua dang nh?p, kh�ng c?n l�m g�
                 return principal;
             }
 
-            // 2. Kiểm tra xem đã transform chưa (tránh chạy lặp lại)
+            // 2. Ki?m tra xem d� transform chua (tr�nh ch?y l?p l?i)
             if (principal.HasClaim(c => c.Type == "Permission"))
             {
                 return principal;
             }
 
-            // 3. Lấy RoleId từ Claim gốc
+            // 3. L?y RoleId t? Claim g?c
             var roleIdClaim = principal.FindFirst(AppClaimTypes.Role) ?? principal.FindFirst(ClaimTypes.Role);
             if (roleIdClaim == null || !Guid.TryParse(roleIdClaim.Value, out Guid roleId))
             {
-                _logger.LogWarning("--- PermissionClaimsTransformation: Không tìm thấy RoleId hợp lệ trong token. Bỏ qua. ---");
+                _logger.LogWarning("--- PermissionClaimsTransformation: Kh�ng t�m th?y RoleId h?p l? trong token. B? qua. ---");
                 return principal;
             }
 
-            // 4. Truy xuất DB để lấy Permissions
+            // 4. Truy xu?t DB d? l?y Permissions
             using var scope = _serviceProvider.CreateScope();
             var roleQueries = scope.ServiceProvider.GetRequiredService<IRoleQueries>();
 
             var role = await roleQueries.GetByIdAsync(roleId, CancellationToken.None);
 
-            // Case: Role không tồn tại (đã bị xóa?)
+            // Case: Role kh�ng t?n t?i (d� b? x�a?)
             if (role == null)
             {
-                _logger.LogWarning("--- PermissionClaimsTransformation: RoleId {RoleId} không tồn tại trong DB. ---", roleId);
+                _logger.LogWarning("--- PermissionClaimsTransformation: RoleId {RoleId} kh�ng t?n t?i trong DB. ---", roleId);
                 return principal;
             }
 
-            // Case: Role không có quyền nào
+            // Case: Role kh�ng c� quy?n n�o
             if (!role.Permissions.Any())
             {
-                _logger.LogInformation("--- PermissionClaimsTransformation: Role {RoleName} không có permission nào. ---", role.Name);
+                _logger.LogInformation("--- PermissionClaimsTransformation: Role {RoleName} kh�ng c� permission n�o. ---", role.Name);
                 return principal;
             }
 
-            // 5. Clone và thêm Claims
-            // Lưu ý: Phải Clone identity, không sửa trực tiếp trên principal gốc để tránh side-effect
+            // 5. Clone v� th�m Claims
+            // Luu �: Ph?i Clone identity, kh�ng s?a tr?c ti?p tr�n principal g?c d? tr�nh side-effect
             var cloneIdentity = ((ClaimsIdentity)principal.Identity).Clone();
 
             var permissionCodes = new List<string>();
@@ -75,9 +75,9 @@ namespace ControlHub.Infrastructure.Authorization.Permissions
                 permissionCodes.Add(permission.Code);
             }
 
-            // 6. Log kết quả (Giống PermissionService cũ)
+            // 6. Log k?t qu? (Gi?ng PermissionService cu)
             _logger.LogInformation(
-                "--- PermissionClaimsTransformation: Đã thêm {Count} quyền cho Role {RoleName}. Danh sách: {Permissions} ---",
+                "--- PermissionClaimsTransformation: �� th�m {Count} quy?n cho Role {RoleName}. Danh s�ch: {Permissions} ---",
                 role.Permissions.Count,
                 role.Name,
                 string.Join(", ", permissionCodes));

@@ -1,4 +1,4 @@
-﻿using System.IdentityModel.Tokens.Jwt;
+using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using ControlHub.Application.Tokens.Interfaces;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
@@ -20,25 +20,25 @@ namespace ControlHub.Infrastructure.Tokens.Generate
             JwtSecurityTokenHandler.DefaultOutboundClaimTypeMap.Clear();
         }
 
-        // THAY ĐỔI LỚN:
-        // Chúng ta inject IOptionsMonitor để lấy TokenValidationParameters
-        // mà ConfigureJwtBearerOptions đã tạo.
+        // THAY �?I L?N:
+        // Ch�ng ta inject IOptionsMonitor d? l?y TokenValidationParameters
+        // m� ConfigureJwtBearerOptions d� t?o.
         public TokenVerifier(ILogger<TokenVerifier> logger, IOptionsMonitor<JwtBearerOptions> jwtOptions)
         {
             _logger = logger;
 
-            // Lấy cấu hình của scheme "Bearer" (mặc định)
+            // L?y c?u h�nh c?a scheme "Bearer" (m?c d?nh)
             var options = jwtOptions.Get(JwtBearerDefaults.AuthenticationScheme);
 
-            // Sao chép (clone) để đảm bảo an toàn thread và không bị thay đổi
+            // Sao ch�p (clone) d? d?m b?o an to�n thread v� kh�ng b? thay d?i
             _validationParameters = options.TokenValidationParameters.Clone();
         }
 
         public ClaimsPrincipal? Verify(string token)
         {
-            // Không cần "new TokenValidationParameters" nữa.
-            // Chúng ta dùng _validationParameters đã được inject.
-            // Logic của bạn đã được DRY (Don't Repeat Yourself)!
+            // Kh�ng c?n "new TokenValidationParameters" n?a.
+            // Ch�ng ta d�ng _validationParameters d� du?c inject.
+            // Logic c?a b?n d� du?c DRY (Don't Repeat Yourself)!
 
             try
             {
@@ -50,9 +50,9 @@ namespace ControlHub.Infrastructure.Tokens.Generate
                     return null;
                 }
 
-                // Việc kiểm tra 'alg' này đã được
-                // _validationParameters.ValidAlgorithms lo rồi,
-                // nhưng cẩn thận 2 lần cũng tốt.
+                // Vi?c ki?m tra 'alg' n�y d� du?c
+                // _validationParameters.ValidAlgorithms lo r?i,
+                // nhung c?n th?n 2 l?n cung t?t.
 
                 return principal;
             }

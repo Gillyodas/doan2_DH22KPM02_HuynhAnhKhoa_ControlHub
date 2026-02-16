@@ -1,4 +1,4 @@
-﻿namespace ControlHub.API.Roles.ViewModels.Requests
+namespace ControlHub.API.Roles.ViewModels.Requests
 {
     public class SearchRolesRequest
     {

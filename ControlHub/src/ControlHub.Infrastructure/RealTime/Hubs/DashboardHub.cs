@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -11,7 +11,7 @@ namespace ControlHub.Infrastructure.RealTime.Hubs
 {
     /// <summary>
     /// Hub cho Admin Dashboard.
-    /// CHỈ Admin hoặc SupperAdmin mới được connect.
+    /// CH? Admin ho?c SupperAdmin m?i du?c connect.
     /// </summary>
     public class DashboardHub : Hub
     {

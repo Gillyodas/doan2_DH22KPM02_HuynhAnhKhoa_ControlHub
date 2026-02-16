@@ -1,4 +1,4 @@
-﻿using ControlHub.Application.Accounts.Interfaces.Repositories;
+using ControlHub.Application.Accounts.Interfaces.Repositories;
 using ControlHub.Application.Common.Persistence;
 using ControlHub.Application.Users.Interfaces.Repositories;
 using ControlHub.SharedKernel.Results;

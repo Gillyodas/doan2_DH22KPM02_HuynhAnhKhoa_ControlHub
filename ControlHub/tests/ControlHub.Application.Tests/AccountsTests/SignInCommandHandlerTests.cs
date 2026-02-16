@@ -1,18 +1,18 @@
-﻿using ControlHub.Application.Accounts.Commands.SignIn;
+using ControlHub.Application.Accounts.Commands.SignIn;
 using ControlHub.Application.Accounts.Interfaces.Repositories;
 using ControlHub.Application.Common.Persistence;
 using ControlHub.Application.Tokens.Interfaces;
 using ControlHub.Application.Tokens.Interfaces.Generate;
 using ControlHub.Application.Tokens.Interfaces.Repositories;
-using ControlHub.Domain.Accounts;
-using ControlHub.Domain.Accounts.Enums;
-using ControlHub.Domain.Accounts.Identifiers.Rules;
-using ControlHub.Domain.Accounts.Identifiers.Services;   // Chứa IdentifierFactory
-using ControlHub.Domain.Accounts.Security;
-using ControlHub.Domain.Accounts.ValueObjects;
+using ControlHub.Domain.Identity.Aggregates;
+using ControlHub.Domain.Identity.Enums;
+using ControlHub.Domain.Identity.Identifiers.Rules;
+using ControlHub.Domain.Identity.Identifiers.Services;   // Ch?a IdentifierFactory
+using ControlHub.Domain.Identity.Security;
+using ControlHub.Domain.Identity.ValueObjects;
 using ControlHub.Domain.Tokens;
 using ControlHub.Domain.Tokens.Enums;
-using ControlHub.Domain.Users;
+using ControlHub.Domain.Identity.Entities;
 using ControlHub.SharedKernel.Accounts;
 using ControlHub.SharedKernel.Common.Errors;
 using ControlHub.SharedKernel.Tokens;
@@ -27,7 +27,7 @@ namespace ControlHub.Application.Tests.AccountsTests
         private readonly Mock<ILogger<SignInCommandHandler>> _loggerMock = new();
         private readonly Mock<IAccountQueries> _accountQueriesMock = new();
 
-        // Thay Mock<IIdentifierValidatorFactory> bằng Mock Validator đơn lẻ
+        // Thay Mock<IIdentifierValidatorFactory> b?ng Mock Validator don l?
         private readonly Mock<IIdentifierValidator> _validatorMock = new();
 
         private readonly Mock<IPasswordHasher> _passwordHasherMock = new();
@@ -38,18 +38,18 @@ namespace ControlHub.Application.Tests.AccountsTests
         private readonly Mock<IUnitOfWork> _uowMock = new();
         private readonly Mock<IPublisher> _publisherMock = new();
 
-        // Dùng Factory thật (Concrete Class)
+        // D�ng Factory th?t (Concrete Class)
         private readonly IdentifierFactory _identifierFactory;
         private readonly SignInCommandHandler _handler;
 
         public SignInCommandHandlerTests()
         {
-            // Setup Validator mặc định cho Happy Path (Email)
+            // Setup Validator m?c d?nh cho Happy Path (Email)
             _validatorMock.Setup(v => v.Type).Returns(IdentifierType.Email);
             _validatorMock.Setup(v => v.ValidateAndNormalize(It.IsAny<string>()))
                           .Returns((true, "normalized@test.com", null));
 
-            // Khởi tạo Factory thật
+            // Kh?i t?o Factory th?t
             _identifierFactory = new IdentifierFactory(
                 new[] { _validatorMock.Object },
                 new Mock<IIdentifierConfigRepository>().Object,
@@ -58,7 +58,7 @@ namespace ControlHub.Application.Tests.AccountsTests
             _handler = new SignInCommandHandler(
                 _loggerMock.Object,
                 _accountQueriesMock.Object,
-                _identifierFactory, // Inject Factory thật
+                _identifierFactory, // Inject Factory th?t
                 _passwordHasherMock.Object,
                 _accessTokenGeneratorMock.Object,
                 _refreshTokenGeneratorMock.Object,
@@ -70,19 +70,19 @@ namespace ControlHub.Application.Tests.AccountsTests
         }
 
         // =================================================================================
-        // NHÓM 1: BẢO MẬT TÀI KHOẢN (SECURITY RULES)
-        // Mục tiêu: Đảm bảo tài khoản bị xóa hoặc bị khóa KHÔNG THỂ đăng nhập.
+        // NH�M 1: B?O M?T T�I KHO?N (SECURITY RULES)
+        // M?c ti�u: �?m b?o t�i kho?n b? x�a ho?c b? kh�a KH�NG TH? dang nh?p.
         // =================================================================================
 
         [Fact]
         public async Task Handle_ShouldReturnFailure_WhenAccountIsDeleted()
         {
-            // 🐛 BUG HUNT: Nếu Handler chỉ check "Account != null" mà quên check "IsDeleted",
-            // test này sẽ FAIL (vì login thành công). Đây là lỗ hổng bảo mật.
+            // ?? BUG HUNT: N?u Handler ch? check "Account != null" m� qu�n check "IsDeleted",
+            // test n�y s? FAIL (v� login th�nh c�ng). ��y l� l? h?ng b?o m?t.
 
             // Arrange
             var command = new SignInCommand("deleted@test.com", "Pass123!", IdentifierType.Email);
-            var account = CreateDummyAccount(isDeleted: true); // Account đã bị xóa
+            var account = CreateDummyAccount(isDeleted: true); // Account d� b? x�a
 
             SetupHappyPathDependencies(command, account);
 
@@ -90,23 +90,23 @@ namespace ControlHub.Application.Tests.AccountsTests
             var result = await _handler.Handle(command, CancellationToken.None);
 
             // Assert
-            Assert.True(result.IsFailure, "LỖI BẢO MẬT: Hệ thống cho phép tài khoản đã bị xóa (IsDeleted=true) đăng nhập.");
+            Assert.True(result.IsFailure, "L?I B?O M?T: H? th?ng cho ph�p t�i kho?n d� b? x�a (IsDeleted=true) dang nh?p.");
 
-            // Trả về InvalidCredentials để bảo mật (không tiết lộ trạng thái tk) hoặc AccountDeleted tùy policy
+            // Tr? v? InvalidCredentials d? b?o m?t (kh�ng ti?t l? tr?ng th�i tk) ho?c AccountDeleted t�y policy
             Assert.True(result.Error == AccountErrors.InvalidCredentials || result.Error == AccountErrors.AccountDeleted);
 
-            // Verify: Không được sinh Token
+            // Verify: Kh�ng du?c sinh Token
             _tokenRepositoryMock.Verify(x => x.AddAsync(It.IsAny<Token>(), It.IsAny<CancellationToken>()), Times.Never);
         }
 
         [Fact]
         public async Task Handle_ShouldReturnFailure_WhenAccountIsInactive()
         {
-            // 🐛 BUG HUNT: Tương tự, tài khoản bị Admin khóa (Deactivated) không được phép đăng nhập.
+            // ?? BUG HUNT: Tuong t?, t�i kho?n b? Admin kh�a (Deactivated) kh�ng du?c ph�p dang nh?p.
 
             // Arrange
             var command = new SignInCommand("locked@test.com", "Pass123!", IdentifierType.Email);
-            var account = CreateDummyAccount(isActive: false); // Account bị khóa
+            var account = CreateDummyAccount(isActive: false); // Account b? kh�a
 
             SetupHappyPathDependencies(command, account);
 
@@ -114,7 +114,7 @@ namespace ControlHub.Application.Tests.AccountsTests
             var result = await _handler.Handle(command, CancellationToken.None);
 
             // Assert
-            Assert.True(result.IsFailure, "LỖI BẢO MẬT: Hệ thống cho phép tài khoản đang bị khóa (IsActive=false) đăng nhập.");
+            Assert.True(result.IsFailure, "L?I B?O M?T: H? th?ng cho ph�p t�i kho?n dang b? kh�a (IsActive=false) dang nh?p.");
             Assert.True(result.Error == AccountErrors.InvalidCredentials || result.Error == AccountErrors.AccountDisabled);
 
             // Verify
@@ -122,22 +122,22 @@ namespace ControlHub.Application.Tests.AccountsTests
         }
 
         // =================================================================================
-        // NHÓM 2: ĐỘ BỀN VỮNG (ROBUSTNESS)
-        // Mục tiêu: Xử lý lỗi hệ thống (Token Generator hỏng) mà không Crash.
+        // NH�M 2: �? B?N V?NG (ROBUSTNESS)
+        // M?c ti�u: X? l� l?i h? th?ng (Token Generator h?ng) m� kh�ng Crash.
         // =================================================================================
 
         [Fact]
         public async Task Handle_ShouldReturnFailure_WhenTokenGenerationReturnsEmpty()
         {
-            // 🐛 BUG HUNT: Nếu Generator trả về null/empty (do lỗi config hoặc thuật toán),
-            // Handler phải bắt được và trả về Error, không được dùng chuỗi rỗng để tạo Token (sẽ gây crash ở Domain).
+            // ?? BUG HUNT: N?u Generator tr? v? null/empty (do l?i config ho?c thu?t to�n),
+            // Handler ph?i b?t du?c v� tr? v? Error, kh�ng du?c d�ng chu?i r?ng d? t?o Token (s? g�y crash ? Domain).
 
             // Arrange
             var command = new SignInCommand("test@test.com", "Pass123!", IdentifierType.Email);
             var account = CreateDummyAccount();
             SetupHappyPathDependencies(command, account);
 
-            // GIẢ LẬP LỖI: AccessToken Generator trả về chuỗi rỗng
+            // GI? L?P L?I: AccessToken Generator tr? v? chu?i r?ng
             _accessTokenGeneratorMock
                 .Setup(g => g.Generate(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>()))
                 .Returns(string.Empty);
@@ -146,10 +146,10 @@ namespace ControlHub.Application.Tests.AccountsTests
             var result = await _handler.Handle(command, CancellationToken.None);
 
             // Assert
-            Assert.True(result.IsFailure, "LỖI: Handler không xử lý trường hợp sinh Token thất bại.");
+            Assert.True(result.IsFailure, "L?I: Handler kh�ng x? l� tru?ng h?p sinh Token th?t b?i.");
             Assert.Equal(TokenErrors.TokenGenerationFailed, result.Error);
 
-            // Verify: Phải log Error để Admin biết hệ thống Token đang lỗi
+            // Verify: Ph?i log Error d? Admin bi?t h? th?ng Token dang l?i
             _loggerMock.Verify(
                 x => x.Log(
                     LogLevel.Error,
@@ -161,15 +161,15 @@ namespace ControlHub.Application.Tests.AccountsTests
         }
 
         // =================================================================================
-        // NHÓM 3: LOGIC NGHIỆP VỤ CƠ BẢN & FACTORY
+        // NH�M 3: LOGIC NGHI?P V? CO B?N & FACTORY
         // =================================================================================
 
         [Fact]
         public async Task Handle_ShouldReturnFailure_WhenIdentifierTypeIsUnsupported()
         {
             // Arrange
-            // Factory thật chỉ chứa EmailValidator (đã setup trong constructor).
-            // Gửi loại Phone -> Factory sẽ không tìm thấy -> Trả về lỗi Unsupported.
+            // Factory th?t ch? ch?a EmailValidator (d� setup trong constructor).
+            // G?i lo?i Phone -> Factory s? kh�ng t�m th?y -> Tr? v? l?i Unsupported.
             var command = new SignInCommand("0909123456", "Pass123!", IdentifierType.Phone);
 
             // Act
@@ -187,7 +187,7 @@ namespace ControlHub.Application.Tests.AccountsTests
             var command = new SignInCommand("invalid-email", "Pass123!", IdentifierType.Email);
             var validationError = Error.Validation("InvalidFormat", "Email format invalid");
 
-            // Setup Validator trả về False
+            // Setup Validator tr? v? False
             _validatorMock
                 .Setup(v => v.ValidateAndNormalize(command.Value))
                 .Returns((false, string.Empty, validationError));
@@ -213,7 +213,7 @@ namespace ControlHub.Application.Tests.AccountsTests
             _accountQueriesMock.Setup(q => q.GetByIdentifierAsync(command.Type, normalized, It.IsAny<CancellationToken>()))
                                .ReturnsAsync(account);
 
-            // Hasher trả về False
+            // Hasher tr? v? False
             _passwordHasherMock.Setup(h => h.Verify(command.Password, It.IsAny<Password>())).Returns(false);
 
             // Act
@@ -225,7 +225,7 @@ namespace ControlHub.Application.Tests.AccountsTests
         }
 
         // =================================================================================
-        // NHÓM 4: HAPPY PATH
+        // NH�M 4: HAPPY PATH
         // =================================================================================
 
         [Fact]
@@ -249,17 +249,17 @@ namespace ControlHub.Application.Tests.AccountsTests
             Assert.Equal(account.Id, result.Value.AccountId);
 
             // Verify Side Effects
-            // 1. Phải lưu Access Token
+            // 1. Ph?i luu Access Token
             _tokenRepositoryMock.Verify(r => r.AddAsync(
                 It.Is<Token>(t => t.Value == accessTokenStr && t.Type == TokenType.AccessToken),
                 It.IsAny<CancellationToken>()), Times.Once);
 
-            // 2. Phải lưu Refresh Token
+            // 2. Ph?i luu Refresh Token
             _tokenRepositoryMock.Verify(r => r.AddAsync(
                 It.Is<Token>(t => t.Value == refreshTokenStr && t.Type == TokenType.RefreshToken),
                 It.IsAny<CancellationToken>()), Times.Once);
 
-            // 3. Phải Commit Transaction
+            // 3. Ph?i Commit Transaction
             _uowMock.Verify(u => u.CommitAsync(It.IsAny<CancellationToken>()), Times.Once);
         }
 
@@ -272,10 +272,10 @@ namespace ControlHub.Application.Tests.AccountsTests
             var password = Password.From(new byte[32], new byte[16]);
             var account = Account.Create(Guid.NewGuid(), password, Guid.NewGuid());
 
-            // Add Identifier để pass check
+            // Add Identifier d? pass check
             account.AddIdentifier(Identifier.Create(IdentifierType.Email, "test@test.com", "test@test.com"));
 
-            // Attach User để lấy username
+            // Attach User d? l?y username
             account.AttachUser(new User(Guid.NewGuid(), account.Id, "TestUser"));
 
             if (!isActive) account.Deactivate();
@@ -289,7 +289,7 @@ namespace ControlHub.Application.Tests.AccountsTests
             string normalized = "test@test.com";
 
             // 1. Validator & Query
-            // (Đã setup Type trong constructor, chỉ cần setup ValidateAndNormalize)
+            // (�� setup Type trong constructor, ch? c?n setup ValidateAndNormalize)
             _validatorMock.Setup(v => v.ValidateAndNormalize(command.Value)).Returns((true, normalized, Error.None));
             _accountQueriesMock.Setup(q => q.GetByIdentifierAsync(command.Type, normalized, It.IsAny<CancellationToken>()))
                                .ReturnsAsync(account);

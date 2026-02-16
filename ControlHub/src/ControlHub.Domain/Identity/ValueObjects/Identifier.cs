@@ -1,8 +1,8 @@
-﻿using ControlHub.Domain.Accounts.Enums;
+using ControlHub.Domain.Identity.Enums;
 using ControlHub.Domain.SharedKernel;
 using ControlHub.SharedKernel.Results;
 
-namespace ControlHub.Domain.Accounts.ValueObjects
+namespace ControlHub.Domain.Identity.ValueObjects
 {
     public sealed class Identifier : ValueObject
     {
@@ -52,7 +52,7 @@ namespace ControlHub.Domain.Accounts.ValueObjects
         protected override IEnumerable<object> GetEqualityComponents()
         {
             yield return Name;
-            yield return NormalizedValue; // equality dựa trên name + normalized value
+            yield return NormalizedValue; // equality d?a tr�n name + normalized value
         }
 
         public override string ToString() => $"{Name}:{NormalizedValue}";

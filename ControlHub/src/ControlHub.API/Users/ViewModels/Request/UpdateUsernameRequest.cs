@@ -1,4 +1,4 @@
-﻿namespace ControlHub.API.Users.ViewModels.Request
+namespace ControlHub.API.Users.ViewModels.Request
 {
     public class UpdateUsernameRequest
     {

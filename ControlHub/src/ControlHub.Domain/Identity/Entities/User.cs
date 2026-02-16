@@ -1,7 +1,7 @@
-﻿using ControlHub.SharedKernel.Results;
+using ControlHub.SharedKernel.Results;
 using ControlHub.SharedKernel.Users;
 
-namespace ControlHub.Domain.Users
+namespace ControlHub.Domain.Identity.Entities
 {
     public class User
     {
@@ -16,12 +16,12 @@ namespace ControlHub.Domain.Users
         // Foreign Key & Navigation
         public Guid AccId { get; private set; }
 
-        // Navigation property về Account (Aggregate Root cha nếu User nằm trong Account Aggregate)
-        // Hoặc chỉ là reference nếu User là Aggregate riêng biệt (tùy thiết kế của bạn)
-        // Ở đây tôi khai báo nó, nhưng EF Core sẽ set nó.
+        // Navigation property v? Account (Aggregate Root cha n?u User n?m trong Account Aggregate)
+        // Ho?c ch? l� reference n?u User l� Aggregate ri�ng bi?t (t�y thi?t k? c?a b?n)
+        // ? d�y t�i khai b�o n�, nhung EF Core s? set n�.
         // public Account Account { get; private set; } = null!; 
 
-        // Constructor rỗng cho EF Core
+        // Constructor r?ng cho EF Core
         private User() { }
 
         public User(Guid id, Guid accId, string? username = null, string? firstName = null, string? lastName = null, string? phoneNumber = null)

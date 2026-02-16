@@ -1,12 +1,12 @@
-﻿using ControlHub.Domain.Accounts.Enums;
-using ControlHub.Domain.Accounts.Identifiers.Rules;
-using ControlHub.Domain.Accounts.Identifiers;
-using ControlHub.Domain.Accounts.ValueObjects;
+using ControlHub.Domain.Identity.Enums;
+using ControlHub.Domain.Identity.Identifiers.Rules;
+using ControlHub.Domain.Identity.Identifiers;
+using ControlHub.Domain.Identity.ValueObjects;
 using ControlHub.SharedKernel.Accounts;
 using ControlHub.SharedKernel.Results;
 using ControlHub.SharedKernel.Common.Errors;
 
-namespace ControlHub.Domain.Accounts.Identifiers.Services
+namespace ControlHub.Domain.Identity.Identifiers.Services
 {
     public class IdentifierFactory
     {

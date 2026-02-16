@@ -1,4 +1,4 @@
-﻿namespace ControlHub.API.Users.ViewModels.Response
+namespace ControlHub.API.Users.ViewModels.Response
 {
     public class UpdateUsernameResponse
     {

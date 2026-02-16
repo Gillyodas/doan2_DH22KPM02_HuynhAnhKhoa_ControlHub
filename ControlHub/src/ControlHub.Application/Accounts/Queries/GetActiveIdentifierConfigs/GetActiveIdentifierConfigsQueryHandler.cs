@@ -1,6 +1,6 @@
 using ControlHub.Application.Accounts.DTOs;
 using AppIdentifierConfigRepository = ControlHub.Application.Accounts.Interfaces.Repositories.IIdentifierConfigRepository;
-using ControlHub.Domain.Accounts.Identifiers;
+using ControlHub.Domain.Identity.Identifiers;
 using ControlHub.SharedKernel.Results;
 using MediatR;
 using Microsoft.Extensions.Logging;

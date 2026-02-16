@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -7,8 +7,8 @@ using System.Threading.Tasks;
 namespace ControlHub.Infrastructure.RealTime.Services
 {
     /// <summary>
-    /// Default implementation - chạy trên single instance.
-    /// Để scale multi-instance: Tạo RedisActiveUserTracker implements IActiveUserTracker.
+    /// Default implementation - ch?y tr�n single instance.
+    /// �? scale multi-instance: T?o RedisActiveUserTracker implements IActiveUserTracker.
     /// </summary>
     internal class InMemoryActiveUserTracker : IActiveUserTracker
     {

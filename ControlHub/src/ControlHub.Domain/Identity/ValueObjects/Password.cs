@@ -1,10 +1,10 @@
-﻿using System.Text.RegularExpressions;
-using ControlHub.Domain.Accounts.Security;
+using System.Text.RegularExpressions;
+using ControlHub.Domain.Identity.Security;
 using ControlHub.Domain.SharedKernel;
 using ControlHub.SharedKernel.Accounts;
 using ControlHub.SharedKernel.Results;
 
-namespace ControlHub.Domain.Accounts.ValueObjects
+namespace ControlHub.Domain.Identity.ValueObjects
 {
     public sealed class Password : ValueObject
     {
@@ -59,8 +59,8 @@ namespace ControlHub.Domain.Accounts.ValueObjects
 
         public bool IsValid()
         {
-            // Salt: tối thiểu 16 bytes, tối đa 64 bytes
-            // Hash: tối thiểu 32 bytes (SHA-256), tối đa 64 bytes (SHA-512)
+            // Salt: t?i thi?u 16 bytes, t?i da 64 bytes
+            // Hash: t?i thi?u 32 bytes (SHA-256), t?i da 64 bytes (SHA-512)
             return Hash is { Length: >= 32 and <= 64 }
                 && Salt is { Length: >= 16 and <= 64 };
         }

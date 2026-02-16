@@ -1,6 +1,6 @@
-using ControlHub.Domain.Accounts.Enums;
-using ControlHub.Domain.Accounts.Identifiers;
-using ControlHub.Domain.Accounts.Identifiers.Services;
+using ControlHub.Domain.Identity.Enums;
+using ControlHub.Domain.Identity.Identifiers;
+using ControlHub.Domain.Identity.Identifiers.Services;
 using FluentAssertions;
 
 namespace ControlHub.Infrastructure.Tests.Identifiers

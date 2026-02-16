@@ -1,10 +1,10 @@
-﻿using ControlHub.Domain.Accounts;
-using ControlHub.Domain.Accounts.Identifiers;
+using ControlHub.Domain.Identity.Aggregates;
+using ControlHub.Domain.Identity.Identifiers;
 using ControlHub.Domain.Outboxs;
 using ControlHub.Domain.Permissions;
 using ControlHub.Domain.Roles;
 using ControlHub.Domain.Tokens;
-using ControlHub.Domain.Users;
+using ControlHub.Domain.Identity.Entities;
 using ControlHub.Infrastructure.RolePermissions;
 using Microsoft.EntityFrameworkCore;
 
@@ -22,10 +22,10 @@ namespace ControlHub.Infrastructure.Persistence
         public DbSet<Role> Roles { get; set; } = default!;
         public DbSet<Permission> Permissions { get; set; } = default!;
 
-        // Entities thuộc Aggregate
+        // Entities thu?c Aggregate
         public DbSet<User> Users { get; set; } = default!;
         public DbSet<Token> Tokens { get; set; } = default!;
-        //TODO: Add OutboxMessage to DbContext + sử dụng virtual DbSet để hỗ trợ testing
+        //TODO: Add OutboxMessage to DbContext + s? d?ng virtual DbSet d? h? tr? testing
         public virtual DbSet<OutboxMessage> OutboxMessages { get; set; } = default!;
 
         // Join Entities
@@ -41,7 +41,7 @@ namespace ControlHub.Infrastructure.Persistence
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.HasDefaultSchema("ControlHub");
-            // Load toàn bộ configuration trong Infrastructure assembly
+            // Load to�n b? configuration trong Infrastructure assembly
             modelBuilder.ApplyConfigurationsFromAssembly(typeof(AppDbContext).Assembly);
             base.OnModelCreating(modelBuilder);
         }

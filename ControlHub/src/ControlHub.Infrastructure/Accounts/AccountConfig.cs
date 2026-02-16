@@ -1,5 +1,5 @@
-﻿using ControlHub.Domain.Accounts;
-using ControlHub.Domain.Users;
+using ControlHub.Domain.Identity.Aggregates;
+using ControlHub.Domain.Identity.Entities;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
@@ -16,38 +16,38 @@ namespace ControlHub.Infrastructure.Accounts
             builder.Property(a => a.IsActive).IsRequired();
             builder.Property(a => a.IsDeleted).IsRequired();
 
-            // --- 1. CẤU HÌNH VALUE OBJECT: PASSWORD (Owned Entity) ---
-            // EF Core sẽ nhúng các cột của Password vào bảng Accounts
+            // --- 1. C?U H�NH VALUE OBJECT: PASSWORD (Owned Entity) ---
+            // EF Core s? nh�ng c�c c?t c?a Password v�o b?ng Accounts
             builder.OwnsOne(a => a.Password, passBuilder =>
             {
                 passBuilder.Property(p => p.Hash)
-                    .HasColumnName("HashPassword") // Tên cột trong DB
+                    .HasColumnName("HashPassword") // T�n c?t trong DB
                     .HasColumnType("varbinary(64)")
                     .IsRequired();
 
                 passBuilder.Property(p => p.Salt)
-                    .HasColumnName("Salt") // Tên cột trong DB
+                    .HasColumnName("Salt") // T�n c?t trong DB
                     .HasColumnType("varbinary(64)")
                     .IsRequired();
             });
 
-            // --- 2. CẤU HÌNH RELATIONSHIPS ---
+            // --- 2. C?U H�NH RELATIONSHIPS ---
 
             // Account (1) -> Role (1)
             builder.HasOne(a => a.Role)
-                .WithMany() // Hoặc .WithMany(r => r.Accounts) nếu bên Role có list Accounts
+                .WithMany() // Ho?c .WithMany(r => r.Accounts) n?u b�n Role c� list Accounts
                 .HasForeignKey(a => a.RoleId)
                 .OnDelete(DeleteBehavior.Restrict);
 
             // Account (1) -> User (1)
             builder.HasOne(a => a.User)
-                .WithOne() // Hoặc .WithOne(u => u.Account) nếu bên User có prop Account
-                .HasForeignKey<User>(u => u.AccId) // User giữ khóa ngoại AccId
+                .WithOne() // Ho?c .WithOne(u => u.Account) n?u b�n User c� prop Account
+                .HasForeignKey<User>(u => u.AccId) // User gi? kh�a ngo?i AccId
                 .OnDelete(DeleteBehavior.Cascade);
 
             // Account (1) -> Tokens (N)
             builder.HasMany(a => a.Tokens)
-                .WithOne() // Bên Token đã cấu hình HasOne<Account>
+                .WithOne() // B�n Token d� c?u h�nh HasOne<Account>
                 .HasForeignKey(t => t.AccountId)
                 .OnDelete(DeleteBehavior.Cascade);
 
@@ -56,23 +56,23 @@ namespace ControlHub.Infrastructure.Accounts
                 .HasField("_tokens")
                 .UsePropertyAccessMode(PropertyAccessMode.Field);
 
-            // --- 3. CẤU HÌNH OWNED COLLECTION: IDENTIFIERS ---
-            // Map List<Identifier> (VO) sang bảng riêng "AccountIdentifiers"
-            // EF Core sẽ tự tạo Shadow PK cho bảng này.
+            // --- 3. C?U H�NH OWNED COLLECTION: IDENTIFIERS ---
+            // Map List<Identifier> (VO) sang b?ng ri�ng "AccountIdentifiers"
+            // EF Core s? t? t?o Shadow PK cho b?ng n�y.
             builder.OwnsMany(a => a.Identifiers, ib =>
             {
                 ib.ToTable("AccountIdentifiers");
 
-                ib.WithOwner().HasForeignKey("AccountId"); // FK trỏ về Account
+                ib.WithOwner().HasForeignKey("AccountId"); // FK tr? v? Account
 
-                // Map các property của Identifier
+                // Map c�c property c?a Identifier
                 ib.Property(i => i.Name).IsRequired().HasMaxLength(100);
                 ib.Property(i => i.Type).IsRequired();
                 ib.Property(i => i.Value).IsRequired().HasMaxLength(300);
                 ib.Property(i => i.NormalizedValue).IsRequired().HasMaxLength(300);
                 ib.Property(i => i.IsDeleted).HasDefaultValue(false);
 
-                // Tạo Unique Index trên bảng phụ - sử dụng Name thay vì Type
+                // T?o Unique Index tr�n b?ng ph? - s? d?ng Name thay v� Type
                 ib.HasIndex(i => new { i.Name, i.NormalizedValue })
                 .IsUnique()
                 .HasFilter("[IsDeleted] = 0");

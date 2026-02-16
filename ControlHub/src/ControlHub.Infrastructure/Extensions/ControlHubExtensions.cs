@@ -1,4 +1,4 @@
-﻿using System.Reflection;
+using System.Reflection;
 using ControlHub.Application.Accounts.Interfaces;
 using ControlHub.Application.Accounts.Interfaces.Repositories;
 using ControlHub.Application.AI;
@@ -21,9 +21,9 @@ using ControlHub.Application.Tokens.Interfaces.Generate;
 using ControlHub.Application.Tokens.Interfaces.Repositories;
 using ControlHub.Application.Tokens.Interfaces.Sender;
 using ControlHub.Application.Users.Interfaces.Repositories;
-using ControlHub.Domain.Accounts.Identifiers.Rules; // Namespace chứa IIdentifierValidator và các Validator cụ thể
-using ControlHub.Domain.Accounts.Identifiers.Services;
-using ControlHub.Domain.Accounts.Security;
+using ControlHub.Domain.Identity.Identifiers.Rules; // Namespace ch?a IIdentifierValidator v� c�c Validator c? th?
+using ControlHub.Domain.Identity.Identifiers.Services;
+using ControlHub.Domain.Identity.Security;
 using ControlHub.Domain.AccessControl.Services;
 using ControlHub.Infrastructure.Accounts.Factories;
 using ControlHub.Infrastructure.Accounts.Repositories;
@@ -84,7 +84,7 @@ namespace ControlHub
     public static class ControlHubExtensions
     {
         /// <summary>
-        /// Cổng vào duy nhất: Đăng ký toàn bộ dịch vụ của ControlHub (Database, Services, Auth, Mediator...)
+        /// C?ng v�o duy nh?t: �ang k� to�n b? d?ch v? c?a ControlHub (Database, Services, Auth, Mediator...)
         /// </summary>
         public static IServiceCollection AddControlHub(this IServiceCollection services, IConfiguration configuration)
         {
@@ -94,16 +94,16 @@ namespace ControlHub
                     configuration.GetConnectionString("DefaultConnection"),
                     b =>
                     {
-                        // Chỉ định Assembly chứa Migration (Infra)
+                        // Ch? d?nh Assembly ch?a Migration (Infra)
                         b.MigrationsAssembly(typeof(AppDbContext).Assembly.FullName);
 
-                        // --- CẬP NHẬT MỚI Ở ĐÂY ---
-                        // Cô lập bảng lịch sử Migration vào schema riêng.
-                        // Điều này giúp ControlHub không "đụng hàng" với bảng __EFMigrationsHistory của App chính (dbo).
+                        // --- C?P NH?T M?I ? ��Y ---
+                        // C� l?p b?ng l?ch s? Migration v�o schema ri�ng.
+                        // �i?u n�y gi�p ControlHub kh�ng "d?ng h�ng" v?i b?ng __EFMigrationsHistory c?a App ch�nh (dbo).
                         b.MigrationsHistoryTable("__EFMigrationsHistory", "ControlHub");
                     }
                 )
-                // --- CẬP NHẬT: Tắt log SQL thành công ở mức Library để đỡ rác Console của App chính ---
+                // --- C?P NH?T: T?t log SQL th�nh c�ng ? m?c Library d? d? r�c Console c?a App ch�nh ---
                 .ConfigureWarnings(w => w.Ignore(Microsoft.EntityFrameworkCore.Diagnostics.RelationalEventId.CommandExecuted))
             );
 
@@ -150,15 +150,15 @@ namespace ControlHub
                 var memoryCache = sp.GetRequiredService<IMemoryCache>();
                 return new CachedIdentifierConfigRepository(baseRepo, memoryCache);
             });
-            services.AddScoped<Domain.Accounts.Identifiers.IIdentifierConfigRepository>(sp => 
+            services.AddScoped<Domain.Identity.Identifiers.IIdentifierConfigRepository>(sp => 
                 sp.GetRequiredService<ControlHub.Application.Accounts.Interfaces.Repositories.IIdentifierConfigRepository>());
 
             // 6. Domain Services & Identifiers
             services.AddScoped<DynamicIdentifierValidator>();
             services.AddScoped<IdentifierFactory>();
 
-            // --- CẬP NHẬT: Đăng ký các triển khai Validator ---
-            // Đăng ký nhiều implementation cho cùng 1 interface để inject IEnumerable<IIdentifierValidator>
+            // --- C?P NH?T: �ang k� c�c tri?n khai Validator ---
+            // �ang k� nhi?u implementation cho c�ng 1 interface d? inject IEnumerable<IIdentifierValidator>
             services.AddScoped<IIdentifierValidator, EmailIdentifierValidator>();
             services.AddScoped<IIdentifierValidator, UsernameIdentifierValidator>();
             services.AddScoped<IIdentifierValidator, PhoneIdentifierValidator>();
@@ -193,7 +193,7 @@ namespace ControlHub
             services.AddScoped<IOutboxRepository, OutboxRepository>();
             services.AddScoped<OutboxHandlerFactory>();
             services.AddHostedService<OutboxProcessor>();
-            // Đăng ký các handler cụ thể cho Factory (nếu Factory dùng IServiceProvider để resolve)
+            // �ang k� c�c handler c? th? cho Factory (n?u Factory d�ng IServiceProvider d? resolve)
             services.AddScoped<IOutboxHandler, EmailOutboxHandler>();
             
             // 10. Logging & AI Infrastructure
@@ -303,17 +303,17 @@ namespace ControlHub
             // MediatR
             services.AddMediatR(cfg => cfg.RegisterServicesFromAssembly(infraAssembly));
 
-            // 12. Controllers (Để Swagger của App chính quét được)
+            // 12. Controllers (�? Swagger c?a App ch�nh qu�t du?c)
             services.AddControllers()
                     .AddApplicationPart(Assembly.GetExecutingAssembly());
 
-            // 13. SWAGGER CONFIGURATION (Tích hợp sẵn)
-            services.AddEndpointsApiExplorer(); // Bắt buộc cho Swagger
+            // 13. SWAGGER CONFIGURATION (T�ch h?p s?n)
+            services.AddEndpointsApiExplorer(); // B?t bu?c cho Swagger
 
             // Authorization
             services.AddAuthorization(options =>
             {
-                // Policy cho Dashboard Hub - chỉ Admin/SupperAdmin
+                // Policy cho Dashboard Hub - ch? Admin/SupperAdmin
                 options.AddPolicy("DashboardAccess", policy =>
                 policy.RequireAssertion(context =>
                 {
@@ -324,7 +324,7 @@ namespace ControlHub
 
             services.AddSwaggerGen(c =>
             {
-                // Lấy URL từ config hoặc để mặc định đường dẫn tương đối để tự chạy theo host
+                // L?y URL t? config ho?c d? m?c d?nh du?ng d?n tuong d?i d? t? ch?y theo host
                 var dashboardUrl = configuration["ControlHub:DashboardUrl"] ?? "/control-hub/index.html";
 
                 c.SwaggerDoc("v1", new OpenApiInfo
@@ -333,7 +333,7 @@ namespace ControlHub
                     Version = "v1",
                     Description = $@"Identity & Access Management provided by ControlHub NuGet
 
-<a href='{dashboardUrl}' class='my-custom-button'>🚀 Open ControlHub Dashboard</a>
+<a href='{dashboardUrl}' class='my-custom-button'>?? Open ControlHub Dashboard</a>
 
 <style>
 .my-custom-button {{
@@ -358,7 +358,7 @@ namespace ControlHub
 </style>"
                 });
 
-                // Cấu hình ổ khóa JWT (Bearer)
+                // C?u h�nh ? kh�a JWT (Bearer)
                 c.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
                 {
                     Description = "JWT Authorization header using the Bearer scheme. Enter your token directly.",
@@ -436,7 +436,7 @@ namespace ControlHub
         }
 
         /// <summary>
-        /// Phục vụ giao diện React Dashboard từ NuGet
+        /// Ph?c v? giao di?n React Dashboard t? NuGet
         /// </summary>
         public static IApplicationBuilder UseControlHub(this IApplicationBuilder app, string guiPath = "/control-hub")
         {
@@ -452,11 +452,11 @@ namespace ControlHub
                 try
                 {
                     ControlHubSeeder.SeedAsync(db).Wait();
-                    Console.WriteLine("✅ ControlHub seeding completed successfully!");
+                    Console.WriteLine("? ControlHub seeding completed successfully!");
                 }
                 catch (Exception ex)
                 {
-                    Console.WriteLine($"❌ ControlHub seeding failed: {ex.Message}");
+                    Console.WriteLine($"? ControlHub seeding failed: {ex.Message}");
                     Console.WriteLine($"Stack trace: {ex.StackTrace}");
                     throw;
                 }

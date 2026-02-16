@@ -1,5 +1,5 @@
-﻿using ControlHub.Application.Tokens.Interfaces.Sender;
-using ControlHub.Domain.Accounts.Enums;
+using ControlHub.Application.Tokens.Interfaces.Sender;
+using ControlHub.Domain.Identity.Enums;
 
 namespace ControlHub.Infrastructure.Tokens.Sender
 {

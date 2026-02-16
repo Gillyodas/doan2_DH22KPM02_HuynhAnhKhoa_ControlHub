@@ -1,4 +1,4 @@
-﻿namespace ControlHub.Domain.Outboxs
+namespace ControlHub.Domain.Outboxs
 {
     public class OutboxMessage
     {
@@ -26,7 +26,7 @@
         public static OutboxMessage Create(OutboxMessageType type, string payload)
             => new OutboxMessage(Guid.NewGuid(), type, payload);
 
-        // Rehydrate (nếu cần thiết, nhưng EF Core thường tự lo việc này)
+        // Rehydrate (n?u c?n thi?t, nhung EF Core thu?ng t? lo vi?c n�y)
         public static OutboxMessage Rehydrate(
             Guid id,
             DateTime occurredOn,
@@ -60,7 +60,7 @@
         {
             Processed = false;
             Error = error;
-            // Có thể cập nhật ProcessedOn để biết lần fail cuối cùng nếu muốn
+            // C� th? c?p nh?t ProcessedOn d? bi?t l?n fail cu?i c�ng n?u mu?n
         }
     }
 }

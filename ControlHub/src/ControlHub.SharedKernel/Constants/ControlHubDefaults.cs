@@ -1,4 +1,4 @@
-﻿namespace ControlHub.SharedKernel.Constants
+namespace ControlHub.SharedKernel.Constants
 {
     public static class ControlHubDefaults
     {

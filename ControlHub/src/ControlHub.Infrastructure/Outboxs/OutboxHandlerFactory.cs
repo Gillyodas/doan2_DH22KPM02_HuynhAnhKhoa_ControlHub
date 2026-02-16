@@ -1,4 +1,4 @@
-﻿using ControlHub.Application.OutBoxs;
+using ControlHub.Application.OutBoxs;
 using ControlHub.Domain.Outboxs;
 
 namespace ControlHub.Infrastructure.Outboxs
@@ -11,7 +11,7 @@ namespace ControlHub.Infrastructure.Outboxs
         {
             _handlers = handlers.ToDictionary(h => h.Type, h => h);
         }
-        //TODO: Thay đổi từ không virtual thành có virtual để có thể override trong unit test
+        //TODO: Thay d?i t? kh�ng virtual th�nh c� virtual d? c� th? override trong unit test
         public virtual IOutboxHandler? Get(OutboxMessageType type)
             => _handlers.TryGetValue(type, out var handler) ? handler : null;
     }

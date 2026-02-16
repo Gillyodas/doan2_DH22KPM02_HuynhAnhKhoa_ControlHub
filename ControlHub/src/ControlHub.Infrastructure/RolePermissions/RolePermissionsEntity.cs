@@ -1,9 +1,9 @@
-﻿using ControlHub.Domain.Permissions;
+using ControlHub.Domain.Permissions;
 using ControlHub.Domain.Roles;
 
 namespace ControlHub.Infrastructure.RolePermissions
 {
-    // Class này thuần túy là POCO cho bảng trung gian (Join Table)
+    // Class n�y thu?n t�y l� POCO cho b?ng trung gian (Join Table)
     public class RolePermissionEntity
     {
         public Guid RoleId { get; set; }

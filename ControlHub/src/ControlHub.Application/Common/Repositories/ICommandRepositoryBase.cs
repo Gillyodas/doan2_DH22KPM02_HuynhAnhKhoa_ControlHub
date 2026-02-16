@@ -1,4 +1,4 @@
-﻿namespace ControlHub.Application.Common.Repositories
+namespace ControlHub.Application.Common.Repositories
 {
     public interface ICommandRepositoryBase<T> where T : class
     {

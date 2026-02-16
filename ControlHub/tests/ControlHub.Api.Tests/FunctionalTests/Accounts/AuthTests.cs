@@ -1,7 +1,7 @@
 using ControlHub.Api.Tests.Abstractions;
 using ControlHub.API.Accounts.ViewModels.Request;
 using ControlHub.API.Accounts.ViewModels.Response;
-using ControlHub.Domain.Accounts.Enums;
+using ControlHub.Domain.Identity.Enums;
 using FluentAssertions;
 using System.Net;
 using System.Net.Http.Json;

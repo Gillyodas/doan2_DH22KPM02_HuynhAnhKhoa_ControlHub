@@ -1,4 +1,4 @@
-﻿namespace ControlHub.API.Permissions.ViewModels.Responses
+namespace ControlHub.API.Permissions.ViewModels.Responses
 {
     public class CreatePermissionsResponse
     {

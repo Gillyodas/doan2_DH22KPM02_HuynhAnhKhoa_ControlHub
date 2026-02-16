@@ -1,4 +1,4 @@
-﻿using System.Collections.Concurrent;
+using System.Collections.Concurrent;
 using System.Reflection;
 using ControlHub.SharedKernel.Common.Errors;
 using ControlHub.SharedKernel.Results;
@@ -40,11 +40,11 @@ namespace ControlHub.Application.Common.Behaviors
             if (failures.Count == 0)
                 return await next();
 
-            // Ghép lỗi thành Error chuẩn
+            // Gh�p l?i th�nh Error chu?n
             var errorMessage = string.Join("; ", failures.Select(f => f.ErrorMessage));
             var error = Error.Validation("Validation.Failed", errorMessage);
 
-            // Trường hợp Handler trả về Result<T> - use cached reflection
+            // Tru?ng h?p Handler tr? v? Result<T> - use cached reflection
             if (typeof(TResponse).IsGenericType &&
                 typeof(TResponse).GetGenericTypeDefinition() == typeof(Result<>))
             {
@@ -67,13 +67,13 @@ namespace ControlHub.Application.Common.Behaviors
                 return (TResponse)result!;
             }
 
-            // Trường hợp Handler trả về Result (non-generic)
+            // Tru?ng h?p Handler tr? v? Result (non-generic)
             if (typeof(TResponse) == typeof(Result))
             {
                 return (TResponse)(object)Result.Failure(error);
             }
 
-            // Nếu không phải Result => fallback throw exception truyền thống
+            // N?u kh�ng ph?i Result => fallback throw exception truy?n th?ng
             throw new ValidationException(errorMessage, failures);
         }
     }

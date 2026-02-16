@@ -1,4 +1,4 @@
-﻿using ControlHub.SharedKernel.Common.Errors;
+using ControlHub.SharedKernel.Common.Errors;
 
 namespace ControlHub.SharedKernel.Results
 {
@@ -41,7 +41,7 @@ namespace ControlHub.SharedKernel.Results
     }
 
     /// <summary>
-    /// Kết quả dạng partial cho batch operation (một phần thành công, một phần thất bại)
+    /// K?t qu? d?ng partial cho batch operation (m?t ph?n th�nh c�ng, m?t ph?n th?t b?i)
     /// </summary>
     public class PartialResult<TSuccess, TFailure>
     {

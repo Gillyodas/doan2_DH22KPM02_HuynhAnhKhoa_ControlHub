@@ -1,9 +1,9 @@
-﻿using System.Text.RegularExpressions;
-using ControlHub.Domain.Accounts.Enums;
+using System.Text.RegularExpressions;
+using ControlHub.Domain.Identity.Enums;
 using ControlHub.SharedKernel.Common.Errors;
 using ControlHub.SharedKernel.Indentifiers;
 
-namespace ControlHub.Domain.Accounts.Identifiers.Rules
+namespace ControlHub.Domain.Identity.Identifiers.Rules
 {
     public class PhoneIdentifierValidator : IIdentifierValidator
     {

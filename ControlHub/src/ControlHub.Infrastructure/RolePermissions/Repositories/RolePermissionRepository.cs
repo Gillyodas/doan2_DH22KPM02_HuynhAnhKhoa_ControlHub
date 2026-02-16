@@ -1,4 +1,4 @@
-﻿using AutoMapper;
+using AutoMapper;
 using ControlHub.Application.Roles.Interfaces.Repositories;
 using ControlHub.Infrastructure.Persistence;
 

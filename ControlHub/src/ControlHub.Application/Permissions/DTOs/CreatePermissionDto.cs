@@ -1,4 +1,4 @@
-﻿namespace ControlHub.Application.Permissions.DTOs
+namespace ControlHub.Application.Permissions.DTOs
 {
     public sealed record CreatePermissionDto(
         string Code,

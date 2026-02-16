@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.IO.Pipelines;
 using System.Linq;
@@ -31,7 +31,7 @@ namespace ControlHub.Infrastructure.RealTime.Services
         }
 
         /// <summary>
-        /// Được gọi từ DashboardNotificationHandler để thêm event vào buffer.
+        /// �u?c g?i t? DashboardNotificationHandler d? th�m event v�o buffer.
         /// </summary>
         /// 
         public void Enqueue(LoginAttemptedEvent evt)

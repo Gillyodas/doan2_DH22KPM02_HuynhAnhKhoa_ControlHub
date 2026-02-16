@@ -1,4 +1,4 @@
-﻿using ControlHub.Domain.Users;
+using ControlHub.Domain.Identity.Entities;
 
 namespace ControlHub.Application.Users.Interfaces.Repositories
 {

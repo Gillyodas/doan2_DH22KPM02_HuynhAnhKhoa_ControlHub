@@ -1,8 +1,8 @@
-﻿using ControlHub.Application.Accounts.Interfaces.Repositories;
-using ControlHub.Domain.Accounts;
-using ControlHub.Domain.Accounts.Enums;
-using ControlHub.Domain.Accounts.ValueObjects;
-using ControlHub.Domain.Users;
+using ControlHub.Application.Accounts.Interfaces.Repositories;
+using ControlHub.Domain.Identity.Aggregates;
+using ControlHub.Domain.Identity.Enums;
+using ControlHub.Domain.Identity.ValueObjects;
+using ControlHub.Domain.Identity.Entities;
 using ControlHub.Infrastructure.Persistence;
 using Microsoft.EntityFrameworkCore;
 
@@ -21,8 +21,8 @@ namespace ControlHub.Infrastructure.Accounts.Repositories
         {
             return await _db.Accounts
                 .AsNoTracking()
-                // Owned Collection (Identifiers) thường được EF Core tự động load (Auto Include)
-                // Nhưng explicit include cũng không sao nếu bạn tắt Auto Include
+                // Owned Collection (Identifiers) thu?ng du?c EF Core t? d?ng load (Auto Include)
+                // Nhung explicit include cung kh�ng sao n?u b?n t?t Auto Include
                 // .Include(a => a.Identifiers) 
                 .FirstOrDefaultAsync(a => a.Id == id, cancellationToken);
         }

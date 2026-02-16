@@ -1,7 +1,7 @@
-﻿using ControlHub.SharedKernel.Common.Errors;
+using ControlHub.SharedKernel.Common.Errors;
 using ControlHub.SharedKernel.Users;
 
-namespace ControlHub.Domain.Users
+namespace ControlHub.Domain.Identity.Entities
 {
     public class UserErrorsCatalog : IErrorCatalog
     {
@@ -19,7 +19,7 @@ namespace ControlHub.Domain.Users
         {
             return _messageToCode.TryGetValue(message, out var code)
                 ? code
-                : null; // middleware sẽ fallback sang "Validation.Unknown"
+                : null; // middleware s? fallback sang "Validation.Unknown"
         }
     }
 }

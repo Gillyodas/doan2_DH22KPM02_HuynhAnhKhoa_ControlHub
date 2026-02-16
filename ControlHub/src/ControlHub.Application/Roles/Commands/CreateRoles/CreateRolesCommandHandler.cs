@@ -1,4 +1,4 @@
-﻿using ControlHub.Application.Common.Persistence;
+using ControlHub.Application.Common.Persistence;
 using ControlHub.Application.Roles.DTOs;
 using ControlHub.Application.Permissions.Interfaces.Repositories;
 using ControlHub.Application.Roles.Interfaces.Repositories;

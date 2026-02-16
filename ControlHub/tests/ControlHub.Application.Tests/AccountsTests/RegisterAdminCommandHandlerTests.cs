@@ -1,10 +1,10 @@
-﻿using ControlHub.Application.Accounts.Commands.RegisterAdmin;
+using ControlHub.Application.Accounts.Commands.RegisterAdmin;
 using ControlHub.Application.Accounts.Interfaces;
 using ControlHub.Application.Accounts.Interfaces.Repositories;
 using ControlHub.Application.Common.Persistence;
-using ControlHub.Domain.Accounts;
-using ControlHub.Domain.Accounts.Enums;
-using ControlHub.Domain.Accounts.ValueObjects;
+using ControlHub.Domain.Identity.Aggregates;
+using ControlHub.Domain.Identity.Enums;
+using ControlHub.Domain.Identity.ValueObjects;
 using ControlHub.SharedKernel.Accounts;
 using ControlHub.SharedKernel.Common.Errors;
 using ControlHub.SharedKernel.Results;
@@ -18,7 +18,7 @@ namespace ControlHub.Application.Tests.AccountsTests
     {
         private readonly Mock<IAccountValidator> _accountValidatorMock = new();
         private readonly Mock<IAccountRepository> _accountRepositoryMock = new();
-        // Sửa lại Mock Logger cho đúng loại (Admin, không phải User)
+        // S?a l?i Mock Logger cho d�ng lo?i (Admin, kh�ng ph?i User)
         private readonly Mock<ILogger<RegisterAdminCommandHandler>> _loggerMock = new();
         private readonly Mock<IAccountFactory> _accountFactoryMock = new();
         private readonly Mock<IConfiguration> _configMock = new();
@@ -29,7 +29,7 @@ namespace ControlHub.Application.Tests.AccountsTests
 
         public RegisterAdminCommandHandlerTests()
         {
-            // Setup mặc định: Config đúng
+            // Setup m?c d?nh: Config d�ng
             _configMock.Setup(x => x["RoleSettings:AdminRoleId"]).Returns(_validRoleId);
 
             _handler = new RegisterAdminCommandHandler(
@@ -43,16 +43,16 @@ namespace ControlHub.Application.Tests.AccountsTests
         }
 
         // =================================================================================
-        // NHÓM 1: BUG HUNTING - CONFIGURATION & ROBUSTNESS
-        // Mục tiêu: Bắt lỗi code đang bị Crash khi cấu hình sai
+        // NH�M 1: BUG HUNTING - CONFIGURATION & ROBUSTNESS
+        // M?c ti�u: B?t l?i code dang b? Crash khi c?u h�nh sai
         // =================================================================================
 
         [Fact]
         public async Task Handle_ShouldReturnFailure_WhenAdminRoleIdConfigIsMissing()
         {
-            // 🐛 BUG HUNT: Code hiện tại dùng Guid.Parse trực tiếp.
-            // Nếu chạy test này, nó sẽ Fail do ArgumentNullException.
-            // Điều này CHỨNG MINH code thiếu logic xử lý lỗi cấu hình.
+            // ?? BUG HUNT: Code hi?n t?i d�ng Guid.Parse tr?c ti?p.
+            // N?u ch?y test n�y, n� s? Fail do ArgumentNullException.
+            // �i?u n�y CH?NG MINH code thi?u logic x? l� l?i c?u h�nh.
 
             // Arrange
             _configMock.Setup(x => x["RoleSettings:AdminRoleId"]).Returns((string?)null);
@@ -62,18 +62,18 @@ namespace ControlHub.Application.Tests.AccountsTests
             var result = await _handler.Handle(command, CancellationToken.None);
 
             // Assert
-            // Mong đợi: Code phải bắt lỗi và trả về Failure
-            Assert.True(result.IsFailure, "LỖI: Handler bị Crash (Exception) thay vì trả về Result.Failure khi thiếu Config.");
+            // Mong d?i: Code ph?i b?t l?i v� tr? v? Failure
+            Assert.True(result.IsFailure, "L?I: Handler b? Crash (Exception) thay v� tr? v? Result.Failure khi thi?u Config.");
             Assert.Equal(CommonErrors.SystemConfigurationError, result.Error);
 
-            // Verify: Không được gọi DB khi lỗi hệ thống
+            // Verify: Kh�ng du?c g?i DB khi l?i h? th?ng
             _accountRepositoryMock.Verify(r => r.AddAsync(It.IsAny<Account>(), It.IsAny<CancellationToken>()), Times.Never);
         }
 
         [Fact]
         public async Task Handle_ShouldReturnFailure_WhenAdminRoleIdConfigIsInvalidFormat()
         {
-            // 🐛 BUG HUNT: Code hiện tại sẽ Crash (FormatException).
+            // ?? BUG HUNT: Code hi?n t?i s? Crash (FormatException).
 
             // Arrange
             _configMock.Setup(x => x["RoleSettings:AdminRoleId"]).Returns("invalid-guid-string");
@@ -83,12 +83,12 @@ namespace ControlHub.Application.Tests.AccountsTests
             var result = await _handler.Handle(command, CancellationToken.None);
 
             // Assert
-            Assert.True(result.IsFailure, "LỖI: Handler bị Crash (FormatException) thay vì trả về Result.Failure khi Config sai định dạng.");
+            Assert.True(result.IsFailure, "L?I: Handler b? Crash (FormatException) thay v� tr? v? Result.Failure khi Config sai d?nh d?ng.");
             Assert.Equal(CommonErrors.SystemConfigurationError, result.Error);
         }
 
         // =================================================================================
-        // NHÓM 2: LOGIC NGHIỆP VỤ (BUSINESS LOGIC)
+        // NH�M 2: LOGIC NGHI?P V? (BUSINESS LOGIC)
         // =================================================================================
 
         [Fact]
@@ -133,7 +133,7 @@ namespace ControlHub.Application.Tests.AccountsTests
         }
 
         // =================================================================================
-        // NHÓM 3: HAPPY PATH
+        // NH�M 3: HAPPY PATH
         // =================================================================================
 
         [Fact]
@@ -147,14 +147,14 @@ namespace ControlHub.Application.Tests.AccountsTests
 
             var dummyPassword = Password.From(new byte[32], new byte[16]);
 
-            // Mock Factory: Kiểm tra xem có truyền đúng RoleId từ Config không
+            // Mock Factory: Ki?m tra xem c� truy?n d�ng RoleId t? Config kh�ng
             _accountFactoryMock
                 .Setup(f => f.CreateWithUserAndIdentifierAsync(
                     It.IsAny<Guid>(),
                     command.Value,
                     command.Type,
                     command.Password,
-                    Guid.Parse(_validRoleId), // Verify logic lấy config
+                    Guid.Parse(_validRoleId), // Verify logic l?y config
                     It.IsAny<string?>(),
                     It.IsAny<Guid?>()))
                 .ReturnsAsync((Guid id, string v, IdentifierType t, string p, Guid r, string? u, Guid? cid) =>

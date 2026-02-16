@@ -1,4 +1,4 @@
-﻿using System.IdentityModel.Tokens.Jwt;
+using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using ControlHub.Application.Common.Persistence;
 using ControlHub.Application.Tokens.Interfaces;
@@ -37,7 +37,7 @@ namespace ControlHub.Application.Accounts.Commands.SignOut
         {
             _logger.LogInformation("{@LogCode} | AccessToken: {AccessToken}",
                 AccountLogs.SignOut_Started,
-                request.accessToken[..Math.Min(10, request.accessToken.Length)]); // log 1 phần token để tránh lộ full
+                request.accessToken[..Math.Min(10, request.accessToken.Length)]); // log 1 ph?n token d? tr�nh l? full
 
             var claim = _tokenVerifier.Verify(request.accessToken);
             if (claim == null)

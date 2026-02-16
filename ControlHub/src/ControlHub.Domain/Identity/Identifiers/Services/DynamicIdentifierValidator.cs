@@ -1,9 +1,9 @@
-﻿using System.Text.RegularExpressions;
-using ControlHub.Domain.Accounts.Enums;
+using System.Text.RegularExpressions;
+using ControlHub.Domain.Identity.Enums;
 using ControlHub.SharedKernel.Common.Errors;
 using ControlHub.SharedKernel.Results;
 
-namespace ControlHub.Domain.Accounts.Identifiers.Services
+namespace ControlHub.Domain.Identity.Identifiers.Services
 {
     public class DynamicIdentifierValidator
     {

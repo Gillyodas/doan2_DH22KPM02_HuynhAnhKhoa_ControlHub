@@ -1,7 +1,7 @@
-﻿using System.Security.Cryptography;
+using System.Security.Cryptography;
 using System.Text;
-using ControlHub.Domain.Accounts.Security;
-using ControlHub.Domain.Accounts.ValueObjects;
+using ControlHub.Domain.Identity.Security;
+using ControlHub.Domain.Identity.ValueObjects;
 using Konscious.Security.Cryptography;
 using Microsoft.Extensions.Options;
 

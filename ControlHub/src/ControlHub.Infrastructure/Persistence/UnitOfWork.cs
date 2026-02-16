@@ -1,4 +1,4 @@
-﻿using ControlHub.Application.Common.Persistence;
+using ControlHub.Application.Common.Persistence;
 using ControlHub.SharedKernel.Common.Exceptions;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Storage;

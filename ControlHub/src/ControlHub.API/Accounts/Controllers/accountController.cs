@@ -1,4 +1,4 @@
-﻿using ControlHub.API.Accounts.ViewModels.Request;
+using ControlHub.API.Accounts.ViewModels.Request;
 using ControlHub.API.Controllers;
 using ControlHub.Application.Accounts.Commands.ChangePassword;
 using ControlHub.Application.Accounts.Commands.ForgotPassword;
@@ -33,12 +33,12 @@ namespace ControlHub.API.Accounts.Controllers
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         public async Task<IActionResult> ChangePassword(Guid id, [FromBody] ChangePasswordRequest request, CancellationToken cancellationToken)
         {
-            // Resource-based Authorization: Kiểm tra quyền trên tài nguyên cụ thể (id)
+            // Resource-based Authorization: Ki?m tra quy?n tr�n t�i nguy�n c? th? (id)
             var authResult = await _authorizationService.AuthorizeAsync(User, id, new SameUserRequirement());
 
             if (!authResult.Succeeded)
             {
-                return Forbid(); // Trả về 403 Forbidden chuẩn xác
+                return Forbid(); // Tr? v? 403 Forbidden chu?n x�c
             }
 
             var command = new ChangePasswordCommand(id, request.curPass, request.newPass);
@@ -47,10 +47,10 @@ namespace ControlHub.API.Accounts.Controllers
 
             if (result.IsFailure)
             {
-                return HandleFailure(result); // Tự động map lỗi (VD: Sai pass cũ -> 400, Account Deleted -> 400)
+                return HandleFailure(result); // T? d?ng map l?i (VD: Sai pass cu -> 400, Account Deleted -> 400)
             }
 
-            return NoContent(); // Thành công và không có nội dung trả về
+            return NoContent(); // Th�nh c�ng v� kh�ng c� n?i dung tr? v?
         }
 
         [AllowAnonymous]

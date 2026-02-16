@@ -1,6 +1,6 @@
-﻿using ControlHub.Application.Users.Interfaces.Repositories;
+using ControlHub.Application.Users.Interfaces.Repositories;
 using ControlHub.Application.Users.DTOs;
-using ControlHub.Domain.Users;
+using ControlHub.Domain.Identity.Entities;
 using ControlHub.Infrastructure.Persistence;
 using ControlHub.SharedKernel.Common;
 using Microsoft.EntityFrameworkCore;
@@ -32,7 +32,7 @@ namespace ControlHub.Infrastructure.Users.Repositories
 
             if (result == null) return null;
 
-            var email = result.a.Identifiers.FirstOrDefault(i => i.Type == ControlHub.Domain.Accounts.Enums.IdentifierType.Email)?.Value;
+            var email = result.a.Identifiers.FirstOrDefault(i => i.Type == ControlHub.Domain.Identity.Enums.IdentifierType.Email)?.Value;
 
             return new UserDto(
                 result.u.Id,
@@ -59,7 +59,7 @@ namespace ControlHub.Infrastructure.Users.Repositories
 
             if (result == null) return null;
 
-            var email = result.a.Identifiers.FirstOrDefault(i => i.Type == ControlHub.Domain.Accounts.Enums.IdentifierType.Email)?.Value;
+            var email = result.a.Identifiers.FirstOrDefault(i => i.Type == ControlHub.Domain.Identity.Enums.IdentifierType.Email)?.Value;
 
             return new UserDto(
                 result.u.Id,
@@ -104,7 +104,7 @@ namespace ControlHub.Infrastructure.Users.Repositories
             var dtos = items.Select(x => new UserDto(
                 x.u.Id,
                 x.u.Username ?? string.Empty,
-                x.a.Identifiers.FirstOrDefault(i => i.Type == ControlHub.Domain.Accounts.Enums.IdentifierType.Email)?.Value,
+                x.a.Identifiers.FirstOrDefault(i => i.Type == ControlHub.Domain.Identity.Enums.IdentifierType.Email)?.Value,
                 x.u.FirstName,
                 x.u.LastName,
                 x.u.PhoneNumber,

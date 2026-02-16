@@ -1,8 +1,8 @@
-﻿using System.Text.RegularExpressions;
+using System.Text.RegularExpressions;
 using ControlHub.SharedKernel.Accounts;
 using ControlHub.SharedKernel.Results;
 
-namespace ControlHub.Domain.Accounts.ValueObjects
+namespace ControlHub.Domain.Identity.ValueObjects
 {
     public sealed class Email : IEquatable<Email>
     {
@@ -14,7 +14,7 @@ namespace ControlHub.Domain.Accounts.ValueObjects
 
         private Email(string value) => Value = value;
 
-        // Factory với validate
+        // Factory v?i validate
         public static Result<Email> Create(string value)
         {
             if (string.IsNullOrWhiteSpace(value))
@@ -26,7 +26,7 @@ namespace ControlHub.Domain.Accounts.ValueObjects
             return Result<Email>.Success(new Email(value));
         }
 
-        // Factory bỏ qua validate (chỉ dùng khi materialize từ DB)
+        // Factory b? qua validate (ch? d�ng khi materialize t? DB)
         public static Email UnsafeCreate(string value) => new(value);
 
         // Value Object equality

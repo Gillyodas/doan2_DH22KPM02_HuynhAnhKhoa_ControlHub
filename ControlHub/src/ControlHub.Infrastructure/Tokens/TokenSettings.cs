@@ -1,4 +1,4 @@
-﻿namespace ControlHub.Infrastructure.Tokens
+namespace ControlHub.Infrastructure.Tokens
 {
     public class TokenSettings
     {

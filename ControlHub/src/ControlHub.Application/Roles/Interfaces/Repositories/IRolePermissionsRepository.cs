@@ -1,4 +1,4 @@
-﻿namespace ControlHub.Application.Roles.Interfaces.Repositories
+namespace ControlHub.Application.Roles.Interfaces.Repositories
 {
     public interface IRolePermissionsRepository
     {

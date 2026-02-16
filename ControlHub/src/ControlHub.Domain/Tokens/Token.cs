@@ -1,4 +1,4 @@
-﻿using ControlHub.Domain.Tokens.Enums;
+using ControlHub.Domain.Tokens.Enums;
 using ControlHub.SharedKernel.Results;
 using ControlHub.SharedKernel.Tokens;
 
@@ -16,9 +16,9 @@ namespace ControlHub.Domain.Tokens
         public bool IsRevoked { get; private set; }
 
         // Navigation Property (Optional)
-        // Trong Domain, Token thường không cần giữ object Account.
-        // Chỉ cần AccountId là đủ để định danh chủ sở hữu.
-        // Nếu cần, bạn có thể thêm: 
+        // Trong Domain, Token thu?ng kh�ng c?n gi? object Account.
+        // Ch? c?n AccountId l� d? d? d?nh danh ch? s? h?u.
+        // N?u c?n, b?n c� th? th�m: 
         // public Account Account { get; private set; } = null!;
 
         private Token() { } // for EF Core

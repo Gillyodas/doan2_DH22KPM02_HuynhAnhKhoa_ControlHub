@@ -1,4 +1,4 @@
-﻿using ControlHub.Domain.Accounts.Enums;
+using ControlHub.Domain.Identity.Enums;
 using ControlHub.SharedKernel.Results;
 using MediatR;
 

@@ -1,8 +1,8 @@
-﻿using ControlHub.Domain.Accounts.Enums;
+using ControlHub.Domain.Identity.Enums;
 using ControlHub.SharedKernel.Common.Errors;
 using ControlHub.SharedKernel.Results;
 
-namespace ControlHub.Domain.Accounts.Identifiers
+namespace ControlHub.Domain.Identity.Identifiers
 {
     public class IdentifierConfig
     {

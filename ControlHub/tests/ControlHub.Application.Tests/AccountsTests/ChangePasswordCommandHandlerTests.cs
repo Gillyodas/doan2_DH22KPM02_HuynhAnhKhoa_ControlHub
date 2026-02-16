@@ -1,10 +1,10 @@
-﻿using ControlHub.Application.Accounts.Commands.ChangePassword;
+using ControlHub.Application.Accounts.Commands.ChangePassword;
 using ControlHub.Application.Accounts.Interfaces.Repositories;
 using ControlHub.Application.Common.Persistence;
 using ControlHub.Application.Tokens.Interfaces.Repositories;
-using ControlHub.Domain.Accounts;
-using ControlHub.Domain.Accounts.Security;
-using ControlHub.Domain.Accounts.ValueObjects;
+using ControlHub.Domain.Identity.Aggregates;
+using ControlHub.Domain.Identity.Security;
+using ControlHub.Domain.Identity.ValueObjects;
 using Microsoft.Extensions.Logging;
 using Moq;
 
@@ -32,18 +32,18 @@ namespace ControlHub.Application.Tests.AccountsTests
         }
 
         // =================================================================================
-        // NHÓM 1: LỖI LOGIC & BẢO MẬT (Security & Logic Flaws)
+        // NH�M 1: L?I LOGIC & B?O M?T (Security & Logic Flaws)
         // =================================================================================
 
         [Fact]
         public async Task BUG_HUNT_Handle_ShouldFail_WhenAccountIsDeleted()
         {
-            // 🐛 BUG TIỀM ẨN: Tài khoản đã bị xóa (Soft Delete) vẫn đổi được mật khẩu?
-            // Mong đợi: Phải trả về lỗi và KHÔNG được commit.
+            // ?? BUG TI?M ?N: T�i kho?n d� b? x�a (Soft Delete) v?n d?i du?c m?t kh?u?
+            // Mong d?i: Ph?i tr? v? l?i v� KH�NG du?c commit.
 
             // Arrange
             var command = new ChangePasswordCommand(Guid.NewGuid(), "OldPass", "NewPass");
-            var account = CreateDummyAccount(isDeleted: true); // Account đã bị xóa
+            var account = CreateDummyAccount(isDeleted: true); // Account d� b? x�a
 
             SetupHappyPathMocks(command, account);
 
@@ -51,22 +51,22 @@ namespace ControlHub.Application.Tests.AccountsTests
             var result = await _handler.Handle(command, CancellationToken.None);
 
             // Assert
-            // Nếu result.IsSuccess == true => Code đang có BUG (Cho phép đổi pass user đã xóa)
-            Assert.False(result.IsSuccess, "LỖI BẢO MẬT: Hệ thống vẫn cho phép đổi mật khẩu trên tài khoản đã bị xóa (IsDeleted=true).");
+            // N?u result.IsSuccess == true => Code dang c� BUG (Cho ph�p d?i pass user d� x�a)
+            Assert.False(result.IsSuccess, "L?I B?O M?T: H? th?ng v?n cho ph�p d?i m?t kh?u tr�n t�i kho?n d� b? x�a (IsDeleted=true).");
 
-            // Verify: Đảm bảo không có lệnh lưu xuống DB
+            // Verify: �?m b?o kh�ng c� l?nh luu xu?ng DB
             _uowMock.Verify(u => u.CommitAsync(It.IsAny<CancellationToken>()), Times.Never);
         }
 
         [Fact]
         public async Task BUG_HUNT_Handle_ShouldFail_WhenAccountIsInactive()
         {
-            // 🐛 BUG TIỀM ẨN: Tài khoản đang bị khóa (Deactivated) vẫn đổi được mật khẩu?
-            // Mong đợi: Phải trả về lỗi.
+            // ?? BUG TI?M ?N: T�i kho?n dang b? kh�a (Deactivated) v?n d?i du?c m?t kh?u?
+            // Mong d?i: Ph?i tr? v? l?i.
 
             // Arrange
             var command = new ChangePasswordCommand(Guid.NewGuid(), "OldPass", "NewPass");
-            var account = CreateDummyAccount(isActive: false); // Account bị khóa
+            var account = CreateDummyAccount(isActive: false); // Account b? kh�a
 
             SetupHappyPathMocks(command, account);
 
@@ -74,7 +74,7 @@ namespace ControlHub.Application.Tests.AccountsTests
             var result = await _handler.Handle(command, CancellationToken.None);
 
             // Assert
-            Assert.False(result.IsSuccess, "LỖI LOGIC: Hệ thống vẫn cho phép đổi mật khẩu trên tài khoản đang bị khóa (IsActive=false).");
+            Assert.False(result.IsSuccess, "L?I LOGIC: H? th?ng v?n cho ph�p d?i m?t kh?u tr�n t�i kho?n dang b? kh�a (IsActive=false).");
 
             // Verify
             _uowMock.Verify(u => u.CommitAsync(It.IsAny<CancellationToken>()), Times.Never);
@@ -83,9 +83,9 @@ namespace ControlHub.Application.Tests.AccountsTests
         [Fact]
         public async Task BUG_HUNT_Handle_DoesNotInvalidateExistingTokens()
         {
-            // 🐛 BUG TIỀM ẨN: Đổi mật khẩu xong, các Token cũ (Access/Refresh) có bị thu hồi không?
-            // Hậu quả: Nếu bị lộ token cũ, hacker vẫn dùng được dù nạn nhân đã đổi pass.
-            // Handler hiện tại KHÔNG có logic gọi _tokenRepository.RevokeAllTokens(...)
+            // ?? BUG TI?M ?N: �?i m?t kh?u xong, c�c Token cu (Access/Refresh) c� b? thu h?i kh�ng?
+            // H?u qu?: N?u b? l? token cu, hacker v?n d�ng du?c d� n?n nh�n d� d?i pass.
+            // Handler hi?n t?i KH�NG c� logic g?i _tokenRepository.RevokeAllTokens(...)
 
             // Arrange
             var command = new ChangePasswordCommand(Guid.NewGuid(), "OldPass", "NewPass");
@@ -96,45 +96,45 @@ namespace ControlHub.Application.Tests.AccountsTests
             await _handler.Handle(command, CancellationToken.None);
 
             // Assert (Bug found if logic is missing)
-            // SỬA LẠI: Chuyển thành Assert.True(false) để TEST FAIL (Màu đỏ).
-            // Lúc này bạn sẽ thấy dòng thông báo này hiện lên trong Test Explorer.
-            // Khi nào bạn thêm logic Revoke vào Handler, hãy xóa dòng này hoặc sửa thành Verify.
-            Assert.True(true, "LỖI BẢO MẬT NGHIÊM TRỌNG: Handler chưa thực hiện thu hồi (Revoke) các Token cũ sau khi đổi mật khẩu.");
+            // S?A L?I: Chuy?n th�nh Assert.True(false) d? TEST FAIL (M�u d?).
+            // L�c n�y b?n s? th?y d�ng th�ng b�o n�y hi?n l�n trong Test Explorer.
+            // Khi n�o b?n th�m logic Revoke v�o Handler, h�y x�a d�ng n�y ho?c s?a th�nh Verify.
+            Assert.True(true, "L?I B?O M?T NGHI�M TR?NG: Handler chua th?c hi?n thu h?i (Revoke) c�c Token cu sau khi d?i m?t kh?u.");
         }
 
         // =================================================================================
-        // NHÓM 2: LỖI TOÀN VẸN DỮ LIỆU (Data Integrity Flaws)
+        // NH�M 2: L?I TO�N V?N D? LI?U (Data Integrity Flaws)
         // =================================================================================
 
         [Fact]
         public async Task BUG_HUNT_Handle_ShouldFail_WhenNewPasswordIsWeak()
         {
-            // 🐛 BUG TIỀM ẨN: PasswordHasher có thể tạo ra Hash cho cả password rỗng hoặc quá ngắn.
-            // Mong đợi: Domain hoặc Validator phải chặn password yếu.
+            // ?? BUG TI?M ?N: PasswordHasher c� th? t?o ra Hash cho c? password r?ng ho?c qu� ng?n.
+            // Mong d?i: Domain ho?c Validator ph?i ch?n password y?u.
 
             // Arrange
-            var command = new ChangePasswordCommand(Guid.NewGuid(), "OldPass", "1"); // Pass mới quá ngắn
+            var command = new ChangePasswordCommand(Guid.NewGuid(), "OldPass", "1"); // Pass m?i qu� ng?n
             var account = CreateDummyAccount();
 
             // Setup Validator & Query ok
             SetupHappyPathMocks(command, account);
 
-            // Giả lập Hasher vẫn hash được chuỗi "1" (Hasher thường không check độ phức tạp)
+            // Gi? l?p Hasher v?n hash du?c chu?i "1" (Hasher thu?ng kh�ng check d? ph?c t?p)
             _passwordHasherMock.Setup(h => h.Hash("1")).Returns(Password.From(new byte[32], new byte[16]));
 
             // Act
             var result = await _handler.Handle(command, CancellationToken.None);
 
             // Assert
-            Assert.False(result.IsSuccess, "LỖI DATA: Hệ thống chấp nhận mật khẩu mới quá yếu/ngắn mà không validate.");
+            Assert.False(result.IsSuccess, "L?I DATA: H? th?ng ch?p nh?n m?t kh?u m?i qu� y?u/ng?n m� kh�ng validate.");
             _uowMock.Verify(u => u.CommitAsync(It.IsAny<CancellationToken>()), Times.Never);
         }
 
         [Fact]
         public async Task BUG_HUNT_Handle_ShouldFail_WhenNewPasswordIsSameAsOld()
         {
-            // 🐛 BUG TIỀM ẨN: Cho phép đổi mật khẩu mới GIỐNG HỆT mật khẩu cũ.
-            // Mong đợi: Nên chặn để tăng tính bảo mật (tùy policy).
+            // ?? BUG TI?M ?N: Cho ph�p d?i m?t kh?u m?i GI?NG H?T m?t kh?u cu.
+            // Mong d?i: N�n ch?n d? tang t�nh b?o m?t (t�y policy).
 
             // Arrange
             var command = new ChangePasswordCommand(Guid.NewGuid(), "SamePass", "SamePass");
@@ -143,17 +143,17 @@ namespace ControlHub.Application.Tests.AccountsTests
             _accountRepositoryMock.Setup(x => x.GetWithoutUserByIdAsync(command.id, It.IsAny<CancellationToken>()))
                 .ReturnsAsync(account);
 
-            // Verify pass cũ OK
+            // Verify pass cu OK
             _passwordHasherMock.Setup(h => h.Verify("SamePass", It.IsAny<Password>())).Returns(true);
 
-            // Hash pass mới (vẫn là SamePass)
+            // Hash pass m?i (v?n l� SamePass)
             _passwordHasherMock.Setup(h => h.Hash("SamePass")).Returns(Password.From(new byte[32], new byte[16]));
 
             // Act
             var result = await _handler.Handle(command, CancellationToken.None);
 
             // Assert
-            Assert.False(result.IsSuccess, "LỖI UX/SECURITY: Hệ thống cho phép mật khẩu mới trùng với mật khẩu cũ.");
+            Assert.False(result.IsSuccess, "L?I UX/SECURITY: H? th?ng cho ph�p m?t kh?u m?i tr�ng v?i m?t kh?u cu.");
             _uowMock.Verify(u => u.CommitAsync(It.IsAny<CancellationToken>()), Times.Never);
         }
 
@@ -180,11 +180,11 @@ namespace ControlHub.Application.Tests.AccountsTests
 
             _passwordHasherMock
                 .Setup(h => h.Verify(command.curPassword, It.IsAny<Password>()))
-                .Returns(true); // Mật khẩu cũ đúng
+                .Returns(true); // M?t kh?u cu d�ng
 
             _passwordHasherMock
                 .Setup(h => h.Hash(command.newPassword))
-                .Returns(Password.From(new byte[32], new byte[16])); // Hash mật khẩu mới thành công
+                .Returns(Password.From(new byte[32], new byte[16])); // Hash m?t kh?u m?i th�nh c�ng
         }
     }
 }

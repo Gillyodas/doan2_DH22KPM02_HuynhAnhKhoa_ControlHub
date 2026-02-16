@@ -1,4 +1,4 @@
-﻿namespace ControlHub.Domain.Tokens.Enums
+namespace ControlHub.Domain.Tokens.Enums
 {
     public enum TokenType
     {

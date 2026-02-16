@@ -1,4 +1,4 @@
-﻿namespace ControlHub.API.Middlewares
+namespace ControlHub.API.Middlewares
 {
     public static class ExceptionMiddlewareExtensions
     {

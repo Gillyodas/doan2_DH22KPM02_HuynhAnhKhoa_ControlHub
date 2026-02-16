@@ -1,23 +1,23 @@
-﻿using ControlHub.Domain.Accounts;
-using ControlHub.Domain.Accounts.Enums;
-using ControlHub.Domain.Accounts.ValueObjects;
-using ControlHub.Domain.Users;
+using ControlHub.Domain.Identity.Aggregates;
+using ControlHub.Domain.Identity.Enums;
+using ControlHub.Domain.Identity.ValueObjects;
+using ControlHub.Domain.Identity.Entities;
 using ControlHub.SharedKernel.Accounts;
-using ControlHub.SharedKernel.Users; // Chứa UserErrors
+using ControlHub.SharedKernel.Users; // Ch?a UserErrors
 
 namespace ControlHub.Domain.Tests.Accounts
 {
     public class AccountTests
     {
-        // Helper tạo Valid Password
+        // Helper t?o Valid Password
         private static Password CreateValidPassword() => Password.From(new byte[32], new byte[16]);
 
-        // --- NHÓM 1: BUG HUNTING - FACTORY VALIDATION ---
+        // --- NH�M 1: BUG HUNTING - FACTORY VALIDATION ---
 
         [Fact]
         public void Create_ShouldThrowException_WhenIdIsEmpty()
         {
-            // BUG HUNT: Không được phép tạo Account với Guid.Empty
+            // BUG HUNT: Kh�ng du?c ph�p t?o Account v?i Guid.Empty
             Assert.Throws<ArgumentException>(() =>
                 Account.Create(Guid.Empty, CreateValidPassword(), Guid.NewGuid()));
         }
@@ -25,7 +25,7 @@ namespace ControlHub.Domain.Tests.Accounts
         [Fact]
         public void Create_ShouldThrowException_WhenRoleIdIsEmpty()
         {
-            // BUG HUNT: Account phải luôn thuộc về một Role
+            // BUG HUNT: Account ph?i lu�n thu?c v? m?t Role
             Assert.Throws<ArgumentException>(() =>
                 Account.Create(Guid.NewGuid(), CreateValidPassword(), Guid.Empty));
         }
@@ -33,12 +33,12 @@ namespace ControlHub.Domain.Tests.Accounts
         [Fact]
         public void Create_ShouldThrowException_WhenPasswordIsNull()
         {
-            // BUG HUNT: Password không được null
+            // BUG HUNT: Password kh�ng du?c null
             Assert.Throws<ArgumentNullException>(() =>
                 Account.Create(Guid.NewGuid(), null!, Guid.NewGuid()));
         }
 
-        // --- NHÓM 2: BUG HUNTING - IDENTIFIER LOGIC ---
+        // --- NH�M 2: BUG HUNTING - IDENTIFIER LOGIC ---
 
         [Fact]
         public void AddIdentifier_ShouldFail_WhenIdentifierAlreadyExists()
@@ -47,14 +47,14 @@ namespace ControlHub.Domain.Tests.Accounts
             var account = Account.Create(Guid.NewGuid(), CreateValidPassword(), Guid.NewGuid());
             var identifier = Identifier.Create(IdentifierType.Email, "test@test.com", "test@test.com");
 
-            // Add lần 1 -> Success
+            // Add l?n 1 -> Success
             account.AddIdentifier(identifier);
 
-            // Act: Add lần 2 (trùng)
+            // Act: Add l?n 2 (tr�ng)
             var result = account.AddIdentifier(identifier);
 
             // Assert
-            Assert.True(result.IsFailure, "BUG: Domain cho phép add trùng Identifier.");
+            Assert.True(result.IsFailure, "BUG: Domain cho ph�p add tr�ng Identifier.");
             Assert.Equal(AccountErrors.IdentifierAlreadyExists, result.Error);
         }
 
@@ -72,7 +72,7 @@ namespace ControlHub.Domain.Tests.Accounts
             Assert.Equal(AccountErrors.IdentifierNotFound, result.Error);
         }
 
-        // --- NHÓM 3: BUG HUNTING - RELATIONSHIP LOGIC ---
+        // --- NH�M 3: BUG HUNTING - RELATIONSHIP LOGIC ---
 
         [Fact]
         public void AttachUser_ShouldFail_WhenUserIsNull()
@@ -95,15 +95,15 @@ namespace ControlHub.Domain.Tests.Accounts
 
             account.AttachUser(user1);
 
-            // Act: Cố gắn thêm user thứ 2 vào cùng 1 account (1-1 violation)
+            // Act: C? g?n th�m user th? 2 v�o c�ng 1 account (1-1 violation)
             var result = account.AttachUser(user2);
 
             // Assert
-            Assert.True(result.IsFailure, "BUG: Domain cho phép 1 Account gắn với nhiều User (Vi phạm 1-1).");
+            Assert.True(result.IsFailure, "BUG: Domain cho ph�p 1 Account g?n v?i nhi?u User (Vi ph?m 1-1).");
             Assert.Equal(UserErrors.AlreadyAtached, result.Error);
         }
 
-        // --- NHÓM 4: BUG HUNTING - UPDATE PASSWORD ---
+        // --- NH�M 4: BUG HUNTING - UPDATE PASSWORD ---
 
         [Fact]
         public void UpdatePassword_ShouldFail_WhenNewPasswordIsInvalid()
@@ -111,15 +111,15 @@ namespace ControlHub.Domain.Tests.Accounts
             // Arrange
             var account = Account.Create(Guid.NewGuid(), CreateValidPassword(), Guid.NewGuid());
 
-            // Giả lập một password object bị lỗi (Hash length = 0)
-            // Đây là case "hack" vào hệ thống type safety
+            // Gi? l?p m?t password object b? l?i (Hash length = 0)
+            // ��y l� case "hack" v�o h? th?ng type safety
             var invalidPass = Password.From(new byte[0], new byte[16]);
 
             // Act
             var result = account.UpdatePassword(invalidPass);
 
             // Assert
-            Assert.True(result.IsFailure, "BUG: UpdatePassword không check tính hợp lệ (IsValid) của password object mới.");
+            Assert.True(result.IsFailure, "BUG: UpdatePassword kh�ng check t�nh h?p l? (IsValid) c?a password object m?i.");
             Assert.Equal(AccountErrors.PasswordIsNotValid, result.Error);
         }
     }

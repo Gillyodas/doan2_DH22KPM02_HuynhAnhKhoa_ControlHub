@@ -1,11 +1,11 @@
-﻿using ControlHub.Application.Accounts.Commands.AddIdentifier;
+using ControlHub.Application.Accounts.Commands.AddIdentifier;
 using ControlHub.Application.Accounts.Interfaces.Repositories;
 using ControlHub.Application.Common.Persistence;
-using ControlHub.Domain.Accounts;
-using ControlHub.Domain.Accounts.Enums;
-using ControlHub.Domain.Accounts.Identifiers.Rules;
-using ControlHub.Domain.Accounts.Identifiers.Services;
-using ControlHub.Domain.Accounts.ValueObjects;
+using ControlHub.Domain.Identity.Aggregates;
+using ControlHub.Domain.Identity.Enums;
+using ControlHub.Domain.Identity.Identifiers.Rules;
+using ControlHub.Domain.Identity.Identifiers.Services;
+using ControlHub.Domain.Identity.ValueObjects;
 using ControlHub.SharedKernel.Accounts;
 using ControlHub.SharedKernel.Common.Errors;
 using Microsoft.Extensions.Logging;
@@ -19,20 +19,20 @@ namespace ControlHub.Application.Tests.AccountsTests
         private readonly Mock<IUnitOfWork> _uowMock = new();
         private readonly Mock<ILogger<AddIdentifierCommandHandler>> _loggerMock = new();
 
-        // Mock Validator để điều khiển IdentifierFactory
+        // Mock Validator d? di?u khi?n IdentifierFactory
         private readonly Mock<IIdentifierValidator> _validatorMock = new();
 
         private readonly AddIdentifierCommandHandler _handler;
 
         public AddIdentifierCommandHandlerTests()
         {
-            // Setup Validator mặc định: Hỗ trợ Email và luôn Valid
+            // Setup Validator m?c d?nh: H? tr? Email v� lu�n Valid
             _validatorMock.Setup(v => v.Type).Returns(IdentifierType.Email);
             _validatorMock
                 .Setup(v => v.ValidateAndNormalize(It.IsAny<string>()))
                 .Returns((true, "normalized_value", null));
 
-            // Khởi tạo Factory thật với Mock Validator
+            // Kh?i t?o Factory th?t v?i Mock Validator
             var identifierFactory = new IdentifierFactory(
                 new[] { _validatorMock.Object },
                 new Mock<IIdentifierConfigRepository>().Object,
@@ -47,7 +47,7 @@ namespace ControlHub.Application.Tests.AccountsTests
         }
 
         // =================================================================================
-        // NHÓM 1: LOGIC NGHIỆP VỤ & BẢO MẬT (Security & Business Rules)
+        // NH�M 1: LOGIC NGHI?P V? & B?O M?T (Security & Business Rules)
         // =================================================================================
 
         [Fact]
@@ -67,14 +67,14 @@ namespace ControlHub.Application.Tests.AccountsTests
             Assert.True(result.IsFailure);
             Assert.Equal(AccountErrors.AccountNotFound, result.Error);
 
-            // Verify: Không được gọi Commit
+            // Verify: Kh�ng du?c g?i Commit
             _uowMock.Verify(u => u.CommitAsync(It.IsAny<CancellationToken>()), Times.Never);
         }
 
         [Fact]
         public async Task Handle_ShouldReturnFailure_WhenAccountIsDeleted()
         {
-            // 🐛 BUG HUNT: Đảm bảo không thể thêm thông tin vào tài khoản đã bị xóa.
+            // ?? BUG HUNT: �?m b?o kh�ng th? th�m th�ng tin v�o t�i kho?n d� b? x�a.
 
             // Arrange
             var command = new AddIdentifierCommand("new@test.com", IdentifierType.Email, Guid.NewGuid());
@@ -86,7 +86,7 @@ namespace ControlHub.Application.Tests.AccountsTests
             var result = await _handler.Handle(command, CancellationToken.None);
 
             // Assert
-            Assert.True(result.IsFailure, "LỖI BẢO MẬT: Hệ thống cho phép thêm identifier vào tài khoản đã xóa.");
+            Assert.True(result.IsFailure, "L?I B?O M?T: H? th?ng cho ph�p th�m identifier v�o t�i kho?n d� x�a.");
             Assert.Equal(AccountErrors.AccountDeleted, result.Error);
             _uowMock.Verify(u => u.CommitAsync(It.IsAny<CancellationToken>()), Times.Never);
         }
@@ -94,7 +94,7 @@ namespace ControlHub.Application.Tests.AccountsTests
         [Fact]
         public async Task Handle_ShouldReturnFailure_WhenAccountIsInactive()
         {
-            // 🐛 BUG HUNT: Đảm bảo tài khoản bị khóa (Disabled) không được thay đổi thông tin.
+            // ?? BUG HUNT: �?m b?o t�i kho?n b? kh�a (Disabled) kh�ng du?c thay d?i th�ng tin.
 
             // Arrange
             var command = new AddIdentifierCommand("new@test.com", IdentifierType.Email, Guid.NewGuid());
@@ -106,19 +106,19 @@ namespace ControlHub.Application.Tests.AccountsTests
             var result = await _handler.Handle(command, CancellationToken.None);
 
             // Assert
-            Assert.True(result.IsFailure, "LỖI LOGIC: Hệ thống cho phép thêm identifier vào tài khoản đang bị khóa.");
+            Assert.True(result.IsFailure, "L?I LOGIC: H? th?ng cho ph�p th�m identifier v�o t�i kho?n dang b? kh�a.");
             Assert.Equal(AccountErrors.AccountDisabled, result.Error);
         }
 
         // =================================================================================
-        // NHÓM 2: VALIDATION DỮ LIỆU ĐẦU VÀO (Input Validation via Factory)
+        // NH�M 2: VALIDATION D? LI?U �?U V�O (Input Validation via Factory)
         // =================================================================================
 
         [Fact]
         public async Task Handle_ShouldReturnFailure_WhenIdentifierTypeIsNotSupported()
         {
             // Arrange
-            // Command gửi loại Phone, nhưng Validator mock chỉ hỗ trợ Email
+            // Command g?i lo?i Phone, nhung Validator mock ch? h? tr? Email
             var command = new AddIdentifierCommand("0909123456", IdentifierType.Phone, Guid.NewGuid());
             var account = CreateDummyAccount();
             SetupRepoToReturnAccount(account);
@@ -141,7 +141,7 @@ namespace ControlHub.Application.Tests.AccountsTests
 
             var validationError = Error.Validation("InvalidFormat", "Bad email");
 
-            // Setup Validator trả về lỗi
+            // Setup Validator tr? v? l?i
             _validatorMock.Setup(v => v.Type).Returns(IdentifierType.Email);
             _validatorMock.Setup(v => v.ValidateAndNormalize(command.value))
                 .Returns((false, string.Empty, validationError));
@@ -155,25 +155,25 @@ namespace ControlHub.Application.Tests.AccountsTests
         }
 
         // =================================================================================
-        // NHÓM 3: LOGIC DOMAIN (Duplicate Check)
+        // NH�M 3: LOGIC DOMAIN (Duplicate Check)
         // =================================================================================
 
         [Fact]
         public async Task Handle_ShouldReturnFailure_WhenIdentifierAlreadyExistsInAccount()
         {
-            // 🐛 BUG HUNT: Kiểm tra xem Domain có chặn trùng lặp trong danh sách Identifiers của Account không.
+            // ?? BUG HUNT: Ki?m tra xem Domain c� ch?n tr�ng l?p trong danh s�ch Identifiers c?a Account kh�ng.
 
             // Arrange
             var existingEmail = "exist@test.com";
             var command = new AddIdentifierCommand(existingEmail, IdentifierType.Email, Guid.NewGuid());
 
             var account = CreateDummyAccount();
-            // Đã có sẵn identifier này trong account
+            // �� c� s?n identifier n�y trong account
             account.AddIdentifier(Identifier.Create(IdentifierType.Email, existingEmail, existingEmail));
 
             SetupRepoToReturnAccount(account);
 
-            // Validator setup (cho phép pass qua bước format check)
+            // Validator setup (cho ph�p pass qua bu?c format check)
             _validatorMock.Setup(v => v.ValidateAndNormalize(existingEmail))
                 .Returns((true, existingEmail, null));
 
@@ -184,12 +184,12 @@ namespace ControlHub.Application.Tests.AccountsTests
             Assert.True(result.IsFailure);
             Assert.Equal(AccountErrors.IdentifierAlreadyExists, result.Error);
 
-            // Verify: Không commit
+            // Verify: Kh�ng commit
             _uowMock.Verify(u => u.CommitAsync(It.IsAny<CancellationToken>()), Times.Never);
         }
 
         // =================================================================================
-        // NHÓM 4: HAPPY PATH (Thành Công)
+        // NH�M 4: HAPPY PATH (Th�nh C�ng)
         // =================================================================================
 
         [Fact]
@@ -210,12 +210,12 @@ namespace ControlHub.Application.Tests.AccountsTests
             // Assert
             Assert.True(result.IsSuccess);
 
-            // Verify State: Identifier đã được thêm vào Account trong bộ nhớ chưa?
+            // Verify State: Identifier d� du?c th�m v�o Account trong b? nh? chua?
             Assert.Contains(account.Identifiers, i => i.Value == "new@test.com");
 
             // Verify Side Effect: Commit transaction
             _uowMock.Verify(u => u.CommitAsync(It.IsAny<CancellationToken>()), Times.Once,
-                "LỖI: Quên gọi Commit để lưu thay đổi xuống DB.");
+                "L?I: Qu�n g?i Commit d? luu thay d?i xu?ng DB.");
         }
 
         // --- Helpers ---

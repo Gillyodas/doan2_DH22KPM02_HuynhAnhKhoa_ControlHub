@@ -1,4 +1,4 @@
-﻿using ControlHub.Infrastructure.RealTime.Hubs;
+using ControlHub.Infrastructure.RealTime.Hubs;
 using OpenTelemetry.Exporter;
 using OpenTelemetry.Metrics;
 using OpenTelemetry.Trace;
@@ -19,9 +19,9 @@ namespace ControlHub.API
 
             // =========================================================================
             // 1. HOST CONFIGURATION (Logging, Metrics, Tracing)
-            // Phần này thuộc về "Ứng dụng chứa" (Host App). 
-            // Người dùng thư viện có thể muốn dùng NLog thay vì Serilog, hoặc Jaeger thay vì Prometheus.
-            // Nên để họ tự quyết định ở đây.
+            // Ph?n n�y thu?c v? "?ng d?ng ch?a" (Host App). 
+            // Ngu?i d�ng thu vi?n c� th? mu?n d�ng NLog thay v� Serilog, ho?c Jaeger thay v� Prometheus.
+            // N�n d? h? t? quy?t d?nh ? d�y.
             // =========================================================================
 
             // Config Serilog
@@ -71,7 +71,7 @@ namespace ControlHub.API
 
             // =========================================================================
             // 2. CONTROL HUB LIBRARY (CORE LOGIC)
-            // Đây là dòng quan trọng nhất. Toàn bộ logic nghiệp vụ, DB, Auth nằm ở đây.
+            // ��y l� d�ng quan tr?ng nh?t. To�n b? logic nghi?p v?, DB, Auth n?m ? d�y.
             // =========================================================================
 
             builder.Services.AddControlHub(builder.Configuration);
@@ -107,12 +107,12 @@ namespace ControlHub.API
 
             app.UseHttpsRedirection();
 
-            // Authentication & Authorization Middleware phải được gọi ở Host App
-            // để đảm bảo đúng thứ tự trong Pipeline của họ.
+            // Authentication & Authorization Middleware ph?i du?c g?i ? Host App
+            // d? d?m b?o d�ng th? t? trong Pipeline c?a h?.
             app.UseAuthentication();
             app.UseAuthorization();
 
-            // Kích hoạt ControlHub (Auto Migration & Seed Data)
+            // K�ch ho?t ControlHub (Auto Migration & Seed Data)
             app.UseControlHub();
 
             app.MapHub<DashboardHub>("/hubs/dashboard");

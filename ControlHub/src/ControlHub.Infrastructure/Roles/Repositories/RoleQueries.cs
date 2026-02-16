@@ -1,4 +1,4 @@
-﻿using ControlHub.Application.Common.DTOs;
+using ControlHub.Application.Common.DTOs;
 using ControlHub.Application.Roles.Interfaces.Repositories;
 using ControlHub.Domain.Roles;
 using ControlHub.Infrastructure.Persistence;
@@ -63,7 +63,7 @@ namespace ControlHub.Infrastructure.Roles.Repositories
 
             if (conditions != null && conditions.Length > 0)
             {
-                // 1. Khởi tạo Predicate là False (Điểm mấu chốt của logic OR)
+                // 1. Kh?i t?o Predicate l� False (�i?m m?u ch?t c?a logic OR)
                 var predicate = PredicateBuilder.False<Role>();
 
                 foreach (var rawTerm in conditions)
@@ -71,12 +71,12 @@ namespace ControlHub.Infrastructure.Roles.Repositories
                     if (string.IsNullOrWhiteSpace(rawTerm)) continue;
                     var term = rawTerm.Trim();
 
-                    // 2. Nối thêm điều kiện bằng hàm Or
-                    // Logic: (Name chứa term) HOẶC (Description chứa term)
+                    // 2. N?i th�m di?u ki?n b?ng h�m Or
+                    // Logic: (Name ch?a term) HO?C (Description ch?a term)
                     predicate = predicate.Or(r => r.Name.Contains(term) || r.Description.Contains(term));
                 }
 
-                // 3. Đưa Predicate đã xây dựng vào Query
+                // 3. �ua Predicate d� x�y d?ng v�o Query
                 // SQL sinh ra: WHERE (Name LIKE %A% OR Desc LIKE %A%) OR (Name LIKE %B% OR Desc LIKE %B%)
                 query = query.Where(predicate);
             }

@@ -1,5 +1,5 @@
-﻿// Các namespace mặc định của ASP.NET Core Web API
-// Mà Sdk="Microsoft.NET.Sdk" không tự động thêm vào.
+// C�c namespace m?c d?nh c?a ASP.NET Core Web API
+// M� Sdk="Microsoft.NET.Sdk" kh�ng t? d?ng th�m v�o.
 
 global using System;
 global using System.Collections.Generic;

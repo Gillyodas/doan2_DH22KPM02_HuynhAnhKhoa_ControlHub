@@ -1,4 +1,4 @@
-﻿using System.Security.Claims;
+using System.Security.Claims;
 using ControlHub.Application.Tokens;
 using ControlHub.Application.Authorization.Requirements;
 using ControlHub.SharedKernel.Constants;
@@ -23,26 +23,26 @@ namespace ControlHub.Infrastructure.Permissions.AuthZ
             if (roleIdClaim != null && 
                 roleIdClaim.Value.Equals(ControlHubDefaults.Roles.SuperAdminId.ToString(), StringComparison.OrdinalIgnoreCase))
             {
-                Console.WriteLine($"[PermissionAuthorizationHandler] ✅ SuperAdmin detected! Bypassing permission check.");
+                Console.WriteLine($"[PermissionAuthorizationHandler] ? SuperAdmin detected! Bypassing permission check.");
                 context.Succeed(requirement);
                 return Task.CompletedTask;
             }
 
-            // Lấy tất cả các claims 'Permission' từ user (đã được thêm từ IClaimsTransformation)
+            // L?y t?t c? c�c claims 'Permission' t? user (d� du?c th�m t? IClaimsTransformation)
             var userPermissions = context.User.FindAll(AppClaimTypes.Permission);
             
             Console.WriteLine($"[PermissionAuthorizationHandler] User has {userPermissions.Count()} permission claims");
 
-            // Kiểm tra xem user có claim nào khớp với permission yêu cầu không
+            // Ki?m tra xem user c� claim n�o kh?p v?i permission y�u c?u kh�ng
             if (userPermissions.Any(c => c.Value == requirement.Permission))
             {
-                Console.WriteLine($"[PermissionAuthorizationHandler] ✅ Permission '{requirement.Permission}' found in user claims");
-                // Nếu có, đánh dấu là thành công
+                Console.WriteLine($"[PermissionAuthorizationHandler] ? Permission '{requirement.Permission}' found in user claims");
+                // N?u c�, d�nh d?u l� th�nh c�ng
                 context.Succeed(requirement);
             }
             else
             {
-                Console.WriteLine($"[PermissionAuthorizationHandler] ❌ Permission '{requirement.Permission}' NOT found in user claims");
+                Console.WriteLine($"[PermissionAuthorizationHandler] ? Permission '{requirement.Permission}' NOT found in user claims");
             }
 
             return Task.CompletedTask;

@@ -1,4 +1,4 @@
-﻿using ControlHub.Application.Accounts.Commands.CreateAccount;
+using ControlHub.Application.Accounts.Commands.CreateAccount;
 using ControlHub.Application.Accounts.Interfaces;
 using ControlHub.Application.Accounts.Interfaces.Repositories;
 using ControlHub.Application.Common.Persistence;

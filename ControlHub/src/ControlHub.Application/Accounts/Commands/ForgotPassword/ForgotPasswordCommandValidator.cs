@@ -1,4 +1,4 @@
-﻿using ControlHub.SharedKernel.Accounts;
+using ControlHub.SharedKernel.Accounts;
 using FluentValidation;
 
 namespace ControlHub.Application.Accounts.Commands.ForgotPassword

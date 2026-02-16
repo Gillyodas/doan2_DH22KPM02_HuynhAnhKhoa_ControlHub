@@ -3,7 +3,7 @@ using System.Net.Http.Json;
 using ControlHub.Api.Tests.Abstractions;
 using ControlHub.API.Accounts.ViewModels.Request;
 using ControlHub.Application.Accounts.Commands.ChangePassword;
-using ControlHub.Domain.Accounts.Enums;
+using ControlHub.Domain.Identity.Enums;
 using ControlHub.Domain.Tokens.Enums;
 using FluentAssertions;
 using Microsoft.EntityFrameworkCore;

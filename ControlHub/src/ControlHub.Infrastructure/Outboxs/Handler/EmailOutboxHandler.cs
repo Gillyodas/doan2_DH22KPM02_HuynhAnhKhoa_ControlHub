@@ -1,4 +1,4 @@
-﻿using System.Text.Json;
+using System.Text.Json;
 using ControlHub.Application.Emails.Interfaces;
 using ControlHub.Application.OutBoxs;
 using ControlHub.Domain.Outboxs;

@@ -1,4 +1,4 @@
-﻿using ControlHub.SharedKernel.Tokens;
+using ControlHub.SharedKernel.Tokens;
 using FluentValidation;
 
 namespace ControlHub.Application.Accounts.Commands.SignOut

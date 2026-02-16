@@ -1,4 +1,4 @@
-﻿namespace ControlHub.SharedKernel.Common.Errors
+namespace ControlHub.SharedKernel.Common.Errors
 {
     public interface IErrorCatalog
     {

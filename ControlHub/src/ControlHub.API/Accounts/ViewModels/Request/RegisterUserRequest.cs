@@ -1,4 +1,4 @@
-﻿using ControlHub.Domain.Accounts.Enums;
+using ControlHub.Domain.Identity.Enums;
 
 namespace ControlHub.API.Accounts.ViewModels.Request
 {

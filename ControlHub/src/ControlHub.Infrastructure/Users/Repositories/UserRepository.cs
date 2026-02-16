@@ -1,5 +1,5 @@
-﻿using ControlHub.Application.Users.Interfaces.Repositories;
-using ControlHub.Domain.Users;
+using ControlHub.Application.Users.Interfaces.Repositories;
+using ControlHub.Domain.Identity.Entities;
 using ControlHub.Infrastructure.Persistence;
 using ControlHub.SharedKernel.Common.Exceptions;
 using Microsoft.EntityFrameworkCore;

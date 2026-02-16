@@ -1,4 +1,4 @@
-﻿using ControlHub.Domain.Roles;
+using ControlHub.Domain.Roles;
 using ControlHub.Infrastructure.RolePermissions;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
@@ -29,29 +29,29 @@ namespace ControlHub.Infrastructure.Roles
 
             builder.HasQueryFilter(r => !r.IsDeleted);
 
-            // --- CẤU HÌNH MANY-TO-MANY ---
+            // --- C?U H�NH MANY-TO-MANY ---
 
-            builder.HasMany(r => r.Permissions) // Role có nhiều Permission
-                .WithMany()                     // Permission (Domain) không cần biết về Role
-                .UsingEntity<RolePermissionEntity>( // Sử dụng bảng trung gian này
+            builder.HasMany(r => r.Permissions) // Role c� nhi?u Permission
+                .WithMany()                     // Permission (Domain) kh�ng c?n bi?t v? Role
+                .UsingEntity<RolePermissionEntity>( // S? d?ng b?ng trung gian n�y
                     join => join
                         .HasOne(rp => rp.Permission)
                         .WithMany()
                         .HasForeignKey(rp => rp.PermissionId),
                     join => join
                         .HasOne(rp => rp.Role)
-                        .WithMany() // Nếu Role không có navigation property tới RolePermissionEntity thì để trống
+                        .WithMany() // N?u Role kh�ng c� navigation property t?i RolePermissionEntity th� d? tr?ng
                         .HasForeignKey(rp => rp.RoleId),
                     join =>
                     {
-                        join.ToTable("RolePermissions"); // Tên bảng trong DB
-                        join.HasKey(rp => new { rp.RoleId, rp.PermissionId }); // Khóa chính phức hợp
+                        join.ToTable("RolePermissions"); // T�n b?ng trong DB
+                        join.HasKey(rp => new { rp.RoleId, rp.PermissionId }); // Kh�a ch�nh ph?c h?p
                     }
                 );
 
-            // --- CẤU HÌNH FIELD ACCESS MODE ---
-            // Bảo EF Core đọc/ghi trực tiếp vào field "_permissions"
-            // thay vì property "Permissions" (vì property chỉ là ReadOnly)
+            // --- C?U H�NH FIELD ACCESS MODE ---
+            // B?o EF Core d?c/ghi tr?c ti?p v�o field "_permissions"
+            // thay v� property "Permissions" (v� property ch? l� ReadOnly)
             builder.Navigation(r => r.Permissions)
                 .HasField("_permissions")
                 .UsePropertyAccessMode(PropertyAccessMode.Field);

@@ -1,4 +1,4 @@
-﻿using System.Security.Claims;
+using System.Security.Claims;
 using ControlHub.Application.Authorization.Requirements;
 using Microsoft.AspNetCore.Authorization;
 
@@ -11,14 +11,14 @@ namespace ControlHub.Infrastructure.Authorization.Handlers
             SameUserRequirement requirement,
             Guid resourceId)
         {
-            // 1. Lấy ID của người đang đăng nhập
-            // Lưu ý: ClaimTypes.NameIdentifier thường map với 'sub' hoặc 'id' tùy config JWT của bạn
+            // 1. L?y ID c?a ngu?i dang dang nh?p
+            // Luu �: ClaimTypes.NameIdentifier thu?ng map v?i 'sub' ho?c 'id' t�y config JWT c?a b?n
             var currentUserIdStr = context.User.FindFirst(ClaimTypes.NameIdentifier)?.Value
                                    ?? context.User.FindFirst("sub")?.Value;
 
             if (Guid.TryParse(currentUserIdStr, out var currentUserId))
             {
-                //Logic mở rộng: Admin luôn được phép
+                //Logic m? r?ng: Admin lu�n du?c ph�p
                 if (context.User.IsInRole("supper_admin"))
                 {
                     context.Succeed(requirement);

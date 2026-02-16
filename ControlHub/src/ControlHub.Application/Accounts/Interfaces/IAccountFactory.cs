@@ -1,5 +1,5 @@
-﻿using ControlHub.Domain.Accounts;
-using ControlHub.Domain.Accounts.Enums;
+using ControlHub.Domain.Identity.Aggregates;
+using ControlHub.Domain.Identity.Enums;
 using ControlHub.SharedKernel.Results;
 
 namespace ControlHub.Application.Accounts.Interfaces

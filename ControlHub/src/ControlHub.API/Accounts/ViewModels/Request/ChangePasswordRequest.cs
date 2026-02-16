@@ -1,4 +1,4 @@
-﻿namespace ControlHub.API.Accounts.ViewModels.Request
+namespace ControlHub.API.Accounts.ViewModels.Request
 {
     public class ChangePasswordRequest
     {

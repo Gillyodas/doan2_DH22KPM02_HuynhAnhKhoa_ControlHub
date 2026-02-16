@@ -1,4 +1,4 @@
-﻿using System.Text;
+using System.Text;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging; // Use ILogger
@@ -7,7 +7,7 @@ using Microsoft.IdentityModel.Tokens;
 
 namespace ControlHub.Infrastructure.Tokens
 {
-    // ⚠️ CRITICAL: Must be IConfigureNamedOptions to support named schemes like "Bearer"
+    // ?? CRITICAL: Must be IConfigureNamedOptions to support named schemes like "Bearer"
     internal class ConfigureJwtBearerOptions : IConfigureNamedOptions<JwtBearerOptions>
     {
         private readonly IConfiguration _configuration;
@@ -40,11 +40,11 @@ namespace ControlHub.Infrastructure.Tokens
             // Fail Fast: Check for missing config immediately to avoid cryptic "Signature validation failed" errors later
             if (string.IsNullOrEmpty(key) || string.IsNullOrEmpty(issuer) || string.IsNullOrEmpty(audience))
             {
-                _logger.LogError("❌ [JWT Config] Missing configuration in appsettings.json. Check Jwt:Issuer, Jwt:Audience, Jwt:Key.");
+                _logger.LogError("? [JWT Config] Missing configuration in appsettings.json. Check Jwt:Issuer, Jwt:Audience, Jwt:Key.");
                 throw new InvalidOperationException("JWT Configuration is missing.");
             }
 
-            _logger.LogInformation("🔐 [JWT Config] Successfully loaded. Issuer: {Issuer}", issuer);
+            _logger.LogInformation("?? [JWT Config] Successfully loaded. Issuer: {Issuer}", issuer);
 
             options.TokenValidationParameters = new TokenValidationParameters
             {

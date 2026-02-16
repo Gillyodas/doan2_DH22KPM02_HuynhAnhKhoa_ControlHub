@@ -1,4 +1,4 @@
-﻿using ControlHub.SharedKernel.Accounts;
+using ControlHub.SharedKernel.Accounts;
 using FluentValidation;
 
 namespace ControlHub.Application.Accounts.Commands.ChangePassword
@@ -7,11 +7,11 @@ namespace ControlHub.Application.Accounts.Commands.ChangePassword
     {
         public ChangePasswordCommandValidator()
         {
-            // current password chỉ cần không rỗng
+            // current password ch? c?n kh�ng r?ng
             RuleFor(x => x.curPassword)
                 .NotEmpty().WithMessage(AccountErrors.PasswordRequired.Message);
 
-            // new password cần đáp ứng policy
+            // new password c?n d�p ?ng policy
             RuleFor(x => x.newPassword)
                 .NotEmpty().WithMessage(AccountErrors.PasswordRequired.Message)
                 .MinimumLength(8).WithMessage(AccountErrors.PasswordTooShort.Message)

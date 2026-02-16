@@ -1,4 +1,4 @@
-﻿namespace ControlHub.Application.Roles.DTOs
+namespace ControlHub.Application.Roles.DTOs
 {
     public record RolePermissionDetailDto(
         Guid RoleId,

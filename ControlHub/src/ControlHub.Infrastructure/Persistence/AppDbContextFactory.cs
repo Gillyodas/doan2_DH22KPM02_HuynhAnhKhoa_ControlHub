@@ -1,4 +1,4 @@
-﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Design;
 using Microsoft.Extensions.Configuration;
 
@@ -6,10 +6,10 @@ namespace ControlHub.Infrastructure.Persistence
 {
     internal class AppDbContextFactory : IDesignTimeDbContextFactory<AppDbContext>
     {
-        // Design-time factory phải có constructor rỗng mặc định
+        // Design-time factory ph?i c� constructor r?ng m?c d?nh
         public AppDbContext CreateDbContext(string[] args)
         {
-            // 1. Tự build Configuration thủ công (vì không có DI lúc design-time)
+            // 1. T? build Configuration th? c�ng (v� kh�ng c� DI l�c design-time)
             IConfigurationRoot configuration = new ConfigurationBuilder()
                 .SetBasePath(Directory.GetCurrentDirectory())
                 .AddJsonFile("appsettings.json", optional: true)
@@ -18,10 +18,10 @@ namespace ControlHub.Infrastructure.Persistence
 
             var builder = new DbContextOptionsBuilder<AppDbContext>();
 
-            // 2. Lấy connection string
+            // 2. L?y connection string
             var connectionString = configuration.GetConnectionString("DefaultConnection");
 
-            // 3. Cấu hình DbContext
+            // 3. C?u h�nh DbContext
             builder.UseSqlServer(connectionString, b =>
                 b.MigrationsAssembly(typeof(AppDbContext).Assembly.FullName));
 

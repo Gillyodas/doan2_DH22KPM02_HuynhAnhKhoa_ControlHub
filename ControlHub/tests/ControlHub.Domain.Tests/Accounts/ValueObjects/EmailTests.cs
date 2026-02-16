@@ -1,4 +1,4 @@
-﻿using ControlHub.Domain.Accounts.ValueObjects;
+using ControlHub.Domain.Identity.ValueObjects;
 using ControlHub.SharedKernel.Accounts;
 
 namespace ControlHub.Domain.Tests.Accounts.ValueObjects
@@ -17,7 +17,7 @@ namespace ControlHub.Domain.Tests.Accounts.ValueObjects
         }
 
         [Theory]
-        // Case lỗi định dạng
+        // Case l?i d?nh d?ng
         [InlineData("plainaddress")]
         [InlineData("#@%^%#$@#$@#.com")]
         [InlineData("@example.com")]
@@ -27,14 +27,14 @@ namespace ControlHub.Domain.Tests.Accounts.ValueObjects
         [InlineData(".email@example.com")]
         [InlineData("email.@example.com")]
         [InlineData("email..email@example.com")]
-        // Case lỗi domain
-        [InlineData("email@example.c")] // TLD quá ngắn (< 2 ký tự)
-        [InlineData("email@example.123")] // TLD không phải chữ cái
+        // Case l?i domain
+        [InlineData("email@example.c")] // TLD qu� ng?n (< 2 k� t?)
+        [InlineData("email@example.123")] // TLD kh�ng ph?i ch? c�i
         public void Create_ShouldFail_WhenEmailFormatIsInvalid(string invalidEmail)
         {
             var result = Email.Create(invalidEmail);
 
-            Assert.True(result.IsFailure, $"BUG: Regex chấp nhận email sai định dạng: '{invalidEmail}'");
+            Assert.True(result.IsFailure, $"BUG: Regex ch?p nh?n email sai d?nh d?ng: '{invalidEmail}'");
             Assert.Equal(AccountErrors.InvalidEmail, result.Error);
         }
 
@@ -56,7 +56,7 @@ namespace ControlHub.Domain.Tests.Accounts.ValueObjects
 
             Assert.Equal(email1, email2);
             Assert.NotEqual(email1, email3);
-            // Case Insensitive check (nếu có trong yêu cầu, hiện tại regex của bạn có IgnoreCase)
+            // Case Insensitive check (n?u c� trong y�u c?u, hi?n t?i regex c?a b?n c� IgnoreCase)
             // Assert.Equal(Email.Create("TEST@TEST.COM").Value, email1); 
         }
     }

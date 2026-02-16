@@ -1,4 +1,4 @@
-﻿using ControlHub.API.Accounts.ViewModels.Request;
+using ControlHub.API.Accounts.ViewModels.Request;
 using ApiResponse = ControlHub.API.Accounts.ViewModels.Response;
 using ControlHub.API.Controllers; // Import BaseApiController
 using ControlHub.Application.Accounts.Commands.CreateAccount;
@@ -18,7 +18,7 @@ namespace ControlHub.API.Accounts.Controllers
     public class AuthController : BaseApiController
     {
         private ILogger<AuthController> _logger;
-        // Constructor truyền Mediator xuống lớp Base
+        // Constructor truy?n Mediator xu?ng l?p Base
         public AuthController(IMediator mediator, ILogger<AuthController> logger) : base(mediator, logger)
         {
         }
@@ -34,7 +34,7 @@ namespace ControlHub.API.Accounts.Controllers
             var result = await Mediator.Send(command, ct);
 
             if (result.IsFailure)
-                return HandleFailure(result); // Sử dụng hàm từ BaseApiController
+                return HandleFailure(result); // S? d?ng h�m t? BaseApiController
 
             return Ok(new ApiResponse.RegisterUserResponse
             {

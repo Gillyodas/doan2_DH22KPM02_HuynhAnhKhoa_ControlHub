@@ -1,4 +1,4 @@
-﻿namespace ControlHub.SharedKernel.Common.Logs
+namespace ControlHub.SharedKernel.Common.Logs
 {
     public sealed record LogCode(string Code, string Message)
     {

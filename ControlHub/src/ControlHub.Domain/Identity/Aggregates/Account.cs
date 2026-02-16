@@ -1,19 +1,19 @@
-﻿using ControlHub.Domain.Accounts.Enums;
-using ControlHub.Domain.Accounts.ValueObjects;
+using ControlHub.Domain.Identity.Enums;
+using ControlHub.Domain.Identity.ValueObjects;
 using ControlHub.Domain.Roles;
 using ControlHub.Domain.Tokens;
-using ControlHub.Domain.Users;
+using ControlHub.Domain.Identity.Entities;
 using ControlHub.SharedKernel.Accounts;
 using ControlHub.SharedKernel.Results;
 using ControlHub.SharedKernel.Users;
 
-namespace ControlHub.Domain.Accounts
+namespace ControlHub.Domain.Identity.Aggregates
 {
     public class Account
     {
         public Guid Id { get; private set; }
 
-        // Value Object: Password (sẽ được map phẳng vào bảng Accounts)
+        // Value Object: Password (s? du?c map ph?ng v�o b?ng Accounts)
         public Password Password { get; private set; } = default!;
 
         public bool IsActive { get; private set; }
@@ -22,11 +22,11 @@ namespace ControlHub.Domain.Accounts
         // Foreign Key
         public Guid RoleId { get; private set; }
 
-        // Navigation Properties (EF Core cần kiểu cụ thể, không dùng Maybe<T> ở đây)
+        // Navigation Properties (EF Core c?n ki?u c? th?, kh�ng d�ng Maybe<T> ? d�y)
         public Role? Role { get; private set; }
         public User? User { get; private set; }
 
-        // Collections (EF Core sẽ map vào field private)
+        // Collections (EF Core s? map v�o field private)
         private readonly List<Identifier> _identifiers = new();
         public IReadOnlyCollection<Identifier> Identifiers => _identifiers.AsReadOnly();
 
@@ -88,7 +88,7 @@ namespace ControlHub.Domain.Accounts
             return Result.Success();
         }
 
-        // Quản lý Token ngay trong Account (Aggregate Root)
+        // Qu?n l� Token ngay trong Account (Aggregate Root)
         public void AddToken(Token token)
         {
             _tokens.Add(token);

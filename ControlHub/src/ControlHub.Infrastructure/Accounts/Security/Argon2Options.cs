@@ -1,4 +1,4 @@
-﻿namespace ControlHub.Infrastructure.Accounts.Security
+namespace ControlHub.Infrastructure.Accounts.Security
 {
     public sealed class Argon2Options
     {

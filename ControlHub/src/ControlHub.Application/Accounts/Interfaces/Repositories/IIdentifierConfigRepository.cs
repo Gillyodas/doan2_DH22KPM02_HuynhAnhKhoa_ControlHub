@@ -1,8 +1,8 @@
-﻿using ControlHub.Domain.Accounts.Identifiers;
+using ControlHub.Domain.Identity.Identifiers;
 
 namespace ControlHub.Application.Accounts.Interfaces.Repositories
 {
-    public interface IIdentifierConfigRepository : Domain.Accounts.Identifiers.IIdentifierConfigRepository
+    public interface IIdentifierConfigRepository : Domain.Identity.Identifiers.IIdentifierConfigRepository
     {
     }
 }

@@ -1,13 +1,13 @@
-﻿namespace ControlHub.SharedKernel
+namespace ControlHub.SharedKernel
 {
     internal class ToDoNote
     {
-        // TODO: Tìm hiểu về Token Refresh tự động (useTokenRefresh)
+        // TODO: T�m hi?u v? Token Refresh t? d?ng (useTokenRefresh)
         // TODO: Document
-        // TODO: Thêm hướng dẫn sử dụng APIs trên FE
-        // TODO: Tìm hiểu về các công nghệ và kỹ thuật cache (mediatR hay Redis)
-        // TODO: Sử dụng Domain Events: Khi một Role được cập nhật, phát ra một Event. Một Handler sẽ bắt Event đó và gọi _memoryCache.Remove(key). Cách này "sạch" nhất vì Decorator không cần quan tâm đến logic nghiệp vụ.
-        // TODO: Thêm các tool observability để theo dõi tỉ lệ truy cập cache
-        // TODO: Xóa bớt 1 method dư thừa của UserRepository
+        // TODO: Th�m hu?ng d?n s? d?ng APIs tr�n FE
+        // TODO: T�m hi?u v? c�c c�ng ngh? v� k? thu?t cache (mediatR hay Redis)
+        // TODO: S? d?ng Domain Events: Khi m?t Role du?c c?p nh?t, ph�t ra m?t Event. M?t Handler s? b?t Event d� v� g?i _memoryCache.Remove(key). C�ch n�y "s?ch" nh?t v� Decorator kh�ng c?n quan t�m d?n logic nghi?p v?.
+        // TODO: Th�m c�c tool observability d? theo d�i t? l? truy c?p cache
+        // TODO: X�a b?t 1 method du th?a c?a UserRepository
     }
 }

@@ -1,5 +1,5 @@
-﻿// File: /Infrastructure/Accounts/IdentifierConfigConfig.cs
-using ControlHub.Domain.Accounts.Identifiers;
+// File: /Infrastructure/Accounts/IdentifierConfigConfig.cs
+using ControlHub.Domain.Identity.Identifiers;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
@@ -31,13 +31,13 @@ namespace ControlHub.Infrastructure.Accounts
             // ===== OWNED COLLECTION: ValidationRules =====
             builder.OwnsMany(c => c.Rules, rb =>
             {
-                // 1. Tên bảng
+                // 1. T�n b?ng
                 rb.ToTable("IdentifierValidationRules", "ControlHub");
 
                 // 2. Foreign Key (shadow property)
                 rb.WithOwner().HasForeignKey("IdentifierConfigId");
 
-                // 3. Primary Key (chỉ dùng Id của ValidationRule)
+                // 3. Primary Key (ch? d�ng Id c?a ValidationRule)
                 rb.HasKey(r => r.Id);
 
                 // 4. Properties mapping

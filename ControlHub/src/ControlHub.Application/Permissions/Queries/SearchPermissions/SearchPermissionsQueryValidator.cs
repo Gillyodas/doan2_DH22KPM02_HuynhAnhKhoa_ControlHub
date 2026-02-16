@@ -1,4 +1,4 @@
-﻿using FluentValidation;
+using FluentValidation;
 
 namespace ControlHub.Application.Permissions.Queries.SearchPermissions
 {

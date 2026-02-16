@@ -1,4 +1,4 @@
-﻿using System.IdentityModel.Tokens.Jwt;
+using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using ControlHub.Application.Accounts.Commands.SignOut;
 using ControlHub.Application.Common.Persistence;
@@ -34,13 +34,13 @@ namespace ControlHub.Application.Tests.AccountsTests
         }
 
         // =================================================================================
-        // NHÓM 1: SECURITY & VALIDATION (Bảo mật & Xác thực)
+        // NH�M 1: SECURITY & VALIDATION (B?o m?t & X�c th?c)
         // =================================================================================
 
         [Fact]
         public async Task Handle_ShouldReturnFailure_WhenTokenVerificationFails()
         {
-            // 🐛 BUG HUNT: Access Token không hợp lệ (hết hạn, sai chữ ký) -> Phải chặn ngay.
+            // ?? BUG HUNT: Access Token kh�ng h?p l? (h?t h?n, sai ch? k�) -> Ph?i ch?n ngay.
             var command = new SignOutCommand("invalid_access_token", "refresh_token");
 
             _tokenVerifierMock.Setup(v => v.Verify(command.accessToken)).Returns((ClaimsPrincipal?)null);
@@ -55,7 +55,7 @@ namespace ControlHub.Application.Tests.AccountsTests
         [Fact]
         public async Task Handle_ShouldReturnFailure_WhenAccountIdInClaimIsInvalid()
         {
-            // 🐛 BUG HUNT: Token giả mạo với Claim "sub" không phải GUID -> Phải chặn.
+            // ?? BUG HUNT: Token gi? m?o v?i Claim "sub" kh�ng ph?i GUID -> Ph?i ch?n.
             var command = new SignOutCommand("access_token", "refresh_token");
 
             var identity = new ClaimsIdentity(new[] { new Claim(JwtRegisteredClaimNames.Sub, "not-a-guid") });
@@ -63,7 +63,7 @@ namespace ControlHub.Application.Tests.AccountsTests
 
             _tokenVerifierMock.Setup(v => v.Verify(command.accessToken)).Returns(principal);
 
-            // Mock DB trả về token (để vượt qua check null trước đó)
+            // Mock DB tr? v? token (d? vu?t qua check null tru?c d�)
             var fakeToken = Token.Create(Guid.NewGuid(), "val", TokenType.AccessToken, DateTime.UtcNow.AddMinutes(1));
             _tokenQueriesMock.Setup(q => q.GetByValueAsync(It.IsAny<string>(), It.IsAny<CancellationToken>()))
                              .ReturnsAsync(fakeToken);
@@ -77,17 +77,17 @@ namespace ControlHub.Application.Tests.AccountsTests
         [Fact]
         public async Task Handle_ShouldReturnFailure_WhenAccountIdMismatch()
         {
-            // 🐛 BUG HUNT: Hacker dùng Token của mình để logout Token của người khác -> Phải chặn.
-            // Token gửi lên (trong DB) thuộc Account A, nhưng Claim trong Token lại là Account B.
+            // ?? BUG HUNT: Hacker d�ng Token c?a m�nh d? logout Token c?a ngu?i kh�c -> Ph?i ch?n.
+            // Token g?i l�n (trong DB) thu?c Account A, nhung Claim trong Token l?i l� Account B.
 
             var command = new SignOutCommand("access_token", "refresh_token");
             var tokenOwnerId = Guid.NewGuid();
             var attackerId = Guid.NewGuid();
 
-            var principal = CreatePrincipal(attackerId); // Người gọi là Attacker
+            var principal = CreatePrincipal(attackerId); // Ngu?i g?i l� Attacker
             _tokenVerifierMock.Setup(v => v.Verify(command.accessToken)).Returns(principal);
 
-            // Token trong DB thuộc về Owner
+            // Token trong DB thu?c v? Owner
             var accessToken = Token.Create(tokenOwnerId, command.accessToken, TokenType.AccessToken, DateTime.UtcNow.AddMinutes(15));
             var refreshToken = Token.Create(tokenOwnerId, command.refreshToken, TokenType.RefreshToken, DateTime.UtcNow.AddDays(7));
 
@@ -96,25 +96,25 @@ namespace ControlHub.Application.Tests.AccountsTests
 
             var result = await _handler.Handle(command, CancellationToken.None);
 
-            Assert.True(result.IsFailure, "LỖI BẢO MẬT: Cho phép logout token không thuộc về người gọi (Mismatch ID).");
+            Assert.True(result.IsFailure, "L?I B?O M?T: Cho ph�p logout token kh�ng thu?c v? ngu?i g?i (Mismatch ID).");
             Assert.Equal(TokenErrors.TokenInvalid, result.Error);
             _uowMock.Verify(u => u.CommitAsync(It.IsAny<CancellationToken>()), Times.Never);
         }
 
         // =================================================================================
-        // NHÓM 2: LOGIC NGHIỆP VỤ (BUSINESS LOGIC)
+        // NH�M 2: LOGIC NGHI?P V? (BUSINESS LOGIC)
         // =================================================================================
 
         [Fact]
         public async Task Handle_ShouldReturnFailure_WhenTokensNotFoundInStorage()
         {
-            // 🐛 BUG HUNT: Token hợp lệ về mặt chữ ký nhưng không có trong DB (đã bị xóa cứng?) -> Coi như lỗi.
+            // ?? BUG HUNT: Token h?p l? v? m?t ch? k� nhung kh�ng c� trong DB (d� b? x�a c?ng?) -> Coi nhu l?i.
             var command = new SignOutCommand("access_token", "refresh_token");
             var principal = CreatePrincipal(Guid.NewGuid());
 
             _tokenVerifierMock.Setup(v => v.Verify(command.accessToken)).Returns(principal);
 
-            // DB trả về null
+            // DB tr? v? null
             _tokenQueriesMock.Setup(q => q.GetByValueAsync(It.IsAny<string>(), It.IsAny<CancellationToken>()))
                              .ReturnsAsync((Token?)null);
 
@@ -127,8 +127,8 @@ namespace ControlHub.Application.Tests.AccountsTests
         [Fact]
         public async Task Handle_ShouldReturnFailure_WhenTokenAlreadyRevoked()
         {
-            // 🐛 BUG HUNT: Cố gắng logout lại một token đã logout rồi.
-            // Domain logic của Token.Revoke() sẽ trả về Failure nếu IsRevoked=true.
+            // ?? BUG HUNT: C? g?ng logout l?i m?t token d� logout r?i.
+            // Domain logic c?a Token.Revoke() s? tr? v? Failure n?u IsRevoked=true.
 
             var command = new SignOutCommand("access_token", "refresh_token");
             var accountId = Guid.NewGuid();
@@ -136,7 +136,7 @@ namespace ControlHub.Application.Tests.AccountsTests
 
             _tokenVerifierMock.Setup(v => v.Verify(command.accessToken)).Returns(principal);
 
-            // Tạo token đã bị Revoke
+            // T?o token d� b? Revoke
             var revokedToken = Token.Rehydrate(Guid.NewGuid(), accountId, command.accessToken, TokenType.AccessToken,
                 DateTime.UtcNow.AddMinutes(15), isUsed: false, isRevoked: true, DateTime.UtcNow); // isRevoked = true
 
@@ -147,13 +147,13 @@ namespace ControlHub.Application.Tests.AccountsTests
 
             var result = await _handler.Handle(command, CancellationToken.None);
 
-            Assert.True(result.IsFailure, "LỖI LOGIC: Không chặn việc logout lại token đã bị thu hồi.");
+            Assert.True(result.IsFailure, "L?I LOGIC: Kh�ng ch?n vi?c logout l?i token d� b? thu h?i.");
             Assert.Equal(TokenErrors.TokenAlreadyRevoked, result.Error);
             _uowMock.Verify(u => u.CommitAsync(It.IsAny<CancellationToken>()), Times.Never);
         }
 
         // =================================================================================
-        // NHÓM 3: LUỒNG THÀNH CÔNG (HAPPY PATH)
+        // NH�M 3: LU?NG TH�NH C�NG (HAPPY PATH)
         // =================================================================================
 
         [Fact]
@@ -166,7 +166,7 @@ namespace ControlHub.Application.Tests.AccountsTests
 
             _tokenVerifierMock.Setup(v => v.Verify(command.accessToken)).Returns(principal);
 
-            // Tạo token hợp lệ
+            // T?o token h?p l?
             var accessToken = Token.Create(accountId, command.accessToken, TokenType.AccessToken, DateTime.UtcNow.AddMinutes(15));
             var refreshToken = Token.Create(accountId, command.refreshToken, TokenType.RefreshToken, DateTime.UtcNow.AddDays(7));
 
@@ -179,12 +179,12 @@ namespace ControlHub.Application.Tests.AccountsTests
             // Assert
             Assert.True(result.IsSuccess);
 
-            // Verify State Change: Cả 2 token phải chuyển sang IsRevoked = true
-            Assert.True(accessToken.IsRevoked, "LỖI DATA: Access Token chưa được đánh dấu Revoked.");
-            Assert.True(refreshToken.IsRevoked, "LỖI DATA: Refresh Token chưa được đánh dấu Revoked.");
+            // Verify State Change: C? 2 token ph?i chuy?n sang IsRevoked = true
+            Assert.True(accessToken.IsRevoked, "L?I DATA: Access Token chua du?c d�nh d?u Revoked.");
+            Assert.True(refreshToken.IsRevoked, "L?I DATA: Refresh Token chua du?c d�nh d?u Revoked.");
 
-            // Verify Side Effect: Phải Commit xuống DB
-            _uowMock.Verify(u => u.CommitAsync(It.IsAny<CancellationToken>()), Times.Once, "LỖI DATA: Quên gọi Commit để lưu trạng thái.");
+            // Verify Side Effect: Ph?i Commit xu?ng DB
+            _uowMock.Verify(u => u.CommitAsync(It.IsAny<CancellationToken>()), Times.Once, "L?I DATA: Qu�n g?i Commit d? luu tr?ng th�i.");
         }
 
         // Helper

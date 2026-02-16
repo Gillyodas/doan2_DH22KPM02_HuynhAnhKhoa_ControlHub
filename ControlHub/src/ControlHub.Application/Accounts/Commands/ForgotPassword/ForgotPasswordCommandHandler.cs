@@ -1,11 +1,11 @@
-﻿using System.Text.Json;
+using System.Text.Json;
 using ControlHub.Application.Accounts.Interfaces.Repositories;
 using ControlHub.Application.Common.Persistence;
 using ControlHub.Application.OutBoxs.Repositories;
 using ControlHub.Application.Tokens.Interfaces;
 using ControlHub.Application.Tokens.Interfaces.Generate;
 using ControlHub.Application.Tokens.Interfaces.Repositories;
-using ControlHub.Domain.Accounts.Identifiers.Services;
+using ControlHub.Domain.Identity.Identifiers.Services;
 using ControlHub.Domain.Outboxs;
 using ControlHub.Domain.Tokens.Enums;
 using ControlHub.SharedKernel.Accounts;

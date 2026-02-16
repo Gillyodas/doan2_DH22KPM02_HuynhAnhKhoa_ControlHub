@@ -1,7 +1,7 @@
-﻿using ControlHub.Domain.Accounts.Enums;
+using ControlHub.Domain.Identity.Enums;
 using ControlHub.SharedKernel.Common.Errors;
 
-namespace ControlHub.Domain.Accounts.Identifiers.Rules
+namespace ControlHub.Domain.Identity.Identifiers.Rules
 {
     public class CustomIdentifierValidator : IIdentifierValidator
     {

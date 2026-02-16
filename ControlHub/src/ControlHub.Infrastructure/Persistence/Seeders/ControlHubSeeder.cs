@@ -1,10 +1,10 @@
-﻿using ControlHub.Domain.Accounts;
-using ControlHub.Domain.Accounts.Enums;
-using ControlHub.Domain.Accounts.Identifiers;
-using ControlHub.Domain.Accounts.Security;
-using ControlHub.Domain.Accounts.ValueObjects;
+using ControlHub.Domain.Identity.Aggregates;
+using ControlHub.Domain.Identity.Enums;
+using ControlHub.Domain.Identity.Identifiers;
+using ControlHub.Domain.Identity.Security;
+using ControlHub.Domain.Identity.ValueObjects;
 using ControlHub.Domain.Roles;
-using ControlHub.Domain.Users;
+using ControlHub.Domain.Identity.Entities;
 using ControlHub.SharedKernel.Constants;
 using Microsoft.EntityFrameworkCore;
 
@@ -32,17 +32,17 @@ namespace ControlHub.Infrastructure.Persistence.Seeders
             if (!await db.Roles.AnyAsync())
             {
                 var superAdmin = Role.Create(
-                    ControlHubDefaults.Roles.SuperAdminId, // Dùng ID cố định
+                    ControlHubDefaults.Roles.SuperAdminId, // D�ng ID c? d?nh
                     ControlHubDefaults.Roles.SuperAdminName,
                     "System Super Admin");
 
                 var admin = Role.Create(
-                    ControlHubDefaults.Roles.AdminId, // Dùng ID cố định
+                    ControlHubDefaults.Roles.AdminId, // D�ng ID c? d?nh
                     ControlHubDefaults.Roles.AdminName,
                     "System Admin");
 
                 var user = Role.Create(
-                    ControlHubDefaults.Roles.UserId, // Dùng ID cố định
+                    ControlHubDefaults.Roles.UserId, // D�ng ID c? d?nh
                     ControlHubDefaults.Roles.UserName,
                     "Standard User");
 

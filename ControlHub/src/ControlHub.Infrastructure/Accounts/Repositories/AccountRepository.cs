@@ -1,6 +1,6 @@
-﻿using ControlHub.Application.Accounts.Interfaces.Repositories;
-using ControlHub.Domain.Accounts;
-using ControlHub.Domain.Accounts.Enums;
+using ControlHub.Application.Accounts.Interfaces.Repositories;
+using ControlHub.Domain.Identity.Aggregates;
+using ControlHub.Domain.Identity.Enums;
 using ControlHub.Infrastructure.Persistence;
 using ControlHub.SharedKernel.Common.Exceptions;
 using Microsoft.EntityFrameworkCore;

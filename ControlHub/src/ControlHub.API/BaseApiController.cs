@@ -1,4 +1,4 @@
-﻿using ControlHub.SharedKernel.Common.Errors;
+using ControlHub.SharedKernel.Common.Errors;
 using ControlHub.SharedKernel.Results;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
@@ -19,7 +19,7 @@ namespace ControlHub.API.Controllers
         }
 
         /// <summary>
-        /// Tự động ánh xạ từ Domain Error sang HTTP Status Code chuẩn
+        /// T? d?ng �nh x? t? Domain Error sang HTTP Status Code chu?n
         /// </summary>
         protected IActionResult? HandleFailure(Result result)
         {

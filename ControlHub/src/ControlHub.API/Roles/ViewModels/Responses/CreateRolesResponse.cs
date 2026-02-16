@@ -1,4 +1,4 @@
-﻿namespace ControlHub.API.Roles.ViewModels.Responses
+namespace ControlHub.API.Roles.ViewModels.Responses
 {
     public class CreateRolesResponse
     {

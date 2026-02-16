@@ -1,13 +1,13 @@
-﻿using System.Linq.Expressions;
+using System.Linq.Expressions;
 
 namespace ControlHub.SharedKernel.Utils
 {
     public static class PredicateBuilder
     {
-        // Khởi tạo mặc định là True (Dùng cho logic AND)
+        // Kh?i t?o m?c d?nh l� True (D�ng cho logic AND)
         public static Expression<Func<T, bool>> True<T>() { return f => true; }
 
-        // Khởi tạo mặc định là False (Dùng cho logic OR)
+        // Kh?i t?o m?c d?nh l� False (D�ng cho logic OR)
         public static Expression<Func<T, bool>> False<T>() { return f => false; }
 
         public static Expression<Func<T, bool>> Or<T>(this Expression<Func<T, bool>> expr1,

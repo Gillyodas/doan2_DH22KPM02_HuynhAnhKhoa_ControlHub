@@ -1,4 +1,4 @@
-﻿using FluentValidation;
+using FluentValidation;
 
 namespace ControlHub.Application.Roles.Commands.CreateRoles
 {
@@ -6,12 +6,12 @@ namespace ControlHub.Application.Roles.Commands.CreateRoles
     {
         public CreateRolesCommandValidator()
         {
-            // Kiểm tra danh sách Roles không null hoặc rỗng
+            // Ki?m tra danh s�ch Roles kh�ng null ho?c r?ng
             RuleFor(x => x.Roles)
                 .NotNull().WithMessage("Roles list is required.")
                 .Must(r => r.Any()).WithMessage("At least one role must be provided.");
 
-            // Validate từng phần tử trong danh sách Roles
+            // Validate t?ng ph?n t? trong danh s�ch Roles
             RuleForEach(x => x.Roles)
                 .SetValidator(new CreateRoleDtoValidator());
         }

@@ -1,4 +1,4 @@
-﻿using ControlHub.Application.Common.DTOs;
+using ControlHub.Application.Common.DTOs;
 using ControlHub.Domain.Roles;
 
 namespace ControlHub.API.Roles.ViewModels.Responses

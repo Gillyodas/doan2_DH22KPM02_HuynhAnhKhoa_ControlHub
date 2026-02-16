@@ -1,4 +1,4 @@
-﻿namespace ControlHub.SharedKernel.Common.Errors
+namespace ControlHub.SharedKernel.Common.Errors
 {
     public enum ErrorType
     {
@@ -14,7 +14,7 @@
     {
         public static readonly Error None = new(string.Empty, string.Empty, ErrorType.Failure);
 
-        // --- SỬA LỖI: Factory Method phải truyền đúng ErrorType ---
+        // --- S?A L?I: Factory Method ph?i truy?n d�ng ErrorType ---
 
         // Validation (400)
         public static Error Validation(string code, string message) =>
@@ -36,7 +36,7 @@
         public static Error Forbidden(string code, string message) =>
             new(code, message, ErrorType.Forbidden);
 
-        // Failure (500 hoặc 400 chung)
+        // Failure (500 ho?c 400 chung)
         public static Error Failure(string code, string message) =>
             new(code, message, ErrorType.Failure);
 

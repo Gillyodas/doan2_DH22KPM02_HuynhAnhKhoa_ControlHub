@@ -1,4 +1,4 @@
-﻿using System.IdentityModel.Tokens.Jwt;
+using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using ControlHub.Application.Tokens.Interfaces.Generate;
 using Microsoft.Extensions.Configuration;

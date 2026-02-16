@@ -1,4 +1,4 @@
-﻿using ControlHub.Application.OutBoxs.Repositories;
+using ControlHub.Application.OutBoxs.Repositories;
 using ControlHub.Domain.Outboxs;
 using ControlHub.Infrastructure.Persistence;
 using ControlHub.SharedKernel.Common.Exceptions;

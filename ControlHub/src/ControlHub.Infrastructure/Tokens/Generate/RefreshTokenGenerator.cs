@@ -1,4 +1,4 @@
-﻿using System.Security.Cryptography;
+using System.Security.Cryptography;
 using ControlHub.Application.Tokens.Interfaces.Generate;
 
 namespace ControlHub.Infrastructure.Tokens.Generate
@@ -7,7 +7,7 @@ namespace ControlHub.Infrastructure.Tokens.Generate
     {
         public string Generate()
         {
-            // Refresh token không cần JWT, thường là random string
+            // Refresh token kh�ng c?n JWT, thu?ng l� random string
             return Convert.ToBase64String(RandomNumberGenerator.GetBytes(64));
         }
     }
