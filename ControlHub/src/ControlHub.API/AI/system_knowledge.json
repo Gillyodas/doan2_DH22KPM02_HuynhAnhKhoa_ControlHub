@@ -1,92 +1,161 @@
 {
     "SystemKnowledge": {
         "architecture": {
-            "description": "ASP.NET Core Clean Architecture: API → Application → Domain → Infrastructure",
-            "database": "SQL Server via Entity Framework Core",
-            "auth": "JWT Bearer tokens via ASP.NET Core Identity",
-            "logging": "Serilog with structured JSON format"
+            "description": "ControlHub is a modular Identity & Access Management (IAM) system built with ASP.NET Core, focusing on secure account management, multi-identifier authentication, and fine-grained permission-based authorization using MediatR and EF Core.",
+            "tech_stack": [
+                "ASP.NET Core 8.0",
+                "Entity Framework Core (SQL Server)",
+                "MediatR (CQRS)",
+                "SignalR (Real-time monitoring)",
+                "Ollama (Local AI Diagnostics)"
+            ],
+            "database": "SQL Server with 'ControlHub' specific migration history schema.",
+            "auth": "JWT Bearer with 5m Access Token TTL and 7d Refresh Token TTL. Supports multiple identifiers per account.",
+            "observability": "OpenTelemetry with OtlpExporter, Prometheus metrics, and structured Serilog logging."
         },
         "modules": {
-            "Permission": {
-                "description": "Manages system permissions and access control",
-                "validation_rules": [
-                    "Permission code must match regex: ^[a-z][a-z0-9_.]*$",
-                    "Code must be lowercase English alphanumeric with dots and underscores only",
-                    "Unicode characters (e.g., Vietnamese diacritics) are not allowed in codes"
-                ],
-                "error_codes": {
-                    "Permission.InvalidFormat": "Permission code contains invalid characters or format",
-                    "Permission.NotFound": "Permission with specified ID/code does not exist",
-                    "Permission.DuplicateCode": "Permission code already exists in the system"
-                },
-                "endpoints": [
-                    "POST /api/Permission/permissions — Create new permission",
-                    "GET /api/Permission/permissions — List all permissions",
-                    "PUT /api/Permission/permissions/{id} — Update existing permission",
-                    "DELETE /api/Permission/permissions/{id} — Delete permission"
-                ]
-            },
             "Auth": {
-                "description": "Authentication and authorization module",
+                "description": "Handles authentication, registration, and session management (tokens).",
                 "validation_rules": [
-                    "JWT token expiry: 5 minutes (access), 7 days (refresh)",
-                    "Password minimum length: 6 characters",
-                    "Account lockout after 5 failed attempts"
+                    "Password must meet complexity requirements (defined in ValueObject.Password).",
+                    "Public registration allowed for Users and SuperAdmins (with MasterKey).",
+                    "Admin registration requires 'users.create' permission.",
+                    "Refresh token must match latest issued token for the account."
                 ],
                 "error_codes": {
-                    "Auth.InvalidCredentials": "Username or password is incorrect",
-                    "Auth.TokenExpired": "JWT access token has expired, use refresh token",
-                    "Auth.AccountLocked": "Account is locked due to repeated failed login attempts",
-                    "Auth.RefreshTokenExpired": "Refresh token has expired, user must login again"
+                    "Auth.InvalidCredentials": "Login failed due to incorrect identifier or password.",
+                    "Auth.TokenExpired": "Access token has expired. Client should call /api/Auth/auth/refresh.",
+                    "Auth.InvalidRefreshToken": "Refresh token is invalid or has been revoked.",
+                    "Auth.AccountLocked": "Account is locked due to too many failed attempts (if policy enabled)."
                 },
                 "endpoints": [
-                    "POST /api/Auth/login — User login",
-                    "POST /api/Auth/refresh — Refresh access token",
-                    "POST /api/Auth/change-password — Change user password"
+                    "POST /api/Auth/users/register (Anonymous)",
+                    "POST /api/Auth/admins/register (users.create)",
+                    "POST /api/Auth/superadmins/register (Anonymous + MasterKey)",
+                    "POST /api/Auth/auth/signin (Anonymous)",
+                    "POST /api/Auth/auth/refresh (Anonymous)",
+                    "POST /api/Auth/auth/signout (Authorize)"
                 ]
             },
-            "Role": {
-                "description": "Role management module",
+            "Account": {
+                "description": "Manages account lifecycle, including security settings and identifiers.",
                 "validation_rules": [
-                    "Role name must be unique",
-                    "SuperAdmin role cannot be modified or deleted"
+                    "Identifiers (Email/Username/Phone) must be unique across all active accounts.",
+                    "Password change requires correct current password (SameUser policy).",
+                    "Deleting an account performs a cascading soft-delete of all identifiers and users."
                 ],
                 "error_codes": {
-                    "Role.NotFound": "Role with specified ID does not exist",
-                    "Role.DuplicateName": "Role name already exists",
-                    "Role.CannotModifySuperAdmin": "SuperAdmin role is read-only"
+                    "Account.IdentifierAlreadyExists": "The provided identifier (Email/Username/Phone) is already in use.",
+                    "Account.IdentifierNotFound": "Specified identifier does not exist on this account.",
+                    "Account.PasswordRequired": "Identity requires a password for certain operations.",
+                    "Account.PasswordIsNotValid": "New password does not meet security complexity rules.",
+                    "Account.RoleRequired": "Every account must be assigned a valid RoleId."
                 },
                 "endpoints": [
-                    "POST /api/Role — Create new role",
-                    "GET /api/Role — List all roles",
-                    "PUT /api/Role/{id} — Update role"
+                    "PATCH /api/Account/users/{id}/password (Authorize + SameUser)",
+                    "POST /api/Account/auth/forgot-password (Anonymous)",
+                    "POST /api/Account/auth/reset-password (Anonymous)",
+                    "GET /api/Account/admins (users.view)"
                 ]
             },
             "User": {
-                "description": "User management module",
+                "description": "Manages user personal profiles and specific user metadata.",
+                "validation_rules": [
+                    "Username update requires 'users.update_username' permission.",
+                    "Profile updates (First/Last name) use UpdateProfile logic in User domain.",
+                    "Users are soft-deleted when their parent Account is deleted."
+                ],
                 "error_codes": {
-                    "User.NotFound": "User with specified ID does not exist",
-                    "User.DuplicateEmail": "Email address already in use",
-                    "User.InvalidEmail": "Email format is invalid"
+                    "User.Required": "Username is mandatory and cannot be empty.",
+                    "User.NotFound": "The specified user ID does not exist in the system.",
+                    "User.AlreadyAtached": "This account already has an associated user profile."
                 },
                 "endpoints": [
-                    "GET /api/User — List users",
-                    "POST /api/User — Create user",
-                    "PUT /api/User/{id} — Update user"
+                    "GET /api/User (users.view)",
+                    "GET /api/User/{id} (users.view)",
+                    "PUT /api/User/{id} (users.update)",
+                    "DELETE /api/User/{id} (users.delete)",
+                    "PATCH /api/User/users/{id}/username (users.update_username)"
+                ]
+            },
+            "Role": {
+                "description": "Defines roles and manages permission assignments for access control.",
+                "validation_rules": [
+                    "Role names must be unique and non-empty.",
+                    "Assigning roles to users requires 'roles.assign' permission.",
+                    "Permission assignment to roles checks for existing codes to prevent duplicates."
+                ],
+                "error_codes": {
+                    "Role.RoleNameRequired": "A unique name must be provided for the role.",
+                    "Role.PermissionNotFound": "Specified permission ID does not exist.",
+                    "Role.PermissionAlreadyExists": "Role already has this permission assigned.",
+                    "Role.AllPermissionsAlreadyExist": "Batch permission assignment failed because all target permissions were already present."
+                },
+                "endpoints": [
+                    "POST /api/Role/roles (roles.create)",
+                    "GET /api/Role (roles.view)",
+                    "PUT /api/Role/{id} (roles.update)",
+                    "DELETE /api/Role/{id} (roles.delete)",
+                    "GET /api/Role/{roleId}/permissions (roles.view)",
+                    "PUT /api/Role/{roleId}/permissions (roles.update)",
+                    "POST /api/Role/users/{userId}/assign/{roleId} (roles.assign)"
+                ]
+            },
+            "Permission": {
+                "description": "Granular access control entries using dot-notation (e.g., 'users.view').",
+                "validation_rules": [
+                    "Codes must strictly match: '^[a-z0-9_]+\\.[a-z0-9_]+$'.",
+                    "Codes must be lowercase and trimmed before creation.",
+                    "Direct CRUD operations on permissions restricted to 'system.manage_settings'."
+                ],
+                "error_codes": {
+                    "Permission.PermissionCodeRequired": "Permission code cannot be empty.",
+                    "Permission.InvalidPermissionFormat": "Code must follow 'module.action' format (lowercase, underscores, dots only).",
+                    "Permission.IdRequired": "A valid GUID must be provided for Permission creation."
+                },
+                "endpoints": [
+                    "POST /api/Permission/permissions (permissions.create)",
+                    "GET /api/Permission (permissions.view)",
+                    "PUT /api/Permission/{id} (permissions.update)",
+                    "DELETE /api/Permission/{id} (permissions.delete)"
                 ]
             },
             "Identifier": {
-                "description": "System identifier/code management",
+                "description": "Flexible authentication identifiers (Email, Username, etc.) with custom regex validation.",
+                "validation_rules": [
+                    "IdentifierConfig define dynamic regex rules for validation.",
+                    "Active configs are used to populate login/registration UI dynamically.",
+                    "Anonymous users can only view active configs, not deactivated ones."
+                ],
                 "error_codes": {
-                    "Identifier.NotFound": "Identifier does not exist",
-                    "Identifier.DuplicateCode": "Identifier code already exists"
-                }
+                    "Identifier.ConfigNotFound": "The specified identifier configuration ID does not exist.",
+                    "Identifier.InvalidValue": "The provided value does not match the regex defined in the configuration."
+                },
+                "endpoints": [
+                    "GET /api/Identifier (identifiers.view)",
+                    "POST /api/Identifier (identifiers.create)",
+                    "GET /api/Identifier/active (Anonymous/Authorize)",
+                    "PATCH /api/Identifier/{id}/toggle-active (identifiers.toggle)",
+                    "PUT /api/Identifier/{id} (identifiers.update)"
+                ]
+            },
+            "Profile": {
+                "description": "Self-service module for users to manage their own information.",
+                "validation_rules": [
+                    "Users can only view/update their own profile (CurrentUserService context).",
+                    "Password change requires authentication and validation of current password."
+                ],
+                "endpoints": [
+                    "GET /api/Profile/me (Authorize)",
+                    "PUT /api/Profile/me (Authorize)",
+                    "PUT /api/Profile/me/password (Authorize)"
+                ]
             }
         },
         "infrastructure_notes": [
-            "CORS policy logs at INFO level are normal framework behavior — not errors",
-            "PermissionClaimsTransformation adds permissions to SuperAdmin automatically",
-            "PermissionAuthorizationHandler bypasses checks for SuperAdmin role"
+            "MediatR Pipeline Behaviors handle global validation (FluentValidation).",
+            "GlobalExceptionMiddleware captures Domain/App errors and maps to correct HTTP status codes.",
+            "Outbox Pattern ensures exactly-once delivery for events like Email notification on registration."
         ]
     }
 }
