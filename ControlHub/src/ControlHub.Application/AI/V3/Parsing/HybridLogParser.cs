@@ -1,9 +1,4 @@
-using System;
-using System.Collections.Generic;
 using System.Diagnostics;
-using System.Linq;
-using System.Threading;
-using System.Threading.Tasks;
 using ControlHub.Application.Common.Interfaces.AI;
 using ControlHub.Application.Common.Interfaces.AI.V3.Parsing;
 using ControlHub.Application.Common.Logging;
@@ -28,13 +23,13 @@ namespace ControlHub.Application.AI.V3.Parsing
         }
 
         public async Task<HybridParseResult> ParseLogsAsync(
-            List<LogEntry> logs, 
-            HybridParsingOptions? options = null, 
+            List<LogEntry> logs,
+            HybridParsingOptions? options = null,
             CancellationToken ct = default)
         {
             options ??= new HybridParsingOptions();
             var sw = Stopwatch.StartNew();
-            
+
             var templates = new List<LogTemplate>();
             var templateToLogs = new Dictionary<string, List<LogEntry>>();
             int drainCount = 0;
@@ -44,7 +39,7 @@ namespace ControlHub.Application.AI.V3.Parsing
 
             // Step 1: Drain3 Parsing for the whole batch
             var drainResult = await _drainParser.ParseLogsAsync(logs);
-            
+
             foreach (var drainTemplate in drainResult.Templates)
             {
                 var templateLogs = drainResult.TemplateToLogs[drainTemplate.TemplateId];
@@ -64,11 +59,11 @@ namespace ControlHub.Application.AI.V3.Parsing
                     foreach (var log in templateLogs)
                     {
                         var semanticResult = await _semanticClassifier.ClassifyAsync(log.Message, ct);
-                        
+
                         // Create a specific template for this semantic category if it doesn't exist
                         var semanticTemplateId = $"semantic_{semanticResult.Category}";
                         var existingTemplate = templates.FirstOrDefault(t => t.TemplateId == semanticTemplateId);
-                        
+
                         if (existingTemplate == null)
                         {
                             existingTemplate = new LogTemplate(
@@ -109,7 +104,7 @@ namespace ControlHub.Application.AI.V3.Parsing
         {
             var logEntry = new LogEntry { MessageTemplate = logLine, Timestamp = DateTime.UtcNow };
             var drainResult = await _drainParser.ParseLogsAsync(new List<LogEntry> { logEntry });
-            
+
             var template = drainResult.Templates.FirstOrDefault();
             var confidence = template != null ? CalculateDrainConfidence(template) : 0f;
 

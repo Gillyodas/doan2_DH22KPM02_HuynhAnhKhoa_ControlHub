@@ -2,9 +2,8 @@ using ControlHub.Application.Users.DTOs;
 using ControlHub.Application.Users.Interfaces.Repositories;
 using ControlHub.SharedKernel.Common;
 using ControlHub.SharedKernel.Results;
-using MediatR;
-
 using ControlHub.SharedKernel.Users;
+using MediatR;
 using Microsoft.Extensions.Logging;
 
 namespace ControlHub.Application.Users.Queries.GetUsers

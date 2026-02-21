@@ -40,7 +40,7 @@ namespace ControlHub.Infrastructure.AI
 
             var content = new StringContent(JsonSerializer.Serialize(point), Encoding.UTF8, "application/json");
             var response = await _httpClient.PutAsync($"/collections/{collectionName}/points?wait=true", content);
-            
+
             if (!response.IsSuccessStatusCode)
             {
                 var error = await response.Content.ReadAsStringAsync();
@@ -76,8 +76,8 @@ namespace ControlHub.Infrastructure.AI
                 {
                     results.Add(new SearchResult
                     {
-                        Id = item.Payload != null && item.Payload.TryGetValue("BusinessId", out var idElement) 
-                             ? idElement.ToString() 
+                        Id = item.Payload != null && item.Payload.TryGetValue("BusinessId", out var idElement)
+                             ? idElement.ToString()
                              : item.Id.ToString(), // Fallback
                         Score = item.Score,
                         Payload = item.Payload ?? new Dictionary<string, object>()

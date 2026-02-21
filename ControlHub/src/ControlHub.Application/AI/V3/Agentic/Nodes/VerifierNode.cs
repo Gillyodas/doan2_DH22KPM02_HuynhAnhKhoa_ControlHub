@@ -1,10 +1,6 @@
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading;
-using System.Threading.Tasks;
 using ControlHub.Application.Common.Interfaces.AI.V3.Agentic;
-using ControlHub.Application.Common.Interfaces.AI.V3.Reasoning;
 using ControlHub.Application.Common.Interfaces.AI.V3.Observability;
+using ControlHub.Application.Common.Interfaces.AI.V3.Reasoning;
 using Microsoft.Extensions.Logging;
 
 namespace ControlHub.Application.AI.V3.Agentic.Nodes
@@ -51,14 +47,14 @@ namespace ControlHub.Application.AI.V3.Agentic.Nodes
                     clone.Context["verification_passed"] = true;
                     clone.Context["verification_score"] = 0.5f;
                     clone.Context["verification_reason"] = "General knowledge answer (no evidence required)";
-                    
+
                     _logger.LogInformation("Verification PASSED: General query with valid plan");
-                    
+
                     clone.Messages.Add(new AgentMessage(
                         "assistant",
                         "Verification PASSED: Medium confidence (0.5) - General knowledge answer"
                     ));
-                    
+
                     return clone;
                 }
                 else
@@ -67,9 +63,9 @@ namespace ControlHub.Application.AI.V3.Agentic.Nodes
                     clone.Context["verification_passed"] = false;
                     clone.Context["verification_score"] = 0f;
                     clone.Context["verification_reason"] = "No execution results to verify";
-                    
+
                     _logger.LogWarning("Verification FAILED: No execution results for incident query");
-                    
+
                     return clone;
                 }
             }
@@ -78,24 +74,24 @@ namespace ControlHub.Application.AI.V3.Agentic.Nodes
             var preRetrievedDocs = clone.GetContext<List<Common.Interfaces.AI.V3.RAG.RankedDocument>>("pre_retrieval_docs");
             var totalRetrievedDocs = preRetrievedDocs?.Count ?? 0;
             var hasRetrievedDocs = totalRetrievedDocs > 0;
-            
-            _logger.LogInformation("Structured Verification: totalRetrievedDocs = {Count}, correlationId = {Id}", 
+
+            _logger.LogInformation("Structured Verification: totalRetrievedDocs = {Count}, correlationId = {Id}",
                 totalRetrievedDocs, correlationId ?? "null");
 
             // Only fail if we have a correlationId but NO docs were retrieved
             if (!hasRetrievedDocs && !string.IsNullOrEmpty(correlationId))
             {
                 _logger.LogWarning("Verification FAILED: No documents retrieved for correlationId: {Id}", correlationId);
-                
+
                 clone.Context["verification_passed"] = false;
                 clone.Context["verification_score"] = 0f;
                 clone.Context["verification_reason"] = $"No logs found for correlationId: {correlationId}";
-                
+
                 clone.Messages.Add(new AgentMessage(
                     "assistant",
                     $"Verification FAILED: No logs found for correlationId {correlationId}"
                 ));
-                
+
                 return clone;
             }
 
@@ -104,7 +100,7 @@ namespace ControlHub.Application.AI.V3.Agentic.Nodes
             {
                 // Calculate confidence based on number of docs retrieved
                 var confidence = Math.Min(0.5f + (totalRetrievedDocs * 0.05f), 0.95f);
-                
+
                 clone.Context["verification_passed"] = true;
                 clone.Context["verification_score"] = confidence;
                 clone.Context["verification_reason"] = $"Found {totalRetrievedDocs} relevant documents (Logs/Knowledge)";
@@ -153,7 +149,7 @@ namespace ControlHub.Application.AI.V3.Agentic.Nodes
                 $"Verification {(passed ? "PASSED" : "FAILED")}: {score.GetLevel()} confidence ({score.Overall:P0})"
             ));
 
-            _logger.LogInformation("Verification {Result}: {Score:F2}", 
+            _logger.LogInformation("Verification {Result}: {Score:F2}",
                 passed ? "PASSED" : "FAILED", score.Overall);
 
             return clone;

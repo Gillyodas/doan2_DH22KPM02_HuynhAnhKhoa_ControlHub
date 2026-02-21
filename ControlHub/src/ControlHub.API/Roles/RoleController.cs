@@ -1,12 +1,12 @@
-using ControlHub.Application.Roles.Commands.AssignRoleToUser;
-using ControlHub.Application.Roles.Queries.GetUserRoles;
 using ControlHub.API.Controllers; // BaseApiController
 using ControlHub.API.Roles.ViewModels.Requests;
 using ControlHub.API.Roles.ViewModels.Responses;
 using ControlHub.Application.Common.DTOs;
+using ControlHub.Application.Roles.Commands.AssignRoleToUser;
 using ControlHub.Application.Roles.Commands.CreateRoles;
 using ControlHub.Application.Roles.Commands.SetRolePermissions;
 using ControlHub.Application.Roles.Queries.GetRolePermissions;
+using ControlHub.Application.Roles.Queries.GetUserRoles;
 using ControlHub.Application.Roles.Queries.SearchRoles;
 using ControlHub.Domain.AccessControl.Aggregates;
 using ControlHub.SharedKernel.Results;
@@ -48,7 +48,7 @@ namespace ControlHub.API.Roles
         {
             var query = new GetUserRolesQuery(userId);
             var result = await Mediator.Send(query, cancellationToken);
-            
+
             if (result.IsFailure) return HandleFailure(result);
 
             return Ok(result.Value);
@@ -61,7 +61,6 @@ namespace ControlHub.API.Roles
         [ProducesResponseType(StatusCodes.Status409Conflict)]
         public async Task<IActionResult> UpdateRole(Guid id, [FromBody] UpdateRoleRequest request, CancellationToken cancellationToken)
         {
-            // Note: Request body doesn't contain ID, but Command does.
             var command = new ControlHub.Application.Roles.Commands.UpdateRole.UpdateRoleCommand(id, request.Name, request.Description);
             var result = await Mediator.Send(command, cancellationToken);
 

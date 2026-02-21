@@ -1,8 +1,3 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading;
-using System.Threading.Tasks;
 using ControlHub.Application.Common.Interfaces.AI;
 using ControlHub.Application.Common.Interfaces.AI.V3.Parsing;
 using ControlHub.Application.Common.Interfaces.AI.V3.RAG;
@@ -27,7 +22,7 @@ namespace ControlHub.Application.AI.V3
         private readonly ILogReaderService _logReader;
         private readonly IConfiguration _config;
         private readonly ILogger<AgenticAuditServiceV3> _logger;
-        
+
         // Feature flags
         private readonly bool _useHybridParsing;
         private readonly bool _useEnhancedRag;
@@ -97,7 +92,7 @@ namespace ControlHub.Application.AI.V3
                             LastSeen: DateTime.UtcNow,
                             Severity: "Information"
                         ));
-                        
+
                         // Use first parse result for classification
                         if (classification == null && parseResult.Classification != null)
                         {
@@ -109,7 +104,7 @@ namespace ControlHub.Application.AI.V3
                         }
                     }
                     toolsUsed.Add("HybridParser");
-                    _logger.LogInformation("Parsed {Count} logs: Category={Category}", 
+                    _logger.LogInformation("Parsed {Count} logs: Category={Category}",
                         processedTemplates.Count, classification?.Category ?? "Unknown");
                 }
 
@@ -134,12 +129,12 @@ namespace ControlHub.Application.AI.V3
                     var context = new ReasoningContext(query, retrievedDocs, null);
                     var reasoningResult = await _reasoningModel.ReasonAsync(context, null, ct);
                     var confidenceScore = await _confidenceScorer.ScoreAsync(reasoningResult, context, ct);
-                    
+
                     analysis = $"[Confidence: {confidenceScore.GetLevel()}]\n\n" +
                                $"## Solution\n{reasoningResult.Solution}\n\n" +
                                $"## Explanation\n{reasoningResult.Explanation}\n\n" +
                                $"## Steps\n" + string.Join("\n", reasoningResult.Steps.Select((s, i) => $"{i + 1}. {s}"));
-                    
+
                     toolsUsed.Add("ReasoningModel");
                     _logger.LogInformation("Reasoning completed: Confidence={Confidence:F2}",
                         confidenceScore.Overall);
@@ -147,7 +142,7 @@ namespace ControlHub.Application.AI.V3
                 else
                 {
                     // Fallback: simple summary
-                    analysis = "Analysis based on log patterns:\n" + 
+                    analysis = "Analysis based on log patterns:\n" +
                                string.Join("\n", processedTemplates.Take(5).Select(t => $"- [{t.Severity}] {t.Pattern}"));
                 }
 
@@ -213,7 +208,7 @@ namespace ControlHub.Application.AI.V3
 
                     answer = $"{reasoningResult.Solution}\n\n" +
                              $"_Confidence: {confidenceScore.GetLevel()} ({confidenceScore.Overall:P0})_";
-                    
+
                     toolsUsed.Add("ReasoningModel");
                 }
                 else

@@ -1,9 +1,9 @@
-using AppIdentifierConfigRepository = ControlHub.Application.Accounts.Interfaces.Repositories.IIdentifierConfigRepository;
 using ControlHub.Domain.Identity.Identifiers;
 using ControlHub.Infrastructure.Persistence;
 using ControlHub.SharedKernel.Common.Errors;
 using ControlHub.SharedKernel.Results;
 using Microsoft.EntityFrameworkCore;
+using AppIdentifierConfigRepository = ControlHub.Application.Accounts.Interfaces.Repositories.IIdentifierConfigRepository;
 
 namespace ControlHub.Infrastructure.Accounts.Repositories
 {

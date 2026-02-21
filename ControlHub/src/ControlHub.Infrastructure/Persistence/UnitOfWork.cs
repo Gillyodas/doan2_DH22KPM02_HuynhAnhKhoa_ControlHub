@@ -1,5 +1,7 @@
-using ControlHub.Application.Common.Persistence;
+﻿using ControlHub.Application.Common.Persistence;
+using ControlHub.Domain.SharedKernel;
 using ControlHub.SharedKernel.Common.Exceptions;
+using MediatR;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Storage;
 using Microsoft.Extensions.Logging;
@@ -11,11 +13,13 @@ namespace ControlHub.Infrastructure.Persistence
         private readonly AppDbContext _dbContext;
         private readonly ILogger<UnitOfWork> _logger;
         private IDbContextTransaction? _currentTransaction;
+        private readonly IMediator _mediator;
 
-        public UnitOfWork(AppDbContext dbContext, ILogger<UnitOfWork> logger)
+        public UnitOfWork(AppDbContext dbContext, ILogger<UnitOfWork> logger, IMediator mediator)
         {
             _dbContext = dbContext;
             _logger = logger;
+            _mediator = mediator;
         }
 
         public bool HasActiveTransaction => _currentTransaction != null;
@@ -45,6 +49,8 @@ namespace ControlHub.Infrastructure.Persistence
             try
             {
                 _logger.LogInformation("Implicit transaction started");
+
+                await DispatchDomainEventsAsync(ct);
 
                 var changes = await SaveChangesAsync(ct);
                 await transaction.CommitAsync(ct);
@@ -168,6 +174,32 @@ namespace ControlHub.Infrastructure.Persistence
                 _ => new RepositoryException(
                     "An unexpected error occurred during transaction.", ex)
             };
+        }
+
+        /// <summary>
+        /// Quét ChangeTracker tìm AggregateRoot có Domain Events chưa dispatch.
+        /// Publish qua MediatR để các handler (VD: cache invalidation) xử lý.
+        /// Chạy TRƯỚC SaveChangesAsync để đảm bảo fail-safe.
+        /// </summary>
+        private async Task DispatchDomainEventsAsync(CancellationToken ct)
+        {
+            var aggregateRoot = _dbContext.ChangeTracker
+                .Entries<AggregateRoot>()
+                .Where(e => e.Entity.DomainEvents.Any())
+                .Select(e => e.Entity)
+                .ToList();
+
+            var domainEvents = aggregateRoot
+                .SelectMany(a => a.DomainEvents)
+                .ToList();
+
+            aggregateRoot.ForEach(a => a.ClearDomainEvents());
+
+            foreach(var domainEvent in domainEvents)
+            {
+                _logger.LogDebug("Dispatching domain event: {EventType}", domainEvent.GetType().Name);
+                await _mediator.Publish(domainEvent, ct);
+            }
         }
     }
 }

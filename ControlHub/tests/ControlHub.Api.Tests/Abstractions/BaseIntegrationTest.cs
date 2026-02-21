@@ -1,9 +1,6 @@
+using System.Net.Http.Json;
 using ControlHub.Infrastructure.Persistence;
 using Microsoft.Extensions.DependencyInjection;
-using System.Net.Http;
-using System.Net.Http.Json;
-using System.Threading.Tasks;
-using Xunit;
 using ApiResponse = ControlHub.API.Accounts.ViewModels.Response;
 
 namespace ControlHub.Api.Tests.Abstractions;
@@ -19,7 +16,7 @@ public abstract class BaseIntegrationTest : IClassFixture<IntegrationTestWebAppF
     {
         Factory = factory;
         Client = factory.CreateClient();
-        
+
         _scope = factory.Services.CreateScope();
         DbContext = _scope.ServiceProvider.GetRequiredService<AppDbContext>();
     }

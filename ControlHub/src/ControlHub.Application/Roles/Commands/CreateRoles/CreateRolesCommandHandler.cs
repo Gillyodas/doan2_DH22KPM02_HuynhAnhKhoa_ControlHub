@@ -1,16 +1,14 @@
 using ControlHub.Application.Common.Persistence;
-using ControlHub.Application.Roles.DTOs;
 using ControlHub.Application.Permissions.Interfaces.Repositories;
+using ControlHub.Application.Roles.DTOs;
 using ControlHub.Application.Roles.Interfaces.Repositories;
-using ControlHub.Domain.AccessControl.Services;
-using ControlHub.Domain.AccessControl.Entities;
 using ControlHub.Domain.AccessControl.Aggregates;
-using ControlHub.SharedKernel.Permissions;
+using ControlHub.Domain.AccessControl.Entities;
+using ControlHub.Domain.AccessControl.Services;
 using ControlHub.SharedKernel.Results;
 using ControlHub.SharedKernel.Roles;
 using MediatR;
 using Microsoft.Extensions.Logging;
-using System.Linq;
 
 namespace ControlHub.Application.Roles.Commands.CreateRoles
 {
@@ -167,8 +165,8 @@ namespace ControlHub.Application.Roles.Commands.CreateRoles
 
             if (!partial.Successes.Any() && failures.Any())
             {
-                 // Handle case where nothing was created but we have failures
-                 // Re-check logic here if needed. Current: return partial result.
+                // Handle case where nothing was created but we have failures
+                // Re-check logic here if needed. Current: return partial result.
             }
 
             return Result<PartialResult<Role, string>>.Success(partial);

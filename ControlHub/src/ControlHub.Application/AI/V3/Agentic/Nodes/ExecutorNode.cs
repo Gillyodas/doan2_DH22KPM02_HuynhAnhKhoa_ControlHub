@@ -1,12 +1,8 @@
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading;
-using System.Threading.Tasks;
 using ControlHub.Application.Common.Interfaces.AI.V3;
 using ControlHub.Application.Common.Interfaces.AI.V3.Agentic;
+using ControlHub.Application.Common.Interfaces.AI.V3.Observability;
 using ControlHub.Application.Common.Interfaces.AI.V3.RAG;
 using ControlHub.Application.Common.Interfaces.AI.V3.Reasoning;
-using ControlHub.Application.Common.Interfaces.AI.V3.Observability;
 using Microsoft.Extensions.Logging;
 
 namespace ControlHub.Application.AI.V3.Agentic.Nodes
@@ -26,10 +22,10 @@ namespace ControlHub.Application.AI.V3.Agentic.Nodes
         public string Description => "Executes plan steps using available tools";
 
         public ExecutorNode(
-            IAgenticRAG agenticRag, 
+            IAgenticRAG agenticRag,
             IReasoningModel reasoningModel,
             ISystemKnowledgeProvider knowledgeProvider,
-            IAgentObserver? observer, 
+            IAgentObserver? observer,
             ILogger<ExecutorNode> logger)
         {
             _agenticRag = agenticRag;
@@ -118,7 +114,7 @@ namespace ControlHub.Application.AI.V3.Agentic.Nodes
 
             // Step 3: Build batch execution prompt — demands diagnosis, not step echo
             var planText = string.Join("\n", plan.Select((s, i) => $"{i + 1}. {s}"));
-            var batchPrompt = 
+            var batchPrompt =
                 $"You are a senior IT auditor executing an investigation.\n\n" +
                 $"## Original Query:\n{originalQuery}\n\n" +
                 (string.IsNullOrEmpty(evidenceSection) ? "" : $"{evidenceSection}\n") +
@@ -139,19 +135,19 @@ namespace ControlHub.Application.AI.V3.Agentic.Nodes
 
             // Step 3: Single LLM call for the entire plan
             var analysis = await _reasoningModel.ReasonAsync(
-                batchContext, 
+                batchContext,
                 new ReasoningOptions(Temperature: 0.2f, MaxTokens: 6144),
                 ct
             );
 
             // Step 4: Store diagnosis results
             var executionResults = new List<string>();
-            
+
             // Primary: Use the LLM's solution + explanation as the main diagnosis
             if (!string.IsNullOrEmpty(analysis.Solution) && analysis.Solution != "Partial Diagnosis")
             {
                 executionResults.Add($"## Problem Summary\n{analysis.Solution}");
-                
+
                 if (!string.IsNullOrEmpty(analysis.Explanation) && analysis.Explanation != "Refer to raw response")
                 {
                     executionResults.Add($"## Root Cause Analysis\n{analysis.Explanation}");

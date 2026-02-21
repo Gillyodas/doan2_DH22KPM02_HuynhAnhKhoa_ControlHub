@@ -1,14 +1,9 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Text;
 using System.Text.Json;
-using System.Threading.Tasks;
 using ControlHub.Application.Common.Logging;
 using ControlHub.Application.Common.Logging.Interfaces;
-using Microsoft.Extensions.Logging;
-
 using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Logging;
 
 namespace ControlHub.Infrastructure.Logging
 {
@@ -35,7 +30,7 @@ namespace ControlHub.Infrastructure.Logging
         public async Task<List<LogEntry>> GetLogsByCorrelationIdAsync(string correlationId)
         {
             var logs = await ReadAllLogsAsync();
-            
+
             _logger.LogInformation("LogReader: Read {Count} total logs from {Path}. Searching for {CorrelationId}", logs.Count, _logDirectory, correlationId);
 
             // Search in multiple fields since "CorrelationId" might not exist
@@ -48,7 +43,7 @@ namespace ControlHub.Infrastructure.Logging
             var matches = logs.Where(l =>
                 // Match RequestId (full, contains, startsWith, endsWith)
                 (l.RequestId != null && (
-                    l.RequestId == correlationId || 
+                    l.RequestId == correlationId ||
                     l.RequestId.Contains(correlationId) ||
                     l.RequestId.StartsWith(correlationId) ||
                     l.RequestId.EndsWith(correlationId)
@@ -94,7 +89,7 @@ namespace ControlHub.Infrastructure.Logging
 
             var files = Directory.GetFiles(_logDirectory, "log-*.json");
 
-            foreach(var file in files)
+            foreach (var file in files)
             {
                 try
                 {
@@ -118,7 +113,7 @@ namespace ControlHub.Infrastructure.Logging
                         }
                     }
                 }
-                catch(Exception ex)
+                catch (Exception ex)
                 {
                     _logger.LogError(ex, "Failed to read log file {File}", file);
                 }

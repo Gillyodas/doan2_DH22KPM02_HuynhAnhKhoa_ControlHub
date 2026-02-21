@@ -1,8 +1,4 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Text.RegularExpressions;
-using System.Threading.Tasks;
 using ControlHub.Application.Common.Interfaces.AI;
 using ControlHub.Application.Common.Logging;
 
@@ -33,7 +29,7 @@ namespace ControlHub.Infrastructure.AI.Parsing
             // Reset state for per-session analysis (or keep persistent if singleton)
             // For now, we assume per-request scope or we want fresh analysis per audit session.
             // If Scoped, this is fine.
-            
+
             var templateToLogs = new Dictionary<string, List<LogEntry>>();
 
             foreach (var log in rawLogs)
@@ -41,7 +37,7 @@ namespace ControlHub.Infrastructure.AI.Parsing
                 if (string.IsNullOrWhiteSpace(log.Message)) continue;
 
                 var (content, matchCluster) = ProcessLogLine(log.Message);
-                
+
                 // Add log to result mapping
                 if (!templateToLogs.ContainsKey(matchCluster.TemplateId))
                 {
@@ -53,7 +49,7 @@ namespace ControlHub.Infrastructure.AI.Parsing
                 matchCluster.Count++;
                 if (log.Timestamp < matchCluster.FirstSeen) matchCluster.FirstSeen = log.Timestamp;
                 if (log.Timestamp > matchCluster.LastSeen) matchCluster.LastSeen = log.Timestamp;
-                
+
                 // Aggregate Severity (Simple heuristic: highest severity wins)
                 if (GetSeverityWeight(log.Level) > GetSeverityWeight(matchCluster.Severity))
                 {
@@ -77,10 +73,10 @@ namespace ControlHub.Infrastructure.AI.Parsing
         {
             // 1. Masking
             var content = Mask(logLine);
-            
+
             // 2. Tokenize
             var tokens = content.Split(new[] { ' ', '\t', ',', ':', ';', '=', '[', ']' }, StringSplitOptions.RemoveEmptyEntries);
-            
+
             // 3. Tree Search
             var matchCluster = TreeSearch(_root, tokens);
 
@@ -143,7 +139,7 @@ namespace ControlHub.Infrastructure.AI.Parsing
                 {
                     // No path found in internal nodes
                     // However, Drain3 usually tries to match all candidates in the leaf node
-                    break; 
+                    break;
                 }
                 currentDepth++;
             }
@@ -177,7 +173,7 @@ namespace ControlHub.Infrastructure.AI.Parsing
             {
                 root.Children[length] = new Node();
             }
-            
+
             Node current = root.Children[length];
             int currentDepth = 1;
 
@@ -189,7 +185,7 @@ namespace ControlHub.Infrastructure.AI.Parsing
                 // Drain3 has smarter internal node construction (e.g. wildcard creation), 
                 // but for simplicity we assume fixed paths until leaf.
                 // Improvement: If node has too many children, collapse to "*"
-                
+
                 if (!current.Children.ContainsKey(token))
                 {
                     if (current.Children.Count > 5) // Max branching factor heuristic
@@ -229,7 +225,7 @@ namespace ControlHub.Infrastructure.AI.Parsing
         private double GetSeqSimilarity(List<string> template, string[] log)
         {
             if (template.Count != log.Length) return 0;
-            
+
             int match = 0;
             for (int i = 0; i < template.Count; i++)
             {
@@ -240,7 +236,7 @@ namespace ControlHub.Infrastructure.AI.Parsing
             }
             return (double)match / template.Count;
         }
-        
+
         private int GetSeverityWeight(string level)
         {
             return level?.ToLower() switch

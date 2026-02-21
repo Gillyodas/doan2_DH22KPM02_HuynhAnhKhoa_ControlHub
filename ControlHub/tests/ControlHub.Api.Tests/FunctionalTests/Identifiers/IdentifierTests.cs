@@ -6,7 +6,6 @@ using ControlHub.Application.Accounts.DTOs;
 using ControlHub.Domain.Identity.Enums;
 using FluentAssertions;
 using Microsoft.EntityFrameworkCore;
-using Xunit;
 
 namespace ControlHub.Api.Tests.FunctionalTests.Identifiers;
 
@@ -42,10 +41,10 @@ public class IdentifierTests : BaseIntegrationTest
         // Assert
         if (response.StatusCode != HttpStatusCode.Created)
         {
-             var content = await response.Content.ReadAsStringAsync();
-             response.StatusCode.Should().Be(HttpStatusCode.Created, $"Fail. Content: {content}");
+            var content = await response.Content.ReadAsStringAsync();
+            response.StatusCode.Should().Be(HttpStatusCode.Created, $"Fail. Content: {content}");
         }
-        
+
         response.StatusCode.Should().Be(HttpStatusCode.Created);
     }
 
@@ -54,12 +53,12 @@ public class IdentifierTests : BaseIntegrationTest
     {
         // Arrange
         await AuthenticateAsSuperAdminAsync();
-        
+
         var rules = new List<ValidationRuleDto>
         {
             new ValidationRuleDto(ValidationRuleType.Required, new Dictionary<string, object>())
         };
-        
+
         // First create
         var command1 = new CreateIdentifierConfigCommand("DuplicateConfig", "Desc", rules);
         var response1 = await Client.PostAsJsonAsync("/api/Identifier", command1);
@@ -71,8 +70,8 @@ public class IdentifierTests : BaseIntegrationTest
         // Assert
         if (response2.StatusCode != HttpStatusCode.Conflict)
         {
-             var content = await response2.Content.ReadAsStringAsync();
-             response2.StatusCode.Should().Be(HttpStatusCode.Conflict, $"Fail. Content: {content}");
+            var content = await response2.Content.ReadAsStringAsync();
+            response2.StatusCode.Should().Be(HttpStatusCode.Conflict, $"Fail. Content: {content}");
         }
         response2.StatusCode.Should().Be(HttpStatusCode.Conflict);
     }
@@ -99,10 +98,10 @@ public class IdentifierTests : BaseIntegrationTest
         var command = new CreateIdentifierConfigCommand("DeactivatedConfig", "Hidden", rules);
         var createResponse = await Client.PostAsJsonAsync("/api/Identifier", command);
         var createdId = await createResponse.Content.ReadFromJsonAsync<Guid>();
-        
+
         // Deactivate it
         await Client.PatchAsJsonAsync($"/api/Identifier/{createdId}/toggle-active", new { IsActive = false });
-        
+
         // Logout / Reset Client to anonymous
         Client.DefaultRequestHeaders.Authorization = null;
 
@@ -127,10 +126,10 @@ public class IdentifierTests : BaseIntegrationTest
         var account = await DbContext.Accounts.Include(a => a.Role).FirstAsync(a => a.Identifiers.Any(i => i.Value == identifier));
         var perm = await DbContext.Permissions.FirstAsync(p => p.Code == "identifiers.toggle");
         account.Role.AddPermission(perm);
-        
+
         // Ensure a config exists
         var config = await DbContext.IdentifierConfigs.FirstAsync();
-        
+
         await DbContext.SaveChangesAsync();
 
         // Act

@@ -3,7 +3,6 @@ using System.Net.Http.Json;
 using ControlHub.Api.Tests.Abstractions;
 using FluentAssertions;
 using Microsoft.EntityFrameworkCore;
-using Xunit;
 
 namespace ControlHub.Api.Tests.FunctionalTests.Users;
 
@@ -34,11 +33,11 @@ public class UserTests : BaseIntegrationTest
 
         // Assert
         if (response.StatusCode != HttpStatusCode.OK)
-            {
-             var content = await response.Content.ReadAsStringAsync();
-             response.StatusCode.Should().Be(HttpStatusCode.OK, $"Fail. Content: {content}");
-            }
-        
+        {
+            var content = await response.Content.ReadAsStringAsync();
+            response.StatusCode.Should().Be(HttpStatusCode.OK, $"Fail. Content: {content}");
+        }
+
         response.StatusCode.Should().Be(HttpStatusCode.OK);
 
         // Verify in DB - Reload to ensure we get fresh data

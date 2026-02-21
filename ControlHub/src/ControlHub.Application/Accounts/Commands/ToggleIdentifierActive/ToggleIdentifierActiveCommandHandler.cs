@@ -1,10 +1,9 @@
-using AppIdentifierConfigRepository = ControlHub.Application.Accounts.Interfaces.Repositories.IIdentifierConfigRepository;
 using ControlHub.Application.Common.Persistence;
-using ControlHub.SharedKernel.Common.Errors;
+using ControlHub.SharedKernel.Accounts;
 using ControlHub.SharedKernel.Results;
 using MediatR;
 using Microsoft.Extensions.Logging;
-using ControlHub.SharedKernel.Accounts;
+using AppIdentifierConfigRepository = ControlHub.Application.Accounts.Interfaces.Repositories.IIdentifierConfigRepository;
 
 namespace ControlHub.Application.Accounts.Commands.ToggleIdentifierActive
 {

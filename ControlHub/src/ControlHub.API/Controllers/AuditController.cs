@@ -1,9 +1,7 @@
-using ControlHub.Application.AI;
 using ControlHub.Application.Common.Interfaces.AI;
 using ControlHub.Application.Common.Interfaces.AI.V1;
 using ControlHub.Application.Common.Interfaces.AI.V3;
 using ControlHub.Application.Common.Interfaces.AI.V3.Observability;
-using ControlHub.Application.Common.Logging;
 using ControlHub.Application.Common.Logging.Interfaces;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -25,7 +23,7 @@ namespace ControlHub.API.Controllers
         private readonly IConfiguration _config;
 
         public AuditController(
-            ILogKnowledgeService knowledgeService, 
+            ILogKnowledgeService knowledgeService,
             ILogReaderService logReader,
             IServiceProvider sp, // Lazy resolve V2/V3 services
             IConfiguration config)
@@ -38,7 +36,7 @@ namespace ControlHub.API.Controllers
             _agentService = sp.GetService<IAuditAgentService>();
             _logParser = sp.GetService<ILogParserService>();
             _runbookService = sp.GetService<IRunbookService>();
-            
+
             // V3 specific services
             _auditAgentV3 = sp.GetService<IAuditAgentV3>();
             _agentObserver = sp.GetService<IAgentObserver>();
@@ -51,15 +49,15 @@ namespace ControlHub.API.Controllers
         {
             var version = _config["AuditAI:Version"] ?? "V1";
             var drain3 = _config.GetValue<bool>("AuditAI:Drain3Enabled");
-            
-            return Ok(new 
-            { 
-                Version = version, 
-                Features = new[] 
-                { 
+
+            return Ok(new
+            {
+                Version = version,
+                Features = new[]
+                {
                     drain3 ? "Drain3 Parsing" : "Passive RAG",
                     _agentService != null ? "Agentic Workflow" : "Standard Workflow"
-                } 
+                }
             });
         }
 
@@ -78,7 +76,7 @@ namespace ControlHub.API.Controllers
         public async Task<IActionResult> IngestRunbooks([FromBody] List<RunbookEntry> runbooks)
         {
             if (_runbookService == null) return BadRequest("Runbook Service is not enabled (V2.5 required).");
-            
+
             await _runbookService.IngestRunbooksAsync(runbooks);
             return Ok(new { Message = $"Ingested {runbooks.Count} runbooks." });
         }
@@ -146,7 +144,7 @@ namespace ControlHub.API.Controllers
             if (_agentService != null)
             {
                 var chatResult = await _agentService.ChatAsync(request, lang);
-                
+
                 return Ok(new
                 {
                     Question = request.Question,
@@ -164,7 +162,7 @@ namespace ControlHub.API.Controllers
             var startTime = request.StartTime ?? endTime.AddHours(-24);
 
             var logs = await _logReader.GetLogsByTimeRangeAsync(startTime, endTime);
-            
+
             if (logs.Count == 0)
             {
                 return Ok(new { Answer = "No logs found." });
@@ -181,17 +179,17 @@ namespace ControlHub.API.Controllers
             });
         }
 
-        
+
         // Endpoint: Get Templates (Debug/UI)
         [Authorize(Policy = "Permission:system.view_logs")]
         [HttpGet("templates/{correlationId}")]
         public async Task<IActionResult> GetTemplates(string correlationId)
         {
             if (_logParser == null) return BadRequest("Log Parsing is not enabled.");
-            
+
             var logs = await _logReader.GetLogsByCorrelationIdAsync(correlationId);
             var result = await _logParser.ParseLogsAsync(logs);
-            
+
             return Ok(result.Templates);
         }
 
@@ -260,7 +258,7 @@ namespace ControlHub.API.Controllers
     {
         /// <summary>Investigation query/question</summary>
         public string Query { get; set; } = string.Empty;
-        
+
         /// <summary>Optional correlation ID to focus investigation</summary>
         public string? CorrelationId { get; set; }
     }

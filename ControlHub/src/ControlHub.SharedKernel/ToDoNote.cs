@@ -2,12 +2,45 @@ namespace ControlHub.SharedKernel
 {
     internal class ToDoNote
     {
-        // TODO: Tìm hi?u v? Token Refresh t? d?ng (useTokenRefresh)
-        // TODO: Document
-        // TODO: Thêm hu?ng d?n s? d?ng APIs trên FE
-        // TODO: Tìm hi?u v? các công ngh? và k? thu?t cache (mediatR hay Redis)
-        // TODO: S? d?ng Domain Events: Khi m?t Role du?c c?p nh?t, phát ra m?t Event. M?t Handler s? b?t Event dó và g?i _memoryCache.Remove(key). Cách này "s?ch" nh?t vì Decorator không c?n quan tâm d?n logic nghi?p v?.
-        // TODO: Thêm các tool observability d? theo dõi t? l? truy c?p cache
-        // TODO: Xóa b?t 1 method du th?a c?a UserRepository
+        // TODO: Them cac tool observability de theo doi ti le truy cap cache
+        // TODO: Xoa bot 1 method du thua cua UserRepository
+        // TODO: Tim hieu ve Token Refresh tu dong (useTokenRefresh)
+
+        // =====================================================================
+        // TODO: [Fire-and-Forget trong SignInCommandHandler]
+        // 
+        // PROBLEM:
+        //   O SignInCommandHandler, chung ta dung '_ = PublishLoginEvent(...)' 
+        //   de fire-and-forget event len Dashboard (MediatR -> SignalR).
+        //   Neu publisher throw exception, exception bi nuot im lang (silently swallowed)
+        //   -> khong co log, khong ai biet event that bai.
+        //
+        // TAI SAO PATTERN HIEN TAI HAY (can tim hieu sau):
+        //   1. Fire-and-Forget ('_ = Task'): Khong block response tra ve client.
+        //      Login response luon nhanh vi khong doi SignalR broadcast xong.
+        //   2. Channel<T> Buffer (LoginEventBuffer): Thay vi moi login event 
+        //      goi SignalR ngay (N requests = N broadcasts), dung Channel<T> 
+        //      batch lai -> flush moi 2 giay. Giam tai SignalR hub, giam network traffic.
+        //      Channel<T> la thread-safe, high-performance producer-consumer.
+        //
+        // SOLUTION CAN LAM:
+        //   - Wrap fire-and-forget trong try-catch de log exception neu co
+        //   - Hoac chuyen sang BackgroundService / IHostedService de xu ly reliable hon
+        //   - Xem xet dung Outbox Pattern (da co san trong project) neu can guarantee delivery
+        // =====================================================================
+
+        // =====================================================================
+        // TODO: [Cache Invalidation - Domain Events cho Dynamic Authorization]
+        //
+        // PROBLEM: 
+        //   CachedRoleRepository cache Role + Permissions toi da 30 phut.
+        //   Neu Admin thay doi permission, user van giu quyen cu toi da 30 phut.
+        //   -> Lo hong bao mat trong Authorization system.
+        //
+        // SOLUTION:
+        //   Trien khai Domain Events trong Role Aggregate Root.
+        //   Khi AddPermission/ClearPermissions -> raise RolePermissionChangedEvent
+        //   -> Handler invalidate IMemoryCache -> next request load fresh tu DB
+        // =====================================================================
     }
 }

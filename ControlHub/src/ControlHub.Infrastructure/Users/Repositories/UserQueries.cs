@@ -1,5 +1,5 @@
-using ControlHub.Application.Users.Interfaces.Repositories;
 using ControlHub.Application.Users.DTOs;
+using ControlHub.Application.Users.Interfaces.Repositories;
 using ControlHub.Domain.Identity.Entities;
 using ControlHub.Infrastructure.Persistence;
 using ControlHub.SharedKernel.Common;
@@ -76,7 +76,7 @@ namespace ControlHub.Infrastructure.Users.Repositories
 
         public async Task<PaginatedResult<UserDto>> GetPaginatedAsync(int page, int pageSize, string? searchTerm, CancellationToken cancellationToken)
         {
-             var query = from u in _db.Users.AsNoTracking()
+            var query = from u in _db.Users.AsNoTracking()
                         join a in _db.Accounts.AsNoTracking() on u.AccId equals a.Id
                         join r in _db.Roles.AsNoTracking() on a.RoleId equals r.Id
                         where !u.IsDeleted // Assuming we filter deleted
@@ -85,7 +85,7 @@ namespace ControlHub.Infrastructure.Users.Repositories
             if (!string.IsNullOrWhiteSpace(searchTerm))
             {
                 var term = searchTerm.ToLower();
-                query = query.Where(x => 
+                query = query.Where(x =>
                     (x.u.Username != null && x.u.Username.ToLower().Contains(term)) ||
                     (x.u.FirstName != null && x.u.FirstName.ToLower().Contains(term)) ||
                     (x.u.LastName != null && x.u.LastName.ToLower().Contains(term)) ||

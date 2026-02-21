@@ -1,14 +1,26 @@
+Ôªøusing Microsoft.Extensions.Logging;
 using System.Reflection;
 using ControlHub.Application.Accounts.Interfaces;
 using ControlHub.Application.Accounts.Interfaces.Repositories;
 using ControlHub.Application.AI;
+using ControlHub.Application.AI.V3;
+using ControlHub.Application.AI.V3.Agentic;
+using ControlHub.Application.AI.V3.Observability;
+using ControlHub.Application.AI.V3.Parsing;
+using ControlHub.Application.AI.V3.RAG;
+using ControlHub.Application.AI.V3.Reasoning;
+using ControlHub.Application.AI.V3.Resilience;
 using ControlHub.Application.Common.Behaviors;
 using ControlHub.Application.Common.Interfaces;
 using ControlHub.Application.Common.Interfaces.AI;
 using ControlHub.Application.Common.Interfaces.AI.V1;
+using ControlHub.Application.Common.Interfaces.AI.V3;
+using ControlHub.Application.Common.Interfaces.AI.V3.Agentic;
+using ControlHub.Application.Common.Interfaces.AI.V3.Observability;
 using ControlHub.Application.Common.Interfaces.AI.V3.Parsing;
 using ControlHub.Application.Common.Interfaces.AI.V3.RAG;
 using ControlHub.Application.Common.Interfaces.AI.V3.Reasoning;
+using ControlHub.Application.Common.Interfaces.AI.V3.Resilience;
 using ControlHub.Application.Common.Logging.Interfaces;
 using ControlHub.Application.Common.Persistence;
 using ControlHub.Application.Emails.Interfaces;
@@ -21,31 +33,19 @@ using ControlHub.Application.Tokens.Interfaces.Generate;
 using ControlHub.Application.Tokens.Interfaces.Repositories;
 using ControlHub.Application.Tokens.Interfaces.Sender;
 using ControlHub.Application.Users.Interfaces.Repositories;
-using ControlHub.Domain.Identity.Identifiers.Rules; // Namespace ch?a IIdentifierValidator v‡ c·c Validator c? th?
+using ControlHub.Domain.AccessControl.Services;
+using ControlHub.Domain.Identity.Identifiers.Rules; // Namespace ch?a IIdentifierValidator v√† c√°c Validator c? th?
 using ControlHub.Domain.Identity.Identifiers.Services;
 using ControlHub.Domain.Identity.Security;
-using ControlHub.Domain.AccessControl.Services;
 using ControlHub.Infrastructure.Accounts.Factories;
 using ControlHub.Infrastructure.Accounts.Repositories;
 using ControlHub.Infrastructure.Accounts.Security;
 using ControlHub.Infrastructure.Accounts.Validators;
 using ControlHub.Infrastructure.AI;
+using ControlHub.Infrastructure.AI.V3;
 using ControlHub.Infrastructure.AI.V3.ML;
 using ControlHub.Infrastructure.AI.V3.RAG;
 using ControlHub.Infrastructure.AI.V3.Reasoning;
-using ControlHub.Infrastructure.AI.V3;
-using ControlHub.Application.AI.V3;
-using ControlHub.Application.AI.V3.RAG;
-using ControlHub.Application.AI.V3.Reasoning;
-using ControlHub.Application.AI.V3.Parsing;
-using ControlHub.Application.AI.V3.RAG;
-using ControlHub.Application.AI.V3.Agentic;
-using ControlHub.Application.AI.V3.Observability;
-using ControlHub.Application.AI.V3.Resilience;
-using ControlHub.Application.Common.Interfaces.AI.V3;
-using ControlHub.Application.Common.Interfaces.AI.V3.Agentic;
-using ControlHub.Application.Common.Interfaces.AI.V3.Observability;
-using ControlHub.Application.Common.Interfaces.AI.V3.Resilience;
 using ControlHub.Infrastructure.Authorization.Handlers;
 using ControlHub.Infrastructure.Authorization.Permissions;
 using ControlHub.Infrastructure.Emails;
@@ -84,7 +84,7 @@ namespace ControlHub
     public static class ControlHubExtensions
     {
         /// <summary>
-        /// C?ng v‡o duy nh?t: –ang k˝ to‡n b? d?ch v? c?a ControlHub (Database, Services, Auth, Mediator...)
+        /// C?ng v√†o duy nh?t: √êang k√Ω to√†n b? d?ch v? c?a ControlHub (Database, Services, Auth, Mediator...)
         /// </summary>
         public static IServiceCollection AddControlHub(this IServiceCollection services, IConfiguration configuration)
         {
@@ -97,13 +97,13 @@ namespace ControlHub
                         // Ch? d?nh Assembly ch?a Migration (Infra)
                         b.MigrationsAssembly(typeof(AppDbContext).Assembly.FullName);
 
-                        // --- C?P NH?T M?I ? –¬Y ---
-                        // CÙ l?p b?ng l?ch s? Migration v‡o schema riÍng.
-                        // –i?u n‡y gi˙p ControlHub khÙng "d?ng h‡ng" v?i b?ng __EFMigrationsHistory c?a App chÌnh (dbo).
+                        // --- C?P NH?T M?I ? √ê√ÇY ---
+                        // C√¥ l?p b?ng l?ch s? Migration v√†o schema ri√™ng.
+                        // √êi?u n√†y gi√∫p ControlHub kh√¥ng "d?ng h√†ng" v?i b?ng __EFMigrationsHistory c?a App ch√≠nh (dbo).
                         b.MigrationsHistoryTable("__EFMigrationsHistory", "ControlHub");
                     }
                 )
-                // --- C?P NH?T: T?t log SQL th‡nh cÙng ? m?c Library d? d? r·c Console c?a App chÌnh ---
+                // --- C?P NH?T: T?t log SQL th√†nh c√¥ng ? m?c Library d? d? r√°c Console c?a App ch√≠nh ---
                 .ConfigureWarnings(w => w.Ignore(Microsoft.EntityFrameworkCore.Diagnostics.RelationalEventId.CommandExecuted))
             );
 
@@ -150,15 +150,15 @@ namespace ControlHub
                 var memoryCache = sp.GetRequiredService<IMemoryCache>();
                 return new CachedIdentifierConfigRepository(baseRepo, memoryCache);
             });
-            services.AddScoped<Domain.Identity.Identifiers.IIdentifierConfigRepository>(sp => 
+            services.AddScoped<Domain.Identity.Identifiers.IIdentifierConfigRepository>(sp =>
                 sp.GetRequiredService<ControlHub.Application.Accounts.Interfaces.Repositories.IIdentifierConfigRepository>());
 
             // 6. Domain Services & Identifiers
             services.AddScoped<DynamicIdentifierValidator>();
             services.AddScoped<IdentifierFactory>();
 
-            // --- C?P NH?T: –ang k˝ c·c tri?n khai Validator ---
-            // –ang k˝ nhi?u implementation cho c˘ng 1 interface d? inject IEnumerable<IIdentifierValidator>
+            // --- C?P NH?T: √êang k√Ω c√°c tri?n khai Validator ---
+            // √êang k√Ω nhi?u implementation cho c√πng 1 interface d? inject IEnumerable<IIdentifierValidator>
             services.AddScoped<IIdentifierValidator, EmailIdentifierValidator>();
             services.AddScoped<IIdentifierValidator, UsernameIdentifierValidator>();
             services.AddScoped<IIdentifierValidator, PhoneIdentifierValidator>();
@@ -170,8 +170,8 @@ namespace ControlHub
             {
                 var baseRepo = provider.GetRequiredService<RoleRepository>();
                 var memoryCache = provider.GetRequiredService<IMemoryCache>();
-
-                return new CachedRoleRepository(baseRepo, memoryCache);
+                var logger = provider.GetRequiredService<ILogger<CachedRoleRepository>>();
+                return new CachedRoleRepository(baseRepo, memoryCache, logger);
             });
 
             services.AddScoped<ControlHub.Infrastructure.Permissions.Repositories.PermissionRepository>();
@@ -193,9 +193,9 @@ namespace ControlHub
             services.AddScoped<IOutboxRepository, OutboxRepository>();
             services.AddScoped<OutboxHandlerFactory>();
             services.AddHostedService<OutboxProcessor>();
-            // –ang k˝ c·c handler c? th? cho Factory (n?u Factory d˘ng IServiceProvider d? resolve)
+            // √êang k√Ω c√°c handler c? th? cho Factory (n?u Factory d√πng IServiceProvider d? resolve)
             services.AddScoped<IOutboxHandler, EmailOutboxHandler>();
-            
+
             // 10. Logging & AI Infrastructure
             services.AddScoped<ILogReaderService, LogReaderService>();
 
@@ -223,37 +223,37 @@ namespace ControlHub
 
             // AI Versioning (V1 vs V2.5 vs V3.0)
             var aiVersion = configuration["AuditAI:Version"] ?? "V1";
-            
+
             if (aiVersion == "V3.0")
             {
                 // V3 Phase 1: Hybrid Parsing with ONNX Semantic Classifier
                 services.AddSingleton<ISemanticLogClassifier, OnnxLogClassifier>(); // Singleton: ONNX session is expensive
                 services.AddScoped<IHybridLogParser, HybridLogParser>();
-                
+
                 // V3 Phase 2: Enhanced RAG with Reranker and Multi-hop
                 services.AddSingleton<IReranker, OnnxReranker>(); // Singleton: ONNX session is expensive
                 services.AddScoped<IMultiHopRetriever, MultiHopRetriever>();
                 services.AddScoped<IAgenticRAG, AgenticRAGService>();
                 services.AddScoped<ILogEvidenceProcessor, LogEvidenceProcessor>();
                 services.AddSingleton<ISystemKnowledgeProvider, SystemKnowledgeProvider>();
-                
+
                 // V3 Phase 3: Reasoning Integration
                 services.AddHttpClient<IReasoningModel, ReasoningModelClient>(client =>
                 {
                     client.Timeout = TimeSpan.FromMinutes(5);
                 });
                 services.AddScoped<IConfidenceScorer, ConfidenceScorer>();
-                
+
                 // V3 Phase 4: Agentic Orchestration
                 services.AddScoped<IStateGraph, StateGraph>();
                 services.AddScoped<IToolRegistry, ToolRegistry>();
                 services.AddScoped<IAuditAgentV3, AuditAgentV3>();
-                
+
                 // V3 Phase 5: Production Hardening
                 services.AddScoped<IAgentObserver, AgentTracer>();
                 services.AddSingleton<ICircuitBreaker, CircuitBreaker>();
                 services.AddScoped<IFallbackStrategy, GracefulDegradation>();
-                
+
                 // V3 Agent Service (uses all V3 components)
                 services.AddScoped<IAuditAgentService, AgenticAuditServiceV3>();
             }
@@ -261,7 +261,7 @@ namespace ControlHub
             {
                 services.AddScoped<IAuditAgentService, AgenticAuditService>();
             }
-            
+
             // Backward Compatibility: Always register V1 service (wrapped or standalone)
             services.AddScoped<ILogKnowledgeService, LogKnowledgeService>();
             services.AddScoped<LogKnowledgeService>(); // Self-binding for older consumers
@@ -303,11 +303,11 @@ namespace ControlHub
             // MediatR
             services.AddMediatR(cfg => cfg.RegisterServicesFromAssembly(infraAssembly));
 
-            // 12. Controllers (–? Swagger c?a App chÌnh quÈt du?c)
+            // 12. Controllers (√ê? Swagger c?a App ch√≠nh qu√©t du?c)
             services.AddControllers()
                     .AddApplicationPart(Assembly.GetExecutingAssembly());
 
-            // 13. SWAGGER CONFIGURATION (TÌch h?p s?n)
+            // 13. SWAGGER CONFIGURATION (T√≠ch h?p s?n)
             services.AddEndpointsApiExplorer(); // B?t bu?c cho Swagger
 
             // Authorization
@@ -358,7 +358,7 @@ namespace ControlHub
 </style>"
                 });
 
-                // C?u hÏnh ? khÛa JWT (Bearer)
+                // C?u h√¨nh ? kh√≥a JWT (Bearer)
                 c.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
                 {
                     Description = "JWT Authorization header using the Bearer scheme. Enter your token directly.",
@@ -448,7 +448,7 @@ namespace ControlHub
                 {
                     db.Database.Migrate();
                 }
-                
+
                 try
                 {
                     ControlHubSeeder.SeedAsync(db).Wait();

@@ -1,11 +1,10 @@
-using ControlHub.Api.Tests.Abstractions;
-using ControlHub.API.Accounts.ViewModels.Request;
-using ApiResponse = ControlHub.API.Accounts.ViewModels.Response;
-using ControlHub.Domain.Identity.Enums;
-using FluentAssertions;
 using System.Net;
 using System.Net.Http.Json;
-using Xunit;
+using ControlHub.Api.Tests.Abstractions;
+using ControlHub.API.Accounts.ViewModels.Request;
+using ControlHub.Domain.Identity.Enums;
+using FluentAssertions;
+using ApiResponse = ControlHub.API.Accounts.ViewModels.Response;
 
 namespace ControlHub.Api.Tests.FunctionalTests.Accounts;
 
@@ -21,7 +20,7 @@ public class TokenTests : BaseIntegrationTest
         // Arrange - Register and Login to get tokens
         var email = "tokenuser@example.com";
         var password = "StrongPassword123!";
-        
+
         await Client.PostAsJsonAsync("/api/Auth/users/register", new RegisterUserRequest
         {
             Value = email,
@@ -35,7 +34,7 @@ public class TokenTests : BaseIntegrationTest
             Password = password,
             Type = IdentifierType.Email
         });
-        
+
         var tokens = await loginResponse.Content.ReadFromJsonAsync<ApiResponse.SignInResponse>();
 
         var refreshRequest = new RefreshAccessTokenRequest

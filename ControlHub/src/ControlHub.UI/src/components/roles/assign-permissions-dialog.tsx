@@ -61,19 +61,13 @@ export function AssignPermissionsDialog({ role, accessToken, open, onOpenChange,
 
     setIsLoading(true)
     try {
-      const result = await rolesApi.addPermissionsForRole(
-        {
-          roleId: role.id,
-          permissionIds: Array.from(selectedPermissions),
-        },
+      await rolesApi.addPermissionsForRole(
+        role.id,
+        Array.from(selectedPermissions),
         accessToken
       )
 
-      if (result.failureCount > 0) {
-        toast.warning(`${result.message}\nSuccess: ${result.successCount}, Failed: ${result.failureCount}`)
-      } else {
-        toast.success(result.message)
-      }
+      toast.success("Permissions updated successfully")
 
       onSuccess()
       onOpenChange(false)

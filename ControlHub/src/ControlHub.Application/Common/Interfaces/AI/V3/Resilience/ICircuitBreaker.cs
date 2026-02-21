@@ -1,7 +1,3 @@
-using System;
-using System.Threading;
-using System.Threading.Tasks;
-
 namespace ControlHub.Application.Common.Interfaces.AI.V3.Resilience
 {
     /// <summary>
@@ -58,8 +54,8 @@ namespace ControlHub.Application.Common.Interfaces.AI.V3.Resilience
         TimeSpan OpenDuration = default
     )
     {
-        public TimeSpan OpenDuration { get; init; } = OpenDuration == default 
-            ? TimeSpan.FromSeconds(30) 
+        public TimeSpan OpenDuration { get; init; } = OpenDuration == default
+            ? TimeSpan.FromSeconds(30)
             : OpenDuration;
     }
 }

@@ -48,13 +48,13 @@ namespace ControlHub.Application.Users.Commands.DeleteUser
 
             // Soft delete Account (cascades to tokens, identifiers)
             account.Delete();
-            
+
             // Soft delete User (explicitly just in case Account doesn't have User loaded)
             user.Delete();
 
             await _unitOfWork.CommitAsync(ct);
 
-             _logger.LogInformation("{@LogCode} | UserId: {UserId}", UserLogs.DeleteUser_Success, request.Id);
+            _logger.LogInformation("{@LogCode} | UserId: {UserId}", UserLogs.DeleteUser_Success, request.Id);
 
             return Result<Unit>.Success(Unit.Value);
         }

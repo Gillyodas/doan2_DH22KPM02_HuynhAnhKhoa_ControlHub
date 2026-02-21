@@ -1,14 +1,9 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using ControlHub.Application.Accounts.DTOs;
-using AppIdentifierConfigRepository = ControlHub.Application.Accounts.Interfaces.Repositories.IIdentifierConfigRepository;
+using ControlHub.SharedKernel.Accounts;
 using ControlHub.SharedKernel.Results;
 using MediatR;
 using Microsoft.Extensions.Logging;
-using ControlHub.SharedKernel.Accounts;
+using AppIdentifierConfigRepository = ControlHub.Application.Accounts.Interfaces.Repositories.IIdentifierConfigRepository;
 
 namespace ControlHub.Application.Accounts.Queries.GetIdentifierConfigs
 {

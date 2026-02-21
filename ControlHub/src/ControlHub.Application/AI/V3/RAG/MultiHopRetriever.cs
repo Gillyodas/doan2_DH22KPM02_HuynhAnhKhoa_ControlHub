@@ -1,8 +1,3 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading;
-using System.Threading.Tasks;
 using ControlHub.Application.Common.Interfaces.AI;
 using ControlHub.Application.Common.Interfaces.AI.V3.RAG;
 using Microsoft.Extensions.Logging;
@@ -144,7 +139,7 @@ namespace ControlHub.Application.AI.V3.RAG
         {
             // Simple approach: Split by space, filter stopwords, take most frequent
             var stopwords = new HashSet<string> { "the", "a", "an", "and", "or", "but", "in", "on", "at", "to", "for" };
-            
+
             var words = text
                 .ToLower()
                 .Split(new[] { ' ', ',', '.', '!', '?' }, StringSplitOptions.RemoveEmptyEntries)

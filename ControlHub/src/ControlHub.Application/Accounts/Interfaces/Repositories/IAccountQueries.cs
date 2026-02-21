@@ -1,7 +1,7 @@
 using ControlHub.Domain.Identity.Aggregates;
+using ControlHub.Domain.Identity.Entities;
 using ControlHub.Domain.Identity.Enums;
 using ControlHub.Domain.Identity.ValueObjects;
-using ControlHub.Domain.Identity.Entities;
 
 namespace ControlHub.Application.Accounts.Interfaces.Repositories
 {

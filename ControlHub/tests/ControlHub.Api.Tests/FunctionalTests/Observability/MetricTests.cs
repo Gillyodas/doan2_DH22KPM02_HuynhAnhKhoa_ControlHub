@@ -1,7 +1,6 @@
 using System.Net;
 using ControlHub.Api.Tests.Abstractions;
 using FluentAssertions;
-using Xunit;
 
 namespace ControlHub.Api.Tests.FunctionalTests.Observability;
 

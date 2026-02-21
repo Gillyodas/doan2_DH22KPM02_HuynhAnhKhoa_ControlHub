@@ -1,5 +1,4 @@
 using ControlHub.Application.Messaging.Outbox;
-using ControlHub.Application.Messaging.Outbox;
 
 namespace ControlHub.Infrastructure.Outboxs
 {

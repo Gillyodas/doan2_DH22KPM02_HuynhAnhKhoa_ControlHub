@@ -43,7 +43,7 @@ public class CachedPermissionRepository : IPermissionRepository
         // It's often better to cache the specific "Set" if it's a common query, or don't cache this specific batch method 
         // unless we break it down.
         // However, if we want to cache individual permissions:
-        
+
         var permissions = new List<Permission>();
         var missingIds = new List<Guid>();
 

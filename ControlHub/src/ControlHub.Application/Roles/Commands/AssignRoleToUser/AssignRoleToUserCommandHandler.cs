@@ -35,7 +35,7 @@ namespace ControlHub.Application.Roles.Commands.AssignRoleToUser
 
         public async Task<Result<Unit>> Handle(AssignRoleToUserCommand request, CancellationToken ct)
         {
-            _logger.LogInformation("{@LogCode} | UserId: {UserId} | RoleId: {RoleId}", 
+            _logger.LogInformation("{@LogCode} | UserId: {UserId} | RoleId: {RoleId}",
                 RoleLogs.AssignRole_Started, request.UserId, request.RoleId);
 
             // 1. Check User
@@ -72,7 +72,7 @@ namespace ControlHub.Application.Roles.Commands.AssignRoleToUser
 
             await _unitOfWork.CommitAsync(ct);
 
-            _logger.LogInformation("{@LogCode} | UserId: {UserId} | RoleId: {RoleId}", 
+            _logger.LogInformation("{@LogCode} | UserId: {UserId} | RoleId: {RoleId}",
                 RoleLogs.AssignRole_Success, request.UserId, request.RoleId);
 
             return Result<Unit>.Success(Unit.Value);

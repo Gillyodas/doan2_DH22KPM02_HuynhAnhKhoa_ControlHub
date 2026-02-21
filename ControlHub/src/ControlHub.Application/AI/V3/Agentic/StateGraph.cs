@@ -1,8 +1,3 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading;
-using System.Threading.Tasks;
 using ControlHub.Application.Common.Interfaces.AI.V3.Agentic;
 using ControlHub.Application.Common.Interfaces.AI.V3.Observability;
 using Microsoft.Extensions.Logging;
@@ -93,7 +88,7 @@ namespace ControlHub.Application.AI.V3.Agentic
                     break;
                 }
 
-                _logger.LogInformation("Executing node: {NodeName} (iteration {Iter})", 
+                _logger.LogInformation("Executing node: {NodeName} (iteration {Iter})",
                     node.Name, state.Iteration);
 
                 if (_observer != null)
@@ -121,7 +116,7 @@ namespace ControlHub.Application.AI.V3.Agentic
 
                     if (_observer != null)
                         await _observer.OnNodeFailed(node.Name, state, ex);
-                    
+
                     break;
                 }
             }

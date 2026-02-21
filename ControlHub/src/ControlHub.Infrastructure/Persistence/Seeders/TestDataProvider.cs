@@ -1,13 +1,11 @@
 using ControlHub.Domain.Identity.Aggregates;
+using ControlHub.Domain.Identity.Entities;
 using ControlHub.Domain.Identity.Enums;
 using ControlHub.Domain.Identity.Identifiers;
 using ControlHub.Domain.Identity.Security;
 using ControlHub.Domain.Identity.ValueObjects;
-using ControlHub.Domain.AccessControl.Aggregates;
-using ControlHub.Domain.Identity.Entities;
-using ControlHub.SharedKernel.Constants;
-using ControlHub.Domain.AccessControl.Entities;
 using ControlHub.Infrastructure.Accounts.Security;
+using ControlHub.SharedKernel.Constants;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
 
@@ -102,13 +100,13 @@ namespace ControlHub.Infrastructure.Persistence.Seeders
         {
             // Check if accounts already exist
             var hasExistingAccounts = await db.Accounts.AnyAsync();
-            
+
             if (hasExistingAccounts && !forceSeed)
             {
                 Console.WriteLine("Test accounts already exist. Use forceSeed=true to override.");
                 return;
             }
-            
+
             if (hasExistingAccounts && forceSeed)
             {
                 Console.WriteLine("Test accounts exist but forceSeed=true. Clearing and reseeding...");
@@ -117,7 +115,7 @@ namespace ControlHub.Infrastructure.Persistence.Seeders
                 db.Accounts.RemoveRange(existingAccounts);
                 await db.SaveChangesAsync();
             }
-            
+
             var passwordHasher = new TestPasswordHasher();
             var accounts = new List<Account>();
 
@@ -138,7 +136,7 @@ namespace ControlHub.Infrastructure.Persistence.Seeders
 
             await db.Accounts.AddRangeAsync(accounts);
             await db.SaveChangesAsync();
-            
+
             Console.WriteLine($"Seeded {accounts.Count} test accounts successfully.");
         }
 
@@ -149,7 +147,7 @@ namespace ControlHub.Infrastructure.Persistence.Seeders
         {
             // Seed Permissions
             var hasExistingPermissions = await db.Permissions.AnyAsync();
-            
+
             if (hasExistingPermissions && !forceSeed)
             {
                 Console.WriteLine("Permissions already exist. Use forceSeed=true to override.");
@@ -162,7 +160,7 @@ namespace ControlHub.Infrastructure.Persistence.Seeders
                 db.Permissions.RemoveRange(existingPermissions);
                 await db.SaveChangesAsync();
             }
-            
+
             if (!hasExistingPermissions || forceSeed)
             {
                 var allPermissions = new[]
@@ -196,7 +194,7 @@ namespace ControlHub.Infrastructure.Persistence.Seeders
                     "permissions.update", "permissions.delete", "permissions.assign"
                 };
 
-                var permissionEntities = allPermissions.Select(p => 
+                var permissionEntities = allPermissions.Select(p =>
                 {
                     var result = Domain.AccessControl.Entities.Permission.Create(Guid.NewGuid(), p, GetPermissionDescription(p));
                     if (result.IsFailure)
@@ -206,7 +204,7 @@ namespace ControlHub.Infrastructure.Persistence.Seeders
 
                 await db.Permissions.AddRangeAsync(permissionEntities);
                 await db.SaveChangesAsync();
-                
+
                 Console.WriteLine($"Seeded {permissionEntities.Count()} permissions successfully.");
             }
 
@@ -221,7 +219,7 @@ namespace ControlHub.Infrastructure.Persistence.Seeders
 
         {
             Console.WriteLine("--- Starting AssignPermissionsToRolesAsync ---");
-            
+
             var roles = await db.Roles.Include(r => r.Permissions).ToListAsync();
             var allPermissions = await db.Permissions.ToListAsync();
 
@@ -237,7 +235,7 @@ namespace ControlHub.Infrastructure.Persistence.Seeders
                     db.RolePermissions.RemoveRange(existingRolePermissions);
                     await db.SaveChangesAsync();
                     Console.WriteLine($"Cleared {existingRolePermissions.Count} existing RolePermissions");
-                    
+
                     // Reload roles to refresh the Permissions collection
                     roles = await db.Roles.Include(r => r.Permissions).ToListAsync();
                 }
@@ -247,14 +245,14 @@ namespace ControlHub.Infrastructure.Persistence.Seeders
 
             {
                 Console.WriteLine($"Processing role: {role.Name} (Current permissions: {role.Permissions.Count})");
-                
+
                 var permissionStrings = role.Name switch
                 {
                     "SuperAdmin" => allPermissions.Select(p => p.Code), // SuperAdmin gets all permissions
-                    "Admin" => allPermissions.Where(p => 
+                    "Admin" => allPermissions.Where(p =>
                         !p.Code.StartsWith("permissions") && // Admin cannot manage permissions
                         !p.Code.Contains("system")).Select(p => p.Code), // Admin cannot access system admin features
-                    "User" => allPermissions.Where(p => 
+                    "User" => allPermissions.Where(p =>
                         p.Code.StartsWith("profile")).Select(p => p.Code), // Users only get profile permissions
                     _ => Enumerable.Empty<string>()
                 };
@@ -277,7 +275,7 @@ namespace ControlHub.Infrastructure.Persistence.Seeders
                         Console.WriteLine($"  ✅ Added {permission.Code}");
                     }
                 }
-                
+
                 Console.WriteLine($"Role {role.Name} now has {role.Permissions.Count} permissions");
             }
 
@@ -300,39 +298,39 @@ namespace ControlHub.Infrastructure.Persistence.Seeders
                 "auth.change_password" => "Allows users to change their password",
                 "auth.forgot_password" => "Allows users to request password reset",
                 "auth.reset_password" => "Allows users to reset forgotten passwords",
-                
+
                 "users.view" => "Allows viewing user accounts",
                 "users.create" => "Allows creating new user accounts",
                 "users.update" => "Allows updating user account information",
                 "users.delete" => "Allows deleting user accounts",
                 "users.update_username" => "Allows updating user usernames",
-                
+
                 "roles.view" => "Allows viewing role definitions",
                 "roles.create" => "Allows creating new roles",
                 "roles.update" => "Allows updating role definitions",
                 "roles.delete" => "Allows deleting roles",
                 "roles.assign" => "Allows assigning roles to users",
-                
+
                 "identifiers.view" => "Allows viewing identifier configurations",
                 "identifiers.create" => "Allows creating identifier configurations",
                 "identifiers.update" => "Allows updating identifier configurations",
                 "identifiers.delete" => "Allows deleting identifier configurations",
                 "identifiers.toggle" => "Allows toggling identifier configuration active status",
-                
+
                 "system.view_logs" => "Allows viewing system logs",
                 "system.view_metrics" => "Allows viewing system metrics",
                 "system.manage_settings" => "Allows managing system settings",
                 "system.view_audit" => "Allows viewing audit logs",
-                
+
                 "profile.view_own" => "Allows viewing own profile",
                 "profile.update_own" => "Allows updating own profile",
-                
+
                 "permissions.view" => "Allows viewing permission definitions",
                 "permissions.create" => "Allows creating new permissions",
                 "permissions.update" => "Allows updating permission definitions",
                 "permissions.delete" => "Allows deleting permissions",
                 "permissions.assign" => "Allows assigning permissions to roles",
-                
+
                 _ => "Permission description not available"
             };
         }
@@ -344,7 +342,7 @@ namespace ControlHub.Infrastructure.Persistence.Seeders
         {
             var accountId = Guid.NewGuid();
             var password = passwordHasher.Hash(testAccount.Password);
-            
+
             var roleId = testAccount.Role switch
             {
                 "SuperAdmin" => ControlHubDefaults.Roles.SuperAdminId,
@@ -354,7 +352,7 @@ namespace ControlHub.Infrastructure.Persistence.Seeders
             };
 
             var account = Account.Create(accountId, password, roleId);
-            
+
             // Normalize the identifier value based on type
             var normalizedValue = testAccount.IdentifierType switch
             {
@@ -369,9 +367,9 @@ namespace ControlHub.Infrastructure.Persistence.Seeders
                 testAccount.IdentifierConfigName,
                 testAccount.IdentifierValue,
                 normalizedValue);
-            
+
             account.AddIdentifier(identifier);
-            
+
             var user = new User(Guid.NewGuid(), accountId, testAccount.UserName);
             account.AttachUser(user);
 
@@ -401,13 +399,13 @@ namespace ControlHub.Infrastructure.Persistence.Seeders
         public static async Task SeedTestIdentifierConfigsAsync(AppDbContext db, bool forceSeed = false)
         {
             var hasExistingConfigs = await db.IdentifierConfigs.AnyAsync();
-            
+
             if (hasExistingConfigs && !forceSeed)
             {
                 Console.WriteLine("Identifier configs already exist. Use forceSeed=true to override.");
                 return;
             }
-            
+
             if (hasExistingConfigs && forceSeed)
             {
                 Console.WriteLine("Identifier configs exist but forceSeed=true. Clearing and reseeding...");
@@ -467,7 +465,7 @@ namespace ControlHub.Infrastructure.Persistence.Seeders
 
             await db.IdentifierConfigs.AddRangeAsync(configs);
             await db.SaveChangesAsync();
-            
+
             Console.WriteLine($"Seeded {configs.Count} identifier configs successfully.");
         }
     }
@@ -503,7 +501,7 @@ namespace ControlHub.Infrastructure.Persistence.Seeders
                 Iterations = 3,
                 DegreeOfParallelism = Environment.ProcessorCount // Use same as runtime
             };
-            
+
             var optionsWrapper = new OptionsWrapper<Argon2Options>(options);
             _passwordHasher = new Argon2PasswordHasher(optionsWrapper);
         }

@@ -1,15 +1,9 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading;
-using System.Threading.Tasks;
 using ControlHub.Application.AI.V3.Parsing;
 using ControlHub.Application.Common.Interfaces.AI;
 using ControlHub.Application.Common.Interfaces.AI.V3.Parsing;
 using ControlHub.Application.Common.Logging;
 using Microsoft.Extensions.Logging;
 using Moq;
-using Xunit;
 
 namespace ControlHub.Application.Tests.AI.V3
 {
@@ -35,7 +29,7 @@ namespace ControlHub.Application.Tests.AI.V3
             // Arrange
             var log = new LogEntry { MessageTemplate = "System started", Timestamp = DateTime.UtcNow };
             var logs = new List<LogEntry> { log };
-            
+
             var template = new LogTemplate("T1", "System started", 1, log.Timestamp, log.Timestamp, "Information");
             var drainResult = new LogParseResult(
                 new List<LogTemplate> { template },
@@ -62,7 +56,7 @@ namespace ControlHub.Application.Tests.AI.V3
             // Arrange
             var log = new LogEntry { MessageTemplate = "Connection failed from 192.168.1.1", Timestamp = DateTime.UtcNow };
             var logs = new List<LogEntry> { log };
-            
+
             // High wildcard count -> Low confidence heuristic (0.5f < 0.7f)
             var template = new LogTemplate("T1", "Connection failed from <*> <*> <*> <*>", 1, log.Timestamp, log.Timestamp, "Information");
             var drainResult = new LogParseResult(
@@ -71,9 +65,9 @@ namespace ControlHub.Application.Tests.AI.V3
             );
 
             var semanticClassification = new LogClassification(
-                "network", 
-                "connection_failure", 
-                0.9f, 
+                "network",
+                "connection_failure",
+                0.9f,
                 new Dictionary<string, string> { { "ip", "192.168.1.1" } }
             );
 
@@ -99,7 +93,7 @@ namespace ControlHub.Application.Tests.AI.V3
             // Arrange
             var logLine = "Database error at sector 5";
             var logEntry = new LogEntry { MessageTemplate = logLine, Timestamp = DateTime.UtcNow };
-            
+
             var template = new LogTemplate("T1", "Database error at <*> <*> <*>", 1, DateTime.UtcNow, DateTime.UtcNow, "Error");
             var drainResult = new LogParseResult(
                 new List<LogTemplate> { template },

@@ -1,8 +1,3 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading;
-using System.Threading.Tasks;
 using ControlHub.Application.Common.Interfaces.AI;
 using ControlHub.Application.Common.Interfaces.AI.V3.RAG;
 using ControlHub.Application.Common.Logging.Interfaces;
@@ -27,7 +22,7 @@ namespace ControlHub.Application.AI.V3.RAG
         private readonly ILogEvidenceProcessor _evidenceProcessor;
         private readonly IConfiguration _config;
         private readonly ILogger<AgenticRAGService> _logger;
-        
+
         // Cache per-investigation (Scoped lifetime)
         private List<RetrievedDocument>? _cachedLogDocs;
         private string? _cachedCorrelationId;
@@ -96,7 +91,7 @@ namespace ControlHub.Application.AI.V3.RAG
             AgenticRAGOptions options,
             CancellationToken ct)
         {
-            _logger.LogInformation("Using single-hop strategy for query: {Query}, CorrelationId: {Id}", 
+            _logger.LogInformation("Using single-hop strategy for query: {Query}, CorrelationId: {Id}",
                 query, options.CorrelationId ?? "null");
 
             var candidates = new List<RetrievedDocument>();
@@ -106,17 +101,17 @@ namespace ControlHub.Application.AI.V3.RAG
             {
                 if (_cachedCorrelationId == options.CorrelationId && _cachedLogDocs != null)
                 {
-                    _logger.LogInformation("Using cached log entries for correlationId: {Id} ({Count} docs)", 
+                    _logger.LogInformation("Using cached log entries for correlationId: {Id} ({Count} docs)",
                         options.CorrelationId, _cachedLogDocs.Count);
                     candidates.AddRange(_cachedLogDocs);
                 }
                 else
                 {
                     _logger.LogInformation("Reading logs for correlationId: {Id}", options.CorrelationId);
-                    
+
                     var logEntries = await _logReader.GetLogsByCorrelationIdAsync(options.CorrelationId);
-                    
-                    _logger.LogInformation("Found {Count} log entries for correlationId: {Id}", 
+
+                    _logger.LogInformation("Found {Count} log entries for correlationId: {Id}",
                         logEntries.Count, options.CorrelationId);
 
                     var logDocs = new List<RetrievedDocument>();
@@ -126,8 +121,8 @@ namespace ControlHub.Application.AI.V3.RAG
                         logDocs.Add(new RetrievedDocument(
                             content,
                             0.95f,
-                            new Dictionary<string, string> 
-                            { 
+                            new Dictionary<string, string>
+                            {
                                 ["source"] = "log_file",
                                 ["timestamp"] = entry.Timestamp.ToString("o"),
                                 ["level"] = entry.Level
@@ -147,7 +142,7 @@ namespace ControlHub.Application.AI.V3.RAG
                     ));
                     // Add prioritized (filtered) logs
                     candidates.AddRange(evidence.PrioritizedLogs);
-                    
+
                     _cachedLogDocs = logDocs;
                     _cachedCorrelationId = options.CorrelationId;
                 }
@@ -157,8 +152,8 @@ namespace ControlHub.Application.AI.V3.RAG
             {
                 _logger.LogInformation("No correlationId, fetching recent Warning/Error logs for context");
                 var recentLogs = await _logReader.GetRecentLogsAsync(100);
-                
-                var importantLogs = recentLogs.Where(l => 
+
+                var importantLogs = recentLogs.Where(l =>
                     l.Level == "Warning" || l.Level == "Error" || l.Level == "Fatal" || l.Level == "Critical"
                 ).ToList();
 
@@ -170,8 +165,8 @@ namespace ControlHub.Application.AI.V3.RAG
                     candidates.Add(new RetrievedDocument(
                         content,
                         0.7f, // Medium score for context logs
-                        new Dictionary<string, string> 
-                        { 
+                        new Dictionary<string, string>
+                        {
                             ["source"] = "recent_logs",
                             ["timestamp"] = entry.Timestamp.ToString("o"),
                             ["level"] = entry.Level
@@ -197,11 +192,11 @@ namespace ControlHub.Application.AI.V3.RAG
                     candidates.Add(new RetrievedDocument(
                         GetContentFromPayload(r.Payload),
                         (float)r.Score,
-                        new Dictionary<string, string> 
-                        { 
-                            ["source"] = "vector_db", 
+                        new Dictionary<string, string>
+                        {
+                            ["source"] = "vector_db",
                             ["id"] = r.Id,
-                            ["is_runbook"] = "true" 
+                            ["is_runbook"] = "true"
                         }
                     ));
                 }

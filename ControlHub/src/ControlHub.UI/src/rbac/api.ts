@@ -69,11 +69,11 @@ export async function createPermissions(permissions: CreatePermissionInput[], ac
 }
 
 export async function addPermissionsForRole(roleId: string, permissionIds: string[], accessToken: string) {
-  return fetchJson<{ message: string; successCount: number; failureCount: number; failedRoles?: string[] }>(
-    `/api/Role/roles/${roleId}/permissions`,
+  return fetchJson<void>(
+    `/api/Role/${roleId}/permissions`,
     {
-      method: "POST",
-      body: { permissionIds },
+      method: "PUT",
+      body: permissionIds,
       accessToken
     }
   )

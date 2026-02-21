@@ -1,6 +1,3 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Text;
 using ControlHub.Application.Common.Interfaces.AI.V3.Agentic;
 using Microsoft.Extensions.Logging;
@@ -78,7 +75,7 @@ namespace ControlHub.Application.AI.V3.Observability
         {
             var sb = new StringBuilder();
             sb.AppendLine("=== Agent Thought Chain ===");
-            
+
             var grouped = _thoughts.GroupBy(t => t.NodeName);
             foreach (var group in grouped)
             {

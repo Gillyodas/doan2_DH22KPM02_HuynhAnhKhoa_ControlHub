@@ -1,12 +1,8 @@
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading;
-using System.Threading.Tasks;
 using ControlHub.Application.Accounts.DTOs;
 using ControlHub.Application.Accounts.Interfaces.Repositories;
+using ControlHub.Application.Common.Settings;
 using ControlHub.SharedKernel.Accounts;
 using ControlHub.SharedKernel.Results;
-using ControlHub.Application.Common.Settings;
 using MediatR;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
@@ -41,11 +37,11 @@ namespace ControlHub.Application.Accounts.Queries.GetAdminAccounts
             _logger.LogInformation("{@LogCode} | RoleId: {RoleId}", AccountLogs.GetAdmins_Started, adminRoleId);
 
             var accounts = await _accountRepository.GetByRoleIdAsync(adminRoleId, cancellationToken);
-            
+
             var dtos = accounts.Select(a => new AccountDto(
                 a.Id,
-                a.Identifiers.FirstOrDefault(i => i.Type == Domain.Identity.Enums.IdentifierType.Username)?.Value ?? 
-                a.Identifiers.FirstOrDefault(i => i.Type == Domain.Identity.Enums.IdentifierType.Email)?.Value ?? 
+                a.Identifiers.FirstOrDefault(i => i.Type == Domain.Identity.Enums.IdentifierType.Username)?.Value ??
+                a.Identifiers.FirstOrDefault(i => i.Type == Domain.Identity.Enums.IdentifierType.Email)?.Value ??
                 a.Identifiers.FirstOrDefault()?.Value ?? "N/A",
                 a.Role?.Name ?? "Admin",
                 a.IsActive

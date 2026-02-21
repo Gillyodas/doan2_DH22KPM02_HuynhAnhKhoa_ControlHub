@@ -1,5 +1,4 @@
 using ControlHub.API.Accounts.ViewModels.Request;
-using ApiResponse = ControlHub.API.Accounts.ViewModels.Response;
 using ControlHub.API.Controllers; // Import BaseApiController
 using ControlHub.Application.Accounts.Commands.CreateAccount;
 using ControlHub.Application.Accounts.Commands.RefreshAccessToken;
@@ -10,6 +9,7 @@ using ControlHub.Application.Accounts.Commands.SignOut;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using ApiResponse = ControlHub.API.Accounts.ViewModels.Response;
 
 namespace ControlHub.API.Accounts.Controllers
 {

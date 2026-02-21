@@ -1,7 +1,4 @@
 using ControlHub.Application.Common.Logging;
-using System.Collections.Generic;
-using System.Threading.Tasks;
-using System;
 
 namespace ControlHub.Application.Common.Interfaces.AI
 {
@@ -11,16 +8,16 @@ namespace ControlHub.Application.Common.Interfaces.AI
     }
 
     public record LogTemplate(
-        string TemplateId, 
-        string Pattern, 
-        int Count, 
-        DateTime FirstSeen, 
-        DateTime LastSeen, 
+        string TemplateId,
+        string Pattern,
+        int Count,
+        DateTime FirstSeen,
+        DateTime LastSeen,
         string Severity
     );
 
     public record LogParseResult(
-        List<LogTemplate> Templates, 
+        List<LogTemplate> Templates,
         Dictionary<string, List<LogEntry>> TemplateToLogs
     );
 }

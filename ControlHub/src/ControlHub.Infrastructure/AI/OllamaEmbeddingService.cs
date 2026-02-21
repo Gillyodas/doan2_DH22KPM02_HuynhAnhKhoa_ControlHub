@@ -20,13 +20,13 @@ namespace ControlHub.Infrastructure.AI
         {
             var request = new
             {
-                model = ModelName, 
+                model = ModelName,
                 prompt = text
             };
 
             var content = new StringContent(JsonSerializer.Serialize(request), Encoding.UTF8, "application/json");
-            
-            try 
+
+            try
             {
                 var response = await _httpClient.PostAsync(OllamaUrl, content);
                 response.EnsureSuccessStatusCode();

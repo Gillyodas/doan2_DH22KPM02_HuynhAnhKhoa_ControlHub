@@ -1,12 +1,9 @@
-using System.Collections.Generic;
-using System.Threading.Tasks;
-
 namespace ControlHub.Application.Common.Interfaces.AI
 {
     public interface IAuditAgentService
     {
         Task<AuditResult> InvestigateSessionAsync(string correlationId, string lang = "en");
-        
+
         /// <summary>
         /// V2.5 Chat with agent workflow (Drain3 + Sampling + Runbooks).
         /// </summary>
@@ -14,8 +11,8 @@ namespace ControlHub.Application.Common.Interfaces.AI
     }
 
     public record AuditResult(
-        string Analysis, 
-        List<LogTemplate> ProcessedTemplates, 
+        string Analysis,
+        List<LogTemplate> ProcessedTemplates,
         List<string> ToolsUsed
     );
 

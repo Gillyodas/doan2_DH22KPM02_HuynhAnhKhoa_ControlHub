@@ -1,6 +1,3 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using ControlHub.Application.Common.Interfaces.AI;
 
 namespace ControlHub.Infrastructure.AI.Strategies
@@ -13,7 +10,7 @@ namespace ControlHub.Infrastructure.AI.Strategies
 
             // Calculate weights: w = SeverityWeight * (1 / log(Count + 1))
             // We want rare errors to be kept.
-            
+
             var weightedItems = templates.Select(t => new
             {
                 Template = t,
@@ -52,14 +49,14 @@ namespace ControlHub.Infrastructure.AI.Strategies
             // +1 to avoid division by zero (though Count >= 1)
             // We use standard log10
             double countFactor = 1.0 / Math.Log10(template.Count + 10); // +10 to smooth out very rare items domination? 
-            // Original formula: IDF. Here let's just say:
-            // Rare items (low count) -> High factor
-            
+                                                                        // Original formula: IDF. Here let's just say:
+                                                                        // Rare items (low count) -> High factor
+
             // Refined: Severity matters most. Then rarity.
             // If count is 1: 1/log(1+1) = 3.32
             // If count is 1000: 1/log(1001) = 0.33
-            
-            return severityFactor * (1.0 / Math.Log(template.Count + 1)); 
+
+            return severityFactor * (1.0 / Math.Log(template.Count + 1));
         }
     }
 }

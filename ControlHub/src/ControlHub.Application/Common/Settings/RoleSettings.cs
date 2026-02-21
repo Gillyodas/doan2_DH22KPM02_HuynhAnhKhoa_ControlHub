@@ -1,5 +1,3 @@
-using System;
-
 namespace ControlHub.Application.Common.Settings
 {
     public class RoleSettings

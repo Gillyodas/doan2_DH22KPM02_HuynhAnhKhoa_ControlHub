@@ -1,10 +1,9 @@
 using ControlHub.Domain.Identity.Enums;
 using ControlHub.Domain.Identity.Identifiers.Rules;
-using ControlHub.Domain.Identity.Identifiers;
 using ControlHub.Domain.Identity.ValueObjects;
 using ControlHub.SharedKernel.Accounts;
-using ControlHub.SharedKernel.Results;
 using ControlHub.SharedKernel.Common.Errors;
+using ControlHub.SharedKernel.Results;
 
 namespace ControlHub.Domain.Identity.Identifiers.Services
 {
@@ -25,8 +24,8 @@ namespace ControlHub.Domain.Identity.Identifiers.Services
         }
 
         public async Task<Result<Identifier>> CreateAsync(
-            IdentifierType type, 
-            string rawValue, 
+            IdentifierType type,
+            string rawValue,
             Guid? configId = null,
             CancellationToken ct = default)
         {

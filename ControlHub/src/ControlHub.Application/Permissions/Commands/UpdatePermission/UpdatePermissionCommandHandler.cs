@@ -39,9 +39,9 @@ namespace ControlHub.Application.Permissions.Commands.UpdatePermission
 
             if (updateResult.IsFailure)
             {
-                _logger.LogWarning("{@LogCode} | PermissionId: {PermissionId}, Error: {Error}", 
+                _logger.LogWarning("{@LogCode} | PermissionId: {PermissionId}, Error: {Error}",
                     PermissionLogs.UpdatePermission_Started, // Re-using started or domain error? Reference used domain error but maybe simple started update info.
-                    request.Id, 
+                    request.Id,
                     updateResult.Error.Code);
                 return updateResult;
             }

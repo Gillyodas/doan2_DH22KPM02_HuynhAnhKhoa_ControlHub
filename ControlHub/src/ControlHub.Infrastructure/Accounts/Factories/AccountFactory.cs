@@ -1,9 +1,9 @@
 using ControlHub.Application.Accounts.Interfaces;
 using ControlHub.Domain.Identity.Aggregates;
+using ControlHub.Domain.Identity.Entities;
 using ControlHub.Domain.Identity.Enums;
 using ControlHub.Domain.Identity.Identifiers.Services;
 using ControlHub.Domain.Identity.Security;
-using ControlHub.Domain.Identity.Entities;
 using ControlHub.SharedKernel.Results;
 
 namespace ControlHub.Infrastructure.Accounts.Factories

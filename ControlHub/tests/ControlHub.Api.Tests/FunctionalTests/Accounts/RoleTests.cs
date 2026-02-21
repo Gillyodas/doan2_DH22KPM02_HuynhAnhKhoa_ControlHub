@@ -1,12 +1,10 @@
+using System.Net;
+using System.Net.Http.Json;
 using ControlHub.Api.Tests.Abstractions;
 using ControlHub.API.Roles.ViewModels.Requests;
 using ControlHub.API.Roles.ViewModels.Responses;
 using ControlHub.Application.Roles.DTOs;
 using FluentAssertions;
-using System.Net;
-using System.Net.Http.Json;
-using Xunit;
-
 using Microsoft.EntityFrameworkCore;
 
 namespace ControlHub.Api.Tests.FunctionalTests.Accounts;
@@ -28,11 +26,11 @@ public class RoleTests : BaseIntegrationTest
         {
             Roles = new List<CreateRoleDto>
             {
-                new CreateRoleDto 
-                ( 
-                    "Test Role " + Guid.NewGuid().ToString().Substring(0, 8), 
+                new CreateRoleDto
+                (
+                    "Test Role " + Guid.NewGuid().ToString().Substring(0, 8),
                     "Test Description",
-                    new List<Guid> { permissionId } 
+                    new List<Guid> { permissionId }
                 )
             }
         };
@@ -53,7 +51,7 @@ public class RoleTests : BaseIntegrationTest
         // This is a "BUG HUNTING" test. 
         // We expect it to fail if validation works, but currently we expect it 
         // to pass (return 200) because the internal validator is bypassed!
-        
+
         // Arrange
         await AuthenticateAsSuperAdminAsync();
         var permissionId = (await DbContext.Set<ControlHub.Domain.AccessControl.Entities.Permission>().FirstAsync()).Id;
@@ -62,8 +60,8 @@ public class RoleTests : BaseIntegrationTest
         {
             Roles = new List<CreateRoleDto>
             {
-                new CreateRoleDto 
-                ( 
+                new CreateRoleDto
+                (
                     "", // Invalid: Empty Name
                     "No Name Role",
                     new List<Guid> { permissionId }
@@ -163,7 +161,7 @@ public class RoleTests : BaseIntegrationTest
         var result = await response.Content.ReadFromJsonAsync<CreateRolesResponse>();
         result.Should().NotBeNull();
         result!.SuccessCount.Should().Be(1);
-        
+
         // BUG: Currently, the duplicate is silently filtered out. 
         // We might want to assert that FailureCount is 1 if we consider this a bug,
         // or just observe it. Currently, it will be 0 because it's filtered out from validDtos list.

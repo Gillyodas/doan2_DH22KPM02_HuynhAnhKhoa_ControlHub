@@ -1,6 +1,6 @@
 using ControlHub.Application.Users.DTOs;
-using ControlHub.SharedKernel.Common;
 using ControlHub.Domain.Identity.Entities;
+using ControlHub.SharedKernel.Common;
 
 namespace ControlHub.Application.Users.Interfaces.Repositories
 {

@@ -2,12 +2,10 @@ using System.Net;
 using System.Net.Http.Json;
 using ControlHub.Api.Tests.Abstractions;
 using ControlHub.API.Accounts.ViewModels.Request;
-using ControlHub.Application.Accounts.Commands.ChangePassword;
 using ControlHub.Domain.Identity.Enums;
 using ControlHub.Domain.TokenManagement.Enums;
 using FluentAssertions;
 using Microsoft.EntityFrameworkCore;
-using Xunit;
 
 namespace ControlHub.Api.Tests.FunctionalTests.Accounts;
 
@@ -50,9 +48,9 @@ public class AccountTests : BaseIntegrationTest
         // Arrange
         var hackerEmail = $"hacker_{Guid.NewGuid()}@example.com";
         var victimEmail = $"victim_{Guid.NewGuid()}@example.com";
-        
+
         await AuthenticateAsync(hackerEmail, "Password@123");
-        
+
         // Create victim by just registering them (no login needed)
         await Client.PostAsJsonAsync("/api/Auth/users/register", new { Value = victimEmail, Password = "Password@123", Type = IdentifierType.Email });
         var victimAccount = await DbContext.Accounts.FirstAsync(a => a.Identifiers.Any(i => i.Value == victimEmail));
@@ -71,9 +69,9 @@ public class AccountTests : BaseIntegrationTest
     [Fact]
     public async Task ForgotPassword_ShouldReturnOk_WhenEmailExists()
     {
-         // Arrange
+        // Arrange
         var email = $"forgot_{Guid.NewGuid()}@example.com";
-        await AuthenticateAsync(email, "Password@123"); 
+        await AuthenticateAsync(email, "Password@123");
         // We are authenticated just to create the user easily, but ForgotPassword is anonymous.
         // Clear headers
         Client.DefaultRequestHeaders.Authorization = null;

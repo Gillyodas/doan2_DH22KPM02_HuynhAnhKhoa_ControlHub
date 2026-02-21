@@ -1,12 +1,12 @@
 using System.Text.Json;
 using ControlHub.Application.Accounts.Interfaces.Repositories;
 using ControlHub.Application.Common.Persistence;
+using ControlHub.Application.Messaging.Outbox;
 using ControlHub.Application.Messaging.Outbox.Repositories;
 using ControlHub.Application.Tokens.Interfaces;
 using ControlHub.Application.Tokens.Interfaces.Generate;
 using ControlHub.Application.Tokens.Interfaces.Repositories;
 using ControlHub.Domain.Identity.Identifiers.Services;
-using ControlHub.Application.Messaging.Outbox;
 using ControlHub.Domain.TokenManagement.Enums;
 using ControlHub.SharedKernel.Accounts;
 using ControlHub.SharedKernel.Common.Errors;

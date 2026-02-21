@@ -1,6 +1,6 @@
 using System.Security.Claims;
-using ControlHub.Application.Tokens;
 using ControlHub.Application.Authorization.Requirements;
+using ControlHub.Application.Tokens;
 using ControlHub.SharedKernel.Constants;
 using Microsoft.AspNetCore.Authorization;
 
@@ -13,14 +13,14 @@ namespace ControlHub.Infrastructure.Permissions.AuthZ
             PermissionRequirement requirement)
         {
             Console.WriteLine($"[PermissionAuthorizationHandler] Checking permission: {requirement.Permission}");
-            
+
             // Check if user is SuperAdmin (bypass all permission checks)
             var roleIdClaim = context.User.FindFirst(AppClaimTypes.Role) ?? context.User.FindFirst(ClaimTypes.Role);
-            
+
             Console.WriteLine($"[PermissionAuthorizationHandler] Role claim found: {roleIdClaim?.Value ?? "NULL"}");
             Console.WriteLine($"[PermissionAuthorizationHandler] SuperAdmin ID: {ControlHubDefaults.Roles.SuperAdminId}");
-            
-            if (roleIdClaim != null && 
+
+            if (roleIdClaim != null &&
                 roleIdClaim.Value.Equals(ControlHubDefaults.Roles.SuperAdminId.ToString(), StringComparison.OrdinalIgnoreCase))
             {
                 Console.WriteLine($"[PermissionAuthorizationHandler] ? SuperAdmin detected! Bypassing permission check.");
@@ -30,7 +30,7 @@ namespace ControlHub.Infrastructure.Permissions.AuthZ
 
             // L?y t?t c? các claims 'Permission' t? user (dã du?c thêm t? IClaimsTransformation)
             var userPermissions = context.User.FindAll(AppClaimTypes.Permission);
-            
+
             Console.WriteLine($"[PermissionAuthorizationHandler] User has {userPermissions.Count()} permission claims");
 
             // Ki?m tra xem user có claim nào kh?p v?i permission yêu c?u không

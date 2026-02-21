@@ -1,4 +1,3 @@
-using System.Collections.Generic;
 using ControlHub.Application.Common.Interfaces.AI.V3.Agentic;
 
 namespace ControlHub.Application.AI.V3.Agentic

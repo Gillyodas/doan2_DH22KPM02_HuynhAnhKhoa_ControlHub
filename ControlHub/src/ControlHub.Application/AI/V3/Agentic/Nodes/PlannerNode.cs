@@ -1,9 +1,6 @@
-using System.Collections.Generic;
-using System.Threading;
-using System.Threading.Tasks;
 using ControlHub.Application.Common.Interfaces.AI.V3.Agentic;
-using ControlHub.Application.Common.Interfaces.AI.V3.Reasoning;
 using ControlHub.Application.Common.Interfaces.AI.V3.Observability;
+using ControlHub.Application.Common.Interfaces.AI.V3.Reasoning;
 using Microsoft.Extensions.Logging;
 
 namespace ControlHub.Application.AI.V3.Agentic.Nodes
@@ -31,9 +28,9 @@ namespace ControlHub.Application.AI.V3.Agentic.Nodes
         public async Task<IAgentState> ExecuteAsync(IAgentState state, CancellationToken ct = default)
         {
             var clone = (AgentState)state.Clone();
-            
+
             // Get user query from context or last message
-            var query = clone.GetContext<string>("query") 
+            var query = clone.GetContext<string>("query")
                         ?? clone.Messages.FindLast(m => m.Role == "user")?.Content
                         ?? "";
 
@@ -48,12 +45,12 @@ namespace ControlHub.Application.AI.V3.Agentic.Nodes
 
             // Get correlationId if available to provide more context to the planner
             var correlationId = clone.GetContext<string>("correlationId");
-            var enhancedQuery = !string.IsNullOrEmpty(correlationId) 
-                ? $"{query} (CorrelationId: {correlationId})" 
+            var enhancedQuery = !string.IsNullOrEmpty(correlationId)
+                ? $"{query} (CorrelationId: {correlationId})"
                 : query;
 
             // Get pre-retrieved docs if available
-            var preRetrievedDocs = clone.GetContext<List<Common.Interfaces.AI.V3.RAG.RankedDocument>>("pre_retrieval_docs") 
+            var preRetrievedDocs = clone.GetContext<List<Common.Interfaces.AI.V3.RAG.RankedDocument>>("pre_retrieval_docs")
                                   ?? new List<Common.Interfaces.AI.V3.RAG.RankedDocument>();
 
             // Use reasoning model to create plan

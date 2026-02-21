@@ -1,10 +1,6 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using Xunit;
-using FluentAssertions;
-using ControlHub.Infrastructure.AI.Strategies;
 using ControlHub.Application.Common.Interfaces.AI;
+using ControlHub.Infrastructure.AI.Strategies;
+using FluentAssertions;
 
 namespace ControlHub.Infrastructure.Tests.AI
 {
@@ -38,7 +34,7 @@ namespace ControlHub.Infrastructure.Tests.AI
 
             // Assert
             sampled.Should().HaveCount(20);
-            
+
             // Errors should be highly represented due to severity weight
             var errorCount = sampled.Count(t => t.Severity == "Error");
             errorCount.Should().BeGreaterThan(5); // Expect at least some errors to make it through

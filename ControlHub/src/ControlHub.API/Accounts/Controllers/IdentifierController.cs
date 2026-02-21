@@ -1,10 +1,10 @@
+using ControlHub.API.Controllers;
 using ControlHub.Application.Accounts.Commands.CreateIdentifier;
 using ControlHub.Application.Accounts.Commands.ToggleIdentifierActive;
 using ControlHub.Application.Accounts.Commands.UpdateIdentifierConfig;
 using ControlHub.Application.Accounts.DTOs;
 using ControlHub.Application.Accounts.Queries.GetActiveIdentifierConfigs;
 using ControlHub.Application.Accounts.Queries.GetIdentifierConfigs;
-using ControlHub.API.Controllers;
 using ControlHub.SharedKernel.Results;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
@@ -19,7 +19,7 @@ namespace ControlHub.API.Accounts.Controllers
     {
         private readonly ILogger<IdentifierController> _logger;
 
-        public IdentifierController(IMediator mediator, ILogger<IdentifierController> logger) 
+        public IdentifierController(IMediator mediator, ILogger<IdentifierController> logger)
             : base(mediator, logger)
         {
             _logger = logger;
@@ -47,7 +47,7 @@ namespace ControlHub.API.Accounts.Controllers
                 return HandleFailure(Result.Failure(result.Error));
             }
 
-            _logger.LogInformation("Successfully retrieved {Count} identifier configurations", 
+            _logger.LogInformation("Successfully retrieved {Count} identifier configurations",
                 result.Value?.Count ?? 0);
             return Ok(result.Value);
         }
@@ -109,7 +109,7 @@ namespace ControlHub.API.Accounts.Controllers
             }
 
             var configType = includeDeactivated ? "all" : "active";
-            _logger.LogInformation("Successfully retrieved {Count} {ConfigType} identifier configurations", 
+            _logger.LogInformation("Successfully retrieved {Count} {ConfigType} identifier configurations",
                 result.Value?.Count ?? 0, configType);
             return Ok(result.Value);
         }

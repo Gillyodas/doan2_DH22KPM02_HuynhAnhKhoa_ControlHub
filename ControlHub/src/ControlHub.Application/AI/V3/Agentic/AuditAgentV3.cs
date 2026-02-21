@@ -1,13 +1,9 @@
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading;
-using System.Threading.Tasks;
 using ControlHub.Application.AI.V3.Agentic.Nodes;
 using ControlHub.Application.Common.Interfaces.AI.V3;
 using ControlHub.Application.Common.Interfaces.AI.V3.Agentic;
+using ControlHub.Application.Common.Interfaces.AI.V3.Observability;
 using ControlHub.Application.Common.Interfaces.AI.V3.RAG;
 using ControlHub.Application.Common.Interfaces.AI.V3.Reasoning;
-using ControlHub.Application.Common.Interfaces.AI.V3.Observability;
 using Microsoft.Extensions.Logging;
 
 namespace ControlHub.Application.AI.V3.Agentic
@@ -45,7 +41,7 @@ namespace ControlHub.Application.AI.V3.Agentic
             _observer = observer;
             _loggerFactory = loggerFactory;
             _logger = logger;
-            
+
             // Build the graph
             BuildGraph();
         }
@@ -67,7 +63,7 @@ namespace ControlHub.Application.AI.V3.Agentic
             // Define edges: START → Planner → Executor (loop until complete) → Verifier → conditional
             _graph.AddEdge(GraphConstants.START, "Planner");
             _graph.AddEdge("Planner", "Executor");
-            
+
             // Executor loops until all steps done
             _graph.AddConditionalEdges("Executor", state =>
             {
@@ -80,10 +76,10 @@ namespace ControlHub.Application.AI.V3.Agentic
             {
                 var clone = state as AgentState;
                 var passed = clone?.GetContextValue("verification_passed", false) ?? false;
-                
+
                 if (passed)
                     return GraphConstants.END;
-                
+
                 return "Reflector";
             });
 
@@ -92,7 +88,7 @@ namespace ControlHub.Application.AI.V3.Agentic
             {
                 var clone = state as AgentState;
                 var shouldRetry = clone?.GetContextValue("reflexion_should_retry", false) ?? false;
-                
+
                 if (shouldRetry)
                 {
                     // Reset execution state for retry
@@ -100,7 +96,7 @@ namespace ControlHub.Application.AI.V3.Agentic
                     clone.Context.Remove("execution_results");
                     return "Planner";
                 }
-                
+
                 return GraphConstants.END;
             });
         }
@@ -125,7 +121,7 @@ namespace ControlHub.Application.AI.V3.Agentic
             _logger.LogInformation("AgenticRAG: Performing pre-retrieval for query: {Query}", query);
             var ragOptions = new AgenticRAGOptions(CorrelationId: correlationId);
             var ragResult = await _agenticRag.RetrieveAsync(query, ragOptions, ct);
-            
+
             initialState.Context["pre_retrieval_docs"] = ragResult.Documents;
             initialState.Context["pre_retrieval_strategy"] = ragResult.StrategyUsed.ToString();
             initialState.Context["rag_metadata"] = ragResult.Metadata;
@@ -214,8 +210,8 @@ namespace ControlHub.Application.AI.V3.Agentic
             {
                 // Check if any runbook was retrieved for this error code
                 var docs = state.GetContext<List<RankedDocument>>("pre_retrieval_docs") ?? new List<RankedDocument>();
-                var hasRunbook = docs.Any(d => 
-                    d.Metadata.GetValueOrDefault("is_runbook") == "true" && 
+                var hasRunbook = docs.Any(d =>
+                    d.Metadata.GetValueOrDefault("is_runbook") == "true" &&
                     d.Content.Contains(meta.ErrorCode, System.StringComparison.OrdinalIgnoreCase));
 
                 if (!hasRunbook)

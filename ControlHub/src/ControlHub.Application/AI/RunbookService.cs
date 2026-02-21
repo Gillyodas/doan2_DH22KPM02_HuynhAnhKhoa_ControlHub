@@ -1,6 +1,3 @@
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using ControlHub.Application.Common.Interfaces.AI;
 using Microsoft.Extensions.Configuration;
 
@@ -13,8 +10,8 @@ namespace ControlHub.Application.AI
         private readonly string _collectionName;
 
         public RunbookService(
-            IVectorDatabase vectorDb, 
-            IEmbeddingService embeddingService, 
+            IVectorDatabase vectorDb,
+            IEmbeddingService embeddingService,
             IConfiguration config)
         {
             _vectorDb = vectorDb;
@@ -28,7 +25,7 @@ namespace ControlHub.Application.AI
             {
                 // Key search text: LogCode + Problem + Tags
                 var textToEmbed = $"Pattern: {rb.LogCode}. Problem: {rb.Problem}. Tags: {string.Join(",", rb.Tags)}";
-                
+
                 var vector = await _embeddingService.GenerateEmbeddingAsync(textToEmbed);
                 if (vector.Length == 0) continue;
 
@@ -65,11 +62,11 @@ namespace ControlHub.Application.AI
         }
 
         // Helper to handle JArray/String conversion since Payload values are objects
-        private static class JsonSerializerHelper 
+        private static class JsonSerializerHelper
         {
             public static string[] DeserializeTags(object tagsObj)
             {
-                try 
+                try
                 {
                     // This depends on how the VectorDB client deserializes JSON. 
                     // Assuming it comes back as JsonElement or JArray if serialized as object.
@@ -78,7 +75,7 @@ namespace ControlHub.Application.AI
                     if (tagsObj is List<string> list) return list.ToArray();
                     return System.Array.Empty<string>();
                 }
-                catch 
+                catch
                 {
                     return System.Array.Empty<string>();
                 }

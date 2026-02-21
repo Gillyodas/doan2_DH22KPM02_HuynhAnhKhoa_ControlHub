@@ -24,7 +24,7 @@ namespace ControlHub.Application.Roles.Queries.GetUserRoles
 
             var roles = await _roleQueries.GetRolesByUserIdAsync(request.UserId, ct);
 
-            _logger.LogInformation("{@LogCode} | UserId: {UserId} | Count: {Count}", 
+            _logger.LogInformation("{@LogCode} | UserId: {UserId} | Count: {Count}",
                 RoleLogs.GetUserRoles_Success, request.UserId, roles.Count);
 
             return Result<List<RoleDto>>.Success(roles);

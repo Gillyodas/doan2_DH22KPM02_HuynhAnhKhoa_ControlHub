@@ -49,14 +49,13 @@ namespace ControlHub.Application.Accounts.Commands.SignOut
                 return Result.Failure(TokenErrors.TokenInvalid);
             }
 
-            var accessToken = await _tokenQueries.GetByValueAsync(request.accessToken, cancellationToken);
             var refreshToken = await _tokenQueries.GetByValueAsync(request.refreshToken, cancellationToken);
 
-            if (accessToken == null || refreshToken == null)
+            if (refreshToken == null)
             {
                 _logger.LogWarning("{@LogCode} | Reason: {Reason}",
                     AccountLogs.SignOut_TokenNotFound,
-                     "token not found in storage");
+                     AccountLogs.SignOut_TokenNotFound.Message);
 
                 return Result.Failure(TokenErrors.TokenNotFound);
             }
@@ -76,19 +75,9 @@ namespace ControlHub.Application.Accounts.Commands.SignOut
                 return Result.Failure(TokenErrors.TokenInvalid);
             }
 
-            if (accessToken.AccountId != accId || refreshToken.AccountId != accId)
-            {
-                _logger.LogWarning("{@LogCode} | AccountId: {AccountId}",
-                    AccountLogs.SignOut_MismatchedAccount,
-                    accId);
-
-                return Result.Failure(TokenErrors.TokenInvalid);
-            }
-
-            var revokeAccessResult = accessToken.Revoke();
             var revokeRefreshResult = refreshToken.Revoke();
 
-            if (revokeAccessResult.IsFailure || revokeRefreshResult.IsFailure)
+            if (revokeRefreshResult.IsFailure)
             {
                 _logger.LogWarning("{@LogCode} | AccountId: {AccountId}",
                     AccountLogs.SignOut_TokenAlreadyRevoked,

@@ -106,17 +106,6 @@ export type CreateRolesResponse = {
   failedRoles?: string[]
 }
 
-export type AddPermissionsForRoleRequest = {
-  roleId: string
-  permissionIds: string[]
-}
-
-export type AddPermissionsForRoleResponse = {
-  message: string
-  successCount: number
-  failureCount: number
-  failedRoles?: string[]
-}
 
 export type AccountDto = {
   id: string

@@ -1,5 +1,3 @@
-using ControlHub.Application.Messaging.Outbox;
-
 namespace ControlHub.Application.Messaging.Outbox.Repositories
 {
     public interface IOutboxRepository

@@ -44,23 +44,20 @@ namespace ControlHub.Application.Roles.Commands.SetRolePermissions
             // Validate that all requested permissions exist
             // Retrieve unique requested IDs to handle accidental duplicates in request
             var uniqueRequestedIds = request.PermissionIds.Distinct().ToList();
-            
+
             if (permissions.Count != uniqueRequestedIds.Count)
             {
-                 return Result.Failure(RoleErrors.InvalidPermissionReference);
+                return Result.Failure(RoleErrors.InvalidPermissionReference);
             }
 
-            // Clear existing permissions
+            // Clear existing permissions (This triggers 1 event)
             role.ClearPermissions();
 
-            // Add new permissions
-            foreach (var permission in permissions)
+            // Add new permissions using AddRangePermission (This triggers 1 event)
+            var addResult = role.AddRangePermission(permissions);
+            if (addResult.IsFailure)
             {
-                var result = role.AddPermission(permission);
-                if (result.IsFailure)
-                {
-                    return result; 
-                }
+                return addResult;
             }
 
             await _unitOfWork.CommitAsync(cancellationToken);

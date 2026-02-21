@@ -1,4 +1,4 @@
-using ControlHub.Infrastructure.RealTime.Hubs;
+ï»¿using ControlHub.Infrastructure.RealTime.Hubs;
 using OpenTelemetry.Exporter;
 using OpenTelemetry.Metrics;
 using OpenTelemetry.Trace;
@@ -19,9 +19,9 @@ namespace ControlHub.API
 
             // =========================================================================
             // 1. HOST CONFIGURATION (Logging, Metrics, Tracing)
-            // Ph?n này thu?c v? "?ng d?ng ch?a" (Host App). 
-            // Ngu?i dùng thu vi?n có th? mu?n dùng NLog thay vì Serilog, ho?c Jaeger thay vì Prometheus.
-            // Nên d? h? t? quy?t d?nh ? dây.
+            // Ph?n nï¿½y thu?c v? "?ng d?ng ch?a" (Host App). 
+            // Ngu?i dï¿½ng thu vi?n cï¿½ th? mu?n dï¿½ng NLog thay vï¿½ Serilog, ho?c Jaeger thay vï¿½ Prometheus.
+            // Nï¿½n d? h? t? quy?t d?nh ? dï¿½y.
             // =========================================================================
 
             // Config Serilog
@@ -34,12 +34,14 @@ namespace ControlHub.API
                 // Sub-logger: Write only Email logs to a separate file
                 .WriteTo.Logger(l => l
                     .Filter.ByIncludingOnly(e => e.Properties.TryGetValue("SourceContext", out var v) && v.ToString().Contains("ControlHub.Infrastructure.Emails"))
-                    .WriteTo.File(new RenderedCompactJsonFormatter(), "Logs/email-.json", rollingInterval: RollingInterval.Day, retainedFileCountLimit: 14, shared: true))
+                    .WriteTo.File(new RenderedCompactJsonFormatter(), "Logs/email-.json", rollingInterval: RollingInterval.Day, retainedFileCountLimit: 14, shared: true)
+                    .WriteTo.File("Logs/email-.txt", rollingInterval: RollingInterval.Day, outputTemplate: "[{Timestamp:HH:mm:ss} {Level:u3}] {Message:lj}{NewLine}{Exception}"))
                 // Main logger: Write everything ELSE to console and main file
                 .WriteTo.Logger(l => l
                     .Filter.ByExcluding(e => e.Properties.TryGetValue("SourceContext", out var v) && v.ToString().Contains("ControlHub.Infrastructure.Emails"))
                     .WriteTo.Console(outputTemplate: "[{Timestamp:HH:mm:ss} {Level:u3}] {Message:lj}{NewLine}{Exception}")
-                    .WriteTo.File(new RenderedCompactJsonFormatter(), "Logs/log-.json", rollingInterval: RollingInterval.Day, retainedFileCountLimit: 14, shared: true))
+                    .WriteTo.File(new RenderedCompactJsonFormatter(), "Logs/log-.json", rollingInterval: RollingInterval.Day, retainedFileCountLimit: 14, shared: true)
+                    .WriteTo.File("Logs/log-.txt", rollingInterval: RollingInterval.Day, outputTemplate: "[{Timestamp:HH:mm:ss} {Level:u3}] {Message:lj}{NewLine}{Exception}"))
                 .CreateLogger();
 
             builder.Host.UseSerilog();
@@ -71,7 +73,7 @@ namespace ControlHub.API
 
             // =========================================================================
             // 2. CONTROL HUB LIBRARY (CORE LOGIC)
-            // Ðây là dòng quan tr?ng nh?t. Toàn b? logic nghi?p v?, DB, Auth n?m ? dây.
+            // ï¿½ï¿½y lï¿½ dï¿½ng quan tr?ng nh?t. Toï¿½n b? logic nghi?p v?, DB, Auth n?m ? dï¿½y.
             // =========================================================================
 
             builder.Services.AddControlHub(builder.Configuration);
@@ -108,11 +110,11 @@ namespace ControlHub.API
             app.UseHttpsRedirection();
 
             // Authentication & Authorization Middleware ph?i du?c g?i ? Host App
-            // d? d?m b?o dúng th? t? trong Pipeline c?a h?.
+            // d? d?m b?o dï¿½ng th? t? trong Pipeline c?a h?.
             app.UseAuthentication();
             app.UseAuthorization();
 
-            // Kích ho?t ControlHub (Auto Migration & Seed Data)
+            // Kï¿½ch ho?t ControlHub (Auto Migration & Seed Data)
             app.UseControlHub();
 
             app.MapHub<DashboardHub>("/hubs/dashboard");

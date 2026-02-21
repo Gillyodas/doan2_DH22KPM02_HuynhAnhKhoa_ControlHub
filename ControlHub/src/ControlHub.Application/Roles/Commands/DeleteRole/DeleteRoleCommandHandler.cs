@@ -5,7 +5,6 @@ using ControlHub.SharedKernel.Results;
 using ControlHub.SharedKernel.Roles;
 using MediatR;
 using Microsoft.Extensions.Logging;
-using System.Linq;
 
 namespace ControlHub.Application.Roles.Commands.DeleteRole
 {
@@ -42,13 +41,13 @@ namespace ControlHub.Application.Roles.Commands.DeleteRole
             var accounts = await _accountRepository.GetByRoleIdAsync(request.Id, ct);
             if (accounts.Any())
             {
-                _logger.LogWarning("{@LogCode} | RoleId: {RoleId} | UsersCount: {UsersCount}", 
+                _logger.LogWarning("{@LogCode} | RoleId: {RoleId} | UsersCount: {UsersCount}",
                     RoleLogs.DeleteRole_InUse, request.Id, accounts.Count);
                 return Result<Unit>.Failure(RoleErrors.RoleInUse);
             }
 
             role.Delete();
-            
+
             await _unitOfWork.CommitAsync(ct);
 
             _logger.LogInformation("{@LogCode} | RoleId: {RoleId}", RoleLogs.DeleteRole_Success, request.Id);

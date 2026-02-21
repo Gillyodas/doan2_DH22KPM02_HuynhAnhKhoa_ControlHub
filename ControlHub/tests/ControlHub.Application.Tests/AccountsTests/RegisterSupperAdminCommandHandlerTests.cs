@@ -1,5 +1,4 @@
 using ControlHub.Application.Accounts.Commands.RegisterSupperAdmin;
-using ControlHub.Application.Accounts.Commands.RegisterUser;
 using ControlHub.Application.Accounts.Interfaces;
 using ControlHub.Application.Accounts.Interfaces.Repositories;
 using ControlHub.Application.Common.Persistence;

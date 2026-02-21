@@ -1,11 +1,10 @@
+using System.Text.Json;
 using ControlHub.Application.Common.Logging;
 using ControlHub.Infrastructure.Logging;
 using FluentAssertions;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 using Moq;
-using System.Text.Json;
-using Xunit;
 
 namespace ControlHub.Infrastructure.Tests.Logging
 {
@@ -19,7 +18,7 @@ namespace ControlHub.Infrastructure.Tests.Logging
         {
             _loggerMock = new Mock<ILogger<LogReaderService>>();
             _configurationMock = new Mock<IConfiguration>();
-            
+
             // Create a unique temporary directory for tests
             _testLogDirectory = Path.Combine(Path.GetTempPath(), "ControlHubTests", Guid.NewGuid().ToString());
             Directory.CreateDirectory(_testLogDirectory);
@@ -43,7 +42,7 @@ namespace ControlHub.Infrastructure.Tests.Logging
                     { "CorrelationId", correlationId }
                 }
             };
-            
+
             var logFilePath = Path.Combine(_testLogDirectory, "log-20260122.json");
             var jsonLine = JsonSerializer.Serialize(logEntry);
             await File.WriteAllTextAsync(logFilePath, jsonLine);

@@ -1,11 +1,13 @@
-using ControlHub.Domain.AccessControl.Entities;
+ï»¿using ControlHub.Domain.AccessControl.Entities;
+using ControlHub.Domain.AccessControl.Events;
+using ControlHub.Domain.SharedKernel;
 using ControlHub.SharedKernel.Results;
 using ControlHub.SharedKernel.Roles;
-// using ControlHub.SharedKernel.Roles; // (Gi? s? b?n có RoleErrors ? dây)
+// using ControlHub.SharedKernel.Roles; // (Gi? s? b?n cÃ³ RoleErrors ? dÃ¢y)
 
 namespace ControlHub.Domain.AccessControl.Aggregates
 {
-    public class Role
+    public class Role : AggregateRoot
     {
         public Guid Id { get; private set; }
         public string Name { get; private set; }
@@ -57,13 +59,15 @@ namespace ControlHub.Domain.AccessControl.Aggregates
             if (permission == null)
                 return Result.Failure(RoleErrors.PermissionNotFound); // Ho?c l?i Null
 
-            // Ki?m tra trùng l?p trong list hi?n t?i
+            // Ki?m tra trÃ¹ng l?p trong list hi?n t?i
             if (_permissions.Any(p => p.Code == permission.Code))
             {
                 return Result.Failure(RoleErrors.PermissionAlreadyExists);
             }
 
             _permissions.Add(permission);
+            RaiseDomainEvent(new RolePermissionChangedEvent(Id));
+
             return Result.Success();
         }
 
@@ -88,6 +92,11 @@ namespace ControlHub.Domain.AccessControl.Aggregates
                 }
             }
 
+            if (successes.Any())
+            {
+                RaiseDomainEvent(new RolePermissionChangedEvent(Id));
+            }
+
             var partial = PartialResult<Permission, string>.Create(successes, failures);
 
             if (!partial.Successes.Any() && partial.Failures.Any())
@@ -100,6 +109,11 @@ namespace ControlHub.Domain.AccessControl.Aggregates
 
         public void ClearPermissions()
         {
+            if (_permissions.Any())
+            {
+                RaiseDomainEvent(new RolePermissionChangedEvent(Id));
+            }
+
             _permissions.Clear();
         }
 

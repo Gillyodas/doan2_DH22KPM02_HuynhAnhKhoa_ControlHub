@@ -1,9 +1,4 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Text;
-using System.Text.Json;
-using System.Threading.Tasks;
 using ControlHub.Application.Common.Interfaces.AI;
 using ControlHub.Application.Common.Logging;
 using ControlHub.Application.Common.Logging.Interfaces;
@@ -56,7 +51,7 @@ namespace ControlHub.Application.AI
             // Step 1: Look for Runbooks for top error templates
             // Step 2: Build Context
             // Step 3: Ask LLM
-            
+
             toolsUsed.Add("Drain3Parser");
             toolsUsed.Add("WeightedReservoirSampling");
 
@@ -84,7 +79,7 @@ namespace ControlHub.Application.AI
 
             // 3.2 Build Prompt
             var prompt = BuildPrompt(sampledTemplates, runbookContext.ToString(), lang);
-            
+
             // 3.3 Inference
             var aiResponse = await _aiService.AnalyzeLogsAsync(prompt);
 
@@ -99,12 +94,12 @@ namespace ControlHub.Application.AI
             // Step 1: Fetch Logs
             // ─────────────────────────────────────────────────────────
             var rawLogs = await FetchLogsForChatAsync(request);
-            
+
             if (!rawLogs.Any())
             {
                 return new ChatResult(
-                    "No logs found for the specified criteria.", 
-                    0, 
+                    "No logs found for the specified criteria.",
+                    0,
                     toolsUsed
                 );
             }
@@ -114,7 +109,7 @@ namespace ControlHub.Application.AI
             // ─────────────────────────────────────────────────────────
             var parseResult = await _parserService.ParseLogsAsync(rawLogs);
             var sampledTemplates = _samplingStrategy.Sample(parseResult.Templates, 30);
-            
+
             toolsUsed.Add("Drain3Parser");
             toolsUsed.Add("WeightedReservoirSampling");
 
@@ -127,15 +122,15 @@ namespace ControlHub.Application.AI
                 .ToList();
 
             var runbookContext = new StringBuilder();
-            
+
             if (errorTemplates.Any())
             {
                 toolsUsed.Add("RunbookLookup");
-                
+
                 foreach (var tmpl in errorTemplates)
                 {
                     var runbooks = await _runbookService.FindRelatedRunbooksAsync(tmpl.Pattern);
-                    
+
                     foreach (var rb in runbooks)
                     {
                         runbookContext.AppendLine($"[Pattern: {tmpl.Pattern}]");
@@ -149,12 +144,12 @@ namespace ControlHub.Application.AI
             // Step 4: Build Prompt & Call LLM
             // ─────────────────────────────────────────────────────────
             var prompt = BuildChatPromptV2(
-                sampledTemplates, 
-                runbookContext.ToString(), 
-                request.Question, 
+                sampledTemplates,
+                runbookContext.ToString(),
+                request.Question,
                 lang
             );
-            
+
             var aiResponse = await _aiService.AnalyzeLogsAsync(prompt);
 
             return new ChatResult(aiResponse, rawLogs.Count, toolsUsed);
@@ -182,13 +177,13 @@ namespace ControlHub.Application.AI
         /// Builds the V2.5 chat prompt with templates and runbook context.
         /// </summary>
         private string BuildChatPromptV2(
-            List<LogTemplate> templates, 
-            string runbookContext, 
-            string question, 
+            List<LogTemplate> templates,
+            string runbookContext,
+            string question,
             string lang)
         {
             var sb = new StringBuilder();
-            
+
             // Language mapping
             string languageName = lang.ToLower() switch
             {
@@ -199,14 +194,14 @@ namespace ControlHub.Application.AI
             // System instruction
             sb.AppendLine("You are an expert SRE assistant.");
             sb.AppendLine($"Task: Answer the user's question based on log data. Respond in {languageName}.");
-            
+
             // Runbook context (if any)
             if (!string.IsNullOrEmpty(runbookContext))
             {
                 sb.AppendLine("\n=== KNOWLEDGE BASE ===");
                 sb.AppendLine(runbookContext);
             }
-            
+
             // Log summary
             sb.AppendLine("\n=== LOG SUMMARY ===");
             sb.AppendLine("Format: [Severity] [Count] Template");
@@ -214,16 +209,16 @@ namespace ControlHub.Application.AI
             {
                 sb.AppendLine($"[{t.Severity}] [x{t.Count}] {t.Pattern}");
             }
-            
+
             // User question
             sb.AppendLine("\n=== USER QUESTION ===");
             sb.AppendLine(question);
-            
+
             sb.AppendLine("\n=== INSTRUCTIONS ===");
             sb.AppendLine("1. Focus on answering the specific question.");
             sb.AppendLine("2. Reference relevant log patterns.");
             sb.AppendLine("3. Suggest actionable next steps if applicable.");
-            
+
             return sb.ToString();
         }
 
@@ -231,28 +226,28 @@ namespace ControlHub.Application.AI
         private string BuildPrompt(List<LogTemplate> templates, string runbookContext, string lang)
         {
             var sb = new StringBuilder();
-            
+
             // Map Language
             string languageName = lang.ToLower() switch
             {
                 "vi" => "Vietnamese",
-                "vn" => "Vietnamese", 
+                "vn" => "Vietnamese",
                 _ => "English"
             };
 
             sb.AppendLine("You are an expert Reliability Engineer (SRE).");
             sb.AppendLine($"Task: Analyze the log summary below and discover the root cause. Response in {languageName}.");
             sb.AppendLine("Use the provided Runbook knowledge if applicable.");
-            
+
             if (!string.IsNullOrEmpty(runbookContext))
             {
                 sb.AppendLine("\n=== KNOWLEDGE BASE / RUNBOOKS ===");
                 sb.AppendLine(runbookContext);
             }
-            
+
             sb.AppendLine("\n=== LOG SESSION SUMMARY ===");
             sb.AppendLine("Format: [Severity] [Count] [TimeRange] Template");
-            
+
             foreach (var t in templates)
             {
                 sb.AppendLine($"[{t.Severity}] [x{t.Count}] [{t.FirstSeen:HH:mm:ss}-{t.LastSeen:HH:mm:ss}] {t.Pattern}");
@@ -262,7 +257,7 @@ namespace ControlHub.Application.AI
             sb.AppendLine("1. Identify the primary error.");
             sb.AppendLine("2. specific Log Patterns/Sequences that lead to the error.");
             sb.AppendLine("3. Suggest a concrete fix based on Runbooks or General Knowledge.");
-            
+
             return sb.ToString();
         }
     }

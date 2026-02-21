@@ -1,11 +1,10 @@
+using System.Net;
+using System.Net.Http.Json;
 using ControlHub.Api.Tests.Abstractions;
 using ControlHub.API.Accounts.ViewModels.Request;
 using ControlHub.API.Accounts.ViewModels.Response;
 using ControlHub.Domain.Identity.Enums;
 using FluentAssertions;
-using System.Net;
-using System.Net.Http.Json;
-using Xunit;
 
 namespace ControlHub.Api.Tests.FunctionalTests.Accounts;
 
@@ -21,7 +20,7 @@ public class AuthTests : BaseIntegrationTest
         // Arrange
         var email = "signoutuser@example.com";
         var password = "StrongPassword123!";
-        
+
         await Client.PostAsJsonAsync("/api/Auth/users/register", new RegisterUserRequest
         {
             Value = email,
@@ -35,9 +34,9 @@ public class AuthTests : BaseIntegrationTest
             Password = password,
             Type = IdentifierType.Email
         });
-        
+
         var tokens = await loginResponse.Content.ReadFromJsonAsync<SignInResponse>();
-        
+
         // Authorize for the SignOut request
         Client.DefaultRequestHeaders.Authorization = new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", tokens!.AccessToken);
 
@@ -63,7 +62,7 @@ public class AuthTests : BaseIntegrationTest
             accessToken = "any",
             refreshToken = "any"
         };
-        
+
         // Ensure no auth header
         Client.DefaultRequestHeaders.Authorization = null;
 

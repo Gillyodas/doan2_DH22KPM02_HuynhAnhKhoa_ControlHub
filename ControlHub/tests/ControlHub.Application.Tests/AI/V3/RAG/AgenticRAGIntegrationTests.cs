@@ -1,8 +1,3 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading;
-using System.Threading.Tasks;
 using ControlHub.Application.AI.V3.RAG;
 using ControlHub.Application.Common.Interfaces.AI;
 using ControlHub.Application.Common.Interfaces.AI.V3.RAG;
@@ -10,7 +5,6 @@ using ControlHub.Application.Common.Logging.Interfaces;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 using Moq;
-using Xunit;
 
 namespace ControlHub.Application.Tests.AI.V3.RAG
 {
@@ -46,7 +40,7 @@ namespace ControlHub.Application.Tests.AI.V3.RAG
             // Arrange
             var query = "authentication error";
             var embedding = new float[] { 0.1f, 0.2f, 0.3f };
-            
+
             _embeddingServiceMock
                 .Setup(x => x.GenerateEmbeddingAsync(query))
                 .ReturnsAsync(embedding);
@@ -89,7 +83,7 @@ namespace ControlHub.Application.Tests.AI.V3.RAG
         {
             // Arrange
             var query = "Why did user login fail after password reset and what was the root cause?";
-            
+
             _multiHopRetrieverMock
                 .Setup(x => x.RetrieveAsync(query, It.IsAny<MultiHopOptions>(), It.IsAny<CancellationToken>()))
                 .ReturnsAsync(new MultiHopResult(
@@ -180,11 +174,11 @@ namespace ControlHub.Application.Tests.AI.V3.RAG
                     It.IsAny<float[]>(),
                     It.IsAny<int>()))
                 .ReturnsAsync(Enumerable.Range(1, 20)
-                    .Select(i => new SearchResult 
-                    { 
-                        Id = i.ToString(), 
-                        Score = 0.5 + (i * 0.01), 
-                        Payload = new Dictionary<string, object> { ["Content"] = $"Doc {i}" } 
+                    .Select(i => new SearchResult
+                    {
+                        Id = i.ToString(),
+                        Score = 0.5 + (i * 0.01),
+                        Payload = new Dictionary<string, object> { ["Content"] = $"Doc {i}" }
                     })
                     .ToList());
 

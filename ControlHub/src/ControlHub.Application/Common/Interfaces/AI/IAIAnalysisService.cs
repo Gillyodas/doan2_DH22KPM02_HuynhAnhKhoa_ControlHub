@@ -1,5 +1,3 @@
-using System.Threading.Tasks;
-
 namespace ControlHub.Application.Common.Interfaces.AI
 {
     public interface IAIAnalysisService

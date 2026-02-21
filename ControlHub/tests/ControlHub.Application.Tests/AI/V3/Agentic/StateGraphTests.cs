@@ -1,11 +1,7 @@
-using System.Collections.Generic;
-using System.Threading;
-using System.Threading.Tasks;
 using ControlHub.Application.AI.V3.Agentic;
 using ControlHub.Application.Common.Interfaces.AI.V3.Agentic;
 using Microsoft.Extensions.Logging;
 using Moq;
-using Xunit;
 
 namespace ControlHub.Application.Tests.AI.V3.Agentic
 {

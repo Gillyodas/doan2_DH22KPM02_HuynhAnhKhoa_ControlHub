@@ -4,7 +4,6 @@ using ControlHub.SharedKernel.Results;
 using ControlHub.SharedKernel.Roles;
 using MediatR;
 using Microsoft.Extensions.Logging;
-using System;
 
 namespace ControlHub.Application.Roles.Commands.UpdateRole
 {

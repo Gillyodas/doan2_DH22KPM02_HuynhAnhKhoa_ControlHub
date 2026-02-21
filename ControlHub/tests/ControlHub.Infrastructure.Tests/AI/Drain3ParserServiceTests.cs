@@ -1,10 +1,6 @@
-using System;
-using System.Collections.Generic;
-using System.Threading.Tasks;
-using Xunit;
-using FluentAssertions;
-using ControlHub.Infrastructure.AI.Parsing;
 using ControlHub.Application.Common.Logging;
+using ControlHub.Infrastructure.AI.Parsing;
+using FluentAssertions;
 
 namespace ControlHub.Infrastructure.Tests.AI
 {

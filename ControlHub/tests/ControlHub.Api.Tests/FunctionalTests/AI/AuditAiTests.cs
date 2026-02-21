@@ -1,9 +1,7 @@
 using System.Net;
-using System.Threading.Tasks;
+using System.Net.Http.Json;
 using ControlHub.Api.Tests.Abstractions;
 using FluentAssertions;
-using Xunit;
-using System.Net.Http.Json;
 
 namespace ControlHub.Api.Tests.FunctionalTests.AI
 {
@@ -21,7 +19,7 @@ namespace ControlHub.Api.Tests.FunctionalTests.AI
 
             // Assert
             response.StatusCode.Should().Be(HttpStatusCode.OK);
-            
+
             var result = await response.Content.ReadFromJsonAsync<VersionResponse>();
             result.Should().NotBeNull();
             // Note: In integration test environment, appsettings might be different ("V1" vs "V2.5").

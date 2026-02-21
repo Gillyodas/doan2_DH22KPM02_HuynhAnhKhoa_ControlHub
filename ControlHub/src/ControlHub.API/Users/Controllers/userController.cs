@@ -1,12 +1,11 @@
 using ControlHub.API.Controllers;
 using ControlHub.API.Users.ViewModels.Request;
 using ControlHub.API.Users.ViewModels.Response;
-using ControlHub.Application.Users.Commands.UpdateUsername;
-using ControlHub.Application.Users.Commands.UpdateUser;
 using ControlHub.Application.Users.Commands.DeleteUser;
+using ControlHub.Application.Users.Commands.UpdateUser;
+using ControlHub.Application.Users.Commands.UpdateUsername;
+using ControlHub.Application.Users.Queries.GetUserById;
 using ControlHub.Application.Users.Queries.GetUsers;
-using ControlHub.Application.Users.Queries.GetUserById;
-using ControlHub.Application.Users.Queries.GetUserById;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -35,7 +34,7 @@ namespace ControlHub.API.Users.Controllers
         {
             var query = new GetUsersQuery(page, pageSize, searchTerm);
             var result = await Mediator.Send(query, cancellationToken);
-            
+
             if (result.IsFailure) return HandleFailure(result);
 
             return Ok(result.Value);
@@ -62,15 +61,15 @@ namespace ControlHub.API.Users.Controllers
         public async Task<IActionResult> UpdateUser(Guid id, [FromBody] UpdateUserRequest request, CancellationToken cancellationToken)
         {
             if (id != request.Id) return BadRequest("Id mismatch");
-            
+
             var command = new UpdateUserCommand(
-                id, 
-                request.Email, 
-                request.FirstName, 
-                request.LastName, 
-                request.PhoneNumber, 
+                id,
+                request.Email,
+                request.FirstName,
+                request.LastName,
+                request.PhoneNumber,
                 request.IsActive);
-                
+
             var result = await Mediator.Send(command, cancellationToken);
 
             if (result.IsFailure) return HandleFailure(result);

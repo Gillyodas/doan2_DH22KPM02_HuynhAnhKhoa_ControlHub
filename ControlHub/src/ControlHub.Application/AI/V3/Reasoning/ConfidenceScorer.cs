@@ -1,7 +1,3 @@
-using System;
-using System.Linq;
-using System.Threading;
-using System.Threading.Tasks;
 using ControlHub.Application.Common.Interfaces.AI.V3.Reasoning;
 using Microsoft.Extensions.Logging;
 
@@ -35,8 +31,8 @@ namespace ControlHub.Application.AI.V3.Reasoning
             var completenessBonus = CalculateCompletenessBonus(result);
 
             // Weighted average
-            var overall = (retrievalConfidence * 0.4f) + 
-                          (reasoningConfidence * 0.4f) + 
+            var overall = (retrievalConfidence * 0.4f) +
+                          (reasoningConfidence * 0.4f) +
                           (completenessBonus * 0.2f);
 
             // Clamp to [0, 1]

@@ -1,4 +1,4 @@
-using System.Security.Claims;
+ï»¿using System.Security.Claims;
 using ControlHub.Application.Roles.Interfaces.Repositories;
 using ControlHub.Application.Tokens; // Ch?a AppClaimTypes
 using Microsoft.AspNetCore.Authentication;
@@ -22,14 +22,14 @@ namespace ControlHub.Infrastructure.Authorization.Permissions
 
         public async Task<ClaimsPrincipal> TransformAsync(ClaimsPrincipal principal)
         {
-            // 1. Ki?m tra xác th?c co b?n
+            // 1. Ki?m tra xï¿½c th?c co b?n
             if (principal.Identity?.IsAuthenticated != true)
             {
-                // User chua dang nh?p, không c?n làm gì
+                // User chua dang nh?p, khï¿½ng c?n lï¿½m gï¿½
                 return principal;
             }
 
-            // 2. Ki?m tra xem dã transform chua (tránh ch?y l?p l?i)
+            // 2. Ki?m tra xem dï¿½ transform chua (trï¿½nh ch?y l?p l?i)
             if (principal.HasClaim(c => c.Type == "Permission"))
             {
                 return principal;
@@ -39,32 +39,32 @@ namespace ControlHub.Infrastructure.Authorization.Permissions
             var roleIdClaim = principal.FindFirst(AppClaimTypes.Role) ?? principal.FindFirst(ClaimTypes.Role);
             if (roleIdClaim == null || !Guid.TryParse(roleIdClaim.Value, out Guid roleId))
             {
-                _logger.LogWarning("--- PermissionClaimsTransformation: Không tìm th?y RoleId h?p l? trong token. B? qua. ---");
+                _logger.LogWarning("--- PermissionClaimsTransformation: Khï¿½ng tï¿½m th?y RoleId h?p l? trong token. B? qua. ---");
                 return principal;
             }
 
             // 4. Truy xu?t DB d? l?y Permissions
             using var scope = _serviceProvider.CreateScope();
-            var roleQueries = scope.ServiceProvider.GetRequiredService<IRoleQueries>();
+            var roleRepository = scope.ServiceProvider.GetRequiredService<IRoleRepository>();
 
-            var role = await roleQueries.GetByIdAsync(roleId, CancellationToken.None);
+            var role = await roleRepository.GetByIdAsync(roleId, CancellationToken.None);
 
-            // Case: Role không t?n t?i (dã b? xóa?)
+            // Case: Role khï¿½ng t?n t?i (dï¿½ b? xï¿½a?)
             if (role == null)
             {
-                _logger.LogWarning("--- PermissionClaimsTransformation: RoleId {RoleId} không t?n t?i trong DB. ---", roleId);
+                _logger.LogWarning("--- PermissionClaimsTransformation: RoleId {RoleId} khï¿½ng t?n t?i trong DB. ---", roleId);
                 return principal;
             }
 
-            // Case: Role không có quy?n nào
+            // Case: Role khï¿½ng cï¿½ quy?n nï¿½o
             if (!role.Permissions.Any())
             {
-                _logger.LogInformation("--- PermissionClaimsTransformation: Role {RoleName} không có permission nào. ---", role.Name);
+                _logger.LogInformation("--- PermissionClaimsTransformation: Role {RoleName} khï¿½ng cï¿½ permission nï¿½o. ---", role.Name);
                 return principal;
             }
 
-            // 5. Clone và thêm Claims
-            // Luu ý: Ph?i Clone identity, không s?a tr?c ti?p trên principal g?c d? tránh side-effect
+            // 5. Clone vï¿½ thï¿½m Claims
+            // Luu ï¿½: Ph?i Clone identity, khï¿½ng s?a tr?c ti?p trï¿½n principal g?c d? trï¿½nh side-effect
             var cloneIdentity = ((ClaimsIdentity)principal.Identity).Clone();
 
             var permissionCodes = new List<string>();
@@ -77,7 +77,7 @@ namespace ControlHub.Infrastructure.Authorization.Permissions
 
             // 6. Log k?t qu? (Gi?ng PermissionService cu)
             _logger.LogInformation(
-                "--- PermissionClaimsTransformation: Ðã thêm {Count} quy?n cho Role {RoleName}. Danh sách: {Permissions} ---",
+                "--- PermissionClaimsTransformation: ï¿½ï¿½ thï¿½m {Count} quy?n cho Role {RoleName}. Danh sï¿½ch: {Permissions} ---",
                 role.Permissions.Count,
                 role.Name,
                 string.Join(", ", permissionCodes));

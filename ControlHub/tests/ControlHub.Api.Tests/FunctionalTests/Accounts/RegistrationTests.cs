@@ -1,10 +1,9 @@
+using System.Net;
+using System.Net.Http.Json;
 using ControlHub.Api.Tests.Abstractions;
 using ControlHub.API.Accounts.ViewModels.Request;
 using ControlHub.Domain.Identity.Enums;
 using FluentAssertions;
-using System.Net;
-using System.Net.Http.Json;
-using Xunit;
 
 namespace ControlHub.Api.Tests.FunctionalTests.Accounts;
 

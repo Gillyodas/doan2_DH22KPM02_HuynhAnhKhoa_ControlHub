@@ -1,10 +1,4 @@
-using System;
-using System.Collections.Generic;
-using System.IO.Pipelines;
-using System.Linq;
-using System.Text;
 using System.Threading.Channels;
-using System.Threading.Tasks;
 using ControlHub.Application.Common.Events;
 using ControlHub.Infrastructure.RealTime.Hubs;
 using Microsoft.AspNetCore.SignalR;
@@ -20,7 +14,8 @@ namespace ControlHub.Infrastructure.RealTime.Services
         private readonly ILogger<LoginEventBuffer> _logger;
         private readonly TimeSpan _flushInterval = TimeSpan.FromMilliseconds(1500);
 
-        public LoginEventBuffer(IHubContext<DashboardHub> hubContext, ILogger<LoginEventBuffer> logger){
+        public LoginEventBuffer(IHubContext<DashboardHub> hubContext, ILogger<LoginEventBuffer> logger)
+        {
             _channel = Channel.CreateUnbounded<LoginAttemptedEvent>(new UnboundedChannelOptions
             {
                 SingleReader = true,
@@ -52,9 +47,9 @@ namespace ControlHub.Infrastructure.RealTime.Services
 
                     try
                     {
-                        while(await _channel.Reader.WaitToReadAsync(cts.Token))
+                        while (await _channel.Reader.WaitToReadAsync(cts.Token))
                         {
-                            while(_channel.Reader.TryRead(out var evt))
+                            while (_channel.Reader.TryRead(out var evt))
                             {
                                 batch.Add(evt);
                             }
@@ -65,13 +60,13 @@ namespace ControlHub.Infrastructure.RealTime.Services
                         //TODO: Timeout - flush batch
                     }
 
-                    if(batch.Count > 0)
+                    if (batch.Count > 0)
                     {
                         await FlushBatchAsync(batch, cancellationToken);
                         batch.Clear();
                     }
                 }
-                catch(Exception ex)
+                catch (Exception ex)
                 {
                     _logger.LogError(ex, "Error in LoginEventBuffer"); //TODO: Format log
                 }

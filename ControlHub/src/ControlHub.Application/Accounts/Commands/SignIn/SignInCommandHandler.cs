@@ -1,4 +1,3 @@
-using System.IO;
 using ControlHub.Application.Accounts.DTOs;
 using ControlHub.Application.Accounts.Interfaces.Repositories;
 using ControlHub.Application.Common.Events;
@@ -6,7 +5,6 @@ using ControlHub.Application.Common.Persistence;
 using ControlHub.Application.Tokens.Interfaces;
 using ControlHub.Application.Tokens.Interfaces.Generate;
 using ControlHub.Application.Tokens.Interfaces.Repositories;
-using ControlHub.Domain.Identity.Enums;
 using ControlHub.Domain.Identity.Identifiers.Services;
 using ControlHub.Domain.Identity.Security;
 using ControlHub.Domain.TokenManagement.Enums;
@@ -122,7 +120,6 @@ namespace ControlHub.Application.Accounts.Commands.SignIn
             var accessToken = _tokenFactory.Create(account.Id, accessTokenValue, TokenType.AccessToken);
             var refreshToken = _tokenFactory.Create(account.Id, refreshTokenValue, TokenType.RefreshToken);
 
-            await _tokenRepository.AddAsync(accessToken, cancellationToken);
             await _tokenRepository.AddAsync(refreshToken, cancellationToken);
             await _uow.CommitAsync(cancellationToken);
 

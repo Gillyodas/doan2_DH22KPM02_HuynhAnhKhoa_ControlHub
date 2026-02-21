@@ -1,12 +1,5 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Net.Http;
 using System.Text;
 using System.Text.Json;
-using System.Threading;
-using System.Threading.Tasks;
-using ControlHub.Application.Common.Interfaces.AI.V3.RAG;
 using ControlHub.Application.Common.Interfaces.AI.V3.Reasoning;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
@@ -46,7 +39,7 @@ namespace ControlHub.Infrastructure.AI.V3.Reasoning
             {
                 // Build prompt với Chain-of-Thought
                 var prompt = BuildPrompt(context, options);
-                
+
                 _logger.LogInformation("Reasoning for query: {Query}", context.Query);
 
                 // Call Ollama
@@ -179,21 +172,21 @@ namespace ControlHub.Infrastructure.AI.V3.Reasoning
                 // Use SendAsync with ResponseHeadersRead for efficiency and better control
                 var request = new HttpRequestMessage(HttpMethod.Post, _ollamaUrl) { Content = content };
                 var response = await _httpClient.SendAsync(request, HttpCompletionOption.ResponseHeadersRead, cts.Token);
-                
+
                 response.EnsureSuccessStatusCode();
 
                 // Read entire response into string
                 var responseJson = await response.Content.ReadAsStringAsync(cts.Token);
-                
+
                 using var jsonDoc = JsonDocument.Parse(responseJson);
                 if (jsonDoc.RootElement.TryGetProperty("response", out var respProp))
                 {
                     return respProp.GetString() ?? string.Empty;
                 }
-                
-                _logger.LogWarning("LLM response did not contain 'response' property. Raw: {Raw}", 
+
+                _logger.LogWarning("LLM response did not contain 'response' property. Raw: {Raw}",
                     responseJson.Length > 200 ? responseJson.Substring(0, 200) : responseJson);
-                
+
                 return string.Empty;
             }
             catch (OperationCanceledException) when (!ct.IsCancellationRequested)
@@ -227,7 +220,7 @@ namespace ControlHub.Infrastructure.AI.V3.Reasoning
                     catch (JsonException)
                     {
                         _logger.LogWarning("Standard JSON parse failed, attempting aggressive cleaning...");
-                        
+
                         // 3. Aggressive cleaning: Remove all escaped double quotes and literal backslashes
                         var aggressive = jsonStr.Replace("\\\"", "\"").Replace("\\\\", "\\");
                         try
@@ -237,7 +230,7 @@ namespace ControlHub.Infrastructure.AI.V3.Reasoning
                         catch (JsonException ex)
                         {
                             _logger.LogWarning(ex, "Aggressive cleaning failed. Attempting Regex extraction fallback...");
-                            
+
                             // 4. Regex fallback extraction
                             return ExtractWithRegex(jsonStr, rawResponse);
                         }
@@ -300,7 +293,7 @@ namespace ControlHub.Infrastructure.AI.V3.Reasoning
                         // Handle hierarchical step objects like { "step": "...", "description": "..." }
                         var title = GetStringProperty(stepElement, "step") ?? GetStringProperty(stepElement, "name");
                         var desc = GetStringProperty(stepElement, "description") ?? GetStringProperty(stepElement, "content");
-                        
+
                         var combined = !string.IsNullOrEmpty(title) && !string.IsNullOrEmpty(desc)
                             ? $"{title}: {desc}"
                             : title ?? desc;
@@ -327,7 +320,7 @@ namespace ControlHub.Infrastructure.AI.V3.Reasoning
 
             // Remove Markdown code block markers
             var result = System.Text.RegularExpressions.Regex.Replace(input, @"```(json)?", "");
-            
+
             // If the whole thing is wrapped in quotes (Ollama sometimes does this with double-escaping)
             if (result.Trim().StartsWith("\"") && result.Trim().EndsWith("\""))
             {
@@ -357,7 +350,7 @@ namespace ControlHub.Infrastructure.AI.V3.Reasoning
 
             var solution = solutionMatch.Success ? solutionMatch.Groups[1].Value : "Partial Diagnosis";
             var explanation = explanationMatch.Success ? explanationMatch.Groups[1].Value : "Refer to raw response";
-            
+
             var steps = new List<string>();
             if (stepsMatch.Success)
             {
@@ -385,7 +378,7 @@ namespace ControlHub.Infrastructure.AI.V3.Reasoning
                     {
                         var value = m.Groups[1].Value.Trim();
                         // Filter out JSON key names and very short strings
-                        if (value.Length > 5 && 
+                        if (value.Length > 5 &&
                             !value.Equals("step", StringComparison.OrdinalIgnoreCase) &&
                             !value.Equals("name", StringComparison.OrdinalIgnoreCase) &&
                             !value.Equals("description", StringComparison.OrdinalIgnoreCase) &&

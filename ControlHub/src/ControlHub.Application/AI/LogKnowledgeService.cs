@@ -15,8 +15,8 @@ namespace ControlHub.Application.AI
         private const string CollectionName = "LogDefinitions";
 
         public LogKnowledgeService(
-            IVectorDatabase vectorDb, 
-            IEmbeddingService embeddingService, 
+            IVectorDatabase vectorDb,
+            IEmbeddingService embeddingService,
             IAIAnalysisService aiService)
         {
             _vectorDb = vectorDb;
@@ -30,9 +30,9 @@ namespace ControlHub.Application.AI
             // Scan toàn bộ assembly chứa CommonLogs để tìm các class XXXLogs
             var assembly = typeof(CommonLogs).Assembly;
             var logClasses = assembly.GetTypes()
-                .Where(t => t.Name.EndsWith("Logs") && t.IsClass && t.IsSealed && t.IsAbstract == false); 
-                // Lưu ý: C# static class là abstract sealed. Nhưng LogCode files của ta là public static class? Yes.
-                // Điều kiện: tìm các class có tên *Logs.
+                .Where(t => t.Name.EndsWith("Logs") && t.IsClass && t.IsSealed && t.IsAbstract == false);
+            // Lưu ý: C# static class là abstract sealed. Nhưng LogCode files của ta là public static class? Yes.
+            // Điều kiện: tìm các class có tên *Logs.
 
             foreach (var type in logClasses)
             {
@@ -47,10 +47,10 @@ namespace ControlHub.Application.AI
 
                     // Text để tạo vector: Cần chứa cả Code lẫn Message để AI hiểu ngữ nghĩa
                     var textToEmbed = $"Code: {logCode.Code}. Meaning: {logCode.Message}";
-                    
+
                     // Tạo Embedding
                     var vector = await _embeddingService.GenerateEmbeddingAsync(textToEmbed);
-                    
+
                     if (vector.Length == 0) continue; // Skip nếu lỗi
 
                     // Lưu vào Qdrant
@@ -88,7 +88,7 @@ namespace ControlHub.Application.AI
             // Nhưng RAG mạnh ở chỗ nếu ta lưu thêm "Cách Fix" trong Vector DB thì sẽ retrieve được).
             // Ở đây demo: Ta search Vector DB bằng chính Log Message để xem có "LogCode tương tự" nào khác không (ít tác dụng nếu data ít).
             // Tốt hơn: Search Vector Database để tìm "Tài liệu xử lý lỗi" (Documentation).
-            
+
             // DEMO SIMPLE RAG:
             // Lấy 1 log lỗi đầu tiên và tìm kiếm trong DB xem có LogCode nào tương tự (để AI hiểu nhóm lỗi)
             var errorLog = logs.FirstOrDefault(l => l.Level == "Error" || l.Level == "Warning");
@@ -110,7 +110,7 @@ namespace ControlHub.Application.AI
 
             // Bước 2.2: Optimize & Build Prompt
             var prompt = new StringBuilder();
-            
+
             // Map Language Code to Full Name
             string languageName = lang.ToLower() switch
             {
@@ -134,7 +134,7 @@ namespace ControlHub.Application.AI
             // OPTIMIZATION: Filter & Truncate
             // 1. Prioritize Errors & Warnings
             var criticalLogs = logs.Where(l => l.Level == "Error" || l.Level == "Warning").ToList();
-            
+
             // 2. Get recent Context (Information) - Max 20 last entries
             var infoLogs = logs.Where(l => l.Level != "Error" && l.Level != "Warning")
                                .TakeLast(20)
@@ -149,8 +149,8 @@ namespace ControlHub.Application.AI
             foreach (var log in logsToAnalyze)
             {
                 // Truncate message to avoid massive stack traces (Max 500 chars)
-                var cleanMessage = log.Message?.Length > 500 
-                    ? log.Message.Substring(0, 500) + "...[TRUNCATED]" 
+                var cleanMessage = log.Message?.Length > 500
+                    ? log.Message.Substring(0, 500) + "...[TRUNCATED]"
                     : log.Message;
 
                 // FIX: Don't print "NoCode" if LogCode is missing. 
@@ -172,7 +172,7 @@ namespace ControlHub.Application.AI
             string languageName = lang.ToLower() switch
             {
                 "vi" => "Vietnamese",
-                "vn" => "Vietnamese", 
+                "vn" => "Vietnamese",
                 "ja" => "Japanese",
                 "ko" => "Korean",
                 "zh" => "Chinese",
@@ -189,16 +189,16 @@ namespace ControlHub.Application.AI
             // Filter & Truncate for Chat Context
             // Prioritize recent logs (last 50) regarding constraints
             var logsToAnalyze = logs.OrderBy(l => l.Timestamp)
-                                    .TakeLast(50) 
+                                    .TakeLast(50)
                                     .ToList();
 
             foreach (var log in logsToAnalyze)
             {
-                 // Handling "NoCode" gracefully: If LogCode is null, don't show it.
-                 var codeDisplay = log.LogCode?.Code != null ? $"[{log.LogCode.Code}] " : "";
-                 var cleanMessage = log.Message?.Length > 300 
-                    ? log.Message.Substring(0, 300) + "..." 
-                    : log.Message;
+                // Handling "NoCode" gracefully: If LogCode is null, don't show it.
+                var codeDisplay = log.LogCode?.Code != null ? $"[{log.LogCode.Code}] " : "";
+                var cleanMessage = log.Message?.Length > 300
+                   ? log.Message.Substring(0, 300) + "..."
+                   : log.Message;
 
                 prompt.AppendLine($"[{log.Timestamp:HH:mm:ss}] [{log.Level}] {codeDisplay}{cleanMessage}");
             }

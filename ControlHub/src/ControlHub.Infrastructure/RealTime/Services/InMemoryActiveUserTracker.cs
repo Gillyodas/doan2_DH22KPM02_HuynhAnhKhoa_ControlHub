@@ -1,9 +1,3 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
 namespace ControlHub.Infrastructure.RealTime.Services
 {
     /// <summary>
@@ -16,7 +10,7 @@ namespace ControlHub.Infrastructure.RealTime.Services
         public int Decrement()
         {
             var newValue = Interlocked.Decrement(ref _count);
-            if(newValue < 0)
+            if (newValue < 0)
             {
                 Interlocked.Exchange(ref _count, 0);
                 return 0;

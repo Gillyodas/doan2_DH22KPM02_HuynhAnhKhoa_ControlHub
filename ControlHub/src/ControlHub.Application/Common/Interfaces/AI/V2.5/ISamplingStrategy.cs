@@ -1,5 +1,3 @@
-using System.Collections.Generic;
-
 namespace ControlHub.Application.Common.Interfaces.AI
 {
     public interface ISamplingStrategy

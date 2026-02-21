@@ -1,6 +1,3 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
 using ControlHub.Application.Common.Interfaces.AI.V3.RAG;
@@ -43,7 +40,7 @@ namespace ControlHub.Infrastructure.AI.V3.RAG
             @"Request finished.*?-\s*(\d{3})\s", RegexOptions.Compiled);
 
         private static readonly Regex ErrorCodeRegex = new(
-            @"(\w+\.\w+(?:Error|Format|Exception|NotFound|Unauthorized|Forbidden|Conflict|Duplicate|Invalid\w*))", 
+            @"(\w+\.\w+(?:Error|Format|Exception|NotFound|Unauthorized|Forbidden|Conflict|Duplicate|Invalid\w*))",
             RegexOptions.Compiled);
 
         private static readonly Regex EndpointRegex = new(
@@ -93,7 +90,7 @@ namespace ControlHub.Infrastructure.AI.V3.RAG
                 int priority;
                 float scoreBoost;
 
-                if (level.Equals("Error", StringComparison.OrdinalIgnoreCase) || 
+                if (level.Equals("Error", StringComparison.OrdinalIgnoreCase) ||
                     level.Equals("Fatal", StringComparison.OrdinalIgnoreCase) ||
                     level.Equals("Critical", StringComparison.OrdinalIgnoreCase))
                 {
@@ -174,7 +171,7 @@ namespace ControlHub.Infrastructure.AI.V3.RAG
                 var level = log.Metadata.GetValueOrDefault("level", "Information");
 
                 // Count severity distribution
-                if (level.Equals("Error", StringComparison.OrdinalIgnoreCase) || 
+                if (level.Equals("Error", StringComparison.OrdinalIgnoreCase) ||
                     level.Equals("Fatal", StringComparison.OrdinalIgnoreCase))
                     errorCount++;
                 else if (level.Equals("Warning", StringComparison.OrdinalIgnoreCase))
@@ -207,7 +204,7 @@ namespace ControlHub.Infrastructure.AI.V3.RAG
                 }
 
                 // Extract error message from WARNING/ERROR entries
-                if (errorMessage == null && (level.Equals("Warning", StringComparison.OrdinalIgnoreCase) 
+                if (errorMessage == null && (level.Equals("Warning", StringComparison.OrdinalIgnoreCase)
                     || level.Equals("Error", StringComparison.OrdinalIgnoreCase)))
                 {
                     // Extract the message part after the level indicator

@@ -4,8 +4,6 @@ import type {
   PagedResult,
   CreateRolesRequest,
   CreateRolesResponse,
-  AddPermissionsForRoleRequest,
-  AddPermissionsForRoleResponse,
   UpdateRoleRequest,
 } from "./types"
 
@@ -100,12 +98,12 @@ export async function deleteRole(
  */
 export async function addPermissionsForRole(
   roleId: string,
-  req: AddPermissionsForRoleRequest,
+  permissionIds: string[],
   accessToken: string
-): Promise<AddPermissionsForRoleResponse> {
-  return fetchJson<AddPermissionsForRoleResponse>(`/api/Role/roles/${roleId}/permissions`, {
-    method: "POST",
-    body: req,
+): Promise<void> {
+  return fetchJson<void>(`/api/Role/${roleId}/permissions`, {
+    method: "PUT",
+    body: permissionIds,
     accessToken,
   })
 }
