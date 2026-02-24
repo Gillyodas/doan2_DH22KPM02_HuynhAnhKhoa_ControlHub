@@ -36,10 +36,15 @@ namespace ControlHub.Domain.AccessControl.Aggregates
 
         public static Role Create(Guid id, string name, string description)
         {
-            if (id == Guid.Empty) throw new ArgumentException("Id is required", nameof(id));
-            if (string.IsNullOrWhiteSpace(name)) throw new ArgumentException("Name is required", nameof(name));
+            if (id == Guid.Empty)
+                throw new ArgumentException("Id is required", nameof(id));
+            if (string.IsNullOrWhiteSpace(name))
+                throw new ArgumentException("Name is required", nameof(name));
 
-            return new Role(id, name.Trim(), description?.Trim() ?? string.Empty, true);
+            var role = new Role(id, name.Trim(), description?.Trim() ?? string.Empty, true);
+            role.RaiseDomainEvent(new RoleCreatedEvent(id));
+
+            return role;
         }
 
         // Logic Update
@@ -119,6 +124,10 @@ namespace ControlHub.Domain.AccessControl.Aggregates
 
         public void Deactivate() => IsActive = false;
         public void Activate() => IsActive = true;
-        public void Delete() => IsDeleted = true;
+        public void Delete()
+        {
+            RaiseDomainEvent(new RoleDeletedEvent(Id));
+            IsDeleted = true;
+        }
     }
 }

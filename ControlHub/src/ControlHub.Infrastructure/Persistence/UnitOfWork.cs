@@ -48,12 +48,12 @@ namespace ControlHub.Infrastructure.Persistence
             await using var transaction = await _dbContext.Database.BeginTransactionAsync(ct);
             try
             {
-                _logger.LogInformation("Implicit transaction started");
-
-                await DispatchDomainEventsAsync(ct);
+                _logger.LogInformation("Implicit transaction started");        
 
                 var changes = await SaveChangesAsync(ct);
                 await transaction.CommitAsync(ct);
+
+                await DispatchDomainEventsAsync(ct);
 
                 _logger.LogInformation(
                 "Transaction committed successfully with {Changes} changes.",

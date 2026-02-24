@@ -76,8 +76,8 @@ namespace ControlHub.Infrastructure.Authorization.Permissions
             }
 
             // 6. Log k?t qu? (Gi?ng PermissionService cu)
-            _logger.LogInformation(
-                "--- PermissionClaimsTransformation: �� th�m {Count} quy?n cho Role {RoleName}. Danh s�ch: {Permissions} ---",
+            _logger.LogDebug(
+                "--- PermissionClaimsTransformation: Đã thêm {Count} quyền cho Role {RoleName}. Danh sách: {Permissions} ---",
                 role.Permissions.Count,
                 role.Name,
                 string.Join(", ", permissionCodes));
