@@ -119,7 +119,7 @@ export function RolesTableCard({
     <div className="flex flex-col h-full bg-sidebar/10 backdrop-blur-md rounded-2xl border border-sidebar-border overflow-hidden shadow-2xl transition-all hover:border-sidebar-border/80">
       <div className="p-6 border-b border-sidebar-border/40 bg-sidebar-accent/5">
         <div className="flex flex-col gap-4">
-          <div className="flex items-center justify-between">
+          <div className="flex items-center justify-between flex-wrap gap-3">
             <div className="flex items-center gap-3">
               <div className="p-2.5 bg-sidebar-primary/10 text-sidebar-primary rounded-xl shadow-inner">
                 <GripVertical className="w-5 h-5" />
@@ -132,7 +132,7 @@ export function RolesTableCard({
                 </div>
               </div>
             </div>
-            <div className="flex gap-2">
+            <div className="flex gap-2 flex-wrap justify-end">
               <Button
                 variant="outline"
                 size="sm"
