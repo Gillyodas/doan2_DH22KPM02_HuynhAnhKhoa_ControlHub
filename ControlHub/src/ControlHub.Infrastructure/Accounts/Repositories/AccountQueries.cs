@@ -27,12 +27,12 @@ namespace ControlHub.Infrastructure.Accounts.Repositories
                 .FirstOrDefaultAsync(a => a.Id == id, cancellationToken);
         }
 
-        public async Task<Account?> GetByIdentifierAsync(IdentifierType identifierType, string normalizedValue, CancellationToken cancellationToken)
+        public async Task<Account?> GetByIdentifierAsync(string normalizedValue, CancellationToken cancellationToken)
         {
             return await _db.Accounts
                 .AsNoTracking()
                 .Include(a => a.User)
-                .Where(a => a.Identifiers.Any(i => i.Type == identifierType && i.NormalizedValue == normalizedValue))
+                .Where(a => a.Identifiers.Any(i => i.NormalizedValue == normalizedValue))
                 .FirstOrDefaultAsync(cancellationToken);
         }
 

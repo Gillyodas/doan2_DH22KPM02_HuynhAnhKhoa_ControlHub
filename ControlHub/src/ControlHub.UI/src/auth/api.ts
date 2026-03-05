@@ -64,7 +64,6 @@ export async function signIn(req: SignInRequest): Promise<AuthData> {
   const data = await postJson<AuthData>("/api/Auth/auth/signin", {
     value: req.value,
     password: req.password,
-    type: req.type,
     identifierConfigId: req.identifierConfigId,
   })
 

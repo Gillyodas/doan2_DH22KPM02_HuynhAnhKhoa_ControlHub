@@ -1,6 +1,7 @@
 using ControlHub.Domain.AccessControl.Aggregates;
 using ControlHub.Domain.Identity.Entities;
 using ControlHub.Domain.Identity.Enums;
+using ControlHub.Domain.Identity.Identifiers;
 using ControlHub.Domain.Identity.ValueObjects;
 using ControlHub.Domain.TokenManagement.Aggregates;
 using ControlHub.SharedKernel.Accounts;
@@ -29,6 +30,8 @@ namespace ControlHub.Domain.Identity.Aggregates
         // Collections (EF Core s? map vào field private)
         private readonly List<Identifier> _identifiers = new();
         public IReadOnlyCollection<Identifier> Identifiers => _identifiers.AsReadOnly();
+
+        //public Guid IdentifierId { get; private set;}
 
         private readonly List<Token> _tokens = new();
         public IReadOnlyCollection<Token> Tokens => _tokens.AsReadOnly();

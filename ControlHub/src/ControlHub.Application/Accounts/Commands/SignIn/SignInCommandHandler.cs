@@ -1,3 +1,4 @@
+using System.Text.RegularExpressions;
 using ControlHub.Application.Accounts.DTOs;
 using ControlHub.Application.Accounts.Interfaces.Repositories;
 using ControlHub.Application.Common.Events;
@@ -20,7 +21,6 @@ namespace ControlHub.Application.Accounts.Commands.SignIn
     {
         private readonly ILogger<SignInCommandHandler> _logger;
         private readonly IAccountQueries _accountQueries;
-        private readonly IdentifierFactory _identifierFactory;
         private readonly IPasswordHasher _passwordHasher;
         private readonly IAccessTokenGenerator _accessTokenGenerator;
         private readonly IRefreshTokenGenerator _refreshTokenGenerator;
@@ -32,7 +32,6 @@ namespace ControlHub.Application.Accounts.Commands.SignIn
         public SignInCommandHandler(
             ILogger<SignInCommandHandler> logger,
             IAccountQueries accountQueries,
-            IdentifierFactory identifierFactory,
             IPasswordHasher passwordHasher,
             IAccessTokenGenerator accessTokenGenerator,
             IRefreshTokenGenerator refreshTokenGenerator,
@@ -43,7 +42,6 @@ namespace ControlHub.Application.Accounts.Commands.SignIn
         {
             _logger = logger;
             _accountQueries = accountQueries;
-            _identifierFactory = identifierFactory;
             _passwordHasher = passwordHasher;
             _accessTokenGenerator = accessTokenGenerator;
             _refreshTokenGenerator = refreshTokenGenerator;
@@ -56,20 +54,10 @@ namespace ControlHub.Application.Accounts.Commands.SignIn
         public async Task<Result<SignInDTO>> Handle(SignInCommand request, CancellationToken cancellationToken)
         {
             _logger.LogInformation("{@LogCode} | Ident: {Value}",
-                AccountLogs.SignIn_Started,
+                AccountLogs.SignIn_Started.Code,
                 request.Value);
 
-            var result = await _identifierFactory.CreateAsync(request.Type, request.Value, request.IdentifierConfigId, cancellationToken);
-            if (result.IsFailure)
-            {
-                _ = PublishLoginEvent(request, false, "Account not found");
-                _logger.LogWarning("{@LogCode} | Ident: {Ident} | Error: {Error}",
-                    AccountLogs.SignIn_InvalidIdentifier,
-                    request.Value, result.Error);
-                return Result<SignInDTO>.Failure(result.Error);
-            }
-
-            var account = await _accountQueries.GetByIdentifierAsync(request.Type, result.Value.NormalizedValue, cancellationToken);
+            var account = await _accountQueries.GetByIdentifierAsync(request.Value, cancellationToken);
             if (account is null || account.IsDeleted == true || account.IsActive == false)
             {
                 _ = PublishLoginEvent(request, false, "Account not found or inactive");
@@ -142,7 +130,6 @@ namespace ControlHub.Application.Accounts.Commands.SignIn
             return _publisher.Publish(new LoginAttemptedEvent
             {
                 IsSuccess = success,
-                IdentifierType = req.Type.ToString(),
                 MaskedIdentifier = MaskIdentifier(req.Value),
                 FailureReason = reason
             });

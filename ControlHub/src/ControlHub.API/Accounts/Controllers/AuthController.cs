@@ -83,7 +83,7 @@ namespace ControlHub.API.Accounts.Controllers
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         public async Task<IActionResult> SignIn([FromBody] SignInRequest request, CancellationToken ct)
         {
-            var command = new SignInCommand(request.Value, request.Password, request.Type, request.IdentifierConfigId);
+            var command = new SignInCommand(request.Value, request.Password, request.IdentifierConfigId);
             var result = await Mediator.Send(command, ct);
 
             if (result.IsFailure)

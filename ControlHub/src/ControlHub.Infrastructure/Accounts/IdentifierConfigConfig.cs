@@ -28,6 +28,9 @@ namespace ControlHub.Infrastructure.Accounts
 
             builder.Property(c => c.UpdatedAt);
 
+            builder.Property(c => c.DeletedAt);
+
+
             // ===== OWNED COLLECTION: ValidationRules =====
             builder.OwnsMany(c => c.Rules, rb =>
             {

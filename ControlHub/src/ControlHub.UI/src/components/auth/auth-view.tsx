@@ -3,7 +3,7 @@ import * as React from "react"
 import { Button } from "@/components/ui/button"
 import { useAuth } from "@/auth/use-auth"
 import type { IdentifierType, RegisterRole } from "@/auth/types"
-import { detectIdentifierType, validateIdentifierValue } from "@/auth/validators"
+import { validateIdentifierValue } from "@/auth/validators"
 import { Eye, EyeOff } from "lucide-react"
 import { useNavigate } from "react-router-dom"
 import { getActiveIdentifierConfigs, type IdentifierConfigDto } from "@/services/api/identifiers"
@@ -49,8 +49,7 @@ export function AuthView() {
   const [signinPassword, setSigninPassword] = React.useState("")
   const [showSigninPassword, setShowSigninPassword] = React.useState(false)
 
-  const [signinIdentifyType, setSigninIdentifyType] = React.useState<IdentifierType>(2) // Default to username for signin
-  const [signinConfigId, setSigninConfigId] = React.useState<string | undefined>(undefined)
+  const [signinConfigId] = React.useState<string | undefined>(undefined)
 
   const [regType, setRegType] = React.useState<IdentifierType>(0)
   const [regConfigId, setRegConfigId] = React.useState<string | undefined>(undefined)
@@ -117,14 +116,6 @@ export function AuthView() {
 
   const canRegister = !regIdentifyError && !regPasswordError && !regConfirmError && !regMasterKeyError
 
-  const detectedSigninType = React.useMemo(() => detectIdentifierType(signinValue), [signinValue])
-
-  // Sync detected type to state for signin if we don't have a manual config selection
-  React.useEffect(() => {
-    if (!signinConfigId) {
-      setSigninIdentifyType(detectedSigninType)
-    }
-  }, [detectedSigninType, signinConfigId])
   const signinIdentifyError = React.useMemo(() => {
     if (!signinValue.trim()) return t('auth.validation.identifyRequired')
     return null
@@ -147,7 +138,6 @@ export function AuthView() {
       await signIn({
         value: signinValue.trim(),
         password: signinPassword,
-        type: signinIdentifyType,
         identifierConfigId: signinConfigId
       })
     } catch (err) {
@@ -267,11 +257,7 @@ export function AuthView() {
                 />
                 {touched.signinValue && signinIdentifyError ? (
                   <p className="mt-1 text-xs text-red-300">{signinIdentifyError}</p>
-                ) : (
-                  <p className="mt-1 text-xs text-zinc-500">
-                    {t('auth.detectedType')}: {signinIdentifyType === 0 ? t('auth.email') : signinIdentifyType === 1 ? t('auth.phone') : signinIdentifyType === 2 ? t('auth.username') : `${t('auth.custom')} (${signinIdentifyType})`}
-                  </p>
-                )}
+                ) : null}
               </div>
 
               <div>
