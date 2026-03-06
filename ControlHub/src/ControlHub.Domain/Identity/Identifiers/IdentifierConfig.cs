@@ -1,11 +1,10 @@
 using ControlHub.Domain.Identity.Enums;
-using ControlHub.Domain.SharedKernel;
 using ControlHub.SharedKernel.Common.Errors;
 using ControlHub.SharedKernel.Results;
 
 namespace ControlHub.Domain.Identity.Identifiers
 {
-    public class IdentifierConfig : AggregateRoot
+    public class IdentifierConfig
     {
         public Guid Id { get; private set; }
         public string Name { get; private set; } // e.g., "Employee ID", "Student Code"
@@ -13,7 +12,6 @@ namespace ControlHub.Domain.Identity.Identifiers
         public bool IsActive { get; private set; }
         public DateTime CreatedAt { get; private set; }
         public DateTime? UpdatedAt { get; private set; }
-        public DateTime? DeletedAt { get; private set; }
 
         // Owned Collection
         private readonly List<ValidationRule> _rules = new();
@@ -82,13 +80,6 @@ namespace ControlHub.Domain.Identity.Identifiers
             _rules.Clear();
             _rules.AddRange(rules);
             UpdatedAt = DateTime.UtcNow;
-        }
-
-        public void Delete()
-        {
-            this.IsActive = false;
-            this.DeletedAt = DateTime.UtcNow;
-            this.UpdatedAt = DateTime.UtcNow;
         }
     }
 }

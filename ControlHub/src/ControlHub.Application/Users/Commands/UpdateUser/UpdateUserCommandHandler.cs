@@ -54,39 +54,6 @@ namespace ControlHub.Application.Users.Commands.UpdateUser
                 return Result<UserDto>.Failure(AccountErrors.AccountNotFound);
             }
 
-            // Update Email
-            if (!string.IsNullOrEmpty(request.Email))
-            {
-                var currentEmailIdentifier = account.Identifiers.FirstOrDefault(i => i.Type == IdentifierType.Email);
-                var normalizedNewEmail = request.Email.ToUpperInvariant();
-
-                // If email changed
-                if (currentEmailIdentifier == null || currentEmailIdentifier.NormalizedValue != normalizedNewEmail)
-                {
-                    // Check duplicate
-                    var existingAccountWithEmail = await _accountRepository.GetByIdentifierWithoutUserAsync(
-                        IdentifierType.Email, normalizedNewEmail, ct);
-
-                    if (existingAccountWithEmail != null && existingAccountWithEmail.Id != account.Id)
-                    {
-                        _logger.LogWarning("{@LogCode} | Email: {Email}", UserLogs.UpdateUser_IdentifierConflict, request.Email);
-                        return Result<UserDto>.Failure(AccountErrors.IdentifierAlreadyExists);
-                    }
-
-                    // Remove old if exists
-                    if (currentEmailIdentifier != null)
-                    {
-                        var removeResult = account.RemoveIdentifier(IdentifierType.Email, currentEmailIdentifier.NormalizedValue);
-                        if (!removeResult.IsSuccess) return Result<UserDto>.Failure(removeResult.Error);
-                    }
-
-                    // Add new
-                    var newIdentifier = Identifier.Create(IdentifierType.Email, request.Email, normalizedNewEmail);
-                    var addResult = account.AddIdentifier(newIdentifier);
-                    if (!addResult.IsSuccess) return Result<UserDto>.Failure(addResult.Error);
-                }
-            }
-
             // Update Profile
             user.UpdateProfile(request.FirstName, request.LastName, request.PhoneNumber);
 

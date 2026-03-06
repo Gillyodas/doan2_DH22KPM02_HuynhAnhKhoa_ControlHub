@@ -33,8 +33,4 @@
     <InternalsVisibleTo Include="ControlHub.Infrastructure" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="Identity\Events\Identifier\" />
-  </ItemGroup>
-
 </Project>

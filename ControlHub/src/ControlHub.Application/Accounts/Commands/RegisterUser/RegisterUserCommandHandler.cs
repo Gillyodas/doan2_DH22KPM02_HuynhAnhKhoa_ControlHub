@@ -42,7 +42,7 @@ namespace ControlHub.Application.Accounts.Commands.RegisterUser
                 AccountLogs.RegisterUser_Started,
                 request.Value);
 
-            if (await _accountValidator.IdentifierIsExist(request.Value.ToLower(), request.Type, cancellationToken))
+            if (await _accountValidator.IdentifierIsExist(request.Value.ToLower(), cancellationToken))
             {
                 _logger.LogWarning("{@LogCode} | Ident: {Ident}",
                     AccountLogs.RegisterUser_IdentifierExists,

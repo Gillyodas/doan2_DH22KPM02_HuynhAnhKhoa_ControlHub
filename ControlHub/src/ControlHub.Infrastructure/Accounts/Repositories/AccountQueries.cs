@@ -21,9 +21,6 @@ namespace ControlHub.Infrastructure.Accounts.Repositories
         {
             return await _db.Accounts
                 .AsNoTracking()
-                // Owned Collection (Identifiers) thu?ng du?c EF Core t? d?ng load (Auto Include)
-                // Nhung explicit include cung không sao n?u b?n t?t Auto Include
-                // .Include(a => a.Identifiers) 
                 .FirstOrDefaultAsync(a => a.Id == id, cancellationToken);
         }
 
@@ -36,20 +33,11 @@ namespace ControlHub.Infrastructure.Accounts.Repositories
                 .FirstOrDefaultAsync(cancellationToken);
         }
 
-        public async Task<Account?> GetByIdentifierWithoutUserAsync(IdentifierType identifierType, string normalizedValue, CancellationToken cancellationToken)
+        public async Task<Account?> GetByIdentifierWithoutUserAsync(string normalizedValue, CancellationToken cancellationToken)
         {
             return await _db.Accounts
                 .AsNoTracking()
-                .Where(a => a.Identifiers.Any(i => i.Type == identifierType && i.NormalizedValue == normalizedValue))
-                .FirstOrDefaultAsync(cancellationToken);
-        }
-
-        public async Task<Identifier?> GetIdentifierByIdentifierAsync(IdentifierType identifierType, string normalizedValue, CancellationToken cancellationToken)
-        {
-            return await _db.Accounts
-                .AsNoTracking()
-                .SelectMany(a => a.Identifiers)
-                .Where(i => i.Type == identifierType && i.NormalizedValue == normalizedValue)
+                .Where(a => a.Identifiers.Any(i => i.NormalizedValue == normalizedValue))
                 .FirstOrDefaultAsync(cancellationToken);
         }
 
@@ -76,6 +64,16 @@ namespace ControlHub.Infrastructure.Accounts.Repositories
                 .Where(a => a.Id == accId)
                 .Select(a => a.RoleId)
                 .FirstOrDefaultAsync(cancellationToken);
+        }
+
+        public async Task<Identifier?> GetIdentifierByIdentifierAsync(
+            string normalizedValue,
+            CancellationToken cancellationToken)
+        {
+            return await _db.Accounts
+                .AsNoTracking()
+                .SelectMany(a => a.Identifiers)
+                .FirstOrDefaultAsync(i => i.NormalizedValue == normalizedValue, cancellationToken);
         }
     }
 }

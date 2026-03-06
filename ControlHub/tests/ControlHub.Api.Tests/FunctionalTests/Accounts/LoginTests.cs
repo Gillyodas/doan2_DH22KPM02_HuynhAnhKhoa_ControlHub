@@ -31,8 +31,7 @@ public class LoginTests : BaseIntegrationTest
         var loginRequest = new SignInRequest
         {
             Value = email,
-            Password = password,
-            Type = IdentifierType.Email
+            Password = password
         };
 
         // Act
@@ -61,8 +60,7 @@ public class LoginTests : BaseIntegrationTest
         var loginRequest = new SignInRequest
         {
             Value = email,
-            Password = "WrongPassword123!",
-            Type = IdentifierType.Email
+            Password = "WrongPassword123!"
         };
 
         // Act
@@ -79,8 +77,7 @@ public class LoginTests : BaseIntegrationTest
         var loginRequest = new SignInRequest
         {
             Value = "any@example.com",
-            Password = "123",
-            Type = IdentifierType.Email
+            Password = "123"
         };
 
         // Act

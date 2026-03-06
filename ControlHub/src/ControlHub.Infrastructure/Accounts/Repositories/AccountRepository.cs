@@ -43,10 +43,10 @@ namespace ControlHub.Infrastructure.Accounts.Repositories
                 .FirstOrDefaultAsync(a => a.Id == id, cancellationToken);
         }
 
-        public async Task<Account?> GetByIdentifierWithoutUserAsync(IdentifierType identifierType, string normalizedValue, CancellationToken cancellationToken)
+        public async Task<Account?> GetByIdentifierWithoutUserAsync(string normalizedValue, CancellationToken cancellationToken)
         {
             return await _db.Accounts
-                .Where(a => a.Identifiers.Any(i => i.Type == identifierType && i.NormalizedValue == normalizedValue))
+                .Where(a => a.Identifiers.Any(i => i.NormalizedValue == normalizedValue))
                 .FirstOrDefaultAsync(cancellationToken);
         }
 

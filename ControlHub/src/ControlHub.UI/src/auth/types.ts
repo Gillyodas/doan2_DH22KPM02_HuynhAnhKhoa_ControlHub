@@ -10,6 +10,7 @@ export type AuthData = {
 export type SignInRequest = {
   value: string
   password: string
+  type: IdentifierType
   identifierConfigId?: string
 }
 

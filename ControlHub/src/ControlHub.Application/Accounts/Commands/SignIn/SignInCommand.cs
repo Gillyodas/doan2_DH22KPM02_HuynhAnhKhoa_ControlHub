@@ -5,5 +5,5 @@ using MediatR;
 
 namespace ControlHub.Application.Accounts.Commands.SignIn
 {
-    public sealed record SignInCommand(string Value, string Password,Guid? IdentifierConfigId = null) : IRequest<Result<SignInDTO>>;
+    public sealed record SignInCommand(string Value, string Password) : IRequest<Result<SignInDTO>>;
 }

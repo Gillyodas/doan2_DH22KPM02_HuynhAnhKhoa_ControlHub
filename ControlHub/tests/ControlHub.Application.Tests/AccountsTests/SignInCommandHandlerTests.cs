@@ -58,7 +58,6 @@ namespace ControlHub.Application.Tests.AccountsTests
             _handler = new SignInCommandHandler(
                 _loggerMock.Object,
                 _accountQueriesMock.Object,
-                _identifierFactory, // Inject Factory th?t
                 _passwordHasherMock.Object,
                 _accessTokenGeneratorMock.Object,
                 _refreshTokenGeneratorMock.Object,
@@ -81,7 +80,7 @@ namespace ControlHub.Application.Tests.AccountsTests
             // test này s? FAIL (vì login thành công). Ðây là l? h?ng b?o m?t.
 
             // Arrange
-            var command = new SignInCommand("deleted@test.com", "Pass123!", IdentifierType.Email);
+            var command = new SignInCommand("deleted@test.com", "Pass123!");
             var account = CreateDummyAccount(isDeleted: true); // Account dã b? xóa
 
             SetupHappyPathDependencies(command, account);
@@ -105,7 +104,7 @@ namespace ControlHub.Application.Tests.AccountsTests
             // ?? BUG HUNT: Tuong t?, tài kho?n b? Admin khóa (Deactivated) không du?c phép dang nh?p.
 
             // Arrange
-            var command = new SignInCommand("locked@test.com", "Pass123!", IdentifierType.Email);
+            var command = new SignInCommand("locked@test.com", "Pass123!");
             var account = CreateDummyAccount(isActive: false); // Account b? khóa
 
             SetupHappyPathDependencies(command, account);
@@ -133,7 +132,7 @@ namespace ControlHub.Application.Tests.AccountsTests
             // Handler ph?i b?t du?c và tr? v? Error, không du?c dùng chu?i r?ng d? t?o Token (s? gây crash ? Domain).
 
             // Arrange
-            var command = new SignInCommand("test@test.com", "Pass123!", IdentifierType.Email);
+            var command = new SignInCommand("test@test.com", "Pass123!");
             var account = CreateDummyAccount();
             SetupHappyPathDependencies(command, account);
 
@@ -170,7 +169,7 @@ namespace ControlHub.Application.Tests.AccountsTests
             // Arrange
             // Factory th?t ch? ch?a EmailValidator (dã setup trong constructor).
             // G?i lo?i Phone -> Factory s? không tìm th?y -> Tr? v? l?i Unsupported.
-            var command = new SignInCommand("0909123456", "Pass123!", IdentifierType.Phone);
+            var command = new SignInCommand("0909123456", "Pass123!");
 
             // Act
             var result = await _handler.Handle(command, CancellationToken.None);
@@ -184,7 +183,7 @@ namespace ControlHub.Application.Tests.AccountsTests
         public async Task Handle_ShouldReturnFailure_WhenIdentifierIsInvalid()
         {
             // Arrange
-            var command = new SignInCommand("invalid-email", "Pass123!", IdentifierType.Email);
+            var command = new SignInCommand("invalid-email", "Pass123!");
             var validationError = Error.Validation("InvalidFormat", "Email format invalid");
 
             // Setup Validator tr? v? False
@@ -204,13 +203,13 @@ namespace ControlHub.Application.Tests.AccountsTests
         public async Task Handle_ShouldReturnFailure_WhenPasswordIsIncorrect()
         {
             // Arrange
-            var command = new SignInCommand("test@test.com", "WrongPass", IdentifierType.Email);
+            var command = new SignInCommand("test@test.com", "WrongPass");
             var account = CreateDummyAccount();
 
             // Setup Validator & Account Query OK
             string normalized = "test@test.com";
             _validatorMock.Setup(v => v.ValidateAndNormalize(command.Value)).Returns((true, normalized, Error.None));
-            _accountQueriesMock.Setup(q => q.GetByIdentifierAsync(command.Type, normalized, It.IsAny<CancellationToken>()))
+            _accountQueriesMock.Setup(q => q.GetByIdentifierAsync(normalized, It.IsAny<CancellationToken>()))
                                .ReturnsAsync(account);
 
             // Hasher tr? v? False
@@ -232,7 +231,7 @@ namespace ControlHub.Application.Tests.AccountsTests
         public async Task Handle_ShouldSucceed_AndSaveTokens_WhenAllValid()
         {
             // Arrange
-            var command = new SignInCommand("test@test.com", "Pass123!", IdentifierType.Email);
+            var command = new SignInCommand("test@test.com", "Pass123!");
             var account = CreateDummyAccount();
             var accessTokenStr = "access_token_123";
             var refreshTokenStr = "refresh_token_456";
@@ -291,7 +290,7 @@ namespace ControlHub.Application.Tests.AccountsTests
             // 1. Validator & Query
             // (Ðã setup Type trong constructor, ch? c?n setup ValidateAndNormalize)
             _validatorMock.Setup(v => v.ValidateAndNormalize(command.Value)).Returns((true, normalized, Error.None));
-            _accountQueriesMock.Setup(q => q.GetByIdentifierAsync(command.Type, normalized, It.IsAny<CancellationToken>()))
+            _accountQueriesMock.Setup(q => q.GetByIdentifierAsync(normalized, It.IsAny<CancellationToken>()))
                                .ReturnsAsync(account);
 
             // 2. Password Check OK

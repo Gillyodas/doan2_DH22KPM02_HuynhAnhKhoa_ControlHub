@@ -69,7 +69,7 @@ namespace ControlHub.Application.Accounts.Commands.ForgotPassword
                 return Result<string>.Failure(result.Error);
             }
 
-            var acc = await _accountRepository.GetByIdentifierWithoutUserAsync(request.Type, result.Value.NormalizedValue, cancellationToken);
+            var acc = await _accountRepository.GetByIdentifierWithoutUserAsync(result.Value.NormalizedValue, cancellationToken);
             if (acc is null)
             {
                 _logger.LogWarning("{@LogCode} | Ident: {Ident}",

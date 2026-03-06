@@ -31,8 +31,7 @@ public class TokenTests : BaseIntegrationTest
         var loginResponse = await Client.PostAsJsonAsync("/api/Auth/auth/signin", new SignInRequest
         {
             Value = email,
-            Password = password,
-            Type = IdentifierType.Email
+            Password = password
         });
 
         var tokens = await loginResponse.Content.ReadFromJsonAsync<ApiResponse.SignInResponse>();

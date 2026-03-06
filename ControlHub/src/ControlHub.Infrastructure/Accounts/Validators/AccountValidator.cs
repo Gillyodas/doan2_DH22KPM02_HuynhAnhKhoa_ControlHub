@@ -13,9 +13,9 @@ namespace ControlHub.Infrastructure.Accounts.Validators
             _accountQueries = accountQueries;
         }
 
-        public async Task<bool> IdentifierIsExist(string Value, IdentifierType Type, CancellationToken cancellationToken)
+        public async Task<bool> IdentifierIsExist(string Value, CancellationToken cancellationToken)
         {
-            return await _accountQueries.GetIdentifierByIdentifierAsync(Type, Value, cancellationToken) != null ? true : false;
+            return await _accountQueries.GetIdentifierByIdentifierAsync(Value, cancellationToken) != null ? true : false;
         }
     }
 }

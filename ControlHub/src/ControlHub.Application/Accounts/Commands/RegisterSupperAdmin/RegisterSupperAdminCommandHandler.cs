@@ -62,7 +62,7 @@ namespace ControlHub.Application.Accounts.Commands.RegisterSupperAdmin
                 return Result<Guid>.Failure(CommonErrors.InvalidMasterKey);
             }
 
-            if (await _accountValidator.IdentifierIsExist(request.Value.ToLower(), request.Type, cancellationToken))
+            if (await _accountValidator.IdentifierIsExist(request.Value.ToLower(), cancellationToken))
             {
                 _logger.LogWarning("{@LogCode} | Ident: {Ident}",
                     AccountLogs.RegisterSupperAdmin_IdentifierExists,

@@ -17,11 +17,9 @@ namespace ControlHub.Application.Accounts.Interfaces.Repositories
             string normalizedValue,
             CancellationToken cancellationToken);
         Task<Account?> GetByIdentifierWithoutUserAsync(
-            IdentifierType identifierType,
             string normalizedValue,
             CancellationToken cancellationToken);
         Task<Identifier?> GetIdentifierByIdentifierAsync(
-            IdentifierType identifierType,
             string normalizedValue,
             CancellationToken cancellationToken);
         Task<Account?> GetByIdentifierNameAsync(

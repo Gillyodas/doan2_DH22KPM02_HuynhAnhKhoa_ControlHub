@@ -37,7 +37,6 @@ public class AdminAccountTests : BaseIntegrationTest
         {
             Value = superAdminEmail,
             Password = password,
-            Type = IdentifierType.Email
         });
         var tokens = await loginResponse.Content.ReadFromJsonAsync<SignInResponse>();
         Client.DefaultRequestHeaders.Authorization = new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", tokens!.AccessToken);

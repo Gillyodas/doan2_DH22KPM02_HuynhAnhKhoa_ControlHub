@@ -9,7 +9,6 @@ namespace ControlHub.Application.Accounts.Interfaces.Repositories
             Guid id,
             CancellationToken cancellationToken);
         Task<Account?> GetByIdentifierWithoutUserAsync(
-            IdentifierType identifierType,
             string normalizedValue,
             CancellationToken cancellationToken);
 

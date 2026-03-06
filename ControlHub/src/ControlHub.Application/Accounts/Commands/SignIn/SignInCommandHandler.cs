@@ -1,4 +1,3 @@
-using System.Text.RegularExpressions;
 using ControlHub.Application.Accounts.DTOs;
 using ControlHub.Application.Accounts.Interfaces.Repositories;
 using ControlHub.Application.Common.Events;
@@ -6,7 +5,6 @@ using ControlHub.Application.Common.Persistence;
 using ControlHub.Application.Tokens.Interfaces;
 using ControlHub.Application.Tokens.Interfaces.Generate;
 using ControlHub.Application.Tokens.Interfaces.Repositories;
-using ControlHub.Domain.Identity.Identifiers.Services;
 using ControlHub.Domain.Identity.Security;
 using ControlHub.Domain.TokenManagement.Enums;
 using ControlHub.SharedKernel.Accounts;
@@ -54,7 +52,7 @@ namespace ControlHub.Application.Accounts.Commands.SignIn
         public async Task<Result<SignInDTO>> Handle(SignInCommand request, CancellationToken cancellationToken)
         {
             _logger.LogInformation("{@LogCode} | Ident: {Value}",
-                AccountLogs.SignIn_Started.Code,
+                AccountLogs.SignIn_Started,
                 request.Value);
 
             var account = await _accountQueries.GetByIdentifierAsync(request.Value, cancellationToken);
