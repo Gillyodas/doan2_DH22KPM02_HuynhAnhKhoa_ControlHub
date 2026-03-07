@@ -1,3 +1,4 @@
+using ControlHub.API.Extensions;
 using ControlHub.Application.Common.Interfaces.AI;
 using ControlHub.Application.Common.Interfaces.AI.V1;
 using ControlHub.Application.Common.Interfaces.AI.V3;
@@ -5,12 +6,14 @@ using ControlHub.Application.Common.Interfaces.AI.V3.Observability;
 using ControlHub.Application.Common.Logging.Interfaces;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.RateLimiting;
 
 namespace ControlHub.API.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
     [Authorize]
+    [EnableRateLimiting(RateLimitingExtensions.Policies.GeneralApi)]
     public class AuditController : ControllerBase
     {
         private readonly ILogKnowledgeService _knowledgeService; // V1 service (interface)

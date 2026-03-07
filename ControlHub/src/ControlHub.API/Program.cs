@@ -1,4 +1,5 @@
-﻿using ControlHub.Infrastructure.RealTime.Hubs;
+﻿using ControlHub.API.Extensions;
+using ControlHub.Infrastructure.RealTime.Hubs;
 using OpenTelemetry.Exporter;
 using OpenTelemetry.Metrics;
 using OpenTelemetry.Trace;
@@ -78,6 +79,8 @@ namespace ControlHub.API
 
             builder.Services.AddControlHub(builder.Configuration);
 
+            builder.Services.AddControlHubRateLimiting(builder.Configuration);
+
             builder.Services.AddMemoryCache();
 
             // =========================================================================
@@ -112,6 +115,7 @@ namespace ControlHub.API
             // Authentication & Authorization Middleware ph?i du?c g?i ? Host App
             // d? d?m b?o d�ng th? t? trong Pipeline c?a h?.
             app.UseAuthentication();
+            app.UseRateLimiter();
             app.UseAuthorization();
 
             // K�ch ho?t ControlHub (Auto Migration & Seed Data)

@@ -1,4 +1,5 @@
 using ControlHub.API.Controllers; // BaseApiController
+using ControlHub.API.Extensions;
 using ControlHub.API.Roles.ViewModels.Requests;
 using ControlHub.API.Roles.ViewModels.Responses;
 using ControlHub.Application.Common.DTOs;
@@ -13,11 +14,13 @@ using ControlHub.SharedKernel.Results;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.RateLimiting;
 
 namespace ControlHub.API.Roles
 {
     [ApiController]
     [Route("api/[controller]")]
+    [EnableRateLimiting(RateLimitingExtensions.Policies.GeneralApi)]
     public class RoleController : BaseApiController
     {
         private readonly ILogger<RoleController> _logger;

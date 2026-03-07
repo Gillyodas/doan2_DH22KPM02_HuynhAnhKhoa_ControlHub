@@ -1,5 +1,6 @@
 using ControlHub.API.Accounts.ViewModels.Request;
 using ControlHub.API.Controllers; // Import BaseApiController
+using ControlHub.API.Extensions;
 using ControlHub.Application.Accounts.Commands.CreateAccount;
 using ControlHub.Application.Accounts.Commands.RefreshAccessToken;
 using ControlHub.Application.Accounts.Commands.RegisterAdmin;
@@ -9,6 +10,7 @@ using ControlHub.Application.Accounts.Commands.SignOut;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.RateLimiting;
 using ApiResponse = ControlHub.API.Accounts.ViewModels.Response;
 
 namespace ControlHub.API.Accounts.Controllers
@@ -25,6 +27,7 @@ namespace ControlHub.API.Accounts.Controllers
 
         [AllowAnonymous]
         [HttpPost("users/register")]
+        [EnableRateLimiting(RateLimitingExtensions.Policies.Authentication)]
         [ProducesResponseType(typeof(ApiResponse.RegisterUserResponse), StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status409Conflict)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
@@ -45,6 +48,7 @@ namespace ControlHub.API.Accounts.Controllers
 
         [Authorize(Policy = "Permission:users.create")]
         [HttpPost("admins/register")]
+        [EnableRateLimiting(RateLimitingExtensions.Policies.Authentication)]
         public async Task<IActionResult> RegisterAdmin([FromBody] RegisterAdminRequest request, CancellationToken ct)
         {
             var command = new RegisterAdminCommand(request.Value, request.Type, request.Password, request.IdentifierConfigId);
@@ -62,6 +66,7 @@ namespace ControlHub.API.Accounts.Controllers
 
         [AllowAnonymous]
         [HttpPost("superadmins/register")]
+        [EnableRateLimiting(RateLimitingExtensions.Policies.Authentication)]
         public async Task<IActionResult> RegisterSuperAdmin([FromBody] RegisterSupperAdminRequest request, CancellationToken ct)
         {
             var command = new RegisterSupperAdminCommand(request.Value, request.Type, request.Password, request.MasterKey, request.IdentifierConfigId);
@@ -79,6 +84,7 @@ namespace ControlHub.API.Accounts.Controllers
 
         [AllowAnonymous]
         [HttpPost("auth/signin")]
+        [EnableRateLimiting(RateLimitingExtensions.Policies.Authentication)]
         [ProducesResponseType(typeof(ApiResponse.SignInResponse), StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         public async Task<IActionResult> SignIn([FromBody] SignInRequest request, CancellationToken ct)

@@ -1,4 +1,5 @@
 using ControlHub.API.Controllers;
+using ControlHub.API.Extensions;
 using ControlHub.API.Permissions.ViewModels.Requests;
 using ControlHub.Application.Common.DTOs;
 using ControlHub.Application.Permissions.Commands.CreatePermissions;
@@ -7,11 +8,13 @@ using ControlHub.Domain.AccessControl.Entities;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.RateLimiting;
 
 namespace ControlHub.API.Permissions
 {
     [ApiController]
     [Route("api/[controller]")]
+    [EnableRateLimiting(RateLimitingExtensions.Policies.GeneralApi)]
     public class PermissionController : BaseApiController
     {
         private readonly ILogger<PermissionController> _logger;

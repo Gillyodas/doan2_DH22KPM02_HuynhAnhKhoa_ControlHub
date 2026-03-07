@@ -1,5 +1,6 @@
 using ControlHub.API.Accounts.ViewModels.Request;
 using ControlHub.API.Controllers;
+using ControlHub.API.Extensions;
 using ControlHub.Application.Accounts.Commands.ChangePassword;
 using ControlHub.Application.Accounts.Commands.ForgotPassword;
 using ControlHub.Application.Accounts.Commands.ResetPassword;
@@ -8,6 +9,7 @@ using ControlHub.Application.Authorization.Requirements;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.RateLimiting;
 
 namespace ControlHub.API.Accounts.Controllers
 {
@@ -27,6 +29,7 @@ namespace ControlHub.API.Accounts.Controllers
 
         [Authorize]
         [HttpPatch("users/{id}/password")]
+        [EnableRateLimiting(RateLimitingExtensions.Policies.Sensitive)]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
@@ -55,6 +58,7 @@ namespace ControlHub.API.Accounts.Controllers
 
         [AllowAnonymous]
         [HttpPost("auth/forgot-password")]
+        [EnableRateLimiting(RateLimitingExtensions.Policies.Sensitive)]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
@@ -74,6 +78,7 @@ namespace ControlHub.API.Accounts.Controllers
 
         [AllowAnonymous]
         [HttpPost("auth/reset-password")]
+        [EnableRateLimiting(RateLimitingExtensions.Policies.Sensitive)]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         public async Task<IActionResult> ResetPassword([FromBody] ResetPasswordRequest request, CancellationToken cancellationToken)

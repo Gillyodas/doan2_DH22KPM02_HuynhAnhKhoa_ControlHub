@@ -1,4 +1,5 @@
 using ControlHub.API.Controllers;
+using ControlHub.API.Extensions;
 using ControlHub.Application.Accounts.Commands.CreateIdentifier;
 using ControlHub.Application.Accounts.Commands.ToggleIdentifierActive;
 using ControlHub.Application.Accounts.Commands.UpdateIdentifierConfig;
@@ -9,12 +10,14 @@ using ControlHub.SharedKernel.Results;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.RateLimiting;
 
 namespace ControlHub.API.Accounts.Controllers
 {
     [Authorize]
     [ApiController]
     [Route("api/[controller]")]
+    [EnableRateLimiting(RateLimitingExtensions.Policies.GeneralApi)]
     public class IdentifierController : BaseApiController
     {
         private readonly ILogger<IdentifierController> _logger;

@@ -1,4 +1,5 @@
 using ControlHub.API.Controllers;
+using ControlHub.API.Extensions;
 using ControlHub.API.Users.ViewModels.Request;
 using ControlHub.API.Users.ViewModels.Response;
 using ControlHub.Application.Users.Commands.DeleteUser;
@@ -9,11 +10,13 @@ using ControlHub.Application.Users.Queries.GetUsers;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.RateLimiting;
 
 namespace ControlHub.API.Users.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]
+    [EnableRateLimiting(RateLimitingExtensions.Policies.GeneralApi)]
     public class UserController : BaseApiController
     {
         private readonly ILogger<UserController> _logger;

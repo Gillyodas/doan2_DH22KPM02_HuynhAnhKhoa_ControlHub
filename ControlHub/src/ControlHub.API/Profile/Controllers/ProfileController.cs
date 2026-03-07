@@ -1,5 +1,6 @@
 using ControlHub.API.Accounts.ViewModels.Request;
 using ControlHub.API.Controllers;
+using ControlHub.API.Extensions;
 using ControlHub.API.Profile.ViewModels;
 using ControlHub.Application.Accounts.Commands.ChangePassword;
 using ControlHub.Application.Common.Interfaces;
@@ -8,12 +9,14 @@ using ControlHub.Application.Users.Queries.GetMyProfile;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.RateLimiting;
 
 namespace ControlHub.API.Profile.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]
     [Authorize]
+    [EnableRateLimiting(RateLimitingExtensions.Policies.GeneralApi)]
     public class ProfileController : BaseApiController
     {
         private readonly ICurrentUserService _currentUserService;
