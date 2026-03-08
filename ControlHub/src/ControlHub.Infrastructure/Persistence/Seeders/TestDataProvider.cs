@@ -4,7 +4,7 @@ using ControlHub.Domain.Identity.Enums;
 using ControlHub.Domain.Identity.Identifiers;
 using ControlHub.Domain.Identity.Security;
 using ControlHub.Domain.Identity.ValueObjects;
-using ControlHub.Infrastructure.Accounts.Security;
+using ControlHub.Infrastructure.Identity.Security;
 using ControlHub.SharedKernel.Constants;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;

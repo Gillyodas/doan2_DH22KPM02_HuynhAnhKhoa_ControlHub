@@ -1,8 +1,8 @@
 ﻿using ControlHub.Application.Messaging.Outbox;
 using ControlHub.Application.Messaging.Outbox.Repositories;
-using ControlHub.Infrastructure.Outboxs;
-using ControlHub.Infrastructure.Outboxs.Handler;
-using ControlHub.Infrastructure.Outboxs.Repositories;
+using ControlHub.Infrastructure.Messaging.Outbox;
+using ControlHub.Infrastructure.Messaging.Outbox.Handler;
+using ControlHub.Infrastructure.Messaging.Outbox.Repositories;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace ControlHub.Infrastructure.DependencyInjection;

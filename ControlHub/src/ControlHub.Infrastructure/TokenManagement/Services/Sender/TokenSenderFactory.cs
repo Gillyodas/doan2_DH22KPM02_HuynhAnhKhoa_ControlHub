@@ -1,0 +1,16 @@
+using ControlHub.Application.Tokens.Interfaces.Sender;
+using ControlHub.Domain.Identity.Enums;
+
+namespace ControlHub.Infrastructure.TokenManagement.Services.Sender
+{
+    internal class TokenSenderFactory : ITokenSenderFactory
+    {
+        private readonly Dictionary<IdentifierType, ITokenSender> _map;
+
+        public TokenSenderFactory(IEnumerable<ITokenSender> sender)
+        {
+            _map = sender.ToDictionary(s => s.Type, s => s);
+        }
+        public ITokenSender? Get(IdentifierType type) => _map.TryGetValue(type, out var s) ? s : null;
+    }
+}

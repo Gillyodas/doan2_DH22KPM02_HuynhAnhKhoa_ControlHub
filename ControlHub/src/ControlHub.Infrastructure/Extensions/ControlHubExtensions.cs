@@ -20,9 +20,9 @@ public static class ControlHubExtensions
         services
             .AddControlHubDatabase(configuration)
             .AddControlHubSecurity(configuration)
-            .AddControlHubTokens(configuration)
-            .AddControlHubAccounts()
-            .AddControlHubRolePermissions(configuration)
+            .AddControlHubTokenManagement(configuration)
+            .AddControlHubIdentity()
+            .AddControlHubAccessControl(configuration)
             .AddControlHubMessaging()
             .AddControlHubAi(configuration)
             .AddControlHubObservability()

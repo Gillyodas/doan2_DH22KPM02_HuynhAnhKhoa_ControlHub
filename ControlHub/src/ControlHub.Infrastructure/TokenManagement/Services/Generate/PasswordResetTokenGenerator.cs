@@ -1,0 +1,23 @@
+using System.IdentityModel.Tokens.Jwt;
+using System.Security.Claims;
+using ControlHub.Application.Tokens.Interfaces.Generate;
+using Microsoft.Extensions.Configuration;
+
+namespace ControlHub.Infrastructure.TokenManagement.Services.Generate
+{
+    public class PasswordResetTokenGenerator : TokenGeneratorBase, IPasswordResetTokenGenerator
+    {
+        public PasswordResetTokenGenerator(IConfiguration config) : base(config) { }
+
+        public string Generate(string userId)
+        {
+            var claims = new List<Claim>
+        {
+            new Claim(JwtRegisteredClaimNames.Sub, userId),
+            new Claim("purpose", "password_reset")
+        };
+
+            return GenerateToken(claims, TimeSpan.FromMinutes(30)); // TTL 30'
+        }
+    }
+}

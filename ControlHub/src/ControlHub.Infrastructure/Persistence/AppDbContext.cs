@@ -5,7 +5,7 @@ using ControlHub.Domain.Identity.Aggregates;
 using ControlHub.Domain.Identity.Entities;
 using ControlHub.Domain.Identity.Identifiers;
 using ControlHub.Domain.TokenManagement.Aggregates;
-using ControlHub.Infrastructure.RolePermissions;
+using ControlHub.Infrastructure.AccessControl.Persistence.Repositories;
 using Microsoft.EntityFrameworkCore;
 
 namespace ControlHub.Infrastructure.Persistence
@@ -41,7 +41,7 @@ namespace ControlHub.Infrastructure.Persistence
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.HasDefaultSchema("ControlHub");
-            // Load toàn b? configuration trong Infrastructure assembly
+            // Load toï¿½n b? configuration trong Infrastructure assembly
             modelBuilder.ApplyConfigurationsFromAssembly(typeof(AppDbContext).Assembly);
             base.OnModelCreating(modelBuilder);
         }
