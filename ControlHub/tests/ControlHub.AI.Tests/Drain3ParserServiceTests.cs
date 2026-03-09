@@ -4,7 +4,7 @@ using System.Threading.Tasks;
 using Xunit;
 using FluentAssertions;
 using ControlHub.Infrastructure.AI.Parsing;
-using ControlHub.Application.Common.Logging;
+using ControlHub.Application.AuditAI.Logging;
 
 namespace ControlHub.AI.Tests
 {

@@ -1,5 +1,5 @@
 using System.Text;
-using ControlHub.Application.Common.Interfaces.AI.V3;
+using ControlHub.Application.AuditAI.Interfaces.V3;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 

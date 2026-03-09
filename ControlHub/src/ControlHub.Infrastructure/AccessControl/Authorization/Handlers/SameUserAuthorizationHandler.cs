@@ -1,5 +1,5 @@
 using System.Security.Claims;
-using ControlHub.Application.Authorization.Requirements;
+using ControlHub.Application.Identity.Authorization;
 using Microsoft.AspNetCore.Authorization;
 
 namespace ControlHub.Infrastructure.AccessControl.Authorization.Handlers

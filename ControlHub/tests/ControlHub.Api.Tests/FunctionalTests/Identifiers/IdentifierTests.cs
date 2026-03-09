@@ -1,8 +1,8 @@
 using System.Net;
 using System.Net.Http.Json;
 using ControlHub.Api.Tests.Abstractions;
-using ControlHub.Application.Accounts.Commands.CreateIdentifier;
-using ControlHub.Application.Accounts.DTOs;
+using ControlHub.Application.Identity.Commands.CreateIdentifier;
+using ControlHub.Application.Identity.DTOs;
 using ControlHub.Domain.Identity.Enums;
 using FluentAssertions;
 using Microsoft.EntityFrameworkCore;

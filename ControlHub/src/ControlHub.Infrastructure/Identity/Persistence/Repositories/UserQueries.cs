@@ -1,5 +1,5 @@
-using ControlHub.Application.Users.DTOs;
-using ControlHub.Application.Users.Interfaces.Repositories;
+using ControlHub.Application.Identity.DTOs;
+using ControlHub.Application.Identity.Interfaces.Repositories;
 using ControlHub.Domain.Identity.Entities;
 using ControlHub.Infrastructure.Persistence;
 using ControlHub.SharedKernel.Common;

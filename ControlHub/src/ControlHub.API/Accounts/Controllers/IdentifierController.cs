@@ -1,11 +1,11 @@
 using ControlHub.API.Controllers;
 using ControlHub.API.Extensions;
-using ControlHub.Application.Accounts.Commands.CreateIdentifier;
-using ControlHub.Application.Accounts.Commands.ToggleIdentifierActive;
-using ControlHub.Application.Accounts.Commands.UpdateIdentifierConfig;
-using ControlHub.Application.Accounts.DTOs;
-using ControlHub.Application.Accounts.Queries.GetActiveIdentifierConfigs;
-using ControlHub.Application.Accounts.Queries.GetIdentifierConfigs;
+using ControlHub.Application.Identity.Commands.CreateIdentifier;
+using ControlHub.Application.Identity.Commands.ToggleIdentifierActive;
+using ControlHub.Application.Identity.Commands.UpdateIdentifierConfig;
+using ControlHub.Application.Identity.DTOs;
+using ControlHub.Application.Identity.Queries.GetActiveIdentifierConfigs;
+using ControlHub.Application.Identity.Queries.GetIdentifierConfigs;
 using ControlHub.SharedKernel.Results;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;

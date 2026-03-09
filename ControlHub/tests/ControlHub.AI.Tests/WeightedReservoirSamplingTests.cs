@@ -4,7 +4,7 @@ using System.Linq;
 using Xunit;
 using FluentAssertions;
 using ControlHub.Infrastructure.AI.Strategies;
-using ControlHub.Application.Common.Interfaces.AI;
+using ControlHub.Application.AuditAI.Interfaces;
 
 namespace ControlHub.AI.Tests
 {

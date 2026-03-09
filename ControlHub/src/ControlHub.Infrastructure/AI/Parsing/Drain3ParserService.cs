@@ -1,6 +1,6 @@
 using System.Text.RegularExpressions;
-using ControlHub.Application.Common.Interfaces.AI;
-using ControlHub.Application.Common.Logging;
+using ControlHub.Application.AuditAI.Interfaces;
+using ControlHub.Application.AuditAI.Logging;
 
 namespace ControlHub.Infrastructure.AI.Parsing
 {

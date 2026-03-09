@@ -3,7 +3,7 @@ using System.Net.Http.Json;
 using ControlHub.Api.Tests.Abstractions;
 using ControlHub.API.Roles.ViewModels.Requests;
 using ControlHub.API.Roles.ViewModels.Responses;
-using ControlHub.Application.Roles.DTOs;
+using ControlHub.Application.AccessControl.DTOs;
 using FluentAssertions;
 using Microsoft.EntityFrameworkCore;
 

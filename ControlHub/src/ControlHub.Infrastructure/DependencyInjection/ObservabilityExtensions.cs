@@ -1,4 +1,4 @@
-﻿using ControlHub.Application.Common.Logging.Interfaces;
+﻿using ControlHub.Application.AuditAI.Logging.Interfaces;
 using ControlHub.Infrastructure.Logging;
 using ControlHub.Infrastructure.RealTime.Services;
 using Microsoft.Extensions.DependencyInjection;

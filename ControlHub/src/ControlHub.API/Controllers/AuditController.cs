@@ -1,9 +1,9 @@
 using ControlHub.API.Extensions;
-using ControlHub.Application.Common.Interfaces.AI;
-using ControlHub.Application.Common.Interfaces.AI.V1;
-using ControlHub.Application.Common.Interfaces.AI.V3;
-using ControlHub.Application.Common.Interfaces.AI.V3.Observability;
-using ControlHub.Application.Common.Logging.Interfaces;
+using ControlHub.Application.AuditAI.Interfaces;
+using ControlHub.Application.AuditAI.Interfaces.V1;
+using ControlHub.Application.AuditAI.Interfaces.V3;
+using ControlHub.Application.AuditAI.Interfaces.V3.Observability;
+using ControlHub.Application.AuditAI.Logging.Interfaces;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.RateLimiting;
@@ -129,7 +129,7 @@ namespace ControlHub.API.Controllers
         // Endpoint 3: Chat với Logs (Hybrid V1/2.5)
         [Authorize(Policy = "Permission:system.view_logs")]
         [HttpPost("chat")]
-        public async Task<IActionResult> Chat([FromBody] Application.Common.Interfaces.AI.ChatRequest request, [FromQuery] string lang = "en")
+        public async Task<IActionResult> Chat([FromBody] Application.AuditAI.Interfaces.ChatRequest request, [FromQuery] string lang = "en")
         {
             // ─────────────────────────────────────────────────────────
             // Auto-detect language from header
@@ -240,13 +240,9 @@ namespace ControlHub.API.Controllers
         [HttpGet("v3/trace")]
         public IActionResult GetAgentTrace()
         {
-            if (_agentObserver is Application.AI.V3.Observability.AgentTracer tracer)
+            if (_agentObserver != null)
             {
-                return Ok(new
-                {
-                    Events = tracer.Events,
-                    Summary = tracer.GetTraceSummary()
-                });
+                return Ok(new { Message = "Agent observer active", Type = _agentObserver.GetType().Name });
             }
 
             return Ok(new { Message = "Agent tracing not available" });

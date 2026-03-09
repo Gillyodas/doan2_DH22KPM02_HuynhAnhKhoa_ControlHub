@@ -1,4 +1,4 @@
-using ControlHub.Application.Permissions.DTOs;
+using ControlHub.Application.AccessControl.DTOs;
 
 namespace ControlHub.API.Permissions.ViewModels.Requests
 {

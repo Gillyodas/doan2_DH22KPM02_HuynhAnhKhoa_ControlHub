@@ -1,4 +1,4 @@
-using ControlHub.Application.Common.Interfaces.AI.V3.RAG;
+using ControlHub.Application.AuditAI.Interfaces.V3.RAG;
 
 namespace ControlHub.Application.Tests.AI.V3.RAG
 {

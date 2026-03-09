@@ -1,4 +1,4 @@
-using ControlHub.Application.Tokens.Interfaces.Sender;
+using ControlHub.Application.TokenManagement.Interfaces.Sender;
 using ControlHub.Domain.Identity.Enums;
 
 namespace ControlHub.Infrastructure.TokenManagement.Services.Sender

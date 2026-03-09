@@ -1,4 +1,4 @@
-using ControlHub.Application.Roles.Interfaces.Repositories;
+using ControlHub.Application.AccessControl.Interfaces.Repositories;
 using ControlHub.Domain.AccessControl.Aggregates;
 using Microsoft.Extensions.Caching.Memory;
 using Microsoft.Extensions.Logging;

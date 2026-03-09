@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using ControlHub.Application.Roles.Interfaces.Repositories;
+using ControlHub.Application.AccessControl.Interfaces.Repositories;
 using ControlHub.Domain.AccessControl.Events;
 using MediatR;
 using Microsoft.Extensions.Caching.Memory;

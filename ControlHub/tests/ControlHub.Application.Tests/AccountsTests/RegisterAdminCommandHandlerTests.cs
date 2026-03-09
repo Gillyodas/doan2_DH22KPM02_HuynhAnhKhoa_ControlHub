@@ -1,6 +1,6 @@
-using ControlHub.Application.Accounts.Commands.RegisterAdmin;
-using ControlHub.Application.Accounts.Interfaces;
-using ControlHub.Application.Accounts.Interfaces.Repositories;
+using ControlHub.Application.Identity.Commands.RegisterAdmin;
+using ControlHub.Application.Identity.Interfaces;
+using ControlHub.Application.Identity.Interfaces.Repositories;
 using ControlHub.Application.Common.Persistence;
 using ControlHub.Domain.Identity.Aggregates;
 using ControlHub.Domain.Identity.Enums;
@@ -97,7 +97,7 @@ namespace ControlHub.Application.Tests.AccountsTests
             // Arrange
             var command = new RegisterAdminCommand("exist@test.com", IdentifierType.Email, "Pass123!");
             _accountValidatorMock
-                .Setup(v => v.IdentifierIsExist(It.IsAny<string>(), It.IsAny<IdentifierType>(), It.IsAny<CancellationToken>()))
+                .Setup(v => v.IdentifierIsExist(It.IsAny<string>(), It.IsAny<CancellationToken>()))
                 .ReturnsAsync(true);
 
             // Act
@@ -115,7 +115,7 @@ namespace ControlHub.Application.Tests.AccountsTests
             // Arrange
             var command = new RegisterAdminCommand("new@test.com", IdentifierType.Email, "Pass123!");
 
-            _accountValidatorMock.Setup(v => v.IdentifierIsExist(It.IsAny<string>(), It.IsAny<IdentifierType>(), It.IsAny<CancellationToken>()))
+            _accountValidatorMock.Setup(v => v.IdentifierIsExist(It.IsAny<string>(), It.IsAny<CancellationToken>()))
                 .ReturnsAsync(false);
 
             var domainError = AccountErrors.InvalidEmail;
@@ -142,7 +142,7 @@ namespace ControlHub.Application.Tests.AccountsTests
             // Arrange
             var command = new RegisterAdminCommand("admin@test.com", IdentifierType.Email, "Pass123!");
 
-            _accountValidatorMock.Setup(v => v.IdentifierIsExist(It.IsAny<string>(), It.IsAny<IdentifierType>(), It.IsAny<CancellationToken>()))
+            _accountValidatorMock.Setup(v => v.IdentifierIsExist(It.IsAny<string>(), It.IsAny<CancellationToken>()))
                 .ReturnsAsync(false);
 
             var dummyPassword = Password.From(new byte[32], new byte[16]);

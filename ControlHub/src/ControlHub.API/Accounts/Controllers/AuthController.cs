@@ -1,12 +1,13 @@
 using ControlHub.API.Accounts.ViewModels.Request;
 using ControlHub.API.Controllers; // Import BaseApiController
 using ControlHub.API.Extensions;
-using ControlHub.Application.Accounts.Commands.CreateAccount;
-using ControlHub.Application.Accounts.Commands.RefreshAccessToken;
-using ControlHub.Application.Accounts.Commands.RegisterAdmin;
-using ControlHub.Application.Accounts.Commands.RegisterSupperAdmin;
-using ControlHub.Application.Accounts.Commands.SignIn;
-using ControlHub.Application.Accounts.Commands.SignOut;
+
+using ControlHub.Application.Identity.Commands.RegisterUser;
+using ControlHub.Application.Identity.Commands.RefreshAccessToken;
+using ControlHub.Application.Identity.Commands.RegisterAdmin;
+using ControlHub.Application.Identity.Commands.RegisterSupperAdmin;
+using ControlHub.Application.Identity.Commands.SignIn;
+using ControlHub.Application.Identity.Commands.SignOut;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;

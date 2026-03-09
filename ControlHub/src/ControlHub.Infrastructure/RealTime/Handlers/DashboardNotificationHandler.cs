@@ -1,11 +1,11 @@
-using ControlHub.Application.Common.Events;
+using ControlHub.Application.Identity.Events;
 using ControlHub.Infrastructure.RealTime.Services;
 using MediatR;
 using Microsoft.Extensions.Logging;
 
 namespace ControlHub.Infrastructure.RealTime.Handlers
 {
-    public class DashboardNotificationHandler : INotificationHandler<LoginAttemptedEvent>
+    public class DashboardNotificationHandler : INotificationHandler<AccountSignedInEvent>
     {
         private readonly LoginEventBuffer _buffer;
         private readonly ILogger<DashboardNotificationHandler> _logger;
@@ -18,7 +18,7 @@ namespace ControlHub.Infrastructure.RealTime.Handlers
             _logger = logger;
         }
 
-        public Task Handle(LoginAttemptedEvent notification, CancellationToken cancellationToken)
+        public Task Handle(AccountSignedInEvent notification, CancellationToken cancellationToken)
         {
             _buffer.Enqueue(notification);
             _logger.LogDebug("Enqueued login event to buffer. Success: {IsSuccess}", notification.IsSuccess);

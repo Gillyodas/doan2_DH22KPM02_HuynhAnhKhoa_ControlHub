@@ -1,7 +1,7 @@
-using ControlHub.Application.Accounts.Interfaces;
-using ControlHub.Application.Accounts.Interfaces.Repositories;
+using ControlHub.Application.Identity.Interfaces;
+using ControlHub.Application.Identity.Interfaces.Repositories;
 using ControlHub.Application.Common.Interfaces;
-using ControlHub.Application.Users.Interfaces.Repositories;
+using ControlHub.Application.Identity.Interfaces.Repositories;
 using ControlHub.Application.Emails.Interfaces;
 using ControlHub.Domain.Identity.Identifiers.Rules;
 using ControlHub.Domain.Identity.Identifiers.Services;
@@ -33,13 +33,13 @@ internal static class IdentityExtensions
 
         // Identifier — Cached decorator pattern
         services.AddScoped<Infrastructure.Identity.Persistence.Repositories.IdentifierConfigRepository>();
-        services.AddScoped<Application.Accounts.Interfaces.Repositories.IIdentifierConfigRepository>(sp =>
+        services.AddScoped<Application.Identity.Interfaces.Repositories.IIdentifierConfigRepository>(sp =>
             new CachedIdentifierConfigRepository(
                 sp.GetRequiredService<Infrastructure.Identity.Persistence.Repositories.IdentifierConfigRepository>(),
                 sp.GetRequiredService<IMemoryCache>()));
 
         services.AddScoped<Domain.Identity.Identifiers.IIdentifierConfigRepository>(sp =>
-            sp.GetRequiredService<Application.Accounts.Interfaces.Repositories.IIdentifierConfigRepository>());
+            sp.GetRequiredService<Application.Identity.Interfaces.Repositories.IIdentifierConfigRepository>());
 
         // Domain Services
         services.AddScoped<DynamicIdentifierValidator>();

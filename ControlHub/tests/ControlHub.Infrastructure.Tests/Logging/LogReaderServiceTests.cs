@@ -1,5 +1,5 @@
 using System.Text.Json;
-using ControlHub.Application.Common.Logging;
+using ControlHub.Application.AuditAI.Logging;
 using ControlHub.Infrastructure.Logging;
 using FluentAssertions;
 using Microsoft.Extensions.Configuration;

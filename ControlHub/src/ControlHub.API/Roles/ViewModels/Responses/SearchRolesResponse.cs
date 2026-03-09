@@ -1,4 +1,4 @@
-using ControlHub.Application.Common.DTOs;
+using ControlHub.SharedKernel.Common.DTOs;
 using ControlHub.Domain.AccessControl.Aggregates;
 
 namespace ControlHub.API.Roles.ViewModels.Responses

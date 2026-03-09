@@ -1,4 +1,4 @@
-using ControlHub.Application.Common.Interfaces.AI;
+using ControlHub.Application.AuditAI.Interfaces;
 
 namespace ControlHub.Infrastructure.AI.Strategies
 {

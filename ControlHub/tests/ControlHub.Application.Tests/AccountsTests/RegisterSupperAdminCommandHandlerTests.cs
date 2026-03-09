@@ -1,6 +1,6 @@
-using ControlHub.Application.Accounts.Commands.RegisterSupperAdmin;
-using ControlHub.Application.Accounts.Interfaces;
-using ControlHub.Application.Accounts.Interfaces.Repositories;
+using ControlHub.Application.Identity.Commands.RegisterSupperAdmin;
+using ControlHub.Application.Identity.Interfaces;
+using ControlHub.Application.Identity.Interfaces.Repositories;
 using ControlHub.Application.Common.Persistence;
 using ControlHub.Domain.Identity.Aggregates;
 using ControlHub.Domain.Identity.Enums;
@@ -105,7 +105,7 @@ namespace ControlHub.Application.Tests.AccountsTests
             var command = new RegisterSupperAdminCommand("super@hub.com", IdentifierType.Email, "Pass123!", ValidMasterKey);
 
             _accountValidatorMock
-                .Setup(v => v.IdentifierIsExist(It.IsAny<string>(), It.IsAny<IdentifierType>(), It.IsAny<CancellationToken>()))
+                .Setup(v => v.IdentifierIsExist(It.IsAny<string>(), It.IsAny<CancellationToken>()))
                 .ReturnsAsync(true);
 
             // Act
@@ -123,7 +123,7 @@ namespace ControlHub.Application.Tests.AccountsTests
             var command = new RegisterSupperAdminCommand("super@hub.com", IdentifierType.Email, "Pass123!", ValidMasterKey);
 
             _accountValidatorMock
-                .Setup(v => v.IdentifierIsExist(It.IsAny<string>(), It.IsAny<IdentifierType>(), It.IsAny<CancellationToken>()))
+                .Setup(v => v.IdentifierIsExist(It.IsAny<string>(), It.IsAny<CancellationToken>()))
                 .ReturnsAsync(false);
 
             var expectedError = AccountErrors.InvalidEmail;
@@ -153,7 +153,7 @@ namespace ControlHub.Application.Tests.AccountsTests
             var command = new RegisterSupperAdminCommand("super@hub.com", IdentifierType.Email, "Pass123!", ValidMasterKey);
 
             _accountValidatorMock
-                .Setup(v => v.IdentifierIsExist(It.IsAny<string>(), It.IsAny<IdentifierType>(), It.IsAny<CancellationToken>()))
+                .Setup(v => v.IdentifierIsExist(It.IsAny<string>(), It.IsAny<CancellationToken>()))
                 .ReturnsAsync(false);
 
             var dummyPassword = Password.From(new byte[32], new byte[16]);

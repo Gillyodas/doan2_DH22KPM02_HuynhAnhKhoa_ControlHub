@@ -1,9 +1,9 @@
 using ControlHub.API.Controllers;
 using ControlHub.API.Extensions;
 using ControlHub.API.Permissions.ViewModels.Requests;
-using ControlHub.Application.Common.DTOs;
-using ControlHub.Application.Permissions.Commands.CreatePermissions;
-using ControlHub.Application.Permissions.Queries.SearchPermissions;
+using ControlHub.SharedKernel.Common.DTOs;
+using ControlHub.Application.AccessControl.Commands.CreatePermissions;
+using ControlHub.Application.AccessControl.Queries.SearchPermissions;
 using ControlHub.Domain.AccessControl.Entities;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
@@ -73,7 +73,7 @@ namespace ControlHub.API.Permissions
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         public async Task<IActionResult> UpdatePermission(Guid id, [FromBody] UpdatePermissionRequest request, CancellationToken cancellationToken)
         {
-            var command = new ControlHub.Application.Permissions.Commands.UpdatePermission.UpdatePermissionCommand(id, request.Code, request.Description);
+            var command = new ControlHub.Application.AccessControl.Commands.UpdatePermission.UpdatePermissionCommand(id, request.Code, request.Description);
             var result = await Mediator.Send(command, cancellationToken);
 
             if (result.IsFailure)
@@ -90,7 +90,7 @@ namespace ControlHub.API.Permissions
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         public async Task<IActionResult> DeletePermission(Guid id, CancellationToken cancellationToken)
         {
-            var command = new ControlHub.Application.Permissions.Commands.DeletePermission.DeletePermissionCommand(id);
+            var command = new ControlHub.Application.AccessControl.Commands.DeletePermission.DeletePermissionCommand(id);
             var result = await Mediator.Send(command, cancellationToken);
 
             if (result.IsFailure)

@@ -1,7 +1,6 @@
-using ControlHub.Application.Accounts.Commands.CreateAccount;
-using ControlHub.Application.Accounts.Commands.RegisterUser;
-using ControlHub.Application.Accounts.Interfaces;
-using ControlHub.Application.Accounts.Interfaces.Repositories;
+using ControlHub.Application.Identity.Commands.RegisterUser;
+using ControlHub.Application.Identity.Interfaces;
+using ControlHub.Application.Identity.Interfaces.Repositories;
 using ControlHub.Application.Common.Persistence;
 using ControlHub.Domain.Identity.Aggregates;
 using ControlHub.Domain.Identity.Enums;
@@ -103,7 +102,7 @@ namespace ControlHub.Application.Tests.AccountsTests
             // Arrange
             var command = new RegisterUserCommand("exist@test.com", IdentifierType.Email, "Pass123!");
             _accountValidatorMock
-                .Setup(v => v.IdentifierIsExist(It.IsAny<string>(), It.IsAny<IdentifierType>(), It.IsAny<CancellationToken>()))
+                .Setup(v => v.IdentifierIsExist(It.IsAny<string>(), It.IsAny<CancellationToken>()))
                 .ReturnsAsync(true);
 
             // Act
@@ -122,7 +121,7 @@ namespace ControlHub.Application.Tests.AccountsTests
         {
             // Arrange
             var command = new RegisterUserCommand("new@test.com", IdentifierType.Email, "Pass123!");
-            _accountValidatorMock.Setup(v => v.IdentifierIsExist(It.IsAny<string>(), It.IsAny<IdentifierType>(), It.IsAny<CancellationToken>())).ReturnsAsync(false);
+            _accountValidatorMock.Setup(v => v.IdentifierIsExist(It.IsAny<string>(), It.IsAny<CancellationToken>())).ReturnsAsync(false);
 
             var expectedError = AccountErrors.InvalidEmail;
             _accountFactoryMock
@@ -150,7 +149,7 @@ namespace ControlHub.Application.Tests.AccountsTests
             var command = new RegisterUserCommand("test@example.com", IdentifierType.Email, "Pass123!");
 
             _accountValidatorMock
-                .Setup(v => v.IdentifierIsExist(It.IsAny<string>(), It.IsAny<IdentifierType>(), It.IsAny<CancellationToken>()))
+                .Setup(v => v.IdentifierIsExist(It.IsAny<string>(), It.IsAny<CancellationToken>()))
                 .ReturnsAsync(false);
 
             var dummyPassword = Password.From(new byte[32], new byte[16]);

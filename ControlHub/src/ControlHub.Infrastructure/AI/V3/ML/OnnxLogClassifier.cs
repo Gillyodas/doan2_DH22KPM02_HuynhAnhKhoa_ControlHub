@@ -1,4 +1,4 @@
-using ControlHub.Application.Common.Interfaces.AI.V3.Parsing;
+using ControlHub.Application.AuditAI.Interfaces.V3.Parsing;
 using FastBertTokenizer;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;

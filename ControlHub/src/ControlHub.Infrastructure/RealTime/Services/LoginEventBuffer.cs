@@ -1,5 +1,5 @@
 using System.Threading.Channels;
-using ControlHub.Application.Common.Events;
+using ControlHub.Application.Identity.Events;
 using ControlHub.Infrastructure.RealTime.Hubs;
 using Microsoft.AspNetCore.SignalR;
 using Microsoft.Extensions.Hosting;
@@ -9,14 +9,14 @@ namespace ControlHub.Infrastructure.RealTime.Services
 {
     public class LoginEventBuffer : BackgroundService
     {
-        private readonly Channel<LoginAttemptedEvent> _channel;
+        private readonly Channel<AccountSignedInEvent> _channel;
         private readonly IHubContext<DashboardHub> _hubContext;
         private readonly ILogger<LoginEventBuffer> _logger;
         private readonly TimeSpan _flushInterval = TimeSpan.FromMilliseconds(1500);
 
         public LoginEventBuffer(IHubContext<DashboardHub> hubContext, ILogger<LoginEventBuffer> logger)
         {
-            _channel = Channel.CreateUnbounded<LoginAttemptedEvent>(new UnboundedChannelOptions
+            _channel = Channel.CreateUnbounded<AccountSignedInEvent>(new UnboundedChannelOptions
             {
                 SingleReader = true,
                 SingleWriter = false
@@ -26,17 +26,17 @@ namespace ControlHub.Infrastructure.RealTime.Services
         }
 
         /// <summary>
-        /// Ðu?c g?i t? DashboardNotificationHandler d? thêm event vào buffer.
+        /// ï¿½u?c g?i t? DashboardNotificationHandler d? thï¿½m event vï¿½o buffer.
         /// </summary>
         /// 
-        public void Enqueue(LoginAttemptedEvent evt)
+        public void Enqueue(AccountSignedInEvent evt)
         {
             _channel.Writer.TryWrite(evt);
         }
 
         protected override async Task ExecuteAsync(CancellationToken cancellationToken)
         {
-            var batch = new List<LoginAttemptedEvent>();
+            var batch = new List<AccountSignedInEvent>();
 
             while (!cancellationToken.IsCancellationRequested)
             {
@@ -73,7 +73,7 @@ namespace ControlHub.Infrastructure.RealTime.Services
             }
         }
 
-        private async Task FlushBatchAsync(List<LoginAttemptedEvent> batch, CancellationToken cancellationToken)
+        private async Task FlushBatchAsync(List<AccountSignedInEvent> batch, CancellationToken cancellationToken)
         {
             var payload = batch.Select(e => new
             {

@@ -1,7 +1,7 @@
 using System.Text;
 using System.Text.Json;
-using ControlHub.Application.Common.Logging;
-using ControlHub.Application.Common.Logging.Interfaces;
+using ControlHub.Application.AuditAI.Logging;
+using ControlHub.Application.AuditAI.Logging.Interfaces;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 

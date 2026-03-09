@@ -1,4 +1,4 @@
-using ControlHub.Application.Common.Logging;
+using ControlHub.Application.AuditAI.Logging;
 using ControlHub.Infrastructure.AI.Parsing;
 using FluentAssertions;
 

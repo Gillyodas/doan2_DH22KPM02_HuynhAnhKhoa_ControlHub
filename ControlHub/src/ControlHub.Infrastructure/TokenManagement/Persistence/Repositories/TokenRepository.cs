@@ -1,4 +1,4 @@
-using ControlHub.Application.Tokens.Interfaces.Repositories;
+using ControlHub.Application.TokenManagement.Interfaces.Repositories;
 using ControlHub.Domain.TokenManagement.Aggregates;
 using ControlHub.Infrastructure.Persistence;
 using ControlHub.SharedKernel.Common.Exceptions;

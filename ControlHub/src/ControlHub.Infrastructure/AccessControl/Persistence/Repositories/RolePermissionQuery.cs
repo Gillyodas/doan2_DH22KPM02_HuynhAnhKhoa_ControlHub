@@ -1,10 +1,10 @@
 using AutoMapper;
-using ControlHub.Application.Roles.Interfaces.Repositories;
+using ControlHub.Application.AccessControl.Interfaces.Repositories;
 using ControlHub.Infrastructure.Persistence;
 
 namespace ControlHub.Infrastructure.AccessControl.Persistence.Repositories
 {
-    internal class RolePermissionQuery : IRolePermissionQueries
+    internal class RolePermissionQuery
     {
         private readonly AppDbContext _db;
         private readonly IMapper _mapper;

@@ -1,6 +1,5 @@
-using ControlHub.Application.Common.Settings;
-using ControlHub.Application.Permissions.Interfaces.Repositories;
-using ControlHub.Application.Roles.Interfaces.Repositories;
+using ControlHub.Application.AccessControl.Settings;
+using ControlHub.Application.AccessControl.Interfaces.Repositories;
 using ControlHub.Domain.AccessControl.Services;
 using ControlHub.Infrastructure.AccessControl.Persistence.Repositories;
 using Microsoft.Extensions.Caching.Memory;

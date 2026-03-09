@@ -1,7 +1,7 @@
-using ControlHub.Application.Accounts.Commands.ChangePassword;
-using ControlHub.Application.Accounts.Interfaces.Repositories;
+using ControlHub.Application.Identity.Commands.ChangePassword;
+using ControlHub.Application.Identity.Interfaces.Repositories;
 using ControlHub.Application.Common.Persistence;
-using ControlHub.Application.Tokens.Interfaces.Repositories;
+using ControlHub.Application.TokenManagement.Interfaces.Repositories;
 using ControlHub.Domain.Identity.Aggregates;
 using ControlHub.Domain.Identity.Security;
 using ControlHub.Domain.Identity.ValueObjects;

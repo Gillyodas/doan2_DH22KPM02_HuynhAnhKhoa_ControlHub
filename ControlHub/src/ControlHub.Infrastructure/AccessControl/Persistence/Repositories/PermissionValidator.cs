@@ -1,4 +1,4 @@
-using ControlHub.Application.Roles.Interfaces.Repositories;
+using ControlHub.Application.AccessControl.Interfaces;
 using ControlHub.Infrastructure.Persistence;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;

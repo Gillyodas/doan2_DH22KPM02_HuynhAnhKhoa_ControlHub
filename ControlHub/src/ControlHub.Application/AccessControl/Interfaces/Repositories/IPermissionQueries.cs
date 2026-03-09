@@ -1,0 +1,16 @@
+using ControlHub.SharedKernel.Common.DTOs;
+using ControlHub.Domain.AccessControl.Entities;
+
+namespace ControlHub.Application.AccessControl.Interfaces.Repositories
+{
+    public interface IPermissionQueries
+    {
+        Task<Permission?> GetByIdAsync(Guid id, CancellationToken cancellationToken);
+        Task<IEnumerable<Permission>> GetAllAsync(CancellationToken cancellationToken);
+        Task<IEnumerable<Permission>> SearchByCodeAsync(string code, CancellationToken cancellationToken);
+        Task<bool> ExistAsync(Guid id, CancellationToken cancellationToken);
+        Task<IEnumerable<Permission>> GetByIdsAsync(IEnumerable<Guid> permissionIds, CancellationToken cancellationToken);
+        Task<IEnumerable<Permission>> GetByRoleIdAsync(Guid roleId, CancellationToken cancellationToken);
+        Task<PagedResult<Permission>> SearchPaginationAsync(int pageIndex, int pageSize, string[] conditions, CancellationToken cancellationToken);
+    }
+}

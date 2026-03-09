@@ -1,5 +1,5 @@
 using System.Security.Cryptography;
-using ControlHub.Application.Tokens.Interfaces.Generate;
+using ControlHub.Application.TokenManagement.Interfaces.Generate;
 
 namespace ControlHub.Infrastructure.TokenManagement.Services.Generate
 {

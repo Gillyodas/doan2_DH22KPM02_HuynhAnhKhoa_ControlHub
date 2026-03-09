@@ -1,9 +1,9 @@
-using ControlHub.Application.Accounts.Commands.SignIn;
-using ControlHub.Application.Accounts.Interfaces.Repositories;
+using ControlHub.Application.Identity.Commands.SignIn;
+using ControlHub.Application.Identity.Interfaces.Repositories;
 using ControlHub.Application.Common.Persistence;
-using ControlHub.Application.Tokens.Interfaces;
-using ControlHub.Application.Tokens.Interfaces.Generate;
-using ControlHub.Application.Tokens.Interfaces.Repositories;
+using ControlHub.Application.TokenManagement.Interfaces;
+using ControlHub.Application.TokenManagement.Interfaces.Generate;
+using ControlHub.Application.TokenManagement.Interfaces.Repositories;
 using ControlHub.Domain.Identity.Aggregates;
 using ControlHub.Domain.Identity.Entities;
 using ControlHub.Domain.Identity.Enums;

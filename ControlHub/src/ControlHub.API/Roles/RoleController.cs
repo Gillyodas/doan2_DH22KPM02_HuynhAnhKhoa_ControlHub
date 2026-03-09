@@ -2,13 +2,13 @@ using ControlHub.API.Controllers; // BaseApiController
 using ControlHub.API.Extensions;
 using ControlHub.API.Roles.ViewModels.Requests;
 using ControlHub.API.Roles.ViewModels.Responses;
-using ControlHub.Application.Common.DTOs;
-using ControlHub.Application.Roles.Commands.AssignRoleToUser;
-using ControlHub.Application.Roles.Commands.CreateRoles;
-using ControlHub.Application.Roles.Commands.SetRolePermissions;
-using ControlHub.Application.Roles.Queries.GetRolePermissions;
-using ControlHub.Application.Roles.Queries.GetUserRoles;
-using ControlHub.Application.Roles.Queries.SearchRoles;
+using ControlHub.SharedKernel.Common.DTOs;
+using ControlHub.Application.Identity.Commands.AssignRole;
+using ControlHub.Application.AccessControl.Commands.CreateRoles;
+using ControlHub.Application.AccessControl.Commands.SetRolePermissions;
+using ControlHub.Application.AccessControl.Queries.GetRolePermissions;
+using ControlHub.Application.AccessControl.Queries.GetUserRoles;
+using ControlHub.Application.AccessControl.Queries.SearchRoles;
 using ControlHub.Domain.AccessControl.Aggregates;
 using ControlHub.SharedKernel.Results;
 using MediatR;
@@ -64,7 +64,7 @@ namespace ControlHub.API.Roles
         [ProducesResponseType(StatusCodes.Status409Conflict)]
         public async Task<IActionResult> UpdateRole(Guid id, [FromBody] UpdateRoleRequest request, CancellationToken cancellationToken)
         {
-            var command = new ControlHub.Application.Roles.Commands.UpdateRole.UpdateRoleCommand(id, request.Name, request.Description);
+            var command = new ControlHub.Application.AccessControl.Commands.UpdateRole.UpdateRoleCommand(id, request.Name, request.Description);
             var result = await Mediator.Send(command, cancellationToken);
 
             if (result.IsFailure) return HandleFailure(result);
@@ -79,7 +79,7 @@ namespace ControlHub.API.Roles
         [ProducesResponseType(StatusCodes.Status409Conflict)]
         public async Task<IActionResult> DeleteRole(Guid id, CancellationToken cancellationToken)
         {
-            var command = new ControlHub.Application.Roles.Commands.DeleteRole.DeleteRoleCommand(id);
+            var command = new ControlHub.Application.AccessControl.Commands.DeleteRole.DeleteRoleCommand(id);
             var result = await Mediator.Send(command, cancellationToken);
 
             if (result.IsFailure) return HandleFailure(result);
@@ -89,7 +89,7 @@ namespace ControlHub.API.Roles
 
         [Authorize(Policy = "Permission:roles.view")]
         [HttpGet("{roleId}/permissions")]
-        [ProducesResponseType(typeof(List<ControlHub.Application.Permissions.DTOs.PermissionDto>), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(List<ControlHub.Application.AccessControl.DTOs.PermissionDto>), StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         public async Task<IActionResult> GetRolePermissions(Guid roleId, CancellationToken cancellationToken)
         {

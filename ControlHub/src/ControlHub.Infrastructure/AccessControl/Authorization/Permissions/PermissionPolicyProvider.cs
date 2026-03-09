@@ -1,4 +1,4 @@
-using ControlHub.Application.Authorization.Requirements;
+using ControlHub.Application.AccessControl.Authorization;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.Extensions.Options;
 

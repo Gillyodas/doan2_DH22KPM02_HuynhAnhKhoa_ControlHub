@@ -1,5 +1,5 @@
-using ControlHub.Application.Common.DTOs;
-using ControlHub.Application.Roles.Interfaces.Repositories;
+using ControlHub.SharedKernel.Common.DTOs;
+using ControlHub.Application.AccessControl.Interfaces.Repositories;
 using ControlHub.Domain.AccessControl.Aggregates;
 using ControlHub.Infrastructure.Persistence;
 using ControlHub.SharedKernel.Utils;
@@ -92,13 +92,13 @@ namespace ControlHub.Infrastructure.AccessControl.Persistence.Repositories
 
             return new PagedResult<Role>(items, totalCount, pageIndex, pageSize);
         }
-        public async Task<List<Application.Roles.DTOs.RoleDto>> GetRolesByUserIdAsync(Guid userId, CancellationToken cancellationToken)
+        public async Task<List<Application.AccessControl.DTOs.RoleDto>> GetRolesByUserIdAsync(Guid userId, CancellationToken cancellationToken)
         {
             var query = from u in _db.Users.AsNoTracking()
                         join a in _db.Accounts.AsNoTracking() on u.AccId equals a.Id
                         join r in _db.Roles.AsNoTracking() on a.RoleId equals r.Id
                         where u.Id == userId
-                        select new Application.Roles.DTOs.RoleDto(r.Id, r.Name, r.Description);
+                        select new Application.AccessControl.DTOs.RoleDto(r.Id, r.Name, r.Description);
 
             return await query.ToListAsync(cancellationToken);
         }

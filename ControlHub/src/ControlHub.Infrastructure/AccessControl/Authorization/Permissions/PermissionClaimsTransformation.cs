@@ -1,6 +1,6 @@
 using System.Security.Claims;
-using ControlHub.Application.Roles.Interfaces.Repositories;
-using ControlHub.Application.Tokens; // Ch?a AppClaimTypes
+using ControlHub.Application.AccessControl.Interfaces.Repositories;
+using ControlHub.Application.Common.Security;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;

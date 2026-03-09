@@ -1,6 +1,6 @@
 using System.Text;
 using System.Text.RegularExpressions;
-using ControlHub.Application.Common.Interfaces.AI.V3.RAG;
+using ControlHub.Application.AuditAI.Interfaces.V3.RAG;
 using Microsoft.Extensions.Logging;
 
 namespace ControlHub.Infrastructure.AI.V3.RAG

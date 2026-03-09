@@ -1,6 +1,6 @@
 using System.Security.Claims;
-using ControlHub.Application.Authorization.Requirements;
-using ControlHub.Application.Tokens;
+using ControlHub.Application.AccessControl.Authorization;
+using ControlHub.Application.Common.Security;
 using ControlHub.SharedKernel.Constants;
 using Microsoft.AspNetCore.Authorization;
 

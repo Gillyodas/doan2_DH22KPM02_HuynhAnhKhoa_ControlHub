@@ -3,7 +3,7 @@ using ControlHub.Infrastructure.Persistence;
 using ControlHub.SharedKernel.Common.Errors;
 using ControlHub.SharedKernel.Results;
 using Microsoft.EntityFrameworkCore;
-using AppIdentifierConfigRepository = ControlHub.Application.Accounts.Interfaces.Repositories.IIdentifierConfigRepository;
+using AppIdentifierConfigRepository = ControlHub.Application.Identity.Interfaces.Repositories.IIdentifierConfigRepository;
 
 namespace ControlHub.Infrastructure.Identity.Persistence.Repositories
 {

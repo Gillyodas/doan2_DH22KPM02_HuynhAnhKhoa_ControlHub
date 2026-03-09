@@ -1,7 +1,7 @@
 using ControlHub.Domain.Identity.Identifiers;
 using ControlHub.SharedKernel.Results;
 using Microsoft.Extensions.Caching.Memory;
-using AppIdentifierConfigRepository = ControlHub.Application.Accounts.Interfaces.Repositories.IIdentifierConfigRepository;
+using AppIdentifierConfigRepository = ControlHub.Application.Identity.Interfaces.Repositories.IIdentifierConfigRepository;
 
 namespace ControlHub.Infrastructure.Identity.Persistence.Repositories;
 

@@ -1,5 +1,5 @@
 using System.Net.Mail;
-using ControlHub.Infrastructure.Emails;
+using ControlHub.Infrastructure.Messaging.Email;
 using Microsoft.Extensions.Configuration;
 
 namespace ControlHub.Infrastructure.Tests.Emails

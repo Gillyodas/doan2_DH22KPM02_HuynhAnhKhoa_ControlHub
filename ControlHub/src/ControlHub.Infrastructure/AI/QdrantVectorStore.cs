@@ -1,7 +1,7 @@
 using System.Text;
 using System.Text.Json;
 using System.Text.Json.Serialization;
-using ControlHub.Application.Common.Interfaces.AI;
+using ControlHub.Application.AuditAI.Interfaces;
 using Microsoft.Extensions.Logging;
 
 namespace ControlHub.Infrastructure.AI

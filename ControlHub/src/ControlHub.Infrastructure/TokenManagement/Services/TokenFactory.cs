@@ -1,4 +1,4 @@
-using ControlHub.Application.Tokens.Interfaces;
+using ControlHub.Application.TokenManagement.Interfaces;
 using ControlHub.Domain.TokenManagement.Aggregates;
 using ControlHub.Domain.TokenManagement.Enums;
 using Microsoft.Extensions.Options;

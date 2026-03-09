@@ -1,6 +1,6 @@
-namespace ControlHub.Application.Common.DTOs
+namespace ControlHub.SharedKernel.Common.DTOs
 {
-    // DTO dùng chung cho t?t c? các API phân trang
+    // DTO dï¿½ng chung cho t?t c? cï¿½c API phï¿½n trang
     public class PagedResult<T>
     {
         public IReadOnlyList<T> Items { get; set; }
@@ -8,7 +8,7 @@ namespace ControlHub.Application.Common.DTOs
         public int PageIndex { get; set; }
         public int PageSize { get; set; }
 
-        // Tính toán s? trang (Optional - có th? tính ? FE ho?c BE)
+        // Tï¿½nh toï¿½n s? trang (Optional - cï¿½ th? tï¿½nh ? FE ho?c BE)
         public int TotalPages => (int)Math.Ceiling(TotalCount / (double)PageSize);
 
         public PagedResult(IReadOnlyList<T> items, int count, int pageIndex, int pageSize)

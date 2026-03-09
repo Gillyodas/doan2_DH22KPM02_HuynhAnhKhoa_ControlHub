@@ -1,4 +1,4 @@
-using ControlHub.Application.Accounts.Interfaces;
+using ControlHub.Application.Identity.Interfaces;
 using ControlHub.Domain.Identity.Aggregates;
 using ControlHub.Domain.Identity.Entities;
 using ControlHub.Domain.Identity.Enums;

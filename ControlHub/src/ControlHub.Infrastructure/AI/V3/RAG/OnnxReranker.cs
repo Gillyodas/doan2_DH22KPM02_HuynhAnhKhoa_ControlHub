@@ -1,4 +1,4 @@
-using ControlHub.Application.Common.Interfaces.AI.V3.RAG;
+using ControlHub.Application.AuditAI.Interfaces.V3.RAG;
 using FastBertTokenizer;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;

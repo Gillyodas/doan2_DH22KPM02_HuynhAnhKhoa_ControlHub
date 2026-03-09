@@ -1,5 +1,5 @@
-using ControlHub.Application.Common.DTOs;
-using ControlHub.Application.Roles.Interfaces.Repositories;
+using ControlHub.SharedKernel.Common.DTOs;
+using ControlHub.Application.AccessControl.Interfaces.Repositories;
 using ControlHub.Domain.AccessControl.Aggregates;
 using ControlHub.SharedKernel.Utils;
 using Microsoft.Extensions.Caching.Memory;
@@ -227,7 +227,7 @@ namespace ControlHub.Infrastructure.AccessControl.Persistence.Repositories
         /// 2. Có thể có nhiều users, dễ tràn bộ nhớ
         /// 3. Có thể implement riêng cache nếu cần (e.g., user-permission cache)
         /// </summary>
-        public async Task<List<Application.Roles.DTOs.RoleDto>> GetRolesByUserIdAsync(
+        public async Task<List<Application.AccessControl.DTOs.RoleDto>> GetRolesByUserIdAsync(
             Guid userId,
             CancellationToken cancellationToken)
         {

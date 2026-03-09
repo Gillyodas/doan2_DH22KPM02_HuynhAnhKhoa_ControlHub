@@ -1,4 +1,4 @@
-using ControlHub.Application.Common.Interfaces.AI;
+using ControlHub.Application.AuditAI.Interfaces;
 using ControlHub.Infrastructure.AI.Strategies;
 using FluentAssertions;
 

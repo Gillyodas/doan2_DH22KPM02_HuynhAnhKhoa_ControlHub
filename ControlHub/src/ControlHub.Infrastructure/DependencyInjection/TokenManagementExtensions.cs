@@ -1,7 +1,7 @@
-using ControlHub.Application.Tokens.Interfaces;
-using ControlHub.Application.Tokens.Interfaces.Generate;
-using ControlHub.Application.Tokens.Interfaces.Repositories;
-using ControlHub.Application.Tokens.Interfaces.Sender;
+using ControlHub.Application.TokenManagement.Interfaces;
+using ControlHub.Application.TokenManagement.Interfaces.Generate;
+using ControlHub.Application.TokenManagement.Interfaces.Repositories;
+using ControlHub.Application.TokenManagement.Interfaces.Sender;
 using ControlHub.Infrastructure.TokenManagement.Services;
 using ControlHub.Infrastructure.TokenManagement.Services.Generate;
 using ControlHub.Infrastructure.TokenManagement.Persistence.Repositories;

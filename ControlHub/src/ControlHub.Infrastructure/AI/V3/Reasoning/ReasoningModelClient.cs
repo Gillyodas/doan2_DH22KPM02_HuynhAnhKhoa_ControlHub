@@ -1,6 +1,6 @@
 using System.Text;
 using System.Text.Json;
-using ControlHub.Application.Common.Interfaces.AI.V3.Reasoning;
+using ControlHub.Application.AuditAI.Interfaces.V3.Reasoning;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 

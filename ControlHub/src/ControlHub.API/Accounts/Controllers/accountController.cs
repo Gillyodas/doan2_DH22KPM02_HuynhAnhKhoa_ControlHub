@@ -1,11 +1,11 @@
 using ControlHub.API.Accounts.ViewModels.Request;
 using ControlHub.API.Controllers;
 using ControlHub.API.Extensions;
-using ControlHub.Application.Accounts.Commands.ChangePassword;
-using ControlHub.Application.Accounts.Commands.ForgotPassword;
-using ControlHub.Application.Accounts.Commands.ResetPassword;
-using ControlHub.Application.Accounts.Queries.GetAdminAccounts;
-using ControlHub.Application.Authorization.Requirements;
+using ControlHub.Application.Identity.Commands.ChangePassword;
+using ControlHub.Application.Identity.Commands.ForgotPassword;
+using ControlHub.Application.Identity.Commands.ResetPassword;
+using ControlHub.Application.Identity.Queries.GetAdminAccounts;
+using ControlHub.Application.Identity.Authorization;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;

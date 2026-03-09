@@ -1,4 +1,4 @@
-using ControlHub.Application.Permissions.Interfaces.Repositories;
+using ControlHub.Application.AccessControl.Interfaces.Repositories;
 using ControlHub.Infrastructure.Persistence;
 using ControlHub.SharedKernel.Common.Exceptions;
 using Microsoft.EntityFrameworkCore;

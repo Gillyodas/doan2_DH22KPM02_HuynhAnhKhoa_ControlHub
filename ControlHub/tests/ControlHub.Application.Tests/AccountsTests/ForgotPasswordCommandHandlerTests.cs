@@ -1,11 +1,11 @@
-using ControlHub.Application.Accounts.Commands.ForgotPassword;
-using ControlHub.Application.Accounts.Interfaces.Repositories;
+using ControlHub.Application.Identity.Commands.ForgotPassword;
+using ControlHub.Application.Identity.Interfaces.Repositories;
 using ControlHub.Application.Common.Persistence;
 using ControlHub.Application.Messaging.Outbox;
 using ControlHub.Application.Messaging.Outbox.Repositories;
-using ControlHub.Application.Tokens.Interfaces;
-using ControlHub.Application.Tokens.Interfaces.Generate;
-using ControlHub.Application.Tokens.Interfaces.Repositories;
+using ControlHub.Application.TokenManagement.Interfaces;
+using ControlHub.Application.TokenManagement.Interfaces.Generate;
+using ControlHub.Application.TokenManagement.Interfaces.Repositories;
 using ControlHub.Domain.Identity.Aggregates;
 using ControlHub.Domain.Identity.Enums;
 using ControlHub.Domain.Identity.Identifiers.Rules;
@@ -168,7 +168,7 @@ namespace ControlHub.Application.Tests.AccountsTests
 
             // Gi? l?p Query tr? v? Null
             _accountRepositoryMock
-                .Setup(q => q.GetByIdentifierWithoutUserAsync(command.Type, normalized, It.IsAny<CancellationToken>()))
+                .Setup(q => q.GetByIdentifierWithoutUserAsync(normalized, It.IsAny<CancellationToken>()))
                 .ReturnsAsync((Account?)null);
 
             // Act
@@ -324,7 +324,7 @@ namespace ControlHub.Application.Tests.AccountsTests
 
             // Setup Query
             _accountRepositoryMock
-                .Setup(q => q.GetByIdentifierWithoutUserAsync(command.Type, command.Value, It.IsAny<CancellationToken>()))
+                .Setup(q => q.GetByIdentifierWithoutUserAsync(command.Value, It.IsAny<CancellationToken>()))
                 .ReturnsAsync(account);
         }
     }
