@@ -1,7 +1,7 @@
 using ControlHub.Application.Identity.Interfaces.Repositories;
 using ControlHub.Application.Common.Persistence;
 using ControlHub.SharedKernel.Results;
-using ControlHub.SharedKernel.Users;
+using ControlHub.SharedKernel.Identity.Users;
 using MediatR;
 using Microsoft.Extensions.Logging;
 

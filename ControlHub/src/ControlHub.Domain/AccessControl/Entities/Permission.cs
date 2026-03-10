@@ -1,5 +1,5 @@
 using System.Text.RegularExpressions;
-using ControlHub.SharedKernel.Permissions;
+using ControlHub.SharedKernel.AccessControl.Permissions;
 using ControlHub.SharedKernel.Results;
 
 namespace ControlHub.Domain.AccessControl.Entities

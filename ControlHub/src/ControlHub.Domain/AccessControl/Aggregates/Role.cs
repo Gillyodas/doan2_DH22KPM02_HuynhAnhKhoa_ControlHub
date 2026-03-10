@@ -2,8 +2,8 @@
 using ControlHub.Domain.AccessControl.Events;
 using ControlHub.Domain.SharedKernel;
 using ControlHub.SharedKernel.Results;
-using ControlHub.SharedKernel.Roles;
-// using ControlHub.SharedKernel.Roles; // (Gi? s? b?n có RoleErrors ? dây)
+using ControlHub.SharedKernel.AccessControl.Roles;
+// using ControlHub.SharedKernel.AccessControl.Roles; // (Gi? s? b?n có RoleErrors ? dây)
 
 namespace ControlHub.Domain.AccessControl.Aggregates
 {

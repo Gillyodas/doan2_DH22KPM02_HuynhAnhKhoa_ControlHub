@@ -5,7 +5,7 @@ using ControlHub.Application.Common.Persistence;
 using ControlHub.Domain.Identity.Aggregates;
 using ControlHub.Domain.Identity.Enums;
 using ControlHub.Domain.Identity.ValueObjects;
-using ControlHub.SharedKernel.Accounts;
+using ControlHub.SharedKernel.Identity.Accounts;
 using ControlHub.SharedKernel.Common.Errors;
 using ControlHub.SharedKernel.Results;
 using Microsoft.Extensions.Configuration;

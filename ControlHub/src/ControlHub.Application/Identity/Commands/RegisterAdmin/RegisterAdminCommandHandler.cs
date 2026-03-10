@@ -1,7 +1,7 @@
 using ControlHub.Application.Identity.Interfaces;
 using ControlHub.Application.Identity.Interfaces.Repositories;
 using ControlHub.Application.Common.Persistence;
-using ControlHub.SharedKernel.Accounts;
+using ControlHub.SharedKernel.Identity.Accounts;
 using ControlHub.SharedKernel.Common.Errors;
 using ControlHub.SharedKernel.Results;
 using MediatR;

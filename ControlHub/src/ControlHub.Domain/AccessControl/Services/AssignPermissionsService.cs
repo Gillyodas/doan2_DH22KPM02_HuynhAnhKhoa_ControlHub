@@ -1,6 +1,6 @@
 using ControlHub.Domain.AccessControl.Aggregates;
 using ControlHub.Domain.AccessControl.Entities;
-using ControlHub.SharedKernel.Permissions;
+using ControlHub.SharedKernel.AccessControl.Permissions;
 using ControlHub.SharedKernel.Results;
 
 namespace ControlHub.Domain.AccessControl.Services

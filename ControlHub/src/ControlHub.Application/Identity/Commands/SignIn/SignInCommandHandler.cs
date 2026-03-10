@@ -7,9 +7,9 @@ using ControlHub.Application.TokenManagement.Interfaces.Generate;
 using ControlHub.Application.TokenManagement.Interfaces.Repositories;
 using ControlHub.Domain.Identity.Security;
 using ControlHub.Domain.TokenManagement.Enums;
-using ControlHub.SharedKernel.Accounts;
+using ControlHub.SharedKernel.Identity.Accounts;
 using ControlHub.SharedKernel.Results;
-using ControlHub.SharedKernel.Tokens;
+using ControlHub.SharedKernel.TokenManagement;
 using MediatR;
 using Microsoft.Extensions.Logging;
 

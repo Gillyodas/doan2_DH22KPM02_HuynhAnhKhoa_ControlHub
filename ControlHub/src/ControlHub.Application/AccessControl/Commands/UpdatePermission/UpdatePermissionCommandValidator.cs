@@ -1,5 +1,5 @@
 using ControlHub.Domain.AccessControl.Entities;
-using ControlHub.SharedKernel.Permissions;
+using ControlHub.SharedKernel.AccessControl.Permissions;
 using FluentValidation;
 
 namespace ControlHub.Application.AccessControl.Commands.UpdatePermission

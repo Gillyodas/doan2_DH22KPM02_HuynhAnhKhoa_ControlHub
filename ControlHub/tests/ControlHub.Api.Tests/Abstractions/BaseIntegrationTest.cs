@@ -1,7 +1,7 @@
 using System.Net.Http.Json;
 using ControlHub.Infrastructure.Persistence;
 using Microsoft.Extensions.DependencyInjection;
-using ApiResponse = ControlHub.API.Accounts.ViewModels.Response;
+using ApiResponse = ControlHub.API.Identity.ViewModels.Response;
 
 namespace ControlHub.Api.Tests.Abstractions;
 

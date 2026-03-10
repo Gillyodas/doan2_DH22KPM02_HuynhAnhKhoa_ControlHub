@@ -4,9 +4,9 @@ using ControlHub.Application.Common.Persistence;
 using ControlHub.Application.AccessControl.Interfaces.Repositories;
 using ControlHub.Domain.Identity.Enums;
 using ControlHub.Domain.Identity.ValueObjects;
-using ControlHub.SharedKernel.Accounts;
+using ControlHub.SharedKernel.Identity.Accounts;
 using ControlHub.SharedKernel.Results;
-using ControlHub.SharedKernel.Users;
+using ControlHub.SharedKernel.Identity.Users;
 using MediatR;
 
 using Microsoft.Extensions.Logging;

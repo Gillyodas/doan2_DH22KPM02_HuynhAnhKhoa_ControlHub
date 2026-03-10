@@ -1,5 +1,5 @@
-using ControlHub.SharedKernel.Accounts;
-using ControlHub.SharedKernel.Tokens;
+using ControlHub.SharedKernel.Identity.Accounts;
+using ControlHub.SharedKernel.TokenManagement;
 using FluentValidation;
 
 namespace ControlHub.Application.Identity.Commands.RefreshAccessToken

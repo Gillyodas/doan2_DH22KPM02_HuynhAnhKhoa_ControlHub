@@ -6,7 +6,7 @@ using ControlHub.Domain.AccessControl.Aggregates;
 using ControlHub.Domain.AccessControl.Entities;
 using ControlHub.Domain.AccessControl.Services;
 using ControlHub.SharedKernel.Results;
-using ControlHub.SharedKernel.Roles;
+using ControlHub.SharedKernel.AccessControl.Roles;
 using MediatR;
 using Microsoft.Extensions.Logging;
 
@@ -40,7 +40,7 @@ namespace ControlHub.Application.AccessControl.Commands.CreateRoles
         public async Task<Result<PartialResult<Role, string>>> Handle(CreateRolesCommand request, CancellationToken ct)
         {
             _logger.LogInformation("{@LogCode} | Count: {Count}",
-                ControlHub.SharedKernel.Roles.RoleLogs.CreateRoles_Started,
+                ControlHub.SharedKernel.AccessControl.Roles.RoleLogs.CreateRoles_Started,
                 request.Roles?.Count() ?? 0);
 
             var existingNames = new HashSet<string>(
@@ -55,7 +55,7 @@ namespace ControlHub.Application.AccessControl.Commands.CreateRoles
                 if (existingNames.Contains(dto.Name.ToLowerInvariant()))
                 {
                     _logger.LogWarning("{@LogCode} | Role: {RoleName}",
-                        ControlHub.SharedKernel.Roles.RoleLogs.CreateRoles_DuplicateNames,
+                        ControlHub.SharedKernel.AccessControl.Roles.RoleLogs.CreateRoles_DuplicateNames,
                         dto.Name);
 
                     failures.Add($"{dto.Name}: {RoleErrors.RoleAlreadyExists.Code}");
@@ -69,7 +69,7 @@ namespace ControlHub.Application.AccessControl.Commands.CreateRoles
             if (!dtosToProcess.Any() && !failures.Any())
             {
                 _logger.LogWarning("{@LogCode} | IncomingCount: {Count}",
-                    ControlHub.SharedKernel.Roles.RoleLogs.CreateRoles_NoValidRole,
+                    ControlHub.SharedKernel.AccessControl.Roles.RoleLogs.CreateRoles_NoValidRole,
                     request.Roles?.Count() ?? 0);
 
                 return Result<PartialResult<Role, string>>.Failure(RoleErrors.NoValidRolesCreated);
@@ -94,7 +94,7 @@ namespace ControlHub.Application.AccessControl.Commands.CreateRoles
                 if (dto.PermissionIds == null || !dto.PermissionIds.Any())
                 {
                     _logger.LogWarning("{@LogCode} | Role: {RoleName}",
-                        ControlHub.SharedKernel.Roles.RoleLogs.CreateRoles_MissingPermissions,
+                        ControlHub.SharedKernel.AccessControl.Roles.RoleLogs.CreateRoles_MissingPermissions,
                         dto.Name);
 
                     failures.Add($"{dto.Name}: {RoleErrors.PermissionRequired.Code}");
@@ -120,10 +120,10 @@ namespace ControlHub.Application.AccessControl.Commands.CreateRoles
                 if (missingPermissions)
                 {
                     _logger.LogWarning("{@LogCode} | Role: {RoleName}",
-                        ControlHub.SharedKernel.Roles.RoleLogs.CreateRoles_NoValidPermissionFound,
+                        ControlHub.SharedKernel.AccessControl.Roles.RoleLogs.CreateRoles_NoValidPermissionFound,
                         dto.Name);
 
-                    failures.Add($"{dto.Name}: {ControlHub.SharedKernel.Permissions.PermissionErrors.PermissionNotFound.Code}");
+                    failures.Add($"{dto.Name}: {ControlHub.SharedKernel.AccessControl.Permissions.PermissionErrors.PermissionNotFound.Code}");
                     continue;
                 }
 
@@ -133,14 +133,14 @@ namespace ControlHub.Application.AccessControl.Commands.CreateRoles
                 {
                     successes.Add(result.Value);
                     _logger.LogInformation("{@LogCode} | Role: {RoleName}",
-                        ControlHub.SharedKernel.Roles.RoleLogs.CreateRoles_RolePrepared,
+                        ControlHub.SharedKernel.AccessControl.Roles.RoleLogs.CreateRoles_RolePrepared,
                         dto.Name);
                 }
                 else
                 {
                     failures.Add($"{dto.Name}: {result.Error.Code}");
                     _logger.LogWarning("{@LogCode} | Role: {RoleName} | Error: {ErrorCode}",
-                        ControlHub.SharedKernel.Roles.RoleLogs.CreateRoles_RolePrepareFailed,
+                        ControlHub.SharedKernel.AccessControl.Roles.RoleLogs.CreateRoles_RolePrepareFailed,
                         dto.Name,
                         result.Error.Code);
                 }
@@ -152,13 +152,13 @@ namespace ControlHub.Application.AccessControl.Commands.CreateRoles
                 await _uow.CommitAsync(ct);
 
                 _logger.LogInformation("{@LogCode} | RolesCreated: {Count}",
-                    ControlHub.SharedKernel.Roles.RoleLogs.CreateRoles_Success,
+                    ControlHub.SharedKernel.AccessControl.Roles.RoleLogs.CreateRoles_Success,
                     successes.Count);
             }
             else
             {
                 _logger.LogInformation("{@LogCode}",
-                    ControlHub.SharedKernel.Roles.RoleLogs.CreateRoles_NoPersist);
+                    ControlHub.SharedKernel.AccessControl.Roles.RoleLogs.CreateRoles_NoPersist);
             }
 
             var partial = PartialResult<Role, string>.Create(successes, failures);

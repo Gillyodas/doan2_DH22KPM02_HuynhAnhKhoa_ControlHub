@@ -1,8 +1,8 @@
 using System.Net;
 using System.Net.Http.Json;
 using ControlHub.Api.Tests.Abstractions;
-using ControlHub.API.Accounts.ViewModels.Request;
-using ControlHub.API.Accounts.ViewModels.Response;
+using ControlHub.API.Identity.ViewModels.Request;
+using ControlHub.API.Identity.ViewModels.Response;
 using ControlHub.Domain.Identity.Enums;
 using FluentAssertions;
 
@@ -41,8 +41,8 @@ public class AuthTests : BaseIntegrationTest
 
         var signOutRequest = new SignOutRequest
         {
-            accessToken = tokens.AccessToken,
-            refreshToken = tokens.RefreshToken
+            AccessToken = tokens.AccessToken,
+            RefreshToken = tokens.RefreshToken
         };
 
         // Act
@@ -58,8 +58,8 @@ public class AuthTests : BaseIntegrationTest
         // Arrange
         var signOutRequest = new SignOutRequest
         {
-            accessToken = "any",
-            refreshToken = "any"
+            AccessToken = "any",
+            RefreshToken = "any"
         };
 
         // Ensure no auth header

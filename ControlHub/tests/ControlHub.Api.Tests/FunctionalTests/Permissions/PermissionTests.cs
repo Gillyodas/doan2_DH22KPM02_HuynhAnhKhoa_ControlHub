@@ -1,7 +1,7 @@
 using System.Net;
 using System.Net.Http.Json;
 using ControlHub.Api.Tests.Abstractions;
-using ControlHub.API.Permissions.ViewModels.Requests;
+using ControlHub.API.AccessControl.ViewModels.Requests;
 using ControlHub.Application.AccessControl.DTOs;
 using FluentAssertions;
 using Microsoft.EntityFrameworkCore;

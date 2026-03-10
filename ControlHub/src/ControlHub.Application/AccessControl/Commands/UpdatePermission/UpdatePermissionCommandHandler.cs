@@ -1,6 +1,6 @@
 using ControlHub.Application.Common.Persistence;
 using ControlHub.Application.AccessControl.Interfaces.Repositories;
-using ControlHub.SharedKernel.Permissions;
+using ControlHub.SharedKernel.AccessControl.Permissions;
 using ControlHub.SharedKernel.Results;
 using MediatR;
 using Microsoft.Extensions.Logging;

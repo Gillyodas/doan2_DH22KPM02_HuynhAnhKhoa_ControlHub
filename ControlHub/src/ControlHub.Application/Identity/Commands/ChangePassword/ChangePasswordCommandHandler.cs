@@ -3,7 +3,7 @@ using ControlHub.Application.Common.Persistence;
 using ControlHub.Application.TokenManagement.Interfaces.Repositories;
 using ControlHub.Domain.Identity.Security;
 using ControlHub.Domain.Identity.ValueObjects;
-using ControlHub.SharedKernel.Accounts;
+using ControlHub.SharedKernel.Identity.Accounts;
 using ControlHub.SharedKernel.Results;
 using MediatR;
 using Microsoft.Extensions.Logging;

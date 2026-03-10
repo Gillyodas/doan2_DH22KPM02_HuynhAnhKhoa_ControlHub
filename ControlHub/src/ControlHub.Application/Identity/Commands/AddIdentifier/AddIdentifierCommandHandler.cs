@@ -1,7 +1,7 @@
 using ControlHub.Application.Identity.Interfaces.Repositories;
 using ControlHub.Application.Common.Persistence;
 using ControlHub.Domain.Identity.Identifiers.Services;
-using ControlHub.SharedKernel.Accounts; // Ch?a AccountLogs, AccountErrors
+using ControlHub.SharedKernel.Identity.Accounts; // Ch?a AccountLogs, AccountErrors
 using ControlHub.SharedKernel.Results;
 using MediatR;
 using Microsoft.Extensions.Logging;

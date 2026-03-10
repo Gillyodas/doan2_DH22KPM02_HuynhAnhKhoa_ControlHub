@@ -1,7 +1,7 @@
 using System.Text.RegularExpressions;
 using ControlHub.Domain.Identity.Security;
 using ControlHub.Domain.SharedKernel;
-using ControlHub.SharedKernel.Accounts;
+using ControlHub.SharedKernel.Identity.Accounts;
 using ControlHub.SharedKernel.Results;
 
 namespace ControlHub.Domain.Identity.ValueObjects

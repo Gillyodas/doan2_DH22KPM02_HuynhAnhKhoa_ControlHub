@@ -4,9 +4,9 @@ using ControlHub.Domain.Identity.Enums;
 using ControlHub.Domain.Identity.Identifiers;
 using ControlHub.Domain.Identity.ValueObjects;
 using ControlHub.Domain.TokenManagement.Aggregates;
-using ControlHub.SharedKernel.Accounts;
+using ControlHub.SharedKernel.Identity.Accounts;
 using ControlHub.SharedKernel.Results;
-using ControlHub.SharedKernel.Users;
+using ControlHub.SharedKernel.Identity.Users;
 
 namespace ControlHub.Domain.Identity.Aggregates
 {

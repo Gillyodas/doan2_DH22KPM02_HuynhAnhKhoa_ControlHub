@@ -1,10 +1,10 @@
 using System.Net;
 using System.Net.Http.Json;
 using ControlHub.Api.Tests.Abstractions;
-using ControlHub.API.Accounts.ViewModels.Request;
+using ControlHub.API.Identity.ViewModels.Request;
 using ControlHub.Domain.Identity.Enums;
 using FluentAssertions;
-using ApiResponse = ControlHub.API.Accounts.ViewModels.Response;
+using ApiResponse = ControlHub.API.Identity.ViewModels.Response;
 
 namespace ControlHub.Api.Tests.FunctionalTests.Accounts;
 

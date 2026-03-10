@@ -6,7 +6,7 @@ using ControlHub.Application.TokenManagement.Interfaces;
 using ControlHub.Application.TokenManagement.Interfaces.Repositories;
 using ControlHub.Domain.TokenManagement.Aggregates;
 using ControlHub.Domain.TokenManagement.Enums;
-using ControlHub.SharedKernel.Tokens;
+using ControlHub.SharedKernel.TokenManagement;
 using Microsoft.Extensions.Logging;
 using Moq;
 

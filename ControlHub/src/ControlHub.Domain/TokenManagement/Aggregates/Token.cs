@@ -1,6 +1,6 @@
 using ControlHub.Domain.TokenManagement.Enums;
 using ControlHub.SharedKernel.Results;
-using ControlHub.SharedKernel.Tokens;
+using ControlHub.SharedKernel.TokenManagement;
 
 namespace ControlHub.Domain.TokenManagement.Aggregates
 {

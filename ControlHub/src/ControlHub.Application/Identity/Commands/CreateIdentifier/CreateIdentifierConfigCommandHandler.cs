@@ -1,6 +1,7 @@
 using ControlHub.Application.Common.Persistence;
 using ControlHub.Domain.Identity.Identifiers;
-using ControlHub.SharedKernel.Accounts;
+using ControlHub.SharedKernel.Identity.Accounts;
+using ControlHub.SharedKernel.Identity.Identifiers;
 using ControlHub.SharedKernel.Common.Errors;
 using ControlHub.SharedKernel.Results;
 using MediatR;

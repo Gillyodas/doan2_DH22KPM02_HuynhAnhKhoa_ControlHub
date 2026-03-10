@@ -1,7 +1,7 @@
 using System.Net;
 using System.Net.Http.Json;
 using ControlHub.Api.Tests.Abstractions;
-using ControlHub.API.Accounts.ViewModels.Request;
+using ControlHub.API.Identity.ViewModels.Request;
 using ControlHub.Domain.Identity.Enums;
 using ControlHub.Domain.TokenManagement.Enums;
 using FluentAssertions;
@@ -29,8 +29,8 @@ public class AccountTests : BaseIntegrationTest
         // Act
         var response = await Client.PatchAsJsonAsync($"/api/Account/users/{account.Id}/password", new ChangePasswordRequest
         {
-            curPass = oldPass,
-            newPass = newPass
+            CurrentPassword = oldPass,
+            NewPassword = newPass
         });
 
         // Assert
@@ -58,8 +58,8 @@ public class AccountTests : BaseIntegrationTest
         // Act
         var response = await Client.PatchAsJsonAsync($"/api/Account/users/{victimAccount.Id}/password", new ChangePasswordRequest
         {
-            curPass = "Password@123", // Even if they know the password
-            newPass = "HackedPassword@123"
+            CurrentPassword = "Password@123", // Even if they know the password
+            NewPassword = "HackedPassword@123"
         });
 
         // Assert

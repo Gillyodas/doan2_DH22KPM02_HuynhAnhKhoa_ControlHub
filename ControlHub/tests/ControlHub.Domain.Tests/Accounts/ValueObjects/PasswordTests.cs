@@ -1,6 +1,6 @@
 using ControlHub.Domain.Identity.Security;
 using ControlHub.Domain.Identity.ValueObjects;
-using ControlHub.SharedKernel.Accounts;
+using ControlHub.SharedKernel.Identity.Accounts;
 using Moq;
 
 namespace ControlHub.Domain.Tests.Accounts.ValueObjects

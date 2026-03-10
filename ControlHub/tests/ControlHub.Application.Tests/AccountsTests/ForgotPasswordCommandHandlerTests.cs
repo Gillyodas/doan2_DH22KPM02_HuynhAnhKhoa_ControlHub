@@ -13,9 +13,9 @@ using ControlHub.Domain.Identity.Identifiers.Services;   // Namespace ch?a Ident
 using ControlHub.Domain.Identity.ValueObjects;
 using ControlHub.Domain.TokenManagement.Aggregates;
 using ControlHub.Domain.TokenManagement.Enums;
-using ControlHub.SharedKernel.Accounts;
+using ControlHub.SharedKernel.Identity.Accounts;
 using ControlHub.SharedKernel.Common.Errors;
-using ControlHub.SharedKernel.Tokens;
+using ControlHub.SharedKernel.TokenManagement;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 using Moq;

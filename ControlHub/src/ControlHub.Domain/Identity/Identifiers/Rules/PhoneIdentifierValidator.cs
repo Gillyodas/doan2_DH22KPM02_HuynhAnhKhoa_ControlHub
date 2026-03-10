@@ -1,7 +1,7 @@
 using System.Text.RegularExpressions;
 using ControlHub.Domain.Identity.Enums;
 using ControlHub.SharedKernel.Common.Errors;
-using ControlHub.SharedKernel.Indentifiers;
+using ControlHub.SharedKernel.Identity.Identifiers;
 
 namespace ControlHub.Domain.Identity.Identifiers.Rules
 {

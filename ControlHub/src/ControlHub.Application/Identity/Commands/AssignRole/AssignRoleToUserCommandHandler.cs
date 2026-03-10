@@ -2,10 +2,10 @@ using ControlHub.Application.Identity.Interfaces.Repositories;
 using ControlHub.Application.Common.Persistence;
 using ControlHub.Application.AccessControl.Interfaces.Repositories;
 using ControlHub.Application.Identity.Interfaces.Repositories;
-using ControlHub.SharedKernel.Accounts;
+using ControlHub.SharedKernel.Identity.Accounts;
 using ControlHub.SharedKernel.Results;
-using ControlHub.SharedKernel.Roles;
-using ControlHub.SharedKernel.Users;
+using ControlHub.SharedKernel.AccessControl.Roles;
+using ControlHub.SharedKernel.Identity.Users;
 using MediatR;
 using Microsoft.Extensions.Logging;
 
