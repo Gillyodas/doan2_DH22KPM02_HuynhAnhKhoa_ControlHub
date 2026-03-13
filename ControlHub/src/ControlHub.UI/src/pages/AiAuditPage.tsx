@@ -248,7 +248,7 @@ const AiAuditPage = () => {
                                     </div>
                                 )}
                                 {!loading && analysisResult && (
-                                    <ReactMarkdown>{analysisResult.analysis}</ReactMarkdown>
+                                    <ReactMarkdown>{analysisResult.analysis ?? ''}</ReactMarkdown>
                                 )}
                                 {!loading && !analysisResult && (
                                     <div className="flex flex-col items-center justify-center h-64 text-muted-foreground border-2 border-dashed rounded-lg">
@@ -288,7 +288,7 @@ const AiAuditPage = () => {
                                     <Loader2 className="h-8 w-8 animate-spin m-auto" />
                                 ) : chatAnswer ? (
                                     <div className="prose prose-sm dark:prose-invert">
-                                        <ReactMarkdown>{chatAnswer}</ReactMarkdown>
+                                        <ReactMarkdown>{chatAnswer ?? ''}</ReactMarkdown>
                                     </div>
                                 ) : (
                                     <p className="text-center text-muted-foreground mt-40">Ask about recent system activity...</p>
