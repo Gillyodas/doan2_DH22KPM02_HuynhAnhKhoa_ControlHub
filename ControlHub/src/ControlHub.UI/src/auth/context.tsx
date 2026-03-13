@@ -13,11 +13,13 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
 
   // Expose this function to be called from axios interceptor
   const updateAuth = React.useCallback((updates: Partial<AuthData>) => {
-    if (!auth) return
-    const updated = { ...auth, ...updates }
-    saveAuth(updated)
-    setAuth(updated)
-  }, [auth])
+    setAuth(prev => {
+      if (!prev) return prev
+      const updated = { ...prev, ...updates }
+      saveAuth(updated)
+      return updated
+    })
+  }, [])
 
   const signIn = React.useCallback(async (req: SignInRequest) => {
     const data = await api.signIn(req)

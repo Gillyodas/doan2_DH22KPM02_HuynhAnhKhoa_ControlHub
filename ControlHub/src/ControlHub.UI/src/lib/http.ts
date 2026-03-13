@@ -115,18 +115,7 @@ api.interceptors.request.use(async (config: InternalAxiosRequestConfig) => {
 
   // Proactive refresh: if token is expiring soon, refresh before making request
   if (auth?.accessToken && isTokenExpired(auth.accessToken)) {
-    // Only refresh if not already refreshing
-    if (!isRefreshing) {
-      try {
-        console.log("[http] Token expiring soon, proactively refreshing...")
-        const { accessToken } = await refreshAccessToken()
-        config.headers.set("Authorization", `Bearer ${accessToken}`)
-        return config
-      } catch (error) {
-        console.warn("[http] Proactive refresh failed, will retry on 401")
-        // Let response interceptor handle it
-      }
-    } else {
+    if (isRefreshing) {
       // Wait for ongoing refresh to complete
       return new Promise((resolve, reject) => {
         failedQueue.push({
@@ -137,6 +126,21 @@ api.interceptors.request.use(async (config: InternalAxiosRequestConfig) => {
           reject,
         })
       })
+    }
+
+    isRefreshing = true
+    try {
+      console.log("[http] Token expiring soon, proactively refreshing...")
+      const { accessToken } = await refreshAccessToken()
+      processQueue(null, accessToken)
+      config.headers.set("Authorization", `Bearer ${accessToken}`)
+      return config
+    } catch (error) {
+      processQueue(error, null)
+      console.warn("[http] Proactive refresh failed, will retry on 401")
+      // Let response interceptor handle it
+    } finally {
+      isRefreshing = false
     }
   }
 
