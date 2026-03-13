@@ -108,13 +108,18 @@ namespace ControlHub.Infrastructure.AI.V3.Agentic.Nodes
                 (string.IsNullOrEmpty(evidenceSection) ? "" : $"{evidenceSection}\n") +
                 $"## Investigation Plan:\n{planText}\n\n" +
                 $"## Your Task:\n" +
-                $"Analyze the provided log evidence following the investigation plan above.\n" +
-                $"Then produce a FINAL DIAGNOSIS with these 3 mandatory sections:\n\n" +
-                $"1. **Problem Summary**: What specific error or issue occurred? Include the exact error code, HTTP status code, and affected endpoint.\n" +
-                $"2. **Root Cause**: WHY did this happen? Quote the specific WARNING/ERROR log entries that prove the root cause. Ignore INFO-level noise like CORS.\n" +
-                $"3. **Recommendation**: How to fix this? Provide concrete, actionable steps. Reference any matching runbook if available.\n\n" +
-                $"IMPORTANT: Your 'solution' field MUST contain the final diagnosis. Your 'steps' field should contain the 3 sections above as separate items.\n" +
-                $"Do NOT just restate the plan steps. Provide actual findings from the evidence.";
+                $"Before writing your final answer, trace the causal chain step by step:\n" +
+                $"  a) What was the first observable symptom? (identify the highest-severity log entry)\n" +
+                $"  b) What triggered it? (look for WARNINGs or state changes that preceded the failure)\n" +
+                $"  c) What underlying condition caused the trigger?\n\n" +
+                $"Then produce your FINAL DIAGNOSIS using these JSON fields:\n" +
+                $"- 'solution' (your problem summary): One sentence — exact error code, HTTP status, and affected endpoint.\n" +
+                $"- 'explanation' (your root cause): Causal chain in the form \"Trigger: X → Effect: Y → Terminal failure: Z\".\n" +
+                $"  Quote specific ERROR/WARNING log entries (with timestamps and log levels) that prove each link.\n" +
+                $"  Do NOT cite INFO-level entries as causes.\n" +
+                $"- 'steps' (your recommendations): Numbered fix actions. Reference the matching runbook if available.\n" +
+                $"- 'confidence': Your confidence in the diagnosis (0.0–1.0) based on evidence quality.\n\n" +
+                $"CONSTRAINT: Only use error codes, endpoints, and status codes from the Auto-Extracted Evidence above.";
 
             var batchContext = new ReasoningContext(Query: batchPrompt, RetrievedDocs: evidence);
             var analysis = await _reasoningModel.ReasonAsync(

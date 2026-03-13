@@ -46,10 +46,23 @@ namespace ControlHub.Infrastructure.AI.V3.Agentic.Nodes
             var preRetrievedDocs = clone.GetContext<List<Application.AuditAI.Interfaces.V3.RAG.RankedDocument>>("pre_retrieval_docs")
                                   ?? new List<Application.AuditAI.Interfaces.V3.RAG.RankedDocument>();
 
+            var docsContext = preRetrievedDocs.Any()
+                ? "## Pre-Retrieved Evidence (use to inform your hypotheses):\n" +
+                  string.Join("\n", preRetrievedDocs.Take(5).Select((d, i) =>
+                      $"[{i + 1}] {d.Content[..Math.Min(250, d.Content.Length)]}"))
+                : "";
+
             var context = new ReasoningContext(
-                Query: $"Create a detailed technical investigation plan for: {enhancedQuery}. " +
-                       "IMPORTANT: The plan MUST conclude with a final step named 'Root Cause Synthesis and Recommendations' " +
-                       "that aggregates all findings into a developer-friendly report.",
+                Query: $"You are a senior incident investigator.\n\n" +
+                       $"{docsContext}\n\n" +
+                       $"Create a hypothesis-driven investigation plan for: {enhancedQuery}\n\n" +
+                       $"Each step in your plan (in 'steps') must be a falsifiable hypothesis:\n" +
+                       $"\"Hypothesis: [suspected cause] — Check: [specific log field/pattern to examine] — Confirms if: [expected finding]\"\n\n" +
+                       $"Your 'solution' should be a one-line summary of the investigation approach.\n" +
+                       $"Your 'explanation' should state WHY this plan will identify the root cause.\n" +
+                       $"Your 'steps' must be the ordered list of investigation hypotheses (maximum 6).\n" +
+                       $"The LAST step must always be: \"Root Cause Synthesis — Chain all confirmed hypotheses " +
+                       $"into a single causal narrative and produce developer-friendly recommendations.\"",
                 RetrievedDocs: preRetrievedDocs
             );
 

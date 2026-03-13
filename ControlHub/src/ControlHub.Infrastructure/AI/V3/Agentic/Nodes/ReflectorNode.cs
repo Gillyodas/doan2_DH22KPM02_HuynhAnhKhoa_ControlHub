@@ -64,21 +64,18 @@ namespace ControlHub.Infrastructure.AI.V3.Agentic.Nodes
 
             _logger.LogInformation("Reflecting on failed verification: {Reason}", verificationReason);
 
-            var reflectionPrompt = $@"
-Analyze why the following task failed and suggest corrections:
-
-Task: {query}
-
-Execution Results:
-{string.Join("\n", executionResults)}
-
-Failure Reason: {verificationReason}
-
-Provide:
-1. What went wrong
-2. How to fix it
-3. Whether it's worth retrying (considering iteration {state.Iteration}/{state.MaxIterations})
-";
+            var reflectionPrompt =
+                $"You are reviewing a failed AI investigation and deciding whether to retry.\n\n" +
+                $"Task: {query}\n" +
+                $"Iteration: {state.Iteration} of {state.MaxIterations}\n" +
+                $"Failure Reason: {verificationReason}\n\n" +
+                $"Execution Results Produced:\n{string.Join("\n---\n", executionResults)}\n\n" +
+                $"Answer these questions:\n" +
+                $"1. WHAT WENT WRONG: What specific gap in the analysis caused the failure?\n" +
+                $"2. CORRECTION: What different investigation approach should be taken on retry?\n" +
+                $"3. RETRY_CONFIDENCE (0.0–1.0): How likely is a retry to succeed given the available evidence?\n" +
+                $"   Output this as a float on its own line, prefixed exactly with 'RETRY_CONFIDENCE:'\n\n" +
+                $"Note: A retry will only occur if RETRY_CONFIDENCE > 0.5 and iterations remain.";
 
             var context = new ReasoningContext(
                 Query: reflectionPrompt,
@@ -86,7 +83,25 @@ Provide:
             );
 
             var result = await _reasoningModel.ReasonAsync(context, new ReasoningOptions(Temperature: 0.5f), ct);
-            var shouldRetry = result.Confidence > 0.5f && state.Iteration < state.MaxIterations - 1;
+
+            // Parse explicit RETRY_CONFIDENCE token from raw response; fall back to model's confidence score
+            bool shouldRetry;
+            var raw = result.RawResponse ?? result.Solution ?? "";
+            var confidenceLine = raw.Split('\n')
+                .FirstOrDefault(l => l.TrimStart().StartsWith("RETRY_CONFIDENCE:", StringComparison.OrdinalIgnoreCase));
+            if (confidenceLine != null &&
+                float.TryParse(
+                    confidenceLine.Split(':', 2)[1].Trim(),
+                    System.Globalization.NumberStyles.Float,
+                    System.Globalization.CultureInfo.InvariantCulture,
+                    out var parsedConf))
+            {
+                shouldRetry = parsedConf > 0.5f && state.Iteration < state.MaxIterations - 1;
+            }
+            else
+            {
+                shouldRetry = result.Confidence > 0.5f && state.Iteration < state.MaxIterations - 1;
+            }
 
             return new ReflexionResult(
                 Analysis: result.Explanation,
