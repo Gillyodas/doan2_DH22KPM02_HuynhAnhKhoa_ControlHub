@@ -16,7 +16,7 @@ namespace ControlHub.API.AuditAI.Controllers
     [EnableRateLimiting(RateLimitingExtensions.Policies.GeneralApi)]
     public class AuditController : ControllerBase
     {
-        private readonly ILogKnowledgeService _knowledgeService; // V1 service (interface)
+        private readonly ILogKnowledgeService? _knowledgeService; // V1 service (optional)
         private readonly IAuditAgentService? _agentService;      // V2.5/V3 service (optional)
         private readonly IAuditAgentV3? _auditAgentV3;           // V3 full agentic (optional)
         private readonly IAgentObserver? _agentObserver;         // V3 tracing (optional)
@@ -26,21 +26,18 @@ namespace ControlHub.API.AuditAI.Controllers
         private readonly IConfiguration _config;
 
         public AuditController(
-            ILogKnowledgeService knowledgeService,
             ILogReaderService logReader,
-            IServiceProvider sp, // Lazy resolve V2/V3 services
+            IServiceProvider sp,
             IConfiguration config)
         {
-            _knowledgeService = knowledgeService;
             _logReader = logReader;
             _config = config;
 
-            // Resolve optional services if available
+            // Resolve all AI services optionally — registrations depend on AuditAI:Version
+            _knowledgeService = sp.GetService<ILogKnowledgeService>();
             _agentService = sp.GetService<IAuditAgentService>();
             _logParser = sp.GetService<ILogParserService>();
             _runbookService = sp.GetService<IRunbookService>();
-
-            // V3 specific services
             _auditAgentV3 = sp.GetService<IAuditAgentV3>();
             _agentObserver = sp.GetService<IAgentObserver>();
         }
@@ -69,6 +66,9 @@ namespace ControlHub.API.AuditAI.Controllers
         [HttpPost("learn")]
         public async Task<IActionResult> LearnLogDefinitions()
         {
+            if (_knowledgeService == null)
+                return BadRequest("Log Knowledge Service is not enabled (V1 required).");
+
             await _knowledgeService.IngestLogDefinitionsAsync();
             return Ok("Log Definitions Ingestion started.");
         }
@@ -112,6 +112,9 @@ namespace ControlHub.API.AuditAI.Controllers
             }
 
             // Fallback to V1
+            if (_knowledgeService == null)
+                return BadRequest("Log Knowledge Service is not enabled (V1 required).");
+
             var logs = await _logReader.GetLogsByCorrelationIdAsync(correlationId);
             if (logs.Count == 0) return NotFound("Log session not found.");
 
@@ -161,6 +164,9 @@ namespace ControlHub.API.AuditAI.Controllers
             {
                 return Ok(new { Answer = "No logs found." });
             }
+
+            if (_knowledgeService == null)
+                return BadRequest("Log Knowledge Service is not enabled (V1 required).");
 
             var answer = await _knowledgeService.ChatWithLogsAsync(request.Question, logs, lang);
 
