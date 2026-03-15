@@ -1,0 +1,66 @@
+---
+config:
+  layout: elk
+---
+flowchart TB
+ subgraph CLIENT["Ứng dụng Client"]
+        SendReq["Gửi yêu cầu cập nhật thông tin người dùng"]
+        Start(("Bắt đầu"))
+  end
+ subgraph CONTROLHUB["Hệ thống ControlHub"]
+        Validate{"Dữ liệu đầu vào hợp lệ?"}
+        ErrValidation[/"Trả về lỗi dữ liệu không hợp lệ"/]
+        End1(("Kết thúc"))
+        FindUser["Tìm người dùng theo UserId"]
+        UserExist{"Người dùng tồn tại?"}
+        ErrUserNotFound[/"Trả về lỗi không tìm thấy người dùng"/]
+        FindAcc["Tìm tài khoản liên kết của người dùng"]
+        AccExist{"Tài khoản tồn tại?"}
+        ErrAccNotFound[/"Trả về lỗi không tìm thấy tài khoản"/]
+        CheckRoleChange{"Yêu cầu có thay đổi Role?"}
+        ValidateRole["Kiểm tra Role mới tồn tại trong hệ thống"]
+        RoleOk{"Role mới hợp lệ?"}
+        ErrRole[/"Trả về lỗi không tìm thấy Role"/]
+        AssignRole["Gán Role mới cho tài khoản"]
+        UpdateProfile["Cập nhật thông tin cá nhân: họ tên, số điện thoại"]
+        CheckIdentChange{"Yêu cầu có thay đổi Identifier?"}
+        ValidateIdent["Xác thực định dạng Identifier mới và kiểm tra trùng lặp"]
+        IdentOk{"Hợp lệ và không trùng?"}
+        ErrIdent[/"Trả về lỗi Identifier không hợp lệ hoặc trùng lặp"/]
+        UpdateIdent["Cập nhật Identifier trên tài khoản"]
+        Commit["Xác nhận giao dịch"]
+        ReturnDTO[/"Trả về thông tin người dùng đã cập nhật"/]
+  end
+    Start --> SendReq
+    SendReq --> Validate
+    Validate -- Không --> ErrValidation
+    ErrValidation --> End1
+    Validate -- Có --> FindUser
+    FindUser --> UserExist
+    UserExist -- Không --> ErrUserNotFound
+    ErrUserNotFound --> End1
+    UserExist -- Có --> FindAcc
+    FindAcc --> AccExist
+    AccExist -- Không --> ErrAccNotFound
+    ErrAccNotFound --> End1
+    AccExist -- Có --> CheckRoleChange
+    CheckRoleChange -- Có --> ValidateRole
+    ValidateRole --> RoleOk
+    RoleOk -- Không --> ErrRole
+    ErrRole --> End1
+    RoleOk -- Có --> AssignRole
+    AssignRole --> UpdateProfile
+    CheckRoleChange -- Không --> UpdateProfile
+    UpdateProfile --> CheckIdentChange
+    CheckIdentChange -- Có --> ValidateIdent
+    ValidateIdent --> IdentOk
+    IdentOk -- Không --> ErrIdent
+    ErrIdent --> End1
+    IdentOk -- Có --> UpdateIdent
+    UpdateIdent --> Commit
+    CheckIdentChange -- Không --> Commit
+    Commit --> ReturnDTO
+    ReturnDTO --> End1
+
+    classDef client fill:#08427B,color:#fff,stroke:#073B6F
+    classDef hub fill:#1168BD,color:#fff,stroke:#0E5DAD

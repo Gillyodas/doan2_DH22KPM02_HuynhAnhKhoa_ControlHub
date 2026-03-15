@@ -1,0 +1,57 @@
+---
+config:
+  layout: elk
+---
+flowchart LR
+    SA(["👑 Siêu quản trị viên"]) -- Name + Description + ValidationRules --> P41["4.1 Tạo cấu hình định danh"]
+    P41 -- Kiểm tra Name trùng --> DB[("🗄️ SQL Server")]
+    DB -- Kết quả kiểm tra --> P41
+    P41 -- Ghi IdentifierConfig + ValidationRules --> DB
+    P41 -- "Xóa cache IdentifierConfig-Active" --> CAC[("🧠 In-Memory Cache CachedIdentifierConfigRepository")]
+    P41 -- ConfigId mới --> SA
+    SA -- ConfigId + Name + Description + ValidationRules mới --> P42["4.2 Cập nhật cấu hình định danh"]
+    P42 -- Truy vấn IdentifierConfig theo Id --> DB
+    DB -- Cấu hình hiện tại --> P42 & P43["4.3 Bật / tắt cấu hình định danh"]
+    P42 -- Kiểm tra Name trùng nếu đổi tên --> DB
+    P42 -- Cập nhật IdentifierConfig + ValidationRules --> DB
+    P42 -- "Xóa cache IdentifierConfig-Id + Name" --> CAC
+    P42 -- Xác nhận cập nhật thành công --> SA
+    SA -- ConfigId + IsActive --> P43
+    P43 -- Truy vấn IdentifierConfig theo Id --> DB
+    P43 -- Cập nhật IsActive --> DB
+    P43 -- "Xóa cache IdentifierConfig-Active" --> CAC
+    P43 -- Xác nhận thay đổi trạng thái --> SA
+    SA -- Yêu cầu xem tất cả cấu hình --> P44["4.4 Xem danh sách cấu hình định danh"]
+    P44 -- Truy vấn tất cả IdentifierConfig --> DB
+    DB -- Danh sách IdentifierConfig + Rules --> P44
+    P44 -- Danh sách IdentifierConfigDto --> SA
+    HA(["🖥️ Ứng dụng Host"]) -- Yêu cầu xem cấu hình đang hoạt động --> P45["4.5 Xem cấu hình định danh đang hoạt động"]
+    P45 -- "Đọc cache IdentifierConfig-Active" --> CAC
+    CAC -- Cache hit: Danh sách config active --> P45
+    P45 -- "Cache miss: Truy vấn IsActive = true" --> DB
+    DB -- Danh sách IdentifierConfig active --> P45
+    P45 -- "Ghi vào cache IdentifierConfig-Active" --> CAC
+    P45 -- Danh sách cấu hình đang hoạt động --> HA
+    SA -- AccountId + IdentifierType + Value + ConfigId --> P46["4.6 Thêm định danh vào tài khoản"]
+    P46 -- Truy vấn Account theo Id --> DB
+    DB -- Thông tin Account + Identifier hiện có --> P46
+    P46 -- Truy vấn IdentifierConfig theo ConfigId --> CAC
+    CAC -- Cache hit / miss: IdentifierConfig + ValidationRules --> P46
+    P46 -- Validate + normalize định danh theo Rules --> P46
+    P46 -- Kiểm tra định danh trùng trên Account --> DB
+    P46 -- Ghi Identifier mới vào Account --> DB
+    P46 -- Xác nhận thêm định danh thành công --> SA
+
+     SA:::actor
+     P41:::process
+     DB:::storage
+     CAC:::storage
+     P42:::process
+     P43:::process
+     P44:::process
+     HA:::actor
+     P45:::process
+     P46:::process
+    classDef actor fill:#08427B,color:#fff,stroke:#073B6F
+    classDef process fill:#1168BD,color:#fff,stroke:#0E5DAD
+    classDef storage fill:#555,color:#fff,stroke:#333

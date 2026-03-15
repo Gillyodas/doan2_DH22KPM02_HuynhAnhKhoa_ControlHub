@@ -1,0 +1,81 @@
+---
+config:
+  layout: elk
+---
+flowchart TB
+ subgraph CLIENT["Ứng dụng Client"]
+        SendReq["Gửi yêu cầu tạo Role kèm danh sách Permission"]
+        Start(("Bắt đầu"))
+  end
+ subgraph CONTROLHUB["Hệ thống ControlHub"]
+        Validate{"Danh sách Role không rỗng?"}
+        ErrValidation[/"Trả về lỗi dữ liệu không hợp lệ"/]
+        End1(("Kết thúc"))
+        LoadExisting["Nạp toàn bộ tên Role hiện có trong hệ thống"]
+        FilterLoop["Duyệt từng Role trong yêu cầu"]
+        NameDup{"Tên Role đã tồn tại?"}
+        AddFail1["Ghi nhận thất bại: tên Role trùng lặp"]
+        AddToProcess["Đưa vào danh sách cần xử lý"]
+        NextFilter{"Còn Role tiếp theo?"}
+        AnyToProcess{"Có Role nào cần xử lý?"}
+        ErrNoValid[/"Trả về lỗi không có Role hợp lệ"/]
+        ReturnPartialEmpty[/"Trả về kết quả: chỉ có thất bại"/]
+        LoadPerms["Nạp toàn bộ Permission cần thiết từ cơ sở dữ liệu"]
+        ProcessLoop["Duyệt từng Role cần xử lý"]
+        HasPerms{"Role có danh sách Permission?"}
+        AddFail2["Ghi nhận thất bại: thiếu Permission"]
+        NextProcess{"Còn Role tiếp theo?"}
+        PermsExist{"Tất cả Permission tồn tại trong hệ thống?"}
+        AddFail3["Ghi nhận thất bại: Permission không tìm thấy"]
+        CreateRole["Tạo Role mới và gán danh sách Permission"]
+        CreateOk{"Tạo thành công?"}
+        AddFail4["Ghi nhận thất bại"]
+        AddSuccess["Ghi nhận thành công"]
+        AnySuccess{"Có Role nào tạo thành công?"}
+        Save["Lưu tất cả Role thành công vào cơ sở dữ liệu"]
+        Commit["Xác nhận giao dịch"]
+        SkipSave["Bỏ qua lưu trữ"]
+        ReturnPartial[/"Trả về kết quả: danh sách thành công và thất bại"/]
+  end
+    Start --> SendReq
+    SendReq --> Validate
+    Validate -- Không --> ErrValidation
+    ErrValidation --> End1
+    Validate -- Có --> LoadExisting
+    LoadExisting --> FilterLoop
+    FilterLoop --> NameDup
+    NameDup -- Có --> AddFail1
+    NameDup -- Không --> AddToProcess
+    AddFail1 --> NextFilter
+    AddToProcess --> NextFilter
+    NextFilter -- Có --> FilterLoop
+    NextFilter -- Không --> AnyToProcess
+    AnyToProcess -- Không có và không có thất bại --> ErrNoValid
+    ErrNoValid --> End1
+    AnyToProcess -- Không có nhưng có thất bại --> ReturnPartialEmpty
+    ReturnPartialEmpty --> End1
+    AnyToProcess -- Có --> LoadPerms
+    LoadPerms --> ProcessLoop
+    ProcessLoop --> HasPerms
+    HasPerms -- Không --> AddFail2
+    AddFail2 --> NextProcess
+    HasPerms -- Có --> PermsExist
+    PermsExist -- Không --> AddFail3
+    AddFail3 --> NextProcess
+    PermsExist -- Có --> CreateRole
+    CreateRole --> CreateOk
+    CreateOk -- Không --> AddFail4
+    AddFail4 --> NextProcess
+    CreateOk -- Có --> AddSuccess
+    AddSuccess --> NextProcess
+    NextProcess -- Có --> ProcessLoop
+    NextProcess -- Không --> AnySuccess
+    AnySuccess -- Có --> Save
+    Save --> Commit
+    AnySuccess -- Không --> SkipSave
+    Commit --> ReturnPartial
+    SkipSave --> ReturnPartial
+    ReturnPartial --> End1
+
+    classDef client fill:#08427B,color:#fff,stroke:#073B6F
+    classDef hub fill:#1168BD,color:#fff,stroke:#0E5DAD

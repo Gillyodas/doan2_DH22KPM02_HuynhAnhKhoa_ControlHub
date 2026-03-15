@@ -1,0 +1,32 @@
+sequenceDiagram
+    participant User as Người dùng
+    participant System as Hệ thống ControlHub
+    participant DB as Cơ sở dữ liệu
+    participant Token as Dịch vụ Token
+
+    User->>System: Gửi yêu cầu đăng nhập (Identifier + mật khẩu)
+    System->>System: Kiểm tra dữ liệu đầu vào
+    System->>DB: Tìm tài khoản theo Identifier
+    alt Tài khoản không tồn tại hoặc bị vô hiệu
+        DB-->>System: Không tìm thấy / bị xóa / vô hiệu
+        System->>System: Ghi nhận sự kiện đăng nhập thất bại
+        System-->>User: Lỗi: Thông tin đăng nhập không hợp lệ
+    else Tài khoản hợp lệ
+        DB-->>System: Trả về thông tin tài khoản
+        System->>Token: Xác thực mật khẩu (Argon2id)
+        alt Mật khẩu sai
+            Token-->>System: Xác thực thất bại
+            System->>System: Ghi nhận sự kiện đăng nhập thất bại
+            System-->>User: Lỗi: Thông tin đăng nhập không hợp lệ
+        else Mật khẩu đúng
+            Token-->>System: Xác thực thành công
+            System->>DB: Lấy thông tin Role của tài khoản
+            DB-->>System: RoleId
+            System->>Token: Tạo cặp Access Token và Refresh Token
+            Token-->>System: Access Token + Refresh Token
+            System->>DB: Lưu Refresh Token
+            DB-->>System: Lưu thành công
+            System->>System: Ghi nhận sự kiện đăng nhập thành công
+            System-->>User: Trả về phiên đăng nhập (AccountId, Username, Access Token, Refresh Token)
+        end
+    end

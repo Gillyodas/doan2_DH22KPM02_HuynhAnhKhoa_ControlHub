@@ -1,0 +1,57 @@
+---
+config:
+  layout: elk
+---
+flowchart LR
+    HA(["🖥️ Ứng dụng Host"])
+    DB[("🗄️ SQL Server")]
+
+    HA -- "RefreshToken + AccessToken cũ + AccountId" --> P121["1.2.1 Truy vấn RefreshToken"]
+    P121 -- "SELECT Token WHERE Value = refreshToken" --> DB
+    DB -- "Token entity (AccountId · ExpiredAt · IsUsed · IsRevoked)" --> P121
+    P121 -- "Không tìm thấy" --> P12F["1.2.F Trả lỗi TokenInvalid"]
+    P121 -- "RefreshToken tồn tại" --> P122["1.2.2 Truy vấn Account theo AccountId"]
+
+    P122 -- "SELECT Account + Identifiers WHERE Id = AccountId" --> DB
+    DB -- "Account (Id · IsActive · Identifiers)" --> P122
+    P122 -- "Account không tồn tại" --> P12F
+    P122 -- "Account hợp lệ" --> P123["1.2.3 Kiểm tra tính hợp lệ RefreshToken"]
+
+    P123 -- "RefreshToken.AccountId != request.AccountId" --> P12F
+    P123 -- "ExpiredAt <= UtcNow hoặc IsUsed = true" --> P12F
+    P123 -- "RefreshToken hợp lệ" --> P124["1.2.4 Lấy RoleId và sinh AccessToken mới"]
+
+    P124 -- "SELECT RoleId WHERE AccountId = id" --> DB
+    DB -- "RoleId" --> P124
+    P124 -- "AccessTokenGenerator.Generate(AccountId, Identifier, RoleId)" --> P124
+    P124 -- "AccessToken mới" --> P125["1.2.5 Kiểm tra và thu hồi AccessToken cũ"]
+
+    P125 -- "SELECT Token WHERE Value = accessToken cũ" --> DB
+    DB -- "OldAccessToken entity (AccountId · IsRevoked)" --> P125
+    P125 -- "OldAccessToken.AccountId != AccountId" --> P12F
+    P125 -- "OldAccessToken.MarkAsUsed() + Revoke()" --> P126["1.2.6 Thu hồi RefreshToken cũ và sinh cặp token mới"]
+
+    P126 -- "RefreshToken.MarkAsUsed() + Revoke()" --> P126
+    P126 -- "RefreshTokenGenerator.Generate() — random secure string" --> P126
+    P126 -- "TokenFactory.Create(AccountId, newAccess, AccessToken)" --> P126
+    P126 -- "TokenFactory.Create(AccountId, newRefresh, RefreshToken)" --> P126
+    P126 -- "INSERT AccessToken mới + RefreshToken mới" --> DB
+    P126 -- "UPDATE OldAccessToken + OldRefreshToken (IsUsed=true · IsRevoked=true)" --> DB
+    P126 -- "UnitOfWork.CommitAsync()" --> DB
+    DB -- "Commit thành công" --> P126
+    P126 -- "RefreshAccessTokenResponse (AccessToken mới · RefreshToken mới)" --> HA
+    P12F -- "Error: TokenNotFound / TokenInvalid / AccountNotFound" --> HA
+
+    HA:::actor
+    DB:::storage
+    P121:::process
+    P122:::process
+    P123:::process
+    P124:::process
+    P125:::process
+    P126:::process
+    P12F:::error
+    classDef actor fill:#08427B,color:#fff,stroke:#073B6F
+    classDef process fill:#1168BD,color:#fff,stroke:#0E5DAD
+    classDef storage fill:#555,color:#fff,stroke:#333
+    classDef error fill:#8B1A1A,color:#fff,stroke:#6B0000

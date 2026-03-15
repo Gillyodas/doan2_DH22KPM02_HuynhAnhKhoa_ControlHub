@@ -1,0 +1,61 @@
+---
+config:
+  layout: elk
+---
+flowchart LR
+    HA(["🖥️ Ứng dụng Host"])
+    DB[("🗄️ SQL Server")]
+    OB[("📬 Outbox Table")]
+    CFG[("⚙️ appsettings.json")]
+    SMTP["📧 SMTP Server"]
+
+    HA -- "Định danh + LoạiĐịnhDanh" --> P151["1.5.1 Validate định danh qua IdentifierFactory"]
+    P151 -- "IdentifierFactory.Create(Type, Value) — không async, không configId" --> P151
+    P151 -- "Định danh không hợp lệ về format" --> P15F["1.5.F Trả lỗi"]
+    P151 -- "Identifier hợp lệ (NormalizedValue)" --> P152["1.5.2 Truy vấn tài khoản theo định danh"]
+
+    P152 -- "SELECT Account WHERE NormalizedValue = normalizedValue" --> DB
+    DB -- "Account (Id · IsActive · IsDeleted)" --> P152
+    P152 -- "Không tìm thấy / IsDeleted / IsActive=false" --> P15F
+    P152 -- "Account hợp lệ" --> P153["1.5.3 Sinh Reset Password Token"]
+
+    P153 -- "PasswordResetTokenGenerator.Generate(AccountId)" --> P153
+    P153 -- "Token rỗng" --> P15F
+    P153 -- "Reset token string" --> P154["1.5.4 Lưu Reset Token vào DB"]
+
+    P154 -- "TokenFactory.Create(AccountId, token, TokenType.ResetPassword)" --> P154
+    P154 -- "INSERT Token (ResetPassword type)" --> DB
+    DB -- "Ghi thành công" --> P154
+    P154 -- "Token domain entity" --> P155["1.5.5 Đọc BaseUrl và tạo reset link"]
+
+    P155 -- "Đọc BaseUrl:DevBaseUrl" --> CFG
+    CFG -- "DevBaseUrl string" --> P155
+    P155 -- "DevBaseUrl rỗng / thiếu" --> P15F
+    P155 -- "resetLink = DevBaseUrl + /control-hub/reset-password?token=..." --> P156["1.5.6 Ghi Outbox Message"]
+
+    P156 -- "OutboxMessage.Create(Email, payload: To + Subject + Body + resetLink)" --> P156
+    P156 -- "INSERT OutboxMessage" --> OB
+    P156 -- "UnitOfWork.CommitAsync()" --> DB
+    DB -- "Commit thành công" --> P156
+    P156 -- "Result.Success()" --> HA
+
+    OB -- "Background OutboxProcessor đọc và gửi" --> SMTP
+    P15F -- "Error: InvalidIdentifier / IdentifierNotFound / TokenGenerationFailed / ConfigMissing" --> HA
+
+    HA:::actor
+    DB:::storage
+    OB:::storage
+    CFG:::storage
+    SMTP:::external
+    P151:::process
+    P152:::process
+    P153:::process
+    P154:::process
+    P155:::process
+    P156:::process
+    P15F:::error
+    classDef actor fill:#08427B,color:#fff,stroke:#073B6F
+    classDef process fill:#1168BD,color:#fff,stroke:#0E5DAD
+    classDef storage fill:#555,color:#fff,stroke:#333
+    classDef external fill:#6B6B6B,color:#fff,stroke:#4A4A4A
+    classDef error fill:#8B1A1A,color:#fff,stroke:#6B0000

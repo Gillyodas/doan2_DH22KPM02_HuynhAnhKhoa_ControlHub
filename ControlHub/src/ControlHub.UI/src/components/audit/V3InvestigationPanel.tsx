@@ -1,15 +1,22 @@
-import { useState, Component, ReactNode } from 'react';
+import { useState, useRef, useEffect, Component, ReactNode } from 'react';
 import ReactMarkdown from 'react-markdown';
-import { Send, Loader2, CheckCircle, XCircle, History, RotateCcw } from 'lucide-react';
+import { Send, Loader2, CheckCircle, XCircle, History, RotateCcw, Trash2 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Textarea } from '@/components/ui/textarea';
 import { Input } from '@/components/ui/input';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from '@/components/ui/collapsible';
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from '@/components/ui/select';
 import { useV3Audit } from '@/hooks/use-v3-audit';
-import { AuditHistoryPanel } from '@/components/audit/AuditHistoryPanel';
 import { V3InvestigateResponse } from '@/services/api/audit';
+import { AuditHistoryEntry } from '@/lib/audit-history';
 
 // ── Error Boundary — prevents ReactMarkdown crashes from causing a black screen ──
 interface EBState { hasError: boolean; message: string }
@@ -214,10 +221,141 @@ function InvestigationResult({
   );
 }
 
+function relativeTime(iso: string): string {
+  const mins = Math.floor((Date.now() - new Date(iso).getTime()) / 60_000);
+  if (mins < 1) return 'just now';
+  if (mins < 60) return `${mins}m ago`;
+  if (mins < 1440) return `${Math.floor(mins / 60)}h ago`;
+  return `${Math.floor(mins / 1440)}d ago`;
+}
+
+// ── History Combobox ──
+function HistorySelect({
+  history,
+  selectedId,
+  onSelect,
+  onDelete,
+  onClearAll,
+}: {
+  history: AuditHistoryEntry[];
+  selectedId: string;
+  onSelect: (entry: AuditHistoryEntry) => void;
+  onDelete: (id: string) => void;
+  onClearAll: () => void;
+}) {
+  return (
+    <Card>
+      <CardHeader className="py-3 px-4">
+        <div className="flex items-center justify-between">
+          <CardTitle className="flex items-center gap-2 text-sm font-medium">
+            <History className="h-4 w-4" />
+            Investigation History
+            {history.length > 0 && (
+              <Badge variant="secondary" className="ml-1 text-xs">{history.length}/10</Badge>
+            )}
+          </CardTitle>
+          {history.length > 0 && (
+            <Button
+              variant="ghost"
+              size="sm"
+              className="h-6 px-2 text-xs text-muted-foreground hover:text-destructive"
+              onClick={onClearAll}
+            >
+              Clear all
+            </Button>
+          )}
+        </div>
+      </CardHeader>
+      <CardContent className="px-4 pb-4 pt-0 space-y-3">
+        {history.length === 0 && (
+          <p className="text-xs text-muted-foreground py-2">
+            No investigations saved yet. Run an investigation above to save it here.
+          </p>
+        )}
+        {history.length > 0 && (
+        <div className="space-y-3">
+        {/* Controlled Select — value kept in sync with parent so re-renders don't reset it */}
+        <Select
+          value={selectedId}
+          onValueChange={(id) => {
+            const entry = history.find((e) => e.id === id);
+            if (entry) onSelect(entry);
+          }}
+        >
+          <SelectTrigger className="w-full">
+            <SelectValue placeholder="Select a past investigation to view…" />
+          </SelectTrigger>
+          <SelectContent>
+            {history.map((entry) => {
+              const conf = typeof entry.result.confidence === 'number'
+                ? `${(entry.result.confidence * 100).toFixed(0)}%`
+                : '—';
+              return (
+                <SelectItem key={entry.id} value={entry.id}>
+                  {`[${relativeTime(entry.savedAt)} · ${conf}] ${entry.query.length > 55 ? entry.query.slice(0, 55) + '…' : entry.query}`}
+                </SelectItem>
+              );
+            })}
+          </SelectContent>
+        </Select>
+
+        {/* Clickable rows — clicking the row restores; trash icon deletes only */}
+        <div className="space-y-1">
+          {history.map((entry) => {
+            const conf = typeof entry.result.confidence === 'number'
+              ? `${(entry.result.confidence * 100).toFixed(0)}%`
+              : '—';
+            const isActive = entry.id === selectedId;
+            return (
+              <div
+                key={entry.id}
+                role="button"
+                tabIndex={0}
+                onClick={() => onSelect(entry)}
+                onKeyDown={(e) => e.key === 'Enter' && onSelect(entry)}
+                className={`flex cursor-pointer items-center gap-2 rounded border px-2 py-1.5 text-xs transition-colors
+                  ${isActive
+                    ? 'border-primary bg-primary/10 text-foreground'
+                    : 'bg-muted/30 hover:bg-muted/60 text-muted-foreground'
+                  }`}
+              >
+                <span
+                  className={`h-2 w-2 flex-shrink-0 rounded-full ${
+                    entry.result.verificationPassed ? 'bg-green-500' : 'bg-red-400'
+                  }`}
+                />
+                <span className="flex-1 truncate" title={entry.query}>
+                  {entry.query}
+                </span>
+                <span className="flex-shrink-0 tabular-nums">
+                  {relativeTime(entry.savedAt)} · {conf}
+                </span>
+                <Button
+                  variant="ghost"
+                  size="icon"
+                  className="h-5 w-5 flex-shrink-0 hover:text-destructive"
+                  onClick={(e) => { e.stopPropagation(); onDelete(entry.id); }}
+                  title="Delete"
+                >
+                  <Trash2 className="h-3 w-3" />
+                </Button>
+              </div>
+            );
+          })}
+        </div>
+        </div>
+        )}
+      </CardContent>
+    </Card>
+  );
+}
+
 // ── Main Panel ──
 export function V3InvestigationPanel() {
   const [query, setQuery] = useState('');
   const [correlationId, setCorrelationId] = useState('');
+  const [selectedHistoryId, setSelectedHistoryId] = useState('');
+  const resultRef = useRef<HTMLDivElement>(null);
 
   const {
     result,
@@ -233,8 +371,16 @@ export function V3InvestigationPanel() {
     clearHistory,
   } = useV3Audit();
 
+  // Scroll result into view whenever it changes
+  useEffect(() => {
+    if (result && !isLoading) {
+      resultRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
+  }, [result, isLoading]);
+
   const handleInvestigate = async () => {
     if (!query.trim()) return;
+    setSelectedHistoryId('');
     await investigate({
       query: query.trim(),
       correlationId: correlationId.trim() || undefined,
@@ -242,9 +388,25 @@ export function V3InvestigationPanel() {
     await fetchTrace();
   };
 
+  const handleRestoreFromHistory = (entry: AuditHistoryEntry) => {
+    setSelectedHistoryId(entry.id);
+    restoreFromHistory(entry);
+  };
+
+  const handleDeleteEntry = (id: string) => {
+    if (selectedHistoryId === id) setSelectedHistoryId('');
+    deleteHistoryEntry(id);
+  };
+
+  const handleClearHistory = () => {
+    setSelectedHistoryId('');
+    clearHistory();
+  };
+
   const handleReset = () => {
     setQuery('');
     setCorrelationId('');
+    setSelectedHistoryId('');
     reset();
   };
 
@@ -298,12 +460,13 @@ export function V3InvestigationPanel() {
         </CardContent>
       </Card>
 
-      {/* History Panel */}
-      <AuditHistoryPanel
+      {/* History Combobox */}
+      <HistorySelect
         history={history}
-        onRestore={restoreFromHistory}
-        onDelete={deleteHistoryEntry}
-        onClearAll={clearHistory}
+        selectedId={selectedHistoryId}
+        onSelect={handleRestoreFromHistory}
+        onDelete={handleDeleteEntry}
+        onClearAll={handleClearHistory}
       />
 
       {/* Error */}
@@ -335,7 +498,15 @@ export function V3InvestigationPanel() {
 
       {/* Result */}
       {result && !isLoading && (
-        <InvestigationResult result={result} trace={trace} />
+        <div ref={resultRef}>
+          {selectedHistoryId && (
+            <p className="mb-2 text-xs text-muted-foreground flex items-center gap-1">
+              <History className="h-3 w-3" />
+              Restored from history
+            </p>
+          )}
+          <InvestigationResult result={result} trace={trace} />
+        </div>
       )}
     </div>
   );

@@ -1,0 +1,52 @@
+---
+config:
+  layout: elk
+---
+flowchart LR
+    HA(["🖥️ Ứng dụng Host"]) -- Định danh + Mật khẩu --> P11["1.1 Đăng nhập"]
+    SA(["👑 Siêu quản trị viên"]) -- Định danh + Mật khẩu --> P11
+    P11 -- Truy vấn tài khoản theo định danh --> DB[("🗄️ SQL Server")]
+    DB -- Thông tin tài khoản + Password hash + RoleId --> P11
+    P11 -- Ghi Access Token + Refresh Token --> DB
+    P11 -- Access Token + Refresh Token --> HA & SA
+    HA -- Refresh Token + Access Token cũ + AccountId --> P12["1.2 Làm mới token"]
+    P12 -- Truy vấn Refresh Token + Account --> DB
+    DB -- Token hợp lệ + Thông tin Account + RoleId --> P12
+    P12 -- Thu hồi token cũ · Ghi token mới --> DB
+    P12 -- Access Token mới + Refresh Token mới --> HA
+    HA -- Refresh Token + AccountId --> P13["1.3 Đăng xuất"]
+    SA -- Refresh Token + AccountId --> P13
+    P13 -- Thu hồi Refresh Token --> DB
+    P13 -- Xác nhận đăng xuất thành công --> HA & SA
+    HA -- AccountId + Mật khẩu hiện tại + Mật khẩu mới --> P14["1.4 Đổi mật khẩu"]
+    P14 -- Truy vấn tài khoản + Token hiện hành --> DB
+    DB -- Thông tin tài khoản + Password hash + Danh sách Token --> P14
+    P14 -- Cập nhật Password hash · Thu hồi toàn bộ Token --> DB
+    P14 -- Xác nhận đổi mật khẩu thành công --> HA
+    HA -- Định danh + Loại định danh --> P15["1.5 Yêu cầu đặt lại mật khẩu"]
+    P15 -- Truy vấn tài khoản theo định danh --> DB
+    DB -- Thông tin tài khoản --> P15
+    P15 -- Ghi Reset Password Token --> DB
+    P15 -- Nội dung email + Link đặt lại --> OB[("📬 Outbox Table")]
+    OB -- Gửi email reset mật khẩu --> SMTP["📧 SMTP Server"]
+    HA -- Reset Token + Mật khẩu mới --> P16["1.6 Đặt lại mật khẩu"]
+    P16 -- Truy vấn Reset Token --> DB
+    DB -- Token + Thông tin tài khoản --> P16
+    P16 -- Cập nhật Password hash · Thu hồi Reset Token --> DB
+    P16 -- Xác nhận đặt lại thành công --> HA
+
+     HA:::actor
+     P11:::process
+     SA:::actor
+     DB:::storage
+     P12:::process
+     P13:::process
+     P14:::process
+     P15:::process
+     OB:::storage
+     SMTP:::external
+     P16:::process
+    classDef actor fill:#08427B,color:#fff,stroke:#073B6F
+    classDef process fill:#1168BD,color:#fff,stroke:#0E5DAD
+    classDef storage fill:#555,color:#fff,stroke:#333
+    classDef external fill:#6B6B6B,color:#fff,stroke:#4A4A4A

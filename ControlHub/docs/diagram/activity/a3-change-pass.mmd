@@ -1,0 +1,66 @@
+---
+config:
+  layout: elk
+---
+flowchart TB
+ subgraph CLIENT["Ứng dụng Client"]
+        SendReq["Gửi yêu cầu đổi mật khẩu với mật khẩu cũ và mới"]
+        Start(("Bắt đầu"))
+  end
+ subgraph CONTROLHUB["Hệ thống ControlHub"]
+        Validate{"Dữ liệu hợp lệ? Mật khẩu mới đạt chính sách bảo mật?"}
+        ErrValidation[/"Trả về lỗi dữ liệu không hợp lệ"/]
+        End1(("Kết thúc"))
+        FindAcc["Tìm tài khoản theo AccountId"]
+        AccExist{"Tài khoản tồn tại?"}
+        ErrNotFound[/"Trả về lỗi không tìm thấy tài khoản"/]
+        AccActive{"Tài khoản chưa bị xóa và đang hoạt động?"}
+        ErrAccState[/"Trả về lỗi tài khoản bị xóa hoặc vô hiệu hóa"/]
+        VerifyOld["Xác thực mật khẩu cũ bằng Argon2id"]
+        OldOk{"Mật khẩu cũ đúng?"}
+        ErrOldPwd[/"Trả về lỗi mật khẩu cũ không đúng"/]
+        SameCheck{"Mật khẩu mới trùng mật khẩu cũ?"}
+        ErrSame[/"Trả về lỗi mật khẩu mới không được trùng mật khẩu cũ"/]
+        HashNew["Mã hóa mật khẩu mới bằng Argon2id"]
+        HashOk{"Mã hóa thành công?"}
+        ErrHash[/"Trả về lỗi mã hóa mật khẩu thất bại"/]
+        UpdatePwd["Cập nhật mật khẩu cho tài khoản"]
+        UpdateOk{"Cập nhật thành công?"}
+        ErrUpdate[/"Trả về lỗi cập nhật thất bại"/]
+        RevokeAll["Thu hồi toàn bộ Token còn hiệu lực của tài khoản"]
+        Commit["Xác nhận giao dịch"]
+        ReturnOk[/"Trả về thành công"/]
+  end
+    Start --> SendReq
+    SendReq --> Validate
+    Validate -- Không --> ErrValidation
+    ErrValidation --> End1
+    Validate -- Có --> FindAcc
+    FindAcc --> AccExist
+    AccExist -- Không --> ErrNotFound
+    ErrNotFound --> End1
+    AccExist -- Có --> AccActive
+    AccActive -- Không --> ErrAccState
+    ErrAccState --> End1
+    AccActive -- Có --> VerifyOld
+    VerifyOld --> OldOk
+    OldOk -- Sai --> ErrOldPwd
+    ErrOldPwd --> End1
+    OldOk -- Đúng --> SameCheck
+    SameCheck -- Trùng --> ErrSame
+    ErrSame --> End1
+    SameCheck -- Khác --> HashNew
+    HashNew --> HashOk
+    HashOk -- Không --> ErrHash
+    ErrHash --> End1
+    HashOk -- Có --> UpdatePwd
+    UpdatePwd --> UpdateOk
+    UpdateOk -- Không --> ErrUpdate
+    ErrUpdate --> End1
+    UpdateOk -- Có --> RevokeAll
+    RevokeAll --> Commit
+    Commit --> ReturnOk
+    ReturnOk --> End1
+
+    classDef client fill:#08427B,color:#fff,stroke:#073B6F
+    classDef hub fill:#1168BD,color:#fff,stroke:#0E5DAD

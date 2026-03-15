@@ -1,0 +1,65 @@
+---
+config:
+  layout: elk
+---
+flowchart TB
+ subgraph CLIENT["Ứng dụng Client"]
+        SendReq["Gửi yêu cầu đăng ký với Identifier, mật khẩu và loại tài khoản"]
+        Start(("Bắt đầu"))
+  end
+ subgraph CONTROLHUB["Hệ thống ControlHub"]
+        Validate{"Dữ liệu hợp lệ? Mật khẩu đạt chính sách? MasterKey nếu SuperAdmin?"}
+        ErrValidation[/"Trả về lỗi dữ liệu không hợp lệ"/]
+        End1(("Kết thúc"))
+        RoleType{"Loại đăng ký?"}
+        CheckMasterCfg{"MasterKey được cấu hình trong hệ thống?"}
+        ErrCfg[/"Trả về lỗi cấu hình hệ thống"/]
+        VerifyMaster{"MasterKey từ yêu cầu khớp với cấu hình?"}
+        ErrMaster[/"Trả về lỗi MasterKey không hợp lệ"/]
+        CheckDup["Kiểm tra Identifier đã tồn tại trong hệ thống?"]
+        CheckPerm["Kiểm tra quyền users.create qua Authorization Pipeline"]
+        Dup{"Identifier trùng lặp?"}
+        ErrDup[/"Trả về lỗi Identifier đã tồn tại"/]
+        ResolveRole["Xác định RoleId theo loại đăng ký từ cấu hình"]
+        RoleOk{"RoleId hợp lệ?"}
+        ErrRole[/"Trả về lỗi cấu hình Role không hợp lệ"/]
+        CreateAccount["Tạo tài khoản: mã hóa mật khẩu Argon2id, xác thực Identifier, tạo User"]
+        CreateOk{"Tạo thành công?"}
+        ErrCreate[/"Trả về lỗi: mật khẩu không đạt hoặc Identifier không hợp lệ"/]
+        SaveAcc["Lưu tài khoản vào cơ sở dữ liệu"]
+        Commit["Xác nhận giao dịch"]
+        ReturnId[/"Trả về AccountId mới tạo"/]
+  end
+    Start --> SendReq
+    SendReq --> Validate
+    Validate -- Không --> ErrValidation
+    ErrValidation --> End1
+    Validate -- Có --> RoleType
+    RoleType -- SuperAdmin --> CheckMasterCfg
+    CheckMasterCfg -- Không --> ErrCfg
+    ErrCfg --> End1
+    CheckMasterCfg -- Có --> VerifyMaster
+    VerifyMaster -- Không --> ErrMaster
+    ErrMaster --> End1
+    VerifyMaster -- Có --> CheckDup
+    RoleType -- Admin --> CheckPerm
+    CheckPerm --> CheckDup
+    RoleType -- User --> CheckDup
+    CheckDup --> Dup
+    Dup -- Có --> ErrDup
+    ErrDup --> End1
+    Dup -- Không --> ResolveRole
+    ResolveRole --> RoleOk
+    RoleOk -- Không --> ErrRole
+    ErrRole --> End1
+    RoleOk -- Có --> CreateAccount
+    CreateAccount --> CreateOk
+    CreateOk -- Không --> ErrCreate
+    ErrCreate --> End1
+    CreateOk -- Có --> SaveAcc
+    SaveAcc --> Commit
+    Commit --> ReturnId
+    ReturnId --> End1
+
+    classDef client fill:#08427B,color:#fff,stroke:#073B6F
+    classDef hub fill:#1168BD,color:#fff,stroke:#0E5DAD

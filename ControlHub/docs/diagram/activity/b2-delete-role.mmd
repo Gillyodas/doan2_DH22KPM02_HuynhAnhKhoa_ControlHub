@@ -1,0 +1,39 @@
+---
+config:
+  layout: elk
+---
+flowchart TB
+ subgraph CLIENT["Ứng dụng Client"]
+        SendReq["Gửi yêu cầu xóa Role theo RoleId"]
+        Start(("Bắt đầu"))
+  end
+ subgraph CONTROLHUB["Hệ thống ControlHub"]
+        FindRole["Tìm Role theo RoleId"]
+        RoleExist{"Role tồn tại?"}
+        ErrNotFound[/"Trả về lỗi không tìm thấy Role"/]
+        End1(("Kết thúc"))
+        CheckUsage["Kiểm tra có tài khoản nào đang sử dụng Role?"]
+        InUse{"Có tài khoản đang dùng?"}
+        ErrInUse[/"Trả về lỗi Role đang được sử dụng, kèm số lượng tài khoản"/]
+        SoftDelete["Xóa mềm Role: đánh dấu đã xóa, phát sự kiện RoleDeletedEvent"]
+        Commit["Xác nhận giao dịch"]
+        InvalidateCache["Vô hiệu hóa cache Role"]
+        ReturnOk[/"Trả về thành công 204 NoContent"/]
+  end
+    Start --> SendReq
+    SendReq --> FindRole
+    FindRole --> RoleExist
+    RoleExist -- Không --> ErrNotFound
+    ErrNotFound --> End1
+    RoleExist -- Có --> CheckUsage
+    CheckUsage --> InUse
+    InUse -- Có --> ErrInUse
+    ErrInUse --> End1
+    InUse -- Không --> SoftDelete
+    SoftDelete --> Commit
+    Commit --> InvalidateCache
+    InvalidateCache --> ReturnOk
+    ReturnOk --> End1
+
+    classDef client fill:#08427B,color:#fff,stroke:#073B6F
+    classDef hub fill:#1168BD,color:#fff,stroke:#0E5DAD

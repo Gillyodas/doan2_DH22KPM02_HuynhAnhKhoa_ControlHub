@@ -1,0 +1,55 @@
+---
+config:
+  layout: elk
+---
+flowchart TB
+ subgraph CLIENT["Ứng dụng Client"]
+        Action{"Hành động?"}
+        Start(("Bắt đầu"))
+  end
+ subgraph CONTROLHUB["Hệ thống ControlHub"]
+        ValidateCreate{"Dữ liệu hợp lệ? Tên, mô tả không rỗng, danh sách quy tắc hợp lệ?"}
+        ErrValidation[/"Trả về lỗi dữ liệu không hợp lệ"/]
+        End1(("Kết thúc"))
+        BuildRules["Xây dựng danh sách quy tắc xác thực: Required, MinLength, MaxLength, Pattern, Range..."]
+        CreateConfig["Tạo cấu hình Identifier với tên, mô tả và danh sách quy tắc"]
+        CreateOk{"Tạo thành công?"}
+        ErrDomain[/"Trả về lỗi nghiệp vụ"/]
+        SaveConfig["Lưu cấu hình vào cơ sở dữ liệu"]
+        Commit1["Xác nhận giao dịch"]
+        Cache1["Vô hiệu hóa cache cấu hình Identifier"]
+        ReturnConfig[/"Trả về cấu hình Identifier mới tạo"/]
+        FindConfig["Tìm cấu hình Identifier theo Id"]
+        ConfigExist{"Cấu hình tồn tại?"}
+        ErrNotFound[/"Trả về lỗi không tìm thấy cấu hình"/]
+        Toggle["Đảo trạng thái hoạt động của cấu hình"]
+        Commit2["Xác nhận giao dịch"]
+        Cache2["Vô hiệu hóa cache cấu hình Identifier"]
+        ReturnToggle[/"Trả về trạng thái mới — ảnh hưởng loại Identifier khả dụng trên giao diện đăng nhập và đăng ký"/]
+  end
+    Start --> Action
+    Action -- Tạo mới --> ValidateCreate
+    ValidateCreate -- Không --> ErrValidation
+    ErrValidation --> End1
+    ValidateCreate -- Có --> BuildRules
+    BuildRules --> CreateConfig
+    CreateConfig --> CreateOk
+    CreateOk -- Không --> ErrDomain
+    ErrDomain --> End1
+    CreateOk -- Có --> SaveConfig
+    SaveConfig --> Commit1
+    Commit1 --> Cache1
+    Cache1 --> ReturnConfig
+    ReturnConfig --> End1
+    Action -- Bật hoặc Tắt --> FindConfig
+    FindConfig --> ConfigExist
+    ConfigExist -- Không --> ErrNotFound
+    ErrNotFound --> End1
+    ConfigExist -- Có --> Toggle
+    Toggle --> Commit2
+    Commit2 --> Cache2
+    Cache2 --> ReturnToggle
+    ReturnToggle --> End1
+
+    classDef client fill:#08427B,color:#fff,stroke:#073B6F
+    classDef hub fill:#1168BD,color:#fff,stroke:#0E5DAD

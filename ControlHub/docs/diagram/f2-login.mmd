@@ -1,0 +1,56 @@
+---
+config:
+  layout: elk
+---
+flowchart LR
+    HA(["🖥️ Ứng dụng Host"])
+    DB[("🗄️ SQL Server")]
+    SIG["📡 SignalR Hub Dashboard"]
+
+    HA -- "Định danh + Mật khẩu + LoạiĐịnhDanh" --> P111["1.1.1 Truy vấn tài khoản theo định danh"]
+    P111 -- "SELECT Account + Identifiers + Password WHERE NormalizedValue = định danh" --> DB
+    DB -- "Account (Id · IsActive · IsDeleted · Password hash · Salt)" --> P111
+    P111 -- "Không tìm thấy / IsDeleted / IsActive=false" --> P11F["1.1.F Ghi nhận đăng nhập thất bại"]
+    P111 -- "Account hợp lệ" --> P112["1.1.2 Xác minh mật khẩu Argon2id"]
+
+    P112 -- "Argon2id.Verify(rawPassword, hash, salt)" --> P112
+    P112 -- "Mật khẩu sai" --> P11F
+    P112 -- "Mật khẩu đúng" --> P113["1.1.3 Lấy RoleId của tài khoản"]
+
+    P113 -- "SELECT RoleId WHERE AccountId = id" --> DB
+    DB -- "RoleId" --> P113
+    P113 -- "AccountId + Identifier + RoleId" --> P114["1.1.4 Sinh cặp JWT Token"]
+
+    P114 -- "AccessTokenGenerator.Generate(AccountId, Identifier, RoleId)" --> P114
+    P114 -- "RefreshTokenGenerator.Generate() — random secure string" --> P114
+    P114 -- "AccessToken value + RefreshToken value" --> P115["1.1.5 Lưu token vào DB"]
+
+    P115 -- "TokenFactory.Create(AccountId, value, AccessToken)" --> P115
+    P115 -- "TokenFactory.Create(AccountId, value, RefreshToken)" --> P115
+    P115 -- "INSERT Token (RefreshToken)" --> DB
+    P115 -- "UnitOfWork.CommitAsync()" --> DB
+    DB -- "Commit thành công" --> P115
+    P115 -- "Cặp token đã lưu" --> P116["1.1.6 Phát sự kiện đăng nhập"]
+
+    P11F -- "AccountSignedInEvent (IsSuccess=false · MaskedIdentifier · FailureReason)" --> P116
+    P116 -- "Fire-and-forget: LoginEventBuffer.Enqueue(event)" --> SIG
+    SIG -- "Batch flush mỗi 2 giây: LoginAttemptsBatch" --> SIG
+
+    P116 -- "SignInDTO (AccountId · Username · AccessToken · RefreshToken)" --> HA
+    P11F -- "Error: InvalidCredentials" --> HA
+
+    HA:::actor
+    DB:::storage
+    SIG:::external
+    P111:::process
+    P112:::process
+    P113:::process
+    P114:::process
+    P115:::process
+    P116:::process
+    P11F:::error
+    classDef actor fill:#08427B,color:#fff,stroke:#073B6F
+    classDef process fill:#1168BD,color:#fff,stroke:#0E5DAD
+    classDef storage fill:#555,color:#fff,stroke:#333
+    classDef external fill:#6B6B6B,color:#fff,stroke:#4A4A4A
+    classDef error fill:#8B1A1A,color:#fff,stroke:#6B0000

@@ -1,0 +1,25 @@
+sequenceDiagram
+    participant Admin as Quản trị viên
+    participant System as Hệ thống ControlHub
+    participant DB as Cơ sở dữ liệu
+
+    Admin->>System: Gửi yêu cầu xóa Role (RoleId)
+    System->>DB: Tìm Role theo RoleId
+    alt Role không tồn tại
+        DB-->>System: Không tìm thấy
+        System-->>Admin: Lỗi: Không tìm thấy Role
+    else Role tồn tại
+        DB-->>System: Trả về Role
+        System->>DB: Kiểm tra có tài khoản nào đang dùng Role
+        alt Có tài khoản đang dùng
+            DB-->>System: Danh sách tài khoản (số lượng > 0)
+            System-->>Admin: Lỗi: Role đang được sử dụng (kèm số lượng tài khoản)
+        else Không có tài khoản nào dùng
+            DB-->>System: Danh sách rỗng
+            System->>System: Xóa mềm Role + phát sự kiện RoleDeletedEvent
+            System->>DB: Xác nhận giao dịch
+            DB-->>System: Thành công
+            System->>System: Vô hiệu hóa cache Role
+            System-->>Admin: Xóa thành công (204 NoContent)
+        end
+    end

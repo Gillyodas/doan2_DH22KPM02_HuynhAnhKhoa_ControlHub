@@ -1,0 +1,41 @@
+sequenceDiagram
+    participant Admin as Quản trị viên
+    participant System as Hệ thống ControlHub
+    participant DB as Cơ sở dữ liệu
+
+    Admin->>System: Gửi yêu cầu cập nhật người dùng (UserId, thông tin mới)
+    System->>DB: Tìm người dùng theo UserId
+    alt Người dùng không tồn tại
+        DB-->>System: Không tìm thấy
+        System-->>Admin: Lỗi: Không tìm thấy người dùng
+    else Người dùng tồn tại
+        DB-->>System: Trả về người dùng
+        System->>DB: Tìm tài khoản liên kết
+        alt Tài khoản không tồn tại
+            DB-->>System: Không tìm thấy
+            System-->>Admin: Lỗi: Không tìm thấy tài khoản
+        else Tài khoản tồn tại
+            DB-->>System: Trả về tài khoản
+
+            opt Yêu cầu thay đổi Role
+                System->>DB: Kiểm tra Role mới tồn tại
+                alt Role không tồn tại
+                    DB-->>System: Không tìm thấy
+                    System-->>Admin: Lỗi: Không tìm thấy Role
+                else Role tồn tại
+                    DB-->>System: Trả về Role
+                    System->>System: Gán Role mới cho tài khoản
+                end
+            end
+
+            System->>System: Cập nhật thông tin cá nhân (họ tên, số điện thoại)
+
+            opt Yêu cầu thay đổi trạng thái hoạt động
+                System->>System: Kích hoạt hoặc vô hiệu hóa tài khoản
+            end
+
+            System->>DB: Xác nhận giao dịch
+            DB-->>System: Thành công
+            System-->>Admin: Trả về thông tin người dùng đã cập nhật
+        end
+    end

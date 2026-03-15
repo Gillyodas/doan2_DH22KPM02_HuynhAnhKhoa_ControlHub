@@ -1,0 +1,61 @@
+---
+config:
+  layout: elk
+---
+flowchart LR
+    HA(["🖥️ Ứng dụng Host"])
+    DB[("🗄️ SQL Server")]
+    CFG[("⚙️ appsettings.json")]
+
+    HA -- "Định danh + Mật khẩu + LoạiĐịnhDanh + ConfigId?" --> P211["2.1.1 Kiểm tra định danh trùng"]
+    P211 -- "SELECT Identifier WHERE NormalizedValue = value.ToLower()" --> DB
+    DB -- "Kết quả tồn tại / không tồn tại" --> P211
+    P211 -- "Định danh đã tồn tại" --> P21F["2.1.F Trả lỗi"]
+    P211 -- "Định danh chưa tồn tại" --> P212["2.1.2 Đọc UserRoleId từ config"]
+
+    P212 -- "Đọc RoleSettings:UserRoleId" --> CFG
+    CFG -- "UserRoleId string" --> P212
+    P212 -- "Parse thất bại / thiếu config" --> P21F
+    P212 -- "UserRoleId hợp lệ" --> P213["2.1.3 AccountFactory — Hash mật khẩu Argon2id"]
+
+    P213 -- "PasswordHasher.Hash(rawPassword) — Argon2id 64MB/3 vòng/4 luồng" --> P213
+    P213 -- "Password Value Object (hash + salt)" --> P214["2.1.4 AccountFactory — Tạo Account aggregate"]
+
+    P214 -- "Account.Create(newGuid, password, userRoleId)" --> P214
+    P214 -- "Account entity (IsActive=true · IsDeleted=false)" --> P215["2.1.5 AccountFactory — Validate và tạo Identifier"]
+
+    P215 -- "configId có giá trị?" --> P215
+    P215 -- "configId != null: GetByIdAsync(configId)" --> DB
+    DB -- "IdentifierConfig + ValidationRules" --> P215
+    P215 -- "configId = null: dùng built-in validator theo LoạiĐịnhDanh" --> P215
+    P215 -- "DynamicIdentifierValidator.ValidateAndNormalize() hoặc IIdentifierValidator.ValidateAndNormalize()" --> P215
+    P215 -- "Validate thất bại" --> P21F
+    P215 -- "Identifier Value Object (type · value · normalized)" --> P216["2.1.6 AccountFactory — Gắn Identifier và tạo User"]
+
+    P216 -- "account.AddIdentifier(identifier)" --> P216
+    P216 -- "new User(newGuid, accountId, username=No name)" --> P216
+    P216 -- "account.AttachUser(user)" --> P216
+    P216 -- "Thất bại" --> P21F
+    P216 -- "Account aggregate hoàn chỉnh" --> P217["2.1.7 Lưu Account và commit"]
+
+    P217 -- "AccountRepository.AddAsync(account)" --> DB
+    P217 -- "UnitOfWork.CommitAsync() — INSERT Account + User + Identifier" --> DB
+    DB -- "Commit thành công" --> P217
+    P217 -- "AccountId mới" --> HA
+    P21F -- "Error: IdentifierExists / ConfigMissing / ValidationFailed / AttachFailed" --> HA
+
+    HA:::actor
+    DB:::storage
+    CFG:::storage
+    P211:::process
+    P212:::process
+    P213:::process
+    P214:::process
+    P215:::process
+    P216:::process
+    P217:::process
+    P21F:::error
+    classDef actor fill:#08427B,color:#fff,stroke:#073B6F
+    classDef process fill:#1168BD,color:#fff,stroke:#0E5DAD
+    classDef storage fill:#555,color:#fff,stroke:#333
+    classDef error fill:#8B1A1A,color:#fff,stroke:#6B0000

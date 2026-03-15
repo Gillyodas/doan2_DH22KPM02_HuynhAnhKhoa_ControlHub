@@ -1,0 +1,41 @@
+sequenceDiagram
+    participant Client as Ứng dụng Client
+    participant System as Hệ thống ControlHub
+    participant DB as Cơ sở dữ liệu
+    participant Token as Dịch vụ Token
+
+    Client->>System: Gửi yêu cầu làm mới Token (Access Token + Refresh Token + AccountId)
+    System->>DB: Tìm Refresh Token
+    alt Refresh Token không tồn tại
+        DB-->>System: Không tìm thấy
+        System-->>Client: Lỗi: Token không tìm thấy
+    else Refresh Token tồn tại
+        DB-->>System: Trả về Refresh Token
+        System->>DB: Tìm tài khoản theo AccountId
+        alt Tài khoản không tồn tại
+            DB-->>System: Không tìm thấy
+            System-->>Client: Lỗi: Tài khoản không tìm thấy
+        else Tài khoản tồn tại
+            DB-->>System: Trả về tài khoản
+            System->>System: Kiểm tra Refresh Token thuộc đúng tài khoản
+            alt Token không khớp tài khoản
+                System-->>Client: Lỗi: Token không khớp tài khoản
+            else Token khớp
+                System->>Token: Kiểm tra Refresh Token còn hiệu lực
+                alt Token hết hạn hoặc đã dùng
+                    Token-->>System: Không hợp lệ
+                    System-->>Client: Lỗi: Token không hợp lệ
+                else Token còn hiệu lực
+                    Token-->>System: Hợp lệ
+                    System->>DB: Lấy thông tin Role
+                    DB-->>System: RoleId
+                    System->>Token: Tạo cặp Access Token + Refresh Token mới
+                    Token-->>System: Cặp Token mới
+                    System->>Token: Đánh dấu Refresh Token cũ đã sử dụng
+                    System->>DB: Lưu cặp Token mới
+                    DB-->>System: Lưu thành công
+                    System-->>Client: Trả về Access Token mới + Refresh Token mới
+                end
+            end
+        end
+    end

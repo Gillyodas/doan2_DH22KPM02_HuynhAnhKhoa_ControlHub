@@ -1,0 +1,54 @@
+sequenceDiagram
+    participant User as Người dùng
+    participant System as Hệ thống ControlHub
+    participant DB as Cơ sở dữ liệu
+    participant Token as Dịch vụ Token
+    participant Email as Dịch vụ Email (SMTP)
+
+    rect rgb(240, 248, 255)
+        Note over User, Email: Giai đoạn 1 — Quên mật khẩu
+        User->>System: Gửi yêu cầu quên mật khẩu (Identifier)
+        System->>System: Xác thực định dạng Identifier
+        alt Định dạng không hợp lệ
+            System-->>User: Lỗi: Định dạng Identifier không hợp lệ
+        else Định dạng hợp lệ
+            System->>DB: Tìm tài khoản theo Identifier
+            alt Tài khoản không tồn tại hoặc bị vô hiệu
+                DB-->>System: Không tìm thấy / bị xóa / vô hiệu
+                System-->>User: Lỗi: Không tìm thấy tài khoản
+            else Tài khoản hợp lệ
+                DB-->>System: Trả về thông tin tài khoản
+                System->>Token: Tạo Token đặt lại mật khẩu
+                Token-->>System: Reset Token
+                System->>DB: Lưu Token và tạo yêu cầu gửi email (Outbox)
+                DB-->>System: Lưu thành công
+                System->>Email: Gửi email chứa liên kết đặt lại mật khẩu
+                Email-->>User: Email gửi đến
+                System-->>User: Thông báo đã gửi email
+            end
+        end
+    end
+
+    rect rgb(255, 248, 240)
+        Note over User, Email: Giai đoạn 2 — Đặt lại mật khẩu
+        User->>System: Gửi yêu cầu đặt lại (Token + mật khẩu mới)
+        System->>DB: Tìm Token trong hệ thống
+        alt Token không tồn tại hoặc hết hạn
+            DB-->>System: Không tìm thấy / hết hạn / đã dùng
+            System-->>User: Lỗi: Token không hợp lệ
+        else Token hợp lệ
+            DB-->>System: Trả về Token
+            System->>DB: Tìm tài khoản từ Token
+            alt Tài khoản bị xóa
+                DB-->>System: Tài khoản đã xóa mềm
+                System-->>User: Lỗi: Tài khoản đã bị xóa
+            else Tài khoản hợp lệ
+                DB-->>System: Trả về tài khoản
+                System->>Token: Mã hóa mật khẩu mới (Argon2id)
+                Token-->>System: Mật khẩu đã mã hóa
+                System->>DB: Cập nhật mật khẩu cho tài khoản
+                DB-->>System: Cập nhật thành công
+                System-->>User: Đặt lại mật khẩu thành công
+            end
+        end
+    end

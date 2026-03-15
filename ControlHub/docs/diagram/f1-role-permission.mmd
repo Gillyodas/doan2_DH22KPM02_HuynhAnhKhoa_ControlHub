@@ -1,0 +1,71 @@
+---
+config:
+  layout: elk
+---
+flowchart LR
+    SA(["👑 Siêu quản trị viên"]) -- Danh sách Role + PermissionIds --> P31["3.1 Tạo vai trò"]
+    P31 -- Kiểm tra tên Role trùng --> DB[("🗄️ SQL Server")]
+    DB -- Danh sách tên Role hiện có --> P31
+    P31 -- Truy vấn Permission theo Ids --> DB
+    DB -- Danh sách Permission --> P31
+    P31 -- Ghi Role + gán Permission --> DB
+    P31 -- PartialResult thành công / thất bại --> SA
+    P31 -- RoleCreatedEvent + RolePermissionChangedEvent --> EVT[("📡 Domain Events              In-memory MediatR")]
+    SA -- RoleId + Name + Description mới --> P32["3.2 Cập nhật vai trò"]
+    P32 -- Truy vấn Role theo Id + kiểm tra tên trùng --> DB
+    DB -- Thông tin Role hiện tại --> P32
+    P32 -- Cập nhật Name + Description --> DB
+    P32 -- Xác nhận cập nhật thành công --> SA
+    SA -- RoleId --> P33["3.3 Xóa vai trò"] & P35["3.5 Xem quyền của vai trò"]
+    P33 -- Truy vấn Role + kiểm tra Account đang dùng --> DB
+    DB -- Role + danh sách Account gán Role --> P33
+    P33 -- Soft delete Role --> DB
+    P33 -- Xác nhận xóa thành công --> SA
+    P33 -- RoleDeletedEvent --> EVT
+    SA -- RoleId + danh sách PermissionIds --> P34["3.4 Thiết lập quyền cho vai trò"]
+    P34 -- Truy vấn Role + Permission theo Ids --> DB
+    DB -- Role hiện tại + danh sách Permission --> P34
+    P34 -- Xóa toàn bộ Permission cũ + gán Permission mới --> DB
+    P34 -- Xác nhận thiết lập thành công --> SA
+    P34 -- RolePermissionChangedEvent x2 --> EVT
+    P35 -- Truy vấn Role + Permission --> DB
+    DB -- Danh sách Permission của Role --> P35
+    P35 -- Danh sách PermissionDto --> SA
+    SA -- PageIndex + PageSize + SearchTerm --> P36["3.6 Tìm kiếm vai trò"] & P310["3.10 Tìm kiếm quyền hạn"]
+    P36 -- Truy vấn Role phân trang + lọc --> DB
+    DB -- Danh sách Role + tổng số bản ghi --> P36
+    P36 -- PagedResult danh sách Role --> SA
+    SA -- UserId + RoleId --> P37["3.7 Gán vai trò cho người dùng"] & P38["3.8 Gỡ vai trò khỏi người dùng"]
+    P37 -- Truy vấn User + Account + Role --> DB
+    DB -- Thông tin User + Account + Role --> P37
+    P37 -- Cập nhật RoleId trên Account --> DB
+    P37 -- Xác nhận gán thành công --> SA
+    P38 -- Truy vấn User + Account --> DB
+    DB -- Thông tin User + Account --> P38
+    P38 -- Xóa RoleId khỏi Account --> DB
+    P38 -- Xác nhận gỡ thành công --> SA
+    SA -- Danh sách Permission Code + Description --> P39["3.9 Tạo quyền hạn"]
+    P39 -- Kiểm tra Permission Code trùng --> DB
+    DB -- Kết quả kiểm tra --> P39
+    P39 -- Ghi Permission mới --> DB
+    P39 -- PartialResult thành công / thất bại --> SA
+    P310 -- Truy vấn Permission phân trang + lọc --> DB
+    DB -- Danh sách Permission + tổng số bản ghi --> P310
+    P310 -- PagedResult danh sách Permission --> SA
+
+     SA:::actor
+     P31:::process
+     DB:::storage
+     EVT:::storage
+     P32:::process
+     P33:::process
+     P35:::process
+     P34:::process
+     P36:::process
+     P310:::process
+     P37:::process
+     P38:::process
+     P39:::process
+    classDef actor fill:#08427B,color:#fff,stroke:#073B6F
+    classDef process fill:#1168BD,color:#fff,stroke:#0E5DAD
+    classDef storage fill:#555,color:#fff,stroke:#333

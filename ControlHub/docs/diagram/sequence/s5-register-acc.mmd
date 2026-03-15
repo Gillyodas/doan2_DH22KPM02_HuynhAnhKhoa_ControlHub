@@ -1,0 +1,35 @@
+sequenceDiagram
+    participant User as Người dùng / Ứng dụng Host
+    participant System as Hệ thống ControlHub
+    participant DB as Cơ sở dữ liệu
+
+    User->>System: Gửi yêu cầu đăng ký (Identifier, mật khẩu, loại tài khoản)
+    System->>System: Kiểm tra dữ liệu đầu vào và chính sách mật khẩu
+
+    alt Đăng ký SuperAdmin
+        System->>System: Kiểm tra MasterKey hợp lệ
+        alt MasterKey không hợp lệ
+            System-->>User: Lỗi: MasterKey không hợp lệ
+        end
+    else Đăng ký Admin
+        System->>System: Kiểm tra quyền users.create
+    else Đăng ký User
+        Note right of System: Không cần kiểm tra quyền
+    end
+
+    System->>DB: Kiểm tra Identifier đã tồn tại
+    alt Identifier trùng lặp
+        DB-->>System: Đã tồn tại
+        System-->>User: Lỗi: Identifier đã được sử dụng
+    else Identifier chưa tồn tại
+        DB-->>System: Chưa tồn tại
+        System->>System: Xác định RoleId từ cấu hình theo loại đăng ký
+        System->>System: Tạo tài khoản (mã hóa mật khẩu Argon2id + xác thực Identifier + tạo User)
+        alt Tạo tài khoản thất bại
+            System-->>User: Lỗi: Mật khẩu không đạt hoặc Identifier không hợp lệ
+        else Tạo thành công
+            System->>DB: Lưu tài khoản mới (Account + User + Identifier)
+            DB-->>System: Lưu thành công
+            System-->>User: Trả về AccountId mới
+        end
+    end

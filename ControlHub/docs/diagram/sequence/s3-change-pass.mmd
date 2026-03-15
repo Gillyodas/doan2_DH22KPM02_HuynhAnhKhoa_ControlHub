@@ -1,0 +1,37 @@
+sequenceDiagram
+    participant User as Người dùng
+    participant System as Hệ thống ControlHub
+    participant DB as Cơ sở dữ liệu
+    participant Token as Dịch vụ Token
+
+    User->>System: Gửi yêu cầu đổi mật khẩu (mật khẩu cũ + mới)
+    System->>System: Kiểm tra chính sách mật khẩu mới
+    System->>DB: Tìm tài khoản theo AccountId
+    alt Tài khoản không tồn tại hoặc bị vô hiệu
+        DB-->>System: Không tìm thấy / bị xóa / vô hiệu
+        System-->>User: Lỗi: Tài khoản không hợp lệ
+    else Tài khoản hợp lệ
+        DB-->>System: Trả về tài khoản
+        System->>Token: Xác thực mật khẩu cũ (Argon2id)
+        alt Mật khẩu cũ sai
+            Token-->>System: Xác thực thất bại
+            System-->>User: Lỗi: Mật khẩu cũ không đúng
+        else Mật khẩu cũ đúng
+            Token-->>System: Xác thực thành công
+            System->>System: Kiểm tra mật khẩu mới không trùng mật khẩu cũ
+            alt Mật khẩu trùng
+                System-->>User: Lỗi: Mật khẩu mới không được trùng
+            else Mật khẩu khác
+                System->>Token: Mã hóa mật khẩu mới (Argon2id)
+                Token-->>System: Mật khẩu đã mã hóa
+                System->>DB: Cập nhật mật khẩu cho tài khoản
+                System->>DB: Truy vấn toàn bộ Token của tài khoản
+                DB-->>System: Danh sách Token
+                System->>Token: Thu hồi toàn bộ Token còn hiệu lực
+                Token-->>System: Đã thu hồi
+                System->>DB: Xác nhận giao dịch
+                DB-->>System: Thành công
+                System-->>User: Đổi mật khẩu thành công (phải đăng nhập lại)
+            end
+        end
+    end

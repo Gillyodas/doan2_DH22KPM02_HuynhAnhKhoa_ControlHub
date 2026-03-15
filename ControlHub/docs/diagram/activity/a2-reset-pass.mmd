@@ -1,0 +1,95 @@
+---
+config:
+  layout: elk
+---
+flowchart TB
+ subgraph CLIENT["Ứng dụng Client"]
+        SendForgot["Gửi yêu cầu quên mật khẩu với Identifier"]
+        Start(("Bắt đầu"))
+  end
+ subgraph CONTROLHUB["Hệ thống ControlHub"]
+        ValidateIdent{"Định dạng Identifier hợp lệ?"}
+        ErrFormat[/"Trả về lỗi định dạng Identifier"/]
+        End1(("Kết thúc"))
+        FindAcc["Tìm tài khoản theo Identifier"]
+        AccExist{"Tài khoản tồn tại?"}
+        ErrNotFound[/"Trả về lỗi không tìm thấy Identifier"/]
+        AccActive{"Tài khoản chưa bị xóa và đang hoạt động?"}
+        ErrAccState[/"Trả về lỗi tài khoản bị xóa hoặc vô hiệu hóa"/]
+        GenResetToken["Tạo Token đặt lại mật khẩu"]
+        TokenOk{"Tạo Token thành công?"}
+        ErrTokenGen[/"Trả về lỗi tạo Token thất bại"/]
+        SaveToken["Lưu Token và tạo yêu cầu gửi email trong Outbox"]
+        Commit1["Xác nhận giao dịch"]
+  end
+ subgraph MESSAGING["Hệ thống nhắn tin (SMTP)"]
+        SendEmail["Gửi email chứa liên kết đặt lại mật khẩu qua SMTP"]
+        UserReceive["Người dùng nhận email"]
+  end
+ subgraph CLIENT2["Ứng dụng Client"]
+        SendReset["Gửi yêu cầu đặt lại mật khẩu với Token và mật khẩu mới"]
+  end
+ subgraph CONTROLHUB2["Hệ thống ControlHub"]
+        FindToken["Tìm Token trong hệ thống"]
+        TokenExist{"Token tồn tại?"}
+        ErrTokenNotFound[/"Trả về lỗi không tìm thấy Token"/]
+        TokenValid{"Token chưa hết hạn và chưa sử dụng?"}
+        ErrTokenInvalid[/"Trả về lỗi Token không hợp lệ"/]
+        FindAccByToken["Tìm tài khoản từ Token"]
+        AccOk{"Tài khoản tồn tại?"}
+        ErrAccNotFound[/"Trả về lỗi không tìm thấy tài khoản"/]
+        AccDeleted{"Tài khoản bị xóa mềm?"}
+        ErrAccDeleted[/"Trả về lỗi tài khoản đã bị xóa"/]
+        HashNewPwd["Mã hóa mật khẩu mới bằng Argon2id"]
+        HashOk{"Mã hóa thành công?"}
+        ErrHash[/"Trả về lỗi mã hóa mật khẩu thất bại"/]
+        UpdatePwd["Cập nhật mật khẩu cho tài khoản"]
+        Commit2["Xác nhận giao dịch"]
+        ReturnOk[/"Trả về thành công"/]
+  end
+    Start --> SendForgot
+    SendForgot --> ValidateIdent
+    ValidateIdent -- Không --> ErrFormat
+    ErrFormat --> End1
+    ValidateIdent -- Có --> FindAcc
+    FindAcc --> AccExist
+    AccExist -- Không --> ErrNotFound
+    ErrNotFound --> End1
+    AccExist -- Có --> AccActive
+    AccActive -- Không --> ErrAccState
+    ErrAccState --> End1
+    AccActive -- Có --> GenResetToken
+    GenResetToken --> TokenOk
+    TokenOk -- Không --> ErrTokenGen
+    ErrTokenGen --> End1
+    TokenOk -- Có --> SaveToken
+    SaveToken --> Commit1
+    Commit1 --> SendEmail
+    SendEmail --> UserReceive
+    UserReceive --> SendReset
+    SendReset --> FindToken
+    FindToken --> TokenExist
+    TokenExist -- Không --> ErrTokenNotFound
+    ErrTokenNotFound --> End1
+    TokenExist -- Có --> TokenValid
+    TokenValid -- Không --> ErrTokenInvalid
+    ErrTokenInvalid --> End1
+    TokenValid -- Có --> FindAccByToken
+    FindAccByToken --> AccOk
+    AccOk -- Không --> ErrAccNotFound
+    ErrAccNotFound --> End1
+    AccOk -- Có --> AccDeleted
+    AccDeleted -- Có --> ErrAccDeleted
+    ErrAccDeleted --> End1
+    AccDeleted -- Không --> HashNewPwd
+    HashNewPwd --> HashOk
+    HashOk -- Không --> ErrHash
+    ErrHash --> End1
+    HashOk -- Có --> UpdatePwd
+    UpdatePwd --> Commit2
+    Commit2 --> ReturnOk
+    ReturnOk --> End1
+
+    classDef client fill:#08427B,color:#fff,stroke:#073B6F
+    classDef hub fill:#1168BD,color:#fff,stroke:#0E5DAD
+    classDef msg fill:#6B6B6B,color:#fff,stroke:#4A4A4A

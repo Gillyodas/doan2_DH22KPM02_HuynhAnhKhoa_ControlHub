@@ -1,0 +1,42 @@
+sequenceDiagram
+    participant Admin as Quản trị viên
+    participant System as Hệ thống ControlHub
+    participant DB as Cơ sở dữ liệu
+
+    Admin->>System: Gửi yêu cầu tạo Role (danh sách Role kèm PermissionId)
+    System->>DB: Nạp toàn bộ tên Role hiện có
+    DB-->>System: Danh sách tên Role
+
+    loop Với mỗi Role trong yêu cầu
+        System->>System: Kiểm tra tên Role trùng lặp
+        alt Tên trùng
+            System->>System: Ghi nhận thất bại (tên trùng)
+        else Tên chưa tồn tại
+            System->>System: Đưa vào danh sách cần xử lý
+        end
+    end
+
+    System->>DB: Nạp toàn bộ Permission cần thiết theo danh sách Id
+    DB-->>System: Danh sách Permission
+
+    loop Với mỗi Role cần xử lý
+        alt Không có PermissionId
+            System->>System: Ghi nhận thất bại (thiếu Permission)
+        else Có Permission không tồn tại
+            System->>System: Ghi nhận thất bại (Permission không tìm thấy)
+        else Tất cả Permission hợp lệ
+            System->>System: Tạo Role mới và gán Permission
+            alt Tạo thành công
+                System->>System: Ghi nhận thành công
+            else Tạo thất bại
+                System->>System: Ghi nhận thất bại
+            end
+        end
+    end
+
+    opt Có Role tạo thành công
+        System->>DB: Lưu tất cả Role thành công
+        DB-->>System: Lưu thành công
+    end
+
+    System-->>Admin: Trả về kết quả (danh sách thành công + thất bại)

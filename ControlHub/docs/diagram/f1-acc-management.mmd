@@ -1,0 +1,69 @@
+---
+config:
+  layout: elk
+---
+flowchart LR
+    HA(["🖥️ Ứng dụng Host"]) -- Định danh + Mật khẩu + Loại định danh --> P21["2.1 Đăng ký tài khoản người dùng"]
+    P21 -- Kiểm tra định danh trùng --> DB[("🗄️ SQL Server")]
+    DB -- Kết quả kiểm tra --> P21 & P22["2.2 Đăng ký tài khoản quản trị viên"] & P23["2.3 Đăng ký tài khoản siêu quản trị viên"]
+    P21 -- Đọc UserRoleId --> CFG[("⚙️ appsettings.json — RoleSettings · MasterKey")]
+    CFG -- UserRoleId --> P21
+    P21 -- Ghi Account + User + Identifier --> DB
+    P21 -- AccountId mới --> HA
+    SA(["👑 Siêu quản trị viên"]) -- Định danh + Mật khẩu + Loại định danh --> P22
+    P22 -- Kiểm tra định danh trùng --> DB
+    P22 -- Đọc AdminRoleId --> CFG
+    CFG -- AdminRoleId --> P22 & P29["2.9 Xem danh sách quản trị viên"]
+    P22 -- Ghi Account + User + Identifier --> DB
+    P22 -- AccountId mới --> SA
+    SA -- Định danh + Mật khẩu + MasterKey --> P23
+    P23 -- Xác thực MasterKey --> CFG
+    CFG -- MasterKey + SuperAdminRoleId --> P23
+    P23 -- Kiểm tra định danh trùng --> DB
+    P23 -- Ghi Account + User + Identifier --> DB
+    P23 -- AccountId mới --> SA
+    SA -- PageIndex + PageSize + SearchTerm --> P24["2.4 Xem danh sách người dùng"]
+    P24 -- Truy vấn User phân trang + lọc --> DB
+    DB -- Danh sách User + tổng số bản ghi --> P24
+    P24 -- PagedResult danh sách User --> SA
+    SA -- UserId --> P25["2.5 Xem chi tiết người dùng"] & P28["2.8 Xóa người dùng"]
+    P25 -- Truy vấn User theo Id --> DB
+    DB -- Thông tin User + Account + Role --> P25
+    P25 -- UserDto chi tiết --> SA
+    SA -- UserId + Email + Tên + SĐT + IsActive + RoleId --> P26["2.6 Cập nhật thông tin người dùng"]
+    P26 -- Truy vấn User + Account + Role --> DB
+    DB -- Thông tin hiện tại --> P26
+    P26 -- Cập nhật User + Account + Identifier --> DB
+    P26 -- UserDto đã cập nhật --> SA
+    SA -- AccountId + Username mới --> P27["2.7 Cập nhật tên đăng nhập"]
+    P27 -- Truy vấn User theo AccountId --> DB
+    DB -- Thông tin User hiện tại --> P27
+    P27 -- Cập nhật Username --> DB
+    P27 -- Username mới --> SA
+    P28 -- Truy vấn User + Account --> DB
+    DB -- Thông tin User + Account --> P28
+    P28 -- Soft delete Account + User + Identifiers + Tokens --> DB
+    P28 -- Xác nhận xóa thành công --> SA
+    SA -- Yêu cầu xem danh sách Admin --> P29
+    P29 -- Đọc AdminRoleId --> CFG
+    P29 -- Truy vấn Account theo RoleId --> DB
+    DB -- Danh sách Account Admin --> P29
+    P29 -- Danh sách AccountDto --> SA
+
+    HA:::actor
+    P21:::process
+    DB:::storage
+    P22:::process
+    P23:::process
+    CFG:::config
+    SA:::actor
+    P29:::process
+    P24:::process
+    P25:::process
+    P28:::process
+    P26:::process
+    P27:::process
+    classDef actor fill:#08427B,color:#fff,stroke:#073B6F
+    classDef process fill:#1168BD,color:#fff,stroke:#0E5DAD
+    classDef storage fill:#555,color:#fff,stroke:#333
+    classDef config fill:#7B4F08,color:#fff,stroke:#5C3A06

@@ -1,0 +1,58 @@
+---
+config:
+  layout: elk
+---
+flowchart TB
+ subgraph CLIENT["Ứng dụng Client"]
+        SendReq["Gửi yêu cầu làm mới Token với Access Token, Refresh Token và AccountId"]
+        Start(("Bắt đầu"))
+  end
+ subgraph CONTROLHUB["Hệ thống ControlHub"]
+        Validate{"Dữ liệu đầu vào hợp lệ?"}
+        ErrValidation[/"Trả về lỗi dữ liệu không hợp lệ"/]
+        End1(("Kết thúc"))
+        FindRefresh["Tìm Refresh Token trong hệ thống"]
+        RefreshExist{"Refresh Token tồn tại?"}
+        ErrNotFound[/"Trả về lỗi không tìm thấy Token"/]
+        FindAcc["Tìm tài khoản theo AccountId"]
+        AccExist{"Tài khoản tồn tại?"}
+        ErrAccNotFound[/"Trả về lỗi không tìm thấy tài khoản"/]
+        MatchOwner{"Refresh Token thuộc đúng tài khoản?"}
+        ErrMismatch[/"Trả về lỗi Token không khớp tài khoản"/]
+        TokenAlive{"Refresh Token chưa hết hạn và chưa sử dụng?"}
+        ErrExpired[/"Trả về lỗi Token không hợp lệ"/]
+        LoadRole["Lấy thông tin Role của tài khoản"]
+        GenNewPair["Tạo cặp Access Token và Refresh Token mới"]
+        MarkOldUsed["Đánh dấu Refresh Token cũ đã sử dụng"]
+        SaveNewPair["Lưu cặp Token mới vào cơ sở dữ liệu"]
+        Commit["Xác nhận giao dịch"]
+        ReturnDTO[/"Trả về Access Token mới và Refresh Token mới"/]
+  end
+    Start --> SendReq
+    SendReq --> Validate
+    Validate -- Không --> ErrValidation
+    ErrValidation --> End1
+    Validate -- Có --> FindRefresh
+    FindRefresh --> RefreshExist
+    RefreshExist -- Không --> ErrNotFound
+    ErrNotFound --> End1
+    RefreshExist -- Có --> FindAcc
+    FindAcc --> AccExist
+    AccExist -- Không --> ErrAccNotFound
+    ErrAccNotFound --> End1
+    AccExist -- Có --> MatchOwner
+    MatchOwner -- Không --> ErrMismatch
+    ErrMismatch --> End1
+    MatchOwner -- Có --> TokenAlive
+    TokenAlive -- Không --> ErrExpired
+    ErrExpired --> End1
+    TokenAlive -- Có --> LoadRole
+    LoadRole --> GenNewPair
+    GenNewPair --> MarkOldUsed
+    MarkOldUsed --> SaveNewPair
+    SaveNewPair --> Commit
+    Commit --> ReturnDTO
+    ReturnDTO --> End1
+
+    classDef client fill:#08427B,color:#fff,stroke:#073B6F
+    classDef hub fill:#1168BD,color:#fff,stroke:#0E5DAD

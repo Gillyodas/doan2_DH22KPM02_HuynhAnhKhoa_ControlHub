@@ -1,0 +1,64 @@
+---
+config:
+  layout: elk
+---
+flowchart TB
+ subgraph CLIENT["Ứng dụng Client"]
+        SendReq["Gửi yêu cầu đăng nhập với Identifier và mật khẩu"]
+        Start(("Bắt đầu"))
+  end
+ subgraph CONTROLHUB["Hệ thống ControlHub"]
+        Validate{"Dữ liệu đầu vào hợp lệ?"}
+        ErrValidation[/"Trả về lỗi dữ liệu không hợp lệ"/]
+        End1(("Kết thúc"))
+        LookupAcc["Tìm tài khoản theo Identifier"]
+        AccOk{"Tài khoản tồn tại, chưa bị xóa và đang hoạt động?"}
+        EvtFail1["Ghi nhận sự kiện đăng nhập thất bại"]
+        ErrCred1[/"Trả về lỗi thông tin đăng nhập không hợp lệ"/]
+        VerifyPwd["Xác thực mật khẩu bằng Argon2id"]
+        PwdOk{"Mật khẩu đúng?"}
+        EvtFail2["Ghi nhận sự kiện đăng nhập thất bại"]
+        ErrCred2[/"Trả về lỗi thông tin đăng nhập không hợp lệ"/]
+        LoadRole["Lấy thông tin Role của tài khoản"]
+        CheckIdent{"Tài khoản có Identifier?"}
+        EvtFail3["Ghi nhận sự kiện đăng nhập thất bại"]
+        ErrCred3[/"Trả về lỗi thông tin đăng nhập không hợp lệ"/]
+        GenToken["Tạo cặp Access Token và Refresh Token"]
+        TokenOk{"Tạo Token thành công?"}
+        ErrToken[/"Trả về lỗi tạo Token thất bại"/]
+        SaveRefresh["Lưu Refresh Token vào cơ sở dữ liệu"]
+        Commit["Xác nhận giao dịch"]
+        EvtSuccess["Ghi nhận sự kiện đăng nhập thành công"]
+        ReturnDTO[/"Trả về thông tin phiên: AccountId, Username, Access Token, Refresh Token"/]
+  end
+    Start --> SendReq
+    SendReq --> Validate
+    Validate -- Không --> ErrValidation
+    ErrValidation --> End1
+    Validate -- Có --> LookupAcc
+    LookupAcc --> AccOk
+    AccOk -- Không --> EvtFail1
+    EvtFail1 --> ErrCred1
+    ErrCred1 --> End1
+    AccOk -- Có --> VerifyPwd
+    VerifyPwd --> PwdOk
+    PwdOk -- Sai --> EvtFail2
+    EvtFail2 --> ErrCred2
+    ErrCred2 --> End1
+    PwdOk -- Đúng --> LoadRole
+    LoadRole --> CheckIdent
+    CheckIdent -- Không --> EvtFail3
+    EvtFail3 --> ErrCred3
+    ErrCred3 --> End1
+    CheckIdent -- Có --> GenToken
+    GenToken --> TokenOk
+    TokenOk -- Không --> ErrToken
+    ErrToken --> End1
+    TokenOk -- Có --> SaveRefresh
+    SaveRefresh --> Commit
+    Commit --> EvtSuccess
+    EvtSuccess --> ReturnDTO
+    ReturnDTO --> End1
+
+    classDef client fill:#08427B,color:#fff,stroke:#073B6F
+    classDef hub fill:#1168BD,color:#fff,stroke:#0E5DAD

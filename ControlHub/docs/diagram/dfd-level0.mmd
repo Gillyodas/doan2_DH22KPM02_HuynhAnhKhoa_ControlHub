@@ -1,0 +1,59 @@
+flowchart LR
+    %% ============================================================
+    %% EXTERNAL ENTITIES
+    %% ============================================================
+    SA(["👑 Siêu quản trị viên (SuperAdmin)"])
+    HA(["🖥️ Ứng dụng Host (.NET)"])
+    DB[("🗄️ SQL Server — Tài khoản · Token · Role · Permission")]
+    SMTP["📧 SMTP Server — Gửi email reset mật khẩu"]
+    OL["🧠 Ollama — Local LLM — Embedding + Text Gen"]
+    QD["📦 Qdrant — Vector Database — Runbook RAG"]
+
+    %% ============================================================
+    %% PROCESS
+    %% ============================================================
+    P0(["⬛ 0 — ControlHub System"])
+
+    %% ============================================================
+    %% LUỒNG DỮ LIỆU — SuperAdmin
+    %% ============================================================
+    SA -- "Thông tin đăng nhập · Yêu cầu quản lý (User · Role · Permission) · Nạp runbook AI" --> P0
+    P0 -- "JWT Token · Kết quả quản lý · Dashboard UI · Báo cáo phân tích log" --> SA
+
+    %% ============================================================
+    %% LUỒNG DỮ LIỆU — Ứng dụng Host
+    %% ============================================================
+    HA -- "HTTP Request + Bearer Token (Xác thực · Kiểm tra quyền)" --> P0
+    P0 -- "Kết quả xác thực · Thông tin phân quyền (Role · Permission claims)" --> HA
+
+    %% ============================================================
+    %% LUỒNG DỮ LIỆU — SQL Server
+    %% ============================================================
+    P0 -- "Ghi dữ liệu (Tài khoản · Token · Role · Permission)" --> DB
+    DB -- "Đọc dữ liệu (Xác thực · Phân quyền · Cấu hình)" --> P0
+
+    %% ============================================================
+    %% LUỒNG DỮ LIỆU — SMTP
+    %% ============================================================
+    P0 -- "Nội dung email (Token reset mật khẩu)" --> SMTP
+
+    %% ============================================================
+    %% LUỒNG DỮ LIỆU — AI
+    %% ============================================================
+    P0 -- "Log pattern · Prompt phân tích" --> OL
+    OL -- "Kết quả phân tích · Embedding vector" --> P0
+    P0 -- "Vector embedding · Truy vấn ngữ nghĩa" --> QD
+    QD -- "Runbook liên quan (RAG result)" --> P0
+
+    %% ============================================================
+    %% STYLES
+    %% ============================================================
+    classDef actor fill:#08427B,color:#fff,stroke:#073B6F
+    classDef process fill:#1168BD,color:#fff,stroke:#0E5DAD
+    classDef storage fill:#555,color:#fff,stroke:#333
+    classDef external fill:#6B6B6B,color:#fff,stroke:#4A4A4A
+
+    class SA,HA actor
+    class P0 process
+    class DB storage
+    class SMTP,OL,QD external

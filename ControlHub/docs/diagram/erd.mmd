@@ -1,0 +1,100 @@
+---
+config:
+  layout: elk
+---
+erDiagram
+	direction LR
+	Accounts {
+		Id uniqueidentifier PK ""  
+		HashPassword varbinary_64  "NOT NULL"  
+		Salt varbinary_64  "NOT NULL"  
+		IsActive bit  "NOT NULL"  
+		IsDeleted bit  "NOT NULL"  
+		RoleId uniqueidentifier FK "NOT NULL"  
+	}
+
+	Users {
+		Id uniqueidentifier PK ""  
+		AccId uniqueidentifier FK "NOT NULL, UNIQUE"  
+		Username nvarchar_100  "NULL"  
+		FirstName nvarchar_100  "NULL"  
+		LastName nvarchar_100  "NULL"  
+		PhoneNumber nvarchar_20  "NULL"  
+		IsDeleted bit  "NOT NULL"  
+	}
+
+	AccountIdentifiers {
+		AccountId uniqueidentifier FK "NOT NULL (composite PK)"  
+		Id int PK "IDENTITY"  
+		Type int  "NOT NULL"  
+		Name nvarchar_100  "NOT NULL"  
+		Value nvarchar_300  "NOT NULL"  
+		NormalizedValue nvarchar_300  "NOT NULL"  
+		IsDeleted bit  "NOT NULL, DEFAULT false"  
+	}
+
+	IdentifierConfigs {
+		Id uniqueidentifier PK ""  
+		Name nvarchar_100  "NOT NULL"  
+		Description nvarchar_500  "NOT NULL"  
+		IsActive bit  "NOT NULL"  
+		CreatedAt datetime2  "NOT NULL"  
+		UpdatedAt datetime2  "NULL"  
+	}
+
+	IdentifierValidationRules {
+		Id uniqueidentifier PK ""  
+		IdentifierConfigId uniqueidentifier FK "NOT NULL"  
+		Type nvarchar_50  "NOT NULL (enum as string)"  
+		ParametersJson nvarchar_max  "NOT NULL"  
+		ErrorMessage nvarchar_500  "NULL"  
+		Order int  "NOT NULL, DEFAULT 0"  
+	}
+
+	Roles {
+		Id uniqueidentifier PK ""  
+		Name nvarchar_100  "NOT NULL"  
+		Description nvarchar_255  "NOT NULL"  
+		IsActive bit  "NOT NULL"  
+		IsDeleted bit  "NOT NULL, DEFAULT false"  
+	}
+
+	Permissions {
+		Id uniqueidentifier PK ""  
+		Code nvarchar_100  "NOT NULL, UNIQUE"  
+		Description nvarchar_255  "NOT NULL"  
+	}
+
+	RolePermissions {
+		RoleId uniqueidentifier FK "PK (composite)"  
+		PermissionId uniqueidentifier FK "PK (composite)"  
+	}
+
+	Tokens {
+		Id uniqueidentifier PK ""  
+		AccountId uniqueidentifier FK "NOT NULL"  
+		Value nvarchar_max  "NOT NULL"  
+		Type int  "NOT NULL"  
+		ExpiredAt datetime2  "NOT NULL"  
+		IsUsed bit  "NOT NULL"  
+		IsRevoked bit  "NOT NULL"  
+		CreatedAt datetime2  "NOT NULL"  
+	}
+
+	OutboxMessages {
+		Id uniqueidentifier PK ""  
+		OccurredOn datetime2  "NOT NULL"  
+		Type nvarchar_100  "NOT NULL"  
+		Payload nvarchar_max  "NOT NULL"  
+		Processed bit  "NOT NULL"  
+		ProcessedOn datetime2  "NULL"  
+		Error nvarchar_max  "NULL"  
+	}
+
+	Accounts||--||Users:"has one (CASCADE)"
+	Accounts||--o{AccountIdentifiers:"owns many (CASCADE)"
+	Accounts}o--||Roles:"assigned to (RESTRICT)"
+	Accounts||--o{Tokens:"has many (CASCADE)"
+	Roles||--o{RolePermissions:"has many (CASCADE)"
+	Permissions||--o{RolePermissions:"has many (CASCADE)"
+	IdentifierConfigs||--o{IdentifierValidationRules:"owns many"

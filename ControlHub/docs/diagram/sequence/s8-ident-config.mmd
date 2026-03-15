@@ -1,0 +1,34 @@
+sequenceDiagram
+    participant Dev as Developer / Quản trị viên
+    participant System as Hệ thống ControlHub
+    participant DB as Cơ sở dữ liệu
+
+    alt Tạo cấu hình mới
+        Dev->>System: Gửi yêu cầu tạo cấu hình Identifier (tên, mô tả, danh sách quy tắc)
+        System->>System: Xác thực dữ liệu đầu vào
+        System->>System: Xây dựng danh sách quy tắc xác thực (Required, MinLength, Pattern...)
+        System->>System: Tạo đối tượng IdentifierConfig
+        alt Tạo thất bại
+            System-->>Dev: Lỗi nghiệp vụ
+        else Tạo thành công
+            System->>DB: Lưu cấu hình
+            DB-->>System: Lưu thành công
+            System->>System: Vô hiệu hóa cache cấu hình
+            System-->>Dev: Trả về cấu hình Identifier mới
+        end
+    else Bật hoặc tắt cấu hình
+        Dev->>System: Gửi yêu cầu bật/tắt cấu hình (ConfigId)
+        System->>DB: Tìm cấu hình theo Id
+        alt Cấu hình không tồn tại
+            DB-->>System: Không tìm thấy
+            System-->>Dev: Lỗi: Không tìm thấy cấu hình
+        else Cấu hình tồn tại
+            DB-->>System: Trả về cấu hình
+            System->>System: Đảo trạng thái hoạt động
+            System->>DB: Xác nhận giao dịch
+            DB-->>System: Thành công
+            System->>System: Vô hiệu hóa cache cấu hình
+            System-->>Dev: Trả về trạng thái mới
+            Note right of Dev: Ảnh hưởng loại Identifier khả dụng trên giao diện đăng nhập/đăng ký
+        end
+    end
