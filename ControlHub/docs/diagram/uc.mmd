@@ -1,0 +1,118 @@
+---
+config:
+  layout: elk
+---
+graph LR
+    %% Left actors
+    KH(["👤 Khách"])
+    ND(["👤 Người dùng"])
+    QTV(["👤 Quản trị viên"])
+
+    subgraph SB["ControlHub"]
+        subgraph G1["Nhóm 1 — Xác thực"]
+            UC01(["UC01: Đăng nhập"])
+            UC02(["UC02: Làm mới token"])
+            UC03(["UC03: Đăng xuất"])
+        end
+        subgraph G2["Nhóm 2 — Đăng ký tài khoản"]
+            UC04(["UC04: Đăng ký User"])
+            UC05(["UC05: Đăng ký Admin"])
+            UC06(["UC06: Đăng ký SuperAdmin"])
+        end
+        subgraph G3["Nhóm 3 — Quản lý mật khẩu"]
+            UC07(["UC07: Đổi mật khẩu"])
+            UC08(["UC08: Y/C đặt lại MK"])
+            UC09(["UC09: Đặt lại MK"])
+        end
+        subgraph G4["Nhóm 4 — Quản lý người dùng"]
+            UC10(["UC10: Xem dsách ND"])
+            UC11(["UC11: Xem chi tiết ND"])
+            UC12(["UC12: Cập nhật ND"])
+            UC13(["UC13: Cập nhật TĐN"])
+            UC14(["UC14: Xoá người dùng"])
+            UC15(["UC15: Xem dsách QTV"])
+            UC16(["UC16: Gán vai trò"])
+            UC17(["UC17: Gỡ vai trò"])
+        end
+        subgraph G5["Nhóm 5 — Quản lý vai trò"]
+            UC18(["UC18: Xem dsách VT"])
+            UC19(["UC19: Tạo vai trò"])
+            UC20(["UC20: Cập nhật VT"])
+            UC21(["UC21: Xoá vai trò"])
+            UC22(["UC22: Xem quyền VT"])
+            UC23(["UC23: Thiết lập quyền VT"])
+        end
+        subgraph G6["Nhóm 6 — Quản lý quyền hạn"]
+            UC24(["UC24: Xem dsách QH"])
+            UC25(["UC25: Tạo quyền hạn"])
+        end
+        subgraph G7["Nhóm 7 — Quản lý định danh"]
+            UC26(["UC26: Xem cấu hình ĐD"])
+            UC27(["UC27: Lấy cấu hình active"])
+            UC28(["UC28: Tạo cấu hình ĐD"])
+            UC29(["UC29: Cập nhật cấu hình"])
+            UC30(["UC30: Bật/tắt cấu hình"])
+            UC31(["UC31: Thêm định danh"])
+        end
+        subgraph G8["Nhóm 8 — AuditAI"]
+            UC32(["UC32: Phân tích log"])
+            UC33(["UC33: Chat AI về log"])
+            UC34(["UC34: Nạp tri thức log"])
+            UC35(["UC35: Nạp runbook"])
+        end
+    end
+
+    %% Right actors
+    SQTV(["👤 Siêu quản trị viên"])
+
+    %% include / extend
+    UC08 -.->|«include»| UC09
+    UC21 -.->|«include»| UC22
+    UC32 -.->|«extend»| UC33
+
+    %% Khách (trái) → UC bên trái hệ thống
+    KH --> UC01
+    KH --> UC02
+    KH --> UC04
+    KH --> UC06
+    KH --> UC08
+    KH --> UC27
+
+    %% Người dùng (trái)
+    ND --> UC03
+    ND --> UC07
+    ND --> UC12
+    ND --> UC13
+    ND --> UC31
+
+    %% Quản trị viên (trái)
+    QTV --> UC03
+    QTV --> UC05
+    QTV --> UC10
+    QTV --> UC11
+    QTV --> UC12
+    QTV --> UC14
+    QTV --> UC15
+    QTV --> UC16
+    QTV --> UC17
+    QTV --> UC18
+    QTV --> UC19
+    QTV --> UC20
+    QTV --> UC21
+    QTV --> UC23
+    QTV --> UC24
+    QTV --> UC26
+    QTV --> UC28
+    QTV --> UC29
+    QTV --> UC30
+    QTV --> UC32
+    QTV --> UC33
+
+    %% Siêu quản trị viên (phải) → UC bên phải hệ thống
+    UC06 --> SQTV
+    UC25 --> SQTV
+    UC28 --> SQTV
+    UC29 --> SQTV
+    UC30 --> SQTV
+    UC34 --> SQTV
+    UC35 --> SQTV
