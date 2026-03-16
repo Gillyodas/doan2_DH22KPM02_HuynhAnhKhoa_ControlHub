@@ -7,7 +7,7 @@
 
 		<IsPackable>true</IsPackable>
 		<PackageId>ControlHub.Core</PackageId>
-		<Version>1.3.8</Version>
+		<Version>1.3.9</Version>
 		<Authors>Huỳnh Anh Khoa</Authors>
 		<Company>Huỳnh Anh Khoa</Company>
 		<Description>Thư viện Identity và Auth trọn gói cho .NET 8</Description>

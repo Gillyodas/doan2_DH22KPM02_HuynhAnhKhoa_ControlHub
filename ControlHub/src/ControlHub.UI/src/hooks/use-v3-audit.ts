@@ -1,4 +1,4 @@
-import { useState, useCallback } from 'react';
+import { useState, useCallback, useEffect, useRef } from 'react';
 import { investigateV3, getAgentTrace, V3InvestigateRequest, V3InvestigateResponse, AgentTraceResponse } from '@/services/api/audit';
 import {
   AuditHistoryEntry,
@@ -23,45 +23,87 @@ export interface UseV3AuditReturn {
   clearHistory: () => void;
 }
 
+// Module-level store — survives component unmount/remount
+const v3Store = {
+  result: null as V3InvestigateResponse | null,
+  trace: null as AgentTraceResponse | null,
+  isLoading: false,
+  error: null as string | null,
+};
+
 export function useV3Audit(): UseV3AuditReturn {
-  const [result, setResult] = useState<V3InvestigateResponse | null>(null);
-  const [trace, setTrace] = useState<AgentTraceResponse | null>(null);
-  const [isLoading, setIsLoading] = useState(false);
-  const [error, setError] = useState<string | null>(null);
+  const mountedRef = useRef(true);
+
+  // Initialize from store (restores state on remount)
+  const [result, setResult] = useState<V3InvestigateResponse | null>(v3Store.result);
+  const [trace, setTrace] = useState<AgentTraceResponse | null>(v3Store.trace);
+  const [isLoading, setIsLoading] = useState(v3Store.isLoading);
+  const [error, setError] = useState<string | null>(v3Store.error);
   const [history, setHistory] = useState<AuditHistoryEntry[]>(() => loadAuditHistory());
+
+  useEffect(() => {
+    mountedRef.current = true;
+    // Sync from store on remount (in case fetch completed while unmounted)
+    setResult(v3Store.result);
+    setTrace(v3Store.trace);
+    setIsLoading(v3Store.isLoading);
+    setError(v3Store.error);
+    setHistory(loadAuditHistory());
+
+    return () => { mountedRef.current = false; };
+  }, []);
 
   const investigate = useCallback(async (request: V3InvestigateRequest) => {
     setIsLoading(true);
+    v3Store.isLoading = true;
     setError(null);
+    v3Store.error = null;
     try {
       const response = await investigateV3(request);
-      setResult(response);
+      v3Store.result = response;
+      v3Store.isLoading = false;
       const updated = saveAuditResult(request.query, request.correlationId, response);
-      setHistory(updated);
+      if (mountedRef.current) {
+        setResult(response);
+        setIsLoading(false);
+        setHistory(updated);
+      }
     } catch (err) {
       const message = err instanceof Error ? err.message : 'Investigation failed';
-      setError(message);
-    } finally {
-      setIsLoading(false);
+      v3Store.error = message;
+      v3Store.isLoading = false;
+      if (mountedRef.current) {
+        setError(message);
+        setIsLoading(false);
+      }
     }
   }, []);
 
   const fetchTrace = useCallback(async () => {
     try {
       const response = await getAgentTrace();
-      setTrace(response);
+      v3Store.trace = response;
+      if (mountedRef.current) {
+        setTrace(response);
+      }
     } catch (err) {
       console.error('Failed to fetch trace:', err);
     }
   }, []);
 
   const reset = useCallback(() => {
+    v3Store.result = null;
+    v3Store.trace = null;
+    v3Store.error = null;
     setResult(null);
     setTrace(null);
     setError(null);
   }, []);
 
   const restoreFromHistory = useCallback((entry: AuditHistoryEntry) => {
+    v3Store.result = entry.result;
+    v3Store.trace = null;
+    v3Store.error = null;
     setResult(entry.result);
     setTrace(null);
     setError(null);

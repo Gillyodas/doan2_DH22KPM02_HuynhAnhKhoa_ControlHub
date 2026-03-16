@@ -191,9 +191,13 @@ const AiAuditPage = () => {
                 </button>
             </div>
 
-            {activeTab === 'v3' ? (
+            {/* V3 Tab — always mounted */}
+            <div style={{ display: activeTab === 'v3' ? 'block' : 'none' }}>
                 <V3InvestigationPanel />
-            ) : activeTab === 'analyze' ? (
+            </div>
+
+            {/* Analyze Tab — always mounted */}
+            <div style={{ display: activeTab === 'analyze' ? 'block' : 'none' }}>
                 <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
                     {/* Input Section */}
                     <Card className="col-span-1 h-fit">
@@ -277,8 +281,10 @@ const AiAuditPage = () => {
                         )}
                     </div>
                 </div>
-            ) : (
-                /* Chat Tab Logic (Same as before but simplified) */
+            </div>
+
+            {/* Chat Tab — always mounted */}
+            <div style={{ display: activeTab === 'chat' ? 'block' : 'none' }}>
                 <div className="grid grid-cols-1">
                     <Card className="min-h-[600px] flex flex-col">
                         <CardHeader><CardTitle>Chat with Logs</CardTitle></CardHeader>
@@ -301,7 +307,7 @@ const AiAuditPage = () => {
                         </CardContent>
                     </Card>
                 </div>
-            )}
+            </div>
         </div>
     );
 };
