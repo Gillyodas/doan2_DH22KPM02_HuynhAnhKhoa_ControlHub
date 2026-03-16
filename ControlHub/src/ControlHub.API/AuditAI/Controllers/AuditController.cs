@@ -10,7 +10,7 @@ using Microsoft.AspNetCore.RateLimiting;
 
 namespace ControlHub.API.AuditAI.Controllers
 {
-    [Route("api/[controller]")]
+    [Route("api/audit")]
     [ApiController]
     [Authorize]
     [EnableRateLimiting(RateLimitingExtensions.Policies.GeneralApi)]

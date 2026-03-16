@@ -1,22 +1,33 @@
-﻿using ControlHub.Domain.AccessControl.Entities;
+﻿using System.Text.Json.Serialization;
+using ControlHub.Domain.AccessControl.Entities;
 using ControlHub.Domain.AccessControl.Events;
 using ControlHub.Domain.SharedKernel;
-using ControlHub.SharedKernel.Results;
 using ControlHub.SharedKernel.AccessControl.Roles;
+using ControlHub.SharedKernel.Results;
 // using ControlHub.SharedKernel.AccessControl.Roles; // (Gi? s? b?n có RoleErrors ? dây)
 
 namespace ControlHub.Domain.AccessControl.Aggregates
 {
     public class Role : AggregateRoot
     {
+        [JsonPropertyName("id")]
         public Guid Id { get; private set; }
+
+        [JsonPropertyName("name")]
         public string Name { get; private set; }
+
+        [JsonPropertyName("description")]
         public string Description { get; private set; }
+
+        [JsonPropertyName("isActive")]
         public bool IsActive { get; private set; }
+
+        [JsonPropertyName("isDeleted")]
         public bool IsDeleted { get; private set; }
 
         private readonly List<Permission> _permissions = new();
 
+        [JsonPropertyName("permissions")]
         public IReadOnlyCollection<Permission> Permissions => _permissions.AsReadOnly();
 
         // Navigation Property (Optional): N?u b?n mu?n truy c?p ngu?c l?i t? Role -> Accounts

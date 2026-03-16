@@ -1,6 +1,5 @@
 using ControlHub.Application.Identity.Interfaces;
 using ControlHub.Application.Identity.Interfaces.Repositories;
-using ControlHub.Domain.Identity.Enums;
 
 namespace ControlHub.Infrastructure.Identity.Persistence.Repositories
 {

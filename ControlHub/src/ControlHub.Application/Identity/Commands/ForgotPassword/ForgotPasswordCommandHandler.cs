@@ -1,6 +1,6 @@
 using System.Text.Json;
-using ControlHub.Application.Identity.Interfaces.Repositories;
 using ControlHub.Application.Common.Persistence;
+using ControlHub.Application.Identity.Interfaces.Repositories;
 using ControlHub.Application.Messaging.Outbox;
 using ControlHub.Application.Messaging.Outbox.Repositories;
 using ControlHub.Application.TokenManagement.Interfaces;
@@ -8,9 +8,9 @@ using ControlHub.Application.TokenManagement.Interfaces.Generate;
 using ControlHub.Application.TokenManagement.Interfaces.Repositories;
 using ControlHub.Domain.Identity.Identifiers.Services;
 using ControlHub.Domain.TokenManagement.Enums;
-using ControlHub.SharedKernel.Identity.Accounts;
 using ControlHub.SharedKernel.Common.Errors;
 using ControlHub.SharedKernel.Common.Logs;
+using ControlHub.SharedKernel.Identity.Accounts;
 using ControlHub.SharedKernel.Results;
 using ControlHub.SharedKernel.TokenManagement;
 using MediatR;

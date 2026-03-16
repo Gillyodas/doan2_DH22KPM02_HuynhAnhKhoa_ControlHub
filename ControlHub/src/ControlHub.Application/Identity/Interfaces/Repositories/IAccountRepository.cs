@@ -1,5 +1,4 @@
 using ControlHub.Domain.Identity.Aggregates;
-using ControlHub.Domain.Identity.Enums;
 namespace ControlHub.Application.Identity.Interfaces.Repositories
 {
     public interface IAccountRepository

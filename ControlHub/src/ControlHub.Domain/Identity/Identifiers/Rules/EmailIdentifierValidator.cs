@@ -1,7 +1,7 @@
 using ControlHub.Domain.Identity.Enums;
 using ControlHub.Domain.Identity.ValueObjects;
-using ControlHub.SharedKernel.Identity.Accounts;
 using ControlHub.SharedKernel.Common.Errors;
+using ControlHub.SharedKernel.Identity.Accounts;
 
 namespace ControlHub.Domain.Identity.Identifiers.Rules
 {

@@ -1,5 +1,4 @@
 using ControlHub.Application.Identity.DTOs;
-using ControlHub.Domain.Identity.Enums;
 using ControlHub.SharedKernel.Results;
 using MediatR;
 

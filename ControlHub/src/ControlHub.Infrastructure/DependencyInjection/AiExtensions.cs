@@ -1,12 +1,10 @@
 using ControlHub.Application.AuditAI.Interfaces;
-using ControlHub.Application.AuditAI.Interfaces.V1;
 using ControlHub.Application.AuditAI.Interfaces.V3;
 using ControlHub.Application.AuditAI.Interfaces.V3.Agentic;
 using ControlHub.Application.AuditAI.Interfaces.V3.Observability;
 using ControlHub.Application.AuditAI.Interfaces.V3.Parsing;
 using ControlHub.Application.AuditAI.Interfaces.V3.RAG;
 using ControlHub.Application.AuditAI.Interfaces.V3.Reasoning;
-using ControlHub.Application.AuditAI.Interfaces.V3.Resilience;
 using ControlHub.Infrastructure.AI;
 using ControlHub.Infrastructure.AI.Parsing;
 using ControlHub.Infrastructure.AI.Strategies;
@@ -16,11 +14,11 @@ using ControlHub.Infrastructure.AI.V3.ML;
 using ControlHub.Infrastructure.AI.V3.Observability;
 using ControlHub.Infrastructure.AI.V3.RAG;
 using ControlHub.Infrastructure.AI.V3.Reasoning;
-using AgenticRAGServiceImpl = ControlHub.Infrastructure.AI.V3.RAG.AgenticRAGService;
-using MultiHopRetrieverImpl = ControlHub.Infrastructure.AI.V3.RAG.MultiHopRetriever;
-using ConfidenceScorerImpl = ControlHub.Infrastructure.AI.V3.Reasoning.ConfidenceScorer;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using AgenticRAGServiceImpl = ControlHub.Infrastructure.AI.V3.RAG.AgenticRAGService;
+using ConfidenceScorerImpl = ControlHub.Infrastructure.AI.V3.Reasoning.ConfidenceScorer;
+using MultiHopRetrieverImpl = ControlHub.Infrastructure.AI.V3.RAG.MultiHopRetriever;
 
 namespace ControlHub.Infrastructure.DependencyInjection;
 

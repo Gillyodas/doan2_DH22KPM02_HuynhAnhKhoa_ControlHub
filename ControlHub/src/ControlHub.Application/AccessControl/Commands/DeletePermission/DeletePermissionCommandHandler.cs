@@ -1,5 +1,5 @@
-using ControlHub.Application.Common.Persistence;
 using ControlHub.Application.AccessControl.Interfaces.Repositories;
+using ControlHub.Application.Common.Persistence;
 using ControlHub.SharedKernel.AccessControl.Permissions;
 using ControlHub.SharedKernel.Results;
 using MediatR;

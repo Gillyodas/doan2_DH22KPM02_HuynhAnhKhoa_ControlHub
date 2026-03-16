@@ -1,5 +1,5 @@
-using ControlHub.SharedKernel.Common.DTOs;
 using ControlHub.Domain.AccessControl.Aggregates;
+using ControlHub.SharedKernel.Common.DTOs;
 
 namespace ControlHub.Application.AccessControl.Interfaces.Repositories
 {

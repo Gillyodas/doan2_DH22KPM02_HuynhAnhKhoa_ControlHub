@@ -5,8 +5,6 @@ using MediatR;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.OpenApi.Models;
-using static System.Net.Mime.MediaTypeNames;
-using static Microsoft.EntityFrameworkCore.DbLoggerCategory;
 
 internal static class PresentationExtensions
 {
@@ -39,6 +37,19 @@ internal static class PresentationExtensions
         services.AddSwaggerGen(c =>
         {
             var dashboardUrl = configuration["ControlHub:DashboardUrl"] ?? "/control-hub/index.html";
+
+            c.CustomSchemaIds(type =>
+        type.FullName?
+            .Replace("`1[[", "_")
+            .Replace("]]", "")
+            .Replace(", ", "_")
+            .Replace(",", "_")
+            ?? type.Name);
+
+            c.AddServer(new Microsoft.OpenApi.Models.OpenApiServer
+            {
+                Url = "https://localhost:7110"
+            });
 
             c.SwaggerDoc("v1", new OpenApiInfo
             {

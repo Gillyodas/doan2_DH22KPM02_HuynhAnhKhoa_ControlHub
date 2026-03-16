@@ -53,7 +53,7 @@ import { fetchJson, fetchVoid } from "@/services/api/client"
 
 
 export async function createRoles(roles: CreateRoleInput[], accessToken: string): Promise<CreateRolesResponse> {
-  return fetchJson<CreateRolesResponse>("/api/Role/roles", {
+  return fetchJson<CreateRolesResponse>("/api/role/roles", {
     method: "POST",
     body: { roles },
     accessToken
@@ -61,7 +61,7 @@ export async function createRoles(roles: CreateRoleInput[], accessToken: string)
 }
 
 export async function createPermissions(permissions: CreatePermissionInput[], accessToken: string): Promise<void> {
-  await fetchVoid("/api/Permission/permissions", {
+  await fetchVoid("/api/permission/permissions", {
     method: "POST",
     body: { permissions },
     accessToken
@@ -70,7 +70,7 @@ export async function createPermissions(permissions: CreatePermissionInput[], ac
 
 export async function addPermissionsForRole(roleId: string, permissionIds: string[], accessToken: string) {
   return fetchJson<void>(
-    `/api/Role/${roleId}/permissions`,
+    `/api/role/${roleId}/permissions`,
     {
       method: "PUT",
       body: permissionIds,
@@ -93,7 +93,7 @@ export async function getRoles(
   })
   if (searchTerm) params.set("searchTerm", searchTerm)
 
-  return fetchJson<PagedResult<ApiRole>>(`/api/Role?${params.toString()}`, {
+  return fetchJson<PagedResult<ApiRole>>(`/api/role?${params.toString()}`, {
     accessToken
   })
 }
@@ -112,13 +112,13 @@ export async function getPermissions(
   })
   if (searchTerm) params.set("searchTerm", searchTerm)
 
-  return fetchJson<PagedResult<ApiPermission>>(`/api/Permission?${params.toString()}`, {
+  return fetchJson<PagedResult<ApiPermission>>(`/api/permission?${params.toString()}`, {
     accessToken
   })
 }
 
 export async function updateRole(id: string, input: UpdateRoleInput, accessToken: string): Promise<void> {
-  await fetchVoid(`/api/Role/${id}`, {
+  await fetchVoid(`/api/role/${id}`, {
     method: "PUT",
     body: input,
     accessToken
@@ -126,14 +126,14 @@ export async function updateRole(id: string, input: UpdateRoleInput, accessToken
 }
 
 export async function deleteRole(id: string, accessToken: string): Promise<void> {
-  await fetchVoid(`/api/Role/${id}`, {
+  await fetchVoid(`/api/role/${id}`, {
     method: "DELETE",
     accessToken
   })
 }
 
 export async function updatePermission(id: string, input: UpdatePermissionInput, accessToken: string): Promise<void> {
-  await fetchVoid(`/api/Permission/${id}`, {
+  await fetchVoid(`/api/permission/${id}`, {
     method: "PUT",
     body: input,
     accessToken
@@ -141,7 +141,7 @@ export async function updatePermission(id: string, input: UpdatePermissionInput,
 }
 
 export async function deletePermission(id: string, accessToken: string): Promise<void> {
-  await fetchVoid(`/api/Permission/${id}`, {
+  await fetchVoid(`/api/permission/${id}`, {
     method: "DELETE",
     accessToken
   })

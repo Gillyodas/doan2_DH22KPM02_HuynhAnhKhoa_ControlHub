@@ -22,7 +22,7 @@ export async function getUsers(
   if (params.searchTerm) queryParams.append("searchTerm", params.searchTerm)
 
   const queryString = queryParams.toString()
-  const url = `/api/User${queryString ? `?${queryString}` : ""}`
+  const url = `/api/user${queryString ? `?${queryString}` : ""}`
 
   return fetchJson<PagedResult<User>>(url, {
     method: "GET",
@@ -38,7 +38,7 @@ export async function getUserById(
   userId: string,
   accessToken: string
 ): Promise<User> {
-  return fetchJson<User>(`/api/User/${userId}`, {
+  return fetchJson<User>(`/api/user/${userId}`, {
     method: "GET",
     accessToken,
   })
@@ -53,7 +53,7 @@ export async function updateUser(
   data: UpdateUserRequest,
   accessToken: string
 ): Promise<User> {
-  return fetchJson<User>(`/api/User/${userId}`, {
+  return fetchJson<User>(`/api/user/${userId}`, {
     method: "PUT",
     body: data,
     accessToken,
@@ -69,7 +69,7 @@ export async function updateUsername(
   req: UpdateUsernameRequest,
   accessToken: string
 ): Promise<UpdateUsernameResponse> {
-  return fetchJson<UpdateUsernameResponse>(`/api/User/users/${userId}/username`, {
+  return fetchJson<UpdateUsernameResponse>(`/api/user/users/${userId}/username`, {
     method: "PATCH",
     body: req,
     accessToken,
@@ -84,7 +84,7 @@ export async function deleteUser(
   userId: string,
   accessToken: string
 ): Promise<void> {
-  return fetchJson<void>(`/api/User/${userId}`, {
+  return fetchJson<void>(`/api/user/${userId}`, {
     method: "DELETE",
     accessToken,
   })
@@ -99,7 +99,7 @@ export async function assignRoleToUser(
   roleId: string,
   accessToken: string
 ): Promise<void> {
-  return fetchJson<void>(`/api/Role/users/${userId}/assign/${roleId}`, {
+  return fetchJson<void>(`/api/role/users/${userId}/assign/${roleId}`, {
     method: "POST",
     accessToken,
   })
@@ -114,7 +114,7 @@ export async function removeRoleFromUser(
   roleId: string,
   accessToken: string
 ): Promise<void> {
-  return fetchJson<void>(`/api/Role/users/${userId}/roles/${roleId}`, {
+  return fetchJson<void>(`/api/role/users/${userId}/roles/${roleId}`, {
     method: "DELETE",
     accessToken,
   })

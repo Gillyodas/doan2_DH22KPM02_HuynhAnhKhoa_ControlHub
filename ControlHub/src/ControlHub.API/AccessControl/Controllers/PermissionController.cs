@@ -1,9 +1,9 @@
-using ControlHub.API.Extensions;
 using ControlHub.API.AccessControl.ViewModels.Requests;
-using ControlHub.SharedKernel.Common.DTOs;
+using ControlHub.API.Extensions;
 using ControlHub.Application.AccessControl.Commands.CreatePermissions;
 using ControlHub.Application.AccessControl.Queries.SearchPermissions;
 using ControlHub.Domain.AccessControl.Entities;
+using ControlHub.SharedKernel.Common.DTOs;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -12,7 +12,7 @@ using Microsoft.AspNetCore.RateLimiting;
 namespace ControlHub.API.AccessControl.Controllers
 {
     [ApiController]
-    [Route("api/[controller]")]
+    [Route("api/permission")]
     [EnableRateLimiting(RateLimitingExtensions.Policies.GeneralApi)]
     public class PermissionController : ControlHub.API.Controllers.BaseApiController
     {

@@ -1,5 +1,4 @@
 using AutoMapper;
-using ControlHub.Application.AccessControl.Interfaces.Repositories;
 using ControlHub.Infrastructure.Persistence;
 
 namespace ControlHub.Infrastructure.AccessControl.Persistence.Repositories

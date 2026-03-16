@@ -7,26 +7,26 @@ namespace ControlHub.Infrastructure.TokenManagement.Services.Generate
 {
     public class AccessTokenGenerator : TokenGeneratorBase, IAccessTokenGenerator
     {
-        public AccessTokenGenerator(IConfiguration config) : base(config) { }
+        private readonly IConfiguration _config;
+
+        public AccessTokenGenerator(IConfiguration config) : base(config)
+        {
+            _config = config;
+        }
 
         public string Generate(string accountId, string identifier, string roleId)
         {
             var claims = new List<Claim>
-            {
-                // 1. LUU ID V�O C? "sub" V� "NameIdentifier"
-                // "sub" l� chu?n JWT qu?c t?
-                new Claim(JwtRegisteredClaimNames.Sub, accountId),
+        {
+            new Claim(JwtRegisteredClaimNames.Sub, accountId),
+            new Claim(ClaimTypes.NameIdentifier, accountId),
+            new Claim(ClaimTypes.Name, identifier),
+            new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
+            new Claim(ClaimTypes.Role, roleId)
+        };
 
-                // "NameIdentifier" l� chu?n c?a .NET Identity d? d?nh danh User ID
-                new Claim(ClaimTypes.NameIdentifier, accountId),
-
-                new Claim(ClaimTypes.Name, identifier),
-
-                new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
-                new Claim(ClaimTypes.Role, roleId)
-            };
-
-            return GenerateToken(claims, TimeSpan.FromMinutes(15));
+            var minutes = int.Parse(_config["TokenSettings:AccessTokenMinutes"] ?? "15");
+            return GenerateToken(claims, TimeSpan.FromMinutes(minutes));
         }
     }
 }

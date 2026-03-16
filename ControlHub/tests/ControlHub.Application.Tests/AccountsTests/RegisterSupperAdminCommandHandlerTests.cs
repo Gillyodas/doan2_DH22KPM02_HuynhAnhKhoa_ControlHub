@@ -1,13 +1,13 @@
+using ControlHub.Application.Common.Persistence;
 using ControlHub.Application.Identity.Commands.RegisterSupperAdmin;
 using ControlHub.Application.Identity.Interfaces;
 using ControlHub.Application.Identity.Interfaces.Repositories;
-using ControlHub.Application.Common.Persistence;
 using ControlHub.Domain.Identity.Aggregates;
 using ControlHub.Domain.Identity.Enums;
 using ControlHub.Domain.Identity.ValueObjects;
-using ControlHub.SharedKernel.Identity.Accounts;
 using ControlHub.SharedKernel.Common.Errors;
 using ControlHub.SharedKernel.Common.Logs; // Import namespace ch?a CommonLogs
+using ControlHub.SharedKernel.Identity.Accounts;
 using ControlHub.SharedKernel.Results;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;

@@ -1,7 +1,7 @@
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
-using ControlHub.Application.Identity.Commands.SignOut;
 using ControlHub.Application.Common.Persistence;
+using ControlHub.Application.Identity.Commands.SignOut;
 using ControlHub.Application.TokenManagement.Interfaces;
 using ControlHub.Application.TokenManagement.Interfaces.Repositories;
 using ControlHub.Domain.TokenManagement.Aggregates;

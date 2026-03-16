@@ -1,8 +1,8 @@
 using ControlHub.Domain.Identity.Enums;
 using ControlHub.Domain.Identity.Identifiers.Rules;
 using ControlHub.Domain.Identity.ValueObjects;
-using ControlHub.SharedKernel.Identity.Accounts;
 using ControlHub.SharedKernel.Common.Errors;
+using ControlHub.SharedKernel.Identity.Accounts;
 using ControlHub.SharedKernel.Results;
 
 namespace ControlHub.Domain.Identity.Identifiers.Services

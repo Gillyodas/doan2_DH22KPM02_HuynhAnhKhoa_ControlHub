@@ -44,29 +44,29 @@ export const ROUTES = {
 
 export const API_ENDPOINTS = {
   auth: {
-    signIn: '/api/Auth/auth/signin',
-    register: '/api/Auth/users/register',
-    registerAdmin: '/api/Auth/admins/register',
-    registerSuperAdmin: '/api/Auth/superadmins/register',
-    refresh: '/api/Auth/auth/refresh',
-    signOut: '/api/Auth/auth/signout',
+    signIn: '/api/auth/signin',
+    register: '/api/auth/users/register',
+    registerAdmin: '/api/auth/admins/register',
+    registerSuperAdmin: '/api/auth/superadmins/register',
+    refresh: '/api/auth/refresh',
+    signOut: '/api/auth/signout',
   },
   account: {
-    changePassword: (id: string) => `/api/Account/users/${id}/password`,
-    forgotPassword: '/api/Account/auth/forgot-password',
-    resetPassword: '/api/Account/auth/reset-password',
+    changePassword: (id: string) => `/api/account/users/${id}/password`,
+    forgotPassword: '/api/account/auth/forgot-password',
+    resetPassword: '/api/account/auth/reset-password',
   },
   permissions: {
-    create: '/api/Permission/permissions',
-    list: '/api/Permission',
+    create: '/api/permission/permissions',
+    list: '/api/permission',
   },
   roles: {
-    create: '/api/Role/roles',
-    update: '/api/Role/roles/{roleId}/permissions',
-    list: '/api/Role',
+    create: '/api/role/roles',
+    update: '/api/role/roles/{roleId}/permissions',
+    list: '/api/role',
   },
   users: {
-    updateUsername: (id: string) => `/api/User/users/${id}/username`,
+    updateUsername: (id: string) => `/api/user/users/${id}/username`,
   },
 } as const
 

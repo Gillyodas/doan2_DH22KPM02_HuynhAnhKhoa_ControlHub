@@ -1,5 +1,3 @@
-using ControlHub.Domain.Identity.Enums;
-
 namespace ControlHub.Application.Identity.Interfaces
 {
     public interface IAccountValidator

@@ -1,5 +1,4 @@
 using ControlHub.Application.Identity.DTOs;
-using ControlHub.SharedKernel.Identity.Accounts;
 using ControlHub.SharedKernel.Identity.Identifiers;
 using ControlHub.SharedKernel.Results;
 using MediatR;

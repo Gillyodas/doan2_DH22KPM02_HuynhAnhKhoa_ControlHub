@@ -1,5 +1,4 @@
 using ControlHub.Application.Identity.Events;
-using ControlHub.Application.Messaging.Outbox;
 using MediatR;
 using Microsoft.Extensions.Logging;
 

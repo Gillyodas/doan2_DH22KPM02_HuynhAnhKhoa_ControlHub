@@ -25,6 +25,9 @@ namespace ControlHub.Infrastructure.Persistence.Seeders
                 await db.SaveChangesAsync();
             }
 
+            await TestDataProvider.SeedDefaultRolesAsync(db, forceSeed);
+            await TestDataProvider.SeedPermissionsAndRolesAsync(db, forceSeed);
+            await TestDataProvider.SeedTestIdentifierConfigsAsync(db, forceSeed);
             await TestDataProvider.SeedTestAccountsAsync(db, includeExtended: false, forceSeed: forceSeed);
 
             Console.WriteLine("Database seeding completed successfully.");

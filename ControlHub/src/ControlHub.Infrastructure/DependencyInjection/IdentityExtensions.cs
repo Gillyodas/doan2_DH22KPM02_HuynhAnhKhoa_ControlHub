@@ -1,13 +1,12 @@
+using ControlHub.Application.Common.Interfaces;
+using ControlHub.Application.Emails.Interfaces;
 using ControlHub.Application.Identity.Interfaces;
 using ControlHub.Application.Identity.Interfaces.Repositories;
-using ControlHub.Application.Common.Interfaces;
-using ControlHub.Application.Identity.Interfaces.Repositories;
-using ControlHub.Application.Emails.Interfaces;
 using ControlHub.Domain.Identity.Identifiers.Rules;
 using ControlHub.Domain.Identity.Identifiers.Services;
+using ControlHub.Infrastructure.Common.Services;
 using ControlHub.Infrastructure.Identity.Persistence.Repositories;
 using ControlHub.Infrastructure.Messaging.Email;
-using ControlHub.Infrastructure.Common.Services;
 using Microsoft.Extensions.Caching.Memory;
 using Microsoft.Extensions.DependencyInjection;
 

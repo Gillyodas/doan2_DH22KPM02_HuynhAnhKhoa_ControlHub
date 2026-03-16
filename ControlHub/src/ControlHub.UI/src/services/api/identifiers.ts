@@ -43,7 +43,7 @@ export interface CreateIdentifierConfigCommand {
 }
 
 export async function getIdentifierConfigs(accessToken: string): Promise<IdentifierConfigDto[]> {
-  return fetchJson<IdentifierConfigDto[]>("/api/Identifier", {
+  return fetchJson<IdentifierConfigDto[]>("/api/identifier", {
     method: "GET",
     accessToken,
   })
@@ -53,7 +53,7 @@ export async function createIdentifierConfig(
   data: CreateIdentifierConfigCommand,
   accessToken: string
 ): Promise<{ id: string }> {
-  return fetchJson<{ id: string }>("/api/Identifier", {
+  return fetchJson<{ id: string }>("/api/identifier", {
     method: "POST",
     body: data,
     accessToken,
@@ -61,7 +61,7 @@ export async function createIdentifierConfig(
 }
 
 export async function getActiveIdentifierConfigs(includeDeactivated = false): Promise<IdentifierConfigDto[]> {
-  const url = includeDeactivated ? "/api/Identifier/active?includeDeactivated=true" : "/api/Identifier/active"
+  const url = includeDeactivated ? "/api/identifier/active?includeDeactivated=true" : "/api/identifier/active"
   return fetchJson<IdentifierConfigDto[]>(url, {
     method: "GET",
   })
@@ -72,7 +72,7 @@ export async function toggleIdentifierActive(
   isActive: boolean,
   accessToken: string
 ): Promise<void> {
-  return fetchJson<void>(`/api/Identifier/${id}/toggle-active`, {
+  return fetchJson<void>(`/api/identifier/${id}/toggle-active`, {
     method: "PATCH",
     body: { isActive },
     accessToken,
@@ -84,7 +84,7 @@ export async function updateIdentifierConfig(
   data: CreateIdentifierConfigCommand,
   accessToken: string
 ): Promise<void> {
-  return fetchJson<void>(`/api/Identifier/${id}`, {
+  return fetchJson<void>(`/api/identifier/${id}`, {
     method: "PUT",
     body: { id, ...data },
     accessToken,

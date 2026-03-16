@@ -1,7 +1,6 @@
-using ControlHub.SharedKernel.Common.DTOs;
 using ControlHub.Application.AccessControl.Interfaces.Repositories;
 using ControlHub.Domain.AccessControl.Aggregates;
-using ControlHub.SharedKernel.Utils;
+using ControlHub.SharedKernel.Common.DTOs;
 using Microsoft.Extensions.Caching.Memory;
 using Microsoft.Extensions.Logging;
 

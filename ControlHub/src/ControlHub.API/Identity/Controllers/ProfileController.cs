@@ -1,7 +1,7 @@
 using ControlHub.API.Extensions;
 using ControlHub.API.Identity.ViewModels.Request;
-using ControlHub.Application.Identity.Commands.ChangePassword;
 using ControlHub.Application.Common.Interfaces;
+using ControlHub.Application.Identity.Commands.ChangePassword;
 using ControlHub.Application.Identity.Commands.UpdateMyProfile;
 using ControlHub.Application.Identity.Queries.GetMyProfile;
 using MediatR;
@@ -12,7 +12,7 @@ using Microsoft.AspNetCore.RateLimiting;
 namespace ControlHub.API.Identity.Controllers
 {
     [ApiController]
-    [Route("api/[controller]")]
+    [Route("api/profile")]
     [Authorize]
     [EnableRateLimiting(RateLimitingExtensions.Policies.GeneralApi)]
     public class ProfileController : ControlHub.API.Controllers.BaseApiController

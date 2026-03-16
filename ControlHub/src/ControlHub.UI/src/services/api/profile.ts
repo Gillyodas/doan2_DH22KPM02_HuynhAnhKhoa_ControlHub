@@ -6,7 +6,7 @@ import type { Profile, UpdateProfileRequest } from "./types"
  * Endpoint: GET /api/profile/me
  */
 export async function getMyProfile(accessToken: string): Promise<Profile> {
-    return fetchJson<Profile>("/api/Profile/me", {
+    return fetchJson<Profile>("/api/profile/me", {
         method: "GET",
         accessToken,
     })
@@ -20,7 +20,7 @@ export async function updateMyProfile(
     data: UpdateProfileRequest,
     accessToken: string
 ): Promise<Profile> {
-    return fetchJson<Profile>("/api/Profile/me", {
+    return fetchJson<Profile>("/api/profile/me", {
         method: "PUT",
         body: data,
         accessToken,

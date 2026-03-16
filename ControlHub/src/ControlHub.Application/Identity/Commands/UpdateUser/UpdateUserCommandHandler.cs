@@ -1,14 +1,12 @@
+using ControlHub.Application.AccessControl.Interfaces.Repositories;
+using ControlHub.Application.Common.Persistence;
 using ControlHub.Application.Identity.DTOs;
 using ControlHub.Application.Identity.Interfaces.Repositories;
-using ControlHub.Application.Common.Persistence;
-using ControlHub.Application.AccessControl.Interfaces.Repositories;
 using ControlHub.Domain.Identity.Enums;
-using ControlHub.Domain.Identity.ValueObjects;
 using ControlHub.SharedKernel.Identity.Accounts;
-using ControlHub.SharedKernel.Results;
 using ControlHub.SharedKernel.Identity.Users;
+using ControlHub.SharedKernel.Results;
 using MediatR;
-
 using Microsoft.Extensions.Logging;
 
 namespace ControlHub.Application.Identity.Commands.UpdateUser

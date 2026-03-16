@@ -2,6 +2,23 @@ import { toast } from "sonner"
 
 const API_BASE: string = import.meta.env.VITE_API_BASE_URL ?? ""
 
+function toCamelCase(str: string): string {
+  return str.charAt(0).toLowerCase() + str.slice(1)
+}
+
+function deepCamelCase(obj: unknown): unknown {
+  if (Array.isArray(obj)) return obj.map(deepCamelCase)
+  if (obj !== null && typeof obj === "object") {
+    return Object.fromEntries(
+      Object.entries(obj as Record<string, unknown>).map(([k, v]) => [
+        toCamelCase(k),
+        deepCamelCase(v),
+      ])
+    )
+  }
+  return obj
+}
+
 type ProblemDetails = {
   title?: string
   status?: number
@@ -85,7 +102,7 @@ export async function fetchJson<T>(
     return undefined as T
   }
 
-  return (await res.json()) as T
+  return deepCamelCase(await res.json()) as T
 }
 
 export async function fetchVoid(

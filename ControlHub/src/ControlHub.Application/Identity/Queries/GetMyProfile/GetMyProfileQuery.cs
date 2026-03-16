@@ -1,8 +1,8 @@
+using ControlHub.Application.Common.Interfaces;
 using ControlHub.Application.Identity.DTOs;
 using ControlHub.Application.Identity.Interfaces.Repositories;
-using ControlHub.Application.Common.Interfaces;
-using ControlHub.SharedKernel.Results;
 using ControlHub.SharedKernel.Identity.Users;
+using ControlHub.SharedKernel.Results;
 using MediatR;
 using Microsoft.Extensions.Logging;
 

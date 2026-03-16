@@ -1,6 +1,5 @@
 using ControlHub.Domain.Identity.Aggregates;
 using ControlHub.Domain.Identity.Entities;
-using ControlHub.Domain.Identity.ValueObjects;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 

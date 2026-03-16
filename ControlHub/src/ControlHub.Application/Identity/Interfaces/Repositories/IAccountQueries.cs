@@ -1,6 +1,5 @@
 using ControlHub.Domain.Identity.Aggregates;
 using ControlHub.Domain.Identity.Entities;
-using ControlHub.Domain.Identity.Enums;
 using ControlHub.Domain.Identity.ValueObjects;
 
 namespace ControlHub.Application.Identity.Interfaces.Repositories

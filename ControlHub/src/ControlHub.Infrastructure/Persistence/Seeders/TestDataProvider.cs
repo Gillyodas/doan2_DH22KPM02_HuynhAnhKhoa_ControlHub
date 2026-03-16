@@ -1,3 +1,4 @@
+using ControlHub.Domain.AccessControl.Aggregates;
 using ControlHub.Domain.Identity.Aggregates;
 using ControlHub.Domain.Identity.Entities;
 using ControlHub.Domain.Identity.Enums;
@@ -210,6 +211,36 @@ namespace ControlHub.Infrastructure.Persistence.Seeders
 
             // Always assign permissions to roles (will check for duplicates inside)
             await AssignPermissionsToRolesAsync(db, forceSeed);
+        }
+
+        public static async Task SeedDefaultRolesAsync(AppDbContext db, bool forceSeed = false)
+        {
+            var hasExistingRoles = await db.Roles.AnyAsync();
+
+            if (hasExistingRoles && !forceSeed)
+            {
+                Console.WriteLine("Roles already exist.");
+                return;
+            }
+
+            if (hasExistingRoles && forceSeed)
+            {
+                var existing = await db.Roles.ToListAsync();
+                db.Roles.RemoveRange(existing);
+                await db.SaveChangesAsync();
+            }
+
+            var roles = new[]
+            {
+                Role.Create(ControlHubDefaults.Roles.SuperAdminId, "SuperAdmin", "Super Administrator"),
+                Role.Create(ControlHubDefaults.Roles.AdminId, "Admin", "Administrator"),
+                Role.Create(ControlHubDefaults.Roles.UserId, "User", "Regular User")
+            };
+
+            await db.Roles.AddRangeAsync(roles);
+            await db.SaveChangesAsync();
+
+            Console.WriteLine($"Seeded {roles.Length} default roles.");
         }
 
         /// <summary>

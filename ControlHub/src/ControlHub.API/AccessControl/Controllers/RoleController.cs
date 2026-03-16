@@ -1,14 +1,14 @@
-using ControlHub.API.Extensions;
 using ControlHub.API.AccessControl.ViewModels.Requests;
 using ControlHub.API.AccessControl.ViewModels.Responses;
-using ControlHub.SharedKernel.Common.DTOs;
-using ControlHub.Application.Identity.Commands.AssignRole;
+using ControlHub.API.Extensions;
 using ControlHub.Application.AccessControl.Commands.CreateRoles;
 using ControlHub.Application.AccessControl.Commands.SetRolePermissions;
 using ControlHub.Application.AccessControl.Queries.GetRolePermissions;
 using ControlHub.Application.AccessControl.Queries.GetUserRoles;
 using ControlHub.Application.AccessControl.Queries.SearchRoles;
+using ControlHub.Application.Identity.Commands.AssignRole;
 using ControlHub.Domain.AccessControl.Aggregates;
+using ControlHub.SharedKernel.Common.DTOs;
 using ControlHub.SharedKernel.Results;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
@@ -18,7 +18,7 @@ using Microsoft.AspNetCore.RateLimiting;
 namespace ControlHub.API.AccessControl.Controllers
 {
     [ApiController]
-    [Route("api/[controller]")]
+    [Route("api/role")]
     [EnableRateLimiting(RateLimitingExtensions.Policies.GeneralApi)]
     public class RoleController : ControlHub.API.Controllers.BaseApiController
     {

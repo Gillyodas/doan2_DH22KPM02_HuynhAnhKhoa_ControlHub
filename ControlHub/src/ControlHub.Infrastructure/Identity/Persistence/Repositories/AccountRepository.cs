@@ -1,6 +1,5 @@
 using ControlHub.Application.Identity.Interfaces.Repositories;
 using ControlHub.Domain.Identity.Aggregates;
-using ControlHub.Domain.Identity.Enums;
 using ControlHub.Infrastructure.Persistence;
 using ControlHub.SharedKernel.Common.Exceptions;
 using Microsoft.EntityFrameworkCore;

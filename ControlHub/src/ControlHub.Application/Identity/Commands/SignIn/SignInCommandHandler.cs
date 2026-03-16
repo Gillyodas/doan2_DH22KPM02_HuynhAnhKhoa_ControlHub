@@ -1,7 +1,7 @@
-using ControlHub.Application.Identity.DTOs;
-using ControlHub.Application.Identity.Interfaces.Repositories;
-using ControlHub.Application.Identity.Events;
 using ControlHub.Application.Common.Persistence;
+using ControlHub.Application.Identity.DTOs;
+using ControlHub.Application.Identity.Events;
+using ControlHub.Application.Identity.Interfaces.Repositories;
 using ControlHub.Application.TokenManagement.Interfaces;
 using ControlHub.Application.TokenManagement.Interfaces.Generate;
 using ControlHub.Application.TokenManagement.Interfaces.Repositories;

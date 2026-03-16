@@ -9,6 +9,23 @@ import { jwtDecode } from "jwt-decode"
 
 import { clearAuth, loadAuth, saveAuth } from "@/auth/storage"
 
+function toCamelCase(str: string): string {
+  return str.charAt(0).toLowerCase() + str.slice(1)
+}
+
+function deepCamelCase(obj: unknown): unknown {
+  if (Array.isArray(obj)) return obj.map(deepCamelCase)
+  if (obj !== null && typeof obj === "object") {
+    return Object.fromEntries(
+      Object.entries(obj as Record<string, unknown>).map(([k, v]) => [
+        toCamelCase(k),
+        deepCamelCase(v),
+      ])
+    )
+  }
+  return obj
+}
+
 const API_BASE: string = import.meta.env.VITE_API_BASE_URL ?? ""
 
 /**
@@ -61,7 +78,7 @@ function processQueue(error: unknown, token: string | null) {
 
 function isAuthEndpoint(url?: string) {
   if (!url) return false
-  return url.includes("/api/Auth/auth/signin") || url.includes("/api/Auth/auth/refresh")
+  return url.includes("/api/auth/signin") || url.includes("/api/auth/refresh")
 }
 
 async function refreshAccessToken() {
@@ -72,7 +89,7 @@ async function refreshAccessToken() {
 
   // NOTE: Use a plain axios call without interceptors to avoid recursion
   const res = await axios.post<RefreshResponse>(
-    `${API_BASE}/api/Auth/auth/refresh`,
+    `${API_BASE}/api/auth/refresh`,
     {
       refreshToken: auth.refreshToken,
       accessToken: auth.accessToken,
@@ -201,7 +218,7 @@ api.interceptors.response.use(
     } catch (refreshErr) {
       processQueue(refreshErr, null)
       clearAuth()
-      window.location.replace("/login")
+      window.location.replace(`${import.meta.env.VITE_BASE_URL || '/control-hub'}/login`)
       return Promise.reject(refreshErr)
     } finally {
       isRefreshing = false
@@ -238,7 +255,7 @@ export async function fetchJson<T>(url: string, options: {
 
   try {
     const response = await api.request<T>(config)
-    return response.data
+    return deepCamelCase(response.data) as T
   } catch (error: unknown) {
     // Parse validation errors from backend
     if (error && typeof error === 'object' && 'response' in error) {

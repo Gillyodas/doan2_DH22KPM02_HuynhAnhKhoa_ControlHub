@@ -15,7 +15,7 @@ export async function createRoles(
   req: CreateRolesRequest,
   accessToken: string
 ): Promise<CreateRolesResponse> {
-  return fetchJson<CreateRolesResponse>("/api/Role/roles", {
+  return fetchJson<CreateRolesResponse>("/api/role/roles", {
     method: "POST",
     body: req,
     accessToken,
@@ -40,7 +40,7 @@ export async function getRoles(
   if (params.searchTerm) queryParams.append("searchTerm", params.searchTerm)
 
   const queryString = queryParams.toString()
-  const url = `/api/Role${queryString ? `?${queryString}` : ""}`
+  const url = `/api/role${queryString ? `?${queryString}` : ""}`
 
   return fetchJson<PagedResult<Role>>(url, {
     method: "GET",
@@ -56,7 +56,7 @@ export async function getRoleById(
   roleId: string,
   accessToken: string
 ): Promise<Role> {
-  return fetchJson<Role>(`/api/Role/${roleId}`, {
+  return fetchJson<Role>(`/api/role/${roleId}`, {
     method: "GET",
     accessToken,
   })
@@ -71,7 +71,7 @@ export async function updateRole(
   data: UpdateRoleRequest,
   accessToken: string
 ): Promise<Role> {
-  return fetchJson<Role>(`/api/Role/${roleId}`, {
+  return fetchJson<Role>(`/api/role/${roleId}`, {
     method: "PUT",
     body: data,
     accessToken,
@@ -86,7 +86,7 @@ export async function deleteRole(
   roleId: string,
   accessToken: string
 ): Promise<void> {
-  return fetchJson<void>(`/api/Role/${roleId}`, {
+  return fetchJson<void>(`/api/role/${roleId}`, {
     method: "DELETE",
     accessToken,
   })
@@ -101,7 +101,7 @@ export async function addPermissionsForRole(
   permissionIds: string[],
   accessToken: string
 ): Promise<void> {
-  return fetchJson<void>(`/api/Role/${roleId}/permissions`, {
+  return fetchJson<void>(`/api/role/${roleId}/permissions`, {
     method: "PUT",
     body: permissionIds,
     accessToken,

@@ -1,10 +1,10 @@
 using ControlHub.API.Extensions;
 using ControlHub.API.Identity.ViewModels.Request;
+using ControlHub.Application.Identity.Authorization;
 using ControlHub.Application.Identity.Commands.ChangePassword;
 using ControlHub.Application.Identity.Commands.ForgotPassword;
 using ControlHub.Application.Identity.Commands.ResetPassword;
 using ControlHub.Application.Identity.Queries.GetAdminAccounts;
-using ControlHub.Application.Identity.Authorization;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -13,7 +13,7 @@ using Microsoft.AspNetCore.RateLimiting;
 namespace ControlHub.API.Identity.Controllers
 {
     [ApiController]
-    [Route("api/[controller]")]
+    [Route("api/account")]
     public class AccountController : ControlHub.API.Controllers.BaseApiController
     {
         private readonly IAuthorizationService _authorizationService;

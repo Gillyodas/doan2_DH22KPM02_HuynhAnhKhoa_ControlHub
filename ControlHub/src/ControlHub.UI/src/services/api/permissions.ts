@@ -9,7 +9,7 @@ export async function createPermissions(
   req: CreatePermissionsRequest,
   accessToken: string
 ): Promise<void> {
-  return fetchVoid("/api/Permission/permissions", {
+  return fetchVoid("/api/permission/permissions", {
     method: "POST",
     body: req,
     accessToken,
@@ -30,7 +30,7 @@ export async function getPermissions(
   if (params.searchTerm) queryParams.append("searchTerm", params.searchTerm)
 
   const queryString = queryParams.toString()
-  const url = `/api/Permission${queryString ? `?${queryString}` : ""}`
+  const url = `/api/permission${queryString ? `?${queryString}` : ""}`
 
   return fetchJson<PagedResult<Permission>>(url, {
     method: "GET",

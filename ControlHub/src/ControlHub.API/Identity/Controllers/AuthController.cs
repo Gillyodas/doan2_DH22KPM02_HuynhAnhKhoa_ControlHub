@@ -1,9 +1,9 @@
 using ControlHub.API.Extensions;
 using ControlHub.API.Identity.ViewModels.Request;
-using ControlHub.Application.Identity.Commands.RegisterUser;
 using ControlHub.Application.Identity.Commands.RefreshAccessToken;
 using ControlHub.Application.Identity.Commands.RegisterAdmin;
 using ControlHub.Application.Identity.Commands.RegisterSupperAdmin;
+using ControlHub.Application.Identity.Commands.RegisterUser;
 using ControlHub.Application.Identity.Commands.SignIn;
 using ControlHub.Application.Identity.Commands.SignOut;
 using MediatR;
@@ -15,7 +15,7 @@ using ApiResponse = ControlHub.API.Identity.ViewModels.Response;
 namespace ControlHub.API.Identity.Controllers
 {
     [ApiController]
-    [Route("api/[controller]")]
+    [Route("api/auth")]
     public class AuthController : ControlHub.API.Controllers.BaseApiController
     {
         private ILogger<AuthController> _logger;
@@ -82,7 +82,7 @@ namespace ControlHub.API.Identity.Controllers
         }
 
         [AllowAnonymous]
-        [HttpPost("auth/signin")]
+        [HttpPost("signin")]
         [EnableRateLimiting(RateLimitingExtensions.Policies.Authentication)]
         [ProducesResponseType(typeof(ApiResponse.SignInResponse), StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
@@ -104,7 +104,7 @@ namespace ControlHub.API.Identity.Controllers
         }
 
         [AllowAnonymous]
-        [HttpPost("auth/refresh")]
+        [HttpPost("refresh")]
         public async Task<IActionResult> Refresh([FromBody] RefreshAccessTokenRequest request, CancellationToken ct)
         {
             var command = new RefreshAccessTokenCommand(request.RefreshToken, request.AccID, request.AccessToken);
@@ -121,7 +121,7 @@ namespace ControlHub.API.Identity.Controllers
         }
 
         [Authorize]
-        [HttpPost("auth/signout")]
+        [HttpPost("signout")]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         public async Task<IActionResult> SignOut([FromBody] SignOutRequest request, CancellationToken ct)
         {

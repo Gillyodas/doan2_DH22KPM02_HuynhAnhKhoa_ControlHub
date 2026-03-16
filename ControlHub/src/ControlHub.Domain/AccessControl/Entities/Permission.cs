@@ -1,3 +1,4 @@
+using System.Text.Json.Serialization;
 using System.Text.RegularExpressions;
 using ControlHub.SharedKernel.AccessControl.Permissions;
 using ControlHub.SharedKernel.Results;
@@ -9,8 +10,13 @@ namespace ControlHub.Domain.AccessControl.Entities
         // Regex cho phép: chữ thường, số, dấu chấm và dấu gạch dưới
         public const string PermissionCodeRegex = @"^[a-z0-9_]+\.[a-z0-9_]+$";
 
+        [JsonPropertyName("id")]
         public Guid Id { get; private set; }
+
+        [JsonPropertyName("code")]
         public string Code { get; private set; } = default!; // EF Core sẽ set giá trị này
+
+        [JsonPropertyName("description")]
         public string Description { get; private set; } = string.Empty;
 
         // Constructor rỗng cho EF Core (Bắt buộc)

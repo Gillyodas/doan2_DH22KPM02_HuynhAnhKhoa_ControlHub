@@ -14,7 +14,7 @@ using Microsoft.AspNetCore.RateLimiting;
 namespace ControlHub.API.Identity.Controllers
 {
     [ApiController]
-    [Route("api/[controller]")]
+    [Route("api/user")]
     [EnableRateLimiting(RateLimitingExtensions.Policies.GeneralApi)]
     public class UserController : ControlHub.API.Controllers.BaseApiController
     {

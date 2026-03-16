@@ -1,6 +1,6 @@
+using ControlHub.Application.Common.Persistence;
 using ControlHub.Application.Identity.Commands.ForgotPassword;
 using ControlHub.Application.Identity.Interfaces.Repositories;
-using ControlHub.Application.Common.Persistence;
 using ControlHub.Application.Messaging.Outbox;
 using ControlHub.Application.Messaging.Outbox.Repositories;
 using ControlHub.Application.TokenManagement.Interfaces;
@@ -13,8 +13,8 @@ using ControlHub.Domain.Identity.Identifiers.Services;   // Namespace ch?a Ident
 using ControlHub.Domain.Identity.ValueObjects;
 using ControlHub.Domain.TokenManagement.Aggregates;
 using ControlHub.Domain.TokenManagement.Enums;
-using ControlHub.SharedKernel.Identity.Accounts;
 using ControlHub.SharedKernel.Common.Errors;
+using ControlHub.SharedKernel.Identity.Accounts;
 using ControlHub.SharedKernel.TokenManagement;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;

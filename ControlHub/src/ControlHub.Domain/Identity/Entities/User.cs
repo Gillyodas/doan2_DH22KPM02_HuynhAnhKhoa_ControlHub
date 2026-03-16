@@ -1,5 +1,5 @@
-using ControlHub.SharedKernel.Results;
 using ControlHub.SharedKernel.Identity.Users;
+using ControlHub.SharedKernel.Results;
 
 namespace ControlHub.Domain.Identity.Entities
 {

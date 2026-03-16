@@ -1,11 +1,12 @@
+using System.Text.Json.Serialization;
 using ControlHub.Domain.Identity.Enums;
 
 namespace ControlHub.Application.Identity.DTOs
 {
     public record ValidationRuleDto(
-    ValidationRuleType Type,
-    Dictionary<string, object> Parameters,
-    string? ErrorMessage = null,
-    int Order = 0
-);
+        [property: JsonPropertyName("type")] ValidationRuleType Type,
+        [property: JsonPropertyName("parameters")] Dictionary<string, object> Parameters,
+        [property: JsonPropertyName("errorMessage")] string? ErrorMessage = null,
+        [property: JsonPropertyName("order")] int Order = 0
+    );
 }

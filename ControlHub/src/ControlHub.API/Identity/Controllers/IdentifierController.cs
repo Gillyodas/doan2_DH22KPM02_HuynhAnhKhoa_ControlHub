@@ -16,7 +16,7 @@ namespace ControlHub.API.Identity.Controllers
 {
     [Authorize]
     [ApiController]
-    [Route("api/[controller]")]
+    [Route("api/identifier")]
     [EnableRateLimiting(RateLimitingExtensions.Policies.GeneralApi)]
     public class IdentifierController : ControlHub.API.Controllers.BaseApiController
     {

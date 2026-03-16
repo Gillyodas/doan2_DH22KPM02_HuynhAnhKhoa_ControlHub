@@ -1,4 +1,10 @@
+using System.Text.Json.Serialization;
+
 namespace ControlHub.Application.AccessControl.DTOs
 {
-    public record PermissionDto(Guid Id, string Code, string Description);
+    public record PermissionDto(
+        [property: JsonPropertyName("id")] Guid Id,
+        [property: JsonPropertyName("code")] string Code,
+        [property: JsonPropertyName("description")] string Description
+    );
 }

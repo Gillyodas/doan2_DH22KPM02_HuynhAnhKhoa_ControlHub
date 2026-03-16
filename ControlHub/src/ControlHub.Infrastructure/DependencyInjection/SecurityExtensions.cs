@@ -1,7 +1,7 @@
-﻿using ControlHub.Infrastructure.Identity.Security;
+﻿using ControlHub.Domain.Identity.Security;
 using ControlHub.Infrastructure.AccessControl.Authorization.Handlers;
 using ControlHub.Infrastructure.AccessControl.Authorization.Permissions;
-using ControlHub.Domain.Identity.Security;
+using ControlHub.Infrastructure.Identity.Security;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;

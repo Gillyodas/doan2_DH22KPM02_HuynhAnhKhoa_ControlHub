@@ -22,44 +22,44 @@ const API_GROUPS: ApiGroup[] = [
   {
     nameKey: "identityAuth",
     endpoints: [
-      { path: "/api/Auth/login", method: "POST", descriptionKey: "login", controller: "AuthController", requiresAuth: false },
-      { path: "/api/Auth/register", method: "POST", descriptionKey: "register", controller: "AuthController", requiresAuth: false },
-      { path: "/api/Auth/register-admin", method: "POST", descriptionKey: "registerAdmin", controller: "AuthController", requiresAuth: true },
-      { path: "/api/Auth/refresh-token", method: "POST", descriptionKey: "refreshToken", controller: "AuthController", requiresAuth: false },
-      { path: "/api/Auth/forgot-password", method: "POST", descriptionKey: "forgotPassword", controller: "AuthController", requiresAuth: false },
-      { path: "/api/Auth/reset-password", method: "POST", descriptionKey: "resetPassword", controller: "AuthController", requiresAuth: false },
-      { path: "/api/Auth/change-password", method: "POST", descriptionKey: "changePassword", controller: "AuthController", requiresAuth: true },
+      { path: "/api/auth/signin", method: "POST", descriptionKey: "login", controller: "AuthController", requiresAuth: false },
+      { path: "/api/auth/users/register", method: "POST", descriptionKey: "register", controller: "AuthController", requiresAuth: false },
+      { path: "/api/auth/admins/register", method: "POST", descriptionKey: "registerAdmin", controller: "AuthController", requiresAuth: true },
+      { path: "/api/auth/refresh", method: "POST", descriptionKey: "refreshToken", controller: "AuthController", requiresAuth: false },
+      { path: "/api/account/auth/forgot-password", method: "POST", descriptionKey: "forgotPassword", controller: "AccountController", requiresAuth: false },
+      { path: "/api/account/auth/reset-password", method: "POST", descriptionKey: "resetPassword", controller: "AccountController", requiresAuth: false },
+      { path: "/api/account/users/{id}/password", method: "PATCH", descriptionKey: "changePassword", controller: "AccountController", requiresAuth: true },
     ]
   },
   {
     nameKey: "userHeuristics",
     endpoints: [
-      { path: "/api/User/users/{id}/username", method: "PATCH", descriptionKey: "updateUsername", controller: "UserController", requiresAuth: true },
+      { path: "/api/user/users/{id}/username", method: "PATCH", descriptionKey: "updateUsername", controller: "UserController", requiresAuth: true },
     ]
   },
   {
     nameKey: "roleProtocols",
     endpoints: [
-      { path: "/api/Role", method: "GET", descriptionKey: "getRoles", controller: "RoleController", requiresAuth: true },
-      { path: "/api/Role/{id}", method: "GET", descriptionKey: "getRole", controller: "RoleController", requiresAuth: true },
-      { path: "/api/Role", method: "POST", descriptionKey: "createRole", controller: "RoleController", requiresAuth: true },
-      { path: "/api/Role/{id}", method: "PUT", descriptionKey: "updateRole", controller: "RoleController", requiresAuth: true },
-      { path: "/api/Role/{id}", method: "DELETE", descriptionKey: "deleteRole", controller: "RoleController", requiresAuth: true },
+      { path: "/api/role", method: "GET", descriptionKey: "getRoles", controller: "RoleController", requiresAuth: true },
+      { path: "/api/role/{id}", method: "GET", descriptionKey: "getRole", controller: "RoleController", requiresAuth: true },
+      { path: "/api/role", method: "POST", descriptionKey: "createRole", controller: "RoleController", requiresAuth: true },
+      { path: "/api/role/{id}", method: "PUT", descriptionKey: "updateRole", controller: "RoleController", requiresAuth: true },
+      { path: "/api/role/{id}", method: "DELETE", descriptionKey: "deleteRole", controller: "RoleController", requiresAuth: true },
     ]
   },
   {
     nameKey: "permissionsHub",
     endpoints: [
-      { path: "/api/Permission", method: "GET", descriptionKey: "getPermissions", controller: "PermissionController", requiresAuth: true },
-      { path: "/api/Permission/{id}", method: "GET", descriptionKey: "getPermission", controller: "PermissionController", requiresAuth: true },
-      { path: "/api/Permission", method: "POST", descriptionKey: "createPermission", controller: "PermissionController", requiresAuth: true },
+      { path: "/api/permission", method: "GET", descriptionKey: "getPermissions", controller: "PermissionController", requiresAuth: true },
+      { path: "/api/permission/{id}", method: "GET", descriptionKey: "getPermission", controller: "PermissionController", requiresAuth: true },
+      { path: "/api/permission", method: "POST", descriptionKey: "createPermission", controller: "PermissionController", requiresAuth: true },
     ]
   },
   {
     nameKey: "identifierGates",
     endpoints: [
-      { path: "/api/Identifier", method: "GET", descriptionKey: "getIdentifiers", controller: "IdentifierController", requiresAuth: true },
-      { path: "/api/Identifier", method: "POST", descriptionKey: "createIdentifier", controller: "IdentifierController", requiresAuth: true },
+      { path: "/api/identifier", method: "GET", descriptionKey: "getIdentifiers", controller: "IdentifierController", requiresAuth: true },
+      { path: "/api/identifier", method: "POST", descriptionKey: "createIdentifier", controller: "IdentifierController", requiresAuth: true },
     ]
   },
 ]

@@ -48,7 +48,7 @@ namespace ControlHub.Infrastructure.Persistence
             await using var transaction = await _dbContext.Database.BeginTransactionAsync(ct);
             try
             {
-                _logger.LogInformation("Implicit transaction started");        
+                _logger.LogInformation("Implicit transaction started");
 
                 var changes = await SaveChangesAsync(ct);
                 await transaction.CommitAsync(ct);
@@ -195,7 +195,7 @@ namespace ControlHub.Infrastructure.Persistence
 
             aggregateRoot.ForEach(a => a.ClearDomainEvents());
 
-            foreach(var domainEvent in domainEvents)
+            foreach (var domainEvent in domainEvents)
             {
                 _logger.LogDebug("Dispatching domain event: {EventType}", domainEvent.GetType().Name);
                 await _mediator.Publish(domainEvent, ct);
