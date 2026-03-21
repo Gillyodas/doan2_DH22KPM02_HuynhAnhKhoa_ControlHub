@@ -36,13 +36,13 @@ namespace ControlHub.API
                 .WriteTo.Logger(l => l
                     .Filter.ByIncludingOnly(e => e.Properties.TryGetValue("SourceContext", out var v) && v.ToString().Contains("ControlHub.Infrastructure.Emails"))
                     .WriteTo.File(new RenderedCompactJsonFormatter(), "Logs/email-.json", rollingInterval: RollingInterval.Day, retainedFileCountLimit: 14, shared: true)
-                    .WriteTo.File("Logs/email-.txt", rollingInterval: RollingInterval.Day, outputTemplate: "[{Timestamp:HH:mm:ss} {Level:u3}] {Message:lj}{NewLine}{Exception}"))
+                    .WriteTo.File("Logs/email-.txt", rollingInterval: RollingInterval.Day, outputTemplate: "[{Timestamp:HH:mm:ss} {Level:u3}] [{TraceId}] {Message:lj}{NewLine}{Exception}"))
                 // Main logger: Write everything ELSE to console and main file
                 .WriteTo.Logger(l => l
                     .Filter.ByExcluding(e => e.Properties.TryGetValue("SourceContext", out var v) && v.ToString().Contains("ControlHub.Infrastructure.Emails"))
-                    .WriteTo.Console(outputTemplate: "[{Timestamp:HH:mm:ss} {Level:u3}] {Message:lj}{NewLine}{Exception}")
+                    .WriteTo.Console(outputTemplate: "[{Timestamp:HH:mm:ss} {Level:u3}] [{TraceId}] {Message:lj}{NewLine}{Exception}")
                     .WriteTo.File(new RenderedCompactJsonFormatter(), "Logs/log-.json", rollingInterval: RollingInterval.Day, retainedFileCountLimit: 14, shared: true)
-                    .WriteTo.File("Logs/log-.txt", rollingInterval: RollingInterval.Day, outputTemplate: "[{Timestamp:HH:mm:ss} {Level:u3}] {Message:lj}{NewLine}{Exception}"))
+                    .WriteTo.File("Logs/log-.txt", rollingInterval: RollingInterval.Day, outputTemplate: "[{Timestamp:HH:mm:ss} {Level:u3}] [{TraceId}] {Message:lj}{NewLine}{Exception}"))
                 .CreateLogger();
 
             builder.Host.UseSerilog();
@@ -90,11 +90,17 @@ namespace ControlHub.API
             var app = builder.Build();
 
             app.UseMiddleware<GlobalExceptionMiddleware>();
+
+            // UseControlHub đặt ngay sau GlobalExceptionMiddleware để TraceId middleware
+            // bao phủ toàn bộ pipeline phía sau (CORS, Auth, RateLimiter, Controllers).
+            // GlobalExceptionMiddleware vẫn ở ngoài cùng vì nó là phòng tuyến cuối cùng bắt exception.
+            app.UseControlHub();
+
             app.MapMetrics(); // Prometheus Endpoint
 
             // CORS Configuration
             app.UseCors(policy => policy
-                .WithOrigins("http://localhost:3000", "http://localhost:3000/control-hub", "https://localhost:7110")
+                .WithOrigins("http://localhost:3000", "http://localhost:3000/control-hub")
                 .AllowAnyMethod()
                 .AllowAnyHeader()
                 .AllowCredentials());
@@ -107,6 +113,7 @@ namespace ControlHub.API
                 {
                     options.InjectStylesheet("/custom-swagger.css");
                     options.RoutePrefix = "swagger";
+                    options.SwaggerEndpoint("/swagger/controlhub-v1/swagger.json", "ControlHub Identity API v1");
                 });
             }
 
@@ -117,9 +124,6 @@ namespace ControlHub.API
             app.UseAuthentication();
             app.UseRateLimiter();
             app.UseAuthorization();
-
-            // K�ch ho?t ControlHub (Auto Migration & Seed Data)
-            app.UseControlHub();
 
             app.MapHub<DashboardHub>("/hubs/dashboard");
 

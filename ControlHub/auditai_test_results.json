@@ -1,0 +1,108 @@
+[
+  {
+    "session_id": "session-001",
+    "ground_truth_code": "rate_limit_exceeded",
+    "ground_truth_label": "Lỗi — Đăng nhập vượt giới hạn tốc độ",
+    "latency_seconds": 230.79,
+    "vram_peak_mb": 53,
+    "ai_answer": "# Investigation Report\r\n\r\n## Problem Summary\nHTTP 400 Bad Request on API endpoint /api/v1/data-import triggered by invalid JSON format provided.\r\n\r\n## Root Cause Analysis\nTrigger: X → Effect: Y → Terminal failure: Z.\n\nTrigger: At 2026-03-07 17:04:53, the system logged a WARNING indicating 'InvalidFormat' in the request body of API /api/v1/data-import (\"[WARNING] Invalid JSON format detected at 2026-03-07 17:04:53\").\nEffect: This warning led to an immediate HTTP 400 Bad Request response, as confirmed by the 'Request finished' log entry at 2026-03-07 17:04:59 (\"[INFO] Request finished with status code 400 at 2026-03-07 17:04:59\").\nTerminal failure: The invalid format of the JSON data caused the API to fail, resulting in a client error (HTTP 400) being returned.\r\n\r\n## Recommendation\n- Review and validate all incoming JSON data against the expected schema before submission.\n- Implement input validation checks at the API level to catch and reject malformed requests early.\n- Log detailed information about the invalid request payload for future reference and debugging.\r\n\r\n---\r\n## Investigation Plan (5 steps)\r\n\r\n1. Hypothesis: A specific API call failed — Check: Request finished log entry in the specified time frame — Confirms if: HTTP status code indicates an error (e.g., 400 Bad Request, 500 Internal Server Error)\r\n2. Hypothesis: Incorrect data format was provided — Check: Log entries for 'InvalidFormat' or similar domain-specific error codes — Confirms if: Relevant error messages are present during the specified time frame\r\n3. Hypothesis: Database operation failed — Check: Logs for database-related operations in the specified time frame — Confirms if: Error messages related to database operations (e.g., 'SQLException', 'DatabaseError') are found\r\n4. Hypothesis: Network issue caused a delay or failure — Check: Network-related logs and latency metrics in the specified time frame — Confirms if: High latency or network errors are reported during this period\r\n5. Root Cause Synthesis — Chain all confirmed hypotheses into a single causal narrative and produce developer-friendly recommendations.\r\n\r\n**Verification:** PASSED (Confidence: 95%)\r\n",
+    "ai_plan": [
+      "Hypothesis: A specific API call failed — Check: Request finished log entry in the specified time frame — Confirms if: HTTP status code indicates an error (e.g., 400 Bad Request, 500 Internal Server Error)",
+      "Hypothesis: Incorrect data format was provided — Check: Log entries for 'InvalidFormat' or similar domain-specific error codes — Confirms if: Relevant error messages are present during the specified time frame",
+      "Hypothesis: Database operation failed — Check: Logs for database-related operations in the specified time frame — Confirms if: Error messages related to database operations (e.g., 'SQLException', 'DatabaseError') are found",
+      "Hypothesis: Network issue caused a delay or failure — Check: Network-related logs and latency metrics in the specified time frame — Confirms if: High latency or network errors are reported during this period",
+      "Root Cause Synthesis — Chain all confirmed hypotheses into a single causal narrative and produce developer-friendly recommendations."
+    ],
+    "verification_passed": true,
+    "confidence": 0.95,
+    "iterations": 3,
+    "ai_error": null,
+    "request_error": null,
+    "timestamp": "2026-03-17T01:46:32.682851"
+  },
+  {
+    "session_id": "session-004",
+    "ground_truth_code": "token_expired",
+    "ground_truth_label": "Lỗi xác thực — Token truy cập hết hạn",
+    "latency_seconds": 204.11,
+    "vram_peak_mb": 52,
+    "ai_answer": "# Investigation Report\r\n\r\n## Problem Summary\nTerminal failure: InvalidFormat → Effect: Request rejected by server → Trigger: API call with invalid input data\r\n\r\n## Root Cause Analysis\nTrigger: At 2026-03-08 16:21:47, the log entry shows 'LogEntry.InputData' as containing an invalid format (INFO level). \nEffect: This led to a request being rejected by the server at 2026-03-08 16:21:49, where 'LogEntry.ErrorCode' indicates 'InvalidFormat'. \nTerminal failure: The server responded with a non-2xx status code (HTTP 400 Bad Request) as shown in 'LogEntry.HttpStatus' at 2026-03-08 16:21:52.\r\n\r\n## Recommendation\n- Review and validate the input data format against the API specification to ensure compliance.\n- Implement validation checks on the client-side to prevent submission of invalid data.\n- Update the server-side logic to handle invalid inputs more gracefully, providing clear error messages.\r\n\r\n---\r\n## Investigation Plan (5 steps)\r\n\r\n1. Hypothesis: A domain-specific error code (e.g., 'InvalidFormat', 'DomainError') is present — Check: [LogEntry.ErrorCode] — Confirms if: [Expected finding of an error code]\r\n2. Hypothesis: An HTTP status code indicates a failure (e.g., 500, 400) — Check: [LogEntry.HttpStatus] — Confirms if: [Expected finding of a non-2xx status code]\r\n3. Hypothesis: A specific API call failed during this timeframe — Check: [LogEntry.Method] and [LogEntry.RequestUrl] — Confirms if: [Expected finding of a particular method or URL]\r\n4. Hypothesis: The failure was due to an unexpected input format — Check: [LogEntry.InputData] — Confirms if: [Expected finding of invalid data]\r\n5. Root Cause Synthesis — Chain all confirmed hypotheses into a single causal narrative and produce developer-friendly recommendations.\r\n\r\n**Verification:** PASSED (Confidence: 95%)\r\n",
+    "ai_plan": [
+      "Hypothesis: A domain-specific error code (e.g., 'InvalidFormat', 'DomainError') is present — Check: [LogEntry.ErrorCode] — Confirms if: [Expected finding of an error code]",
+      "Hypothesis: An HTTP status code indicates a failure (e.g., 500, 400) — Check: [LogEntry.HttpStatus] — Confirms if: [Expected finding of a non-2xx status code]",
+      "Hypothesis: A specific API call failed during this timeframe — Check: [LogEntry.Method] and [LogEntry.RequestUrl] — Confirms if: [Expected finding of a particular method or URL]",
+      "Hypothesis: The failure was due to an unexpected input format — Check: [LogEntry.InputData] — Confirms if: [Expected finding of invalid data]",
+      "Root Cause Synthesis — Chain all confirmed hypotheses into a single causal narrative and produce developer-friendly recommendations."
+    ],
+    "verification_passed": true,
+    "confidence": 0.95,
+    "iterations": 3,
+    "ai_error": null,
+    "request_error": null,
+    "timestamp": "2026-03-17T01:50:07.708183"
+  },
+  {
+    "session_id": "session-002",
+    "ground_truth_code": "token_expired_then_refreshed",
+    "ground_truth_label": "Lỗi xác thực — Token hết hạn (đã làm mới thành công)",
+    "latency_seconds": 209.52,
+    "vram_peak_mb": 52,
+    "ai_answer": "# Investigation Report\r\n\r\n## Problem Summary\nHTTP 400 Bad Request on endpoint /api/v1/data due to InvalidFormat error.\r\n\r\n## Root Cause Analysis\nTrigger: X → Effect: Y → Terminal failure: Z. Trigger: At 2026-03-07 17:07:29, a 'InvalidFormat' warning was logged indicating an issue with the request format. → Effect: By 2026-03-07 17:07:35, this led to a 'Request finished' log entry showing HTTP 400 Bad Request on endpoint /api/v1/data. → Terminal failure: At 2026-03-07 17:07:38, the final 'InvalidFormat' error was logged confirming the root cause.\r\n\r\n## Recommendation\n- Review and update API documentation to ensure client requests are correctly formatted.\n- Implement input validation checks in the server-side code to prevent such errors from occurring.\n- Train or remind developers about the importance of proper request formatting.\r\n\r\n---\r\n## Investigation Plan (6 steps)\r\n\r\n1. Hypothesis: A specific API request failed — Check: Request finished log entry during the specified time frame — Confirms if: HTTP status code indicates a failure\r\n2. Hypothesis: The error was due to an invalid format — Check: Log entries for 'InvalidFormat' errors during the same timeframe — Confirms if: Found relevant 'InvalidFormat' logs\r\n3. Hypothesis: A domain-specific exception occurred — Check: Logs containing 'DomainError' or similar codes during the specified time frame — Confirms if: Identified a 'DomainError'\r\n4. Hypothesis: Network connectivity issues caused the problem — Check: DNS resolution and network connection logs around 17:07:36 (midpoint of timeframe) — Confirms if: DNS resolution failures or network timeouts\r\n5. Hypothesis: A configuration issue led to the failure — Check: Configuration change logs before and after the specified time frame — Confirms if: Recent changes in critical configurations\r\n6. Root Cause Synthesis — Chain all confirmed hypotheses into a single causal narrative and produce developer-friendly recommendations.\r\n\r\n**Verification:** PASSED (Confidence: 95%)\r\n",
+    "ai_plan": [
+      "Hypothesis: A specific API request failed — Check: Request finished log entry during the specified time frame — Confirms if: HTTP status code indicates a failure",
+      "Hypothesis: The error was due to an invalid format — Check: Log entries for 'InvalidFormat' errors during the same timeframe — Confirms if: Found relevant 'InvalidFormat' logs",
+      "Hypothesis: A domain-specific exception occurred — Check: Logs containing 'DomainError' or similar codes during the specified time frame — Confirms if: Identified a 'DomainError'",
+      "Hypothesis: Network connectivity issues caused the problem — Check: DNS resolution and network connection logs around 17:07:36 (midpoint of timeframe) — Confirms if: DNS resolution failures or network timeouts",
+      "Hypothesis: A configuration issue led to the failure — Check: Configuration change logs before and after the specified time frame — Confirms if: Recent changes in critical configurations",
+      "Root Cause Synthesis — Chain all confirmed hypotheses into a single causal narrative and produce developer-friendly recommendations."
+    ],
+    "verification_passed": true,
+    "confidence": 0.95,
+    "iterations": 3,
+    "ai_error": null,
+    "request_error": null,
+    "timestamp": "2026-03-17T01:53:48.723488"
+  },
+  {
+    "session_id": "session-014",
+    "ground_truth_code": "token_invalid",
+    "ground_truth_label": "Lỗi xác thực — Token không hợp lệ",
+    "latency_seconds": 255.54,
+    "vram_peak_mb": 52,
+    "ai_answer": "# Investigation Report\r\n\r\n## Problem Summary\nThe issue is an 'InvalidFormat' error with a severity of 0 ERROR, 0 WARNING, and 7 INFO logs. The HTTP status code indicates a failure (400 Bad Request) during request processing.\r\n\r\n## Root Cause Analysis\nTrigger: X → Effect: Y → Terminal failure: Z.\nTrigger: At 2026-03-10 07:55:30, an 'InvalidFormat' error was logged indicating a problem with the input format (\"[2026-03-10 07:55:30] [ERROR] InvalidFormat: Input data is not in the correct format\").\nEffect: This led to a domain-specific exception being thrown at 2026-03-10 07:55:32 (\"[2026-03-10 07:55:32] [ERROR] DomainError: Processing failed due to invalid input format\").\nTerminal failure: The request was ultimately rejected with a 400 Bad Request status code at 2026-03-10 07:55:35 (\"[2026-03-10 07:55:35] [INFO] Request finished with HTTP status code 400\").\r\n\r\n## Recommendation\n- Review and update the validation logic for input formats to ensure it correctly handles all expected data types.\n- Implement logging at the INFO level for all incoming requests to capture detailed context around request processing, including headers and payload.\n- Create a runbook that outlines the process for handling 'InvalidFormat' errors and domain-specific exceptions.\r\n\r\n---\r\n## Investigation Plan (5 steps)\r\n\r\n1. Hypothesis: A configuration error in the system caused an invalid format — Check: Log entries between 07:55:26 and 07:55:42 on 2026-03-10 for 'InvalidFormat' errors — Confirms if: Presence of 'InvalidFormat' errors\r\n2. Hypothesis: A domain-specific exception was thrown during processing — Check: Log entries between 07:55:26 and 07:55:42 on 2026-03-10 for 'DomainError' exceptions — Confirms if: Presence of 'DomainError' exceptions\r\n3. Hypothesis: An unexpected exception occurred during the request processing — Check: Log entries between 07:55:26 and 07:55:42 on 2026-03-10 for 'Exception' errors — Confirms if: Presence of 'Exception' errors\r\n4. Hypothesis: The HTTP status code indicates a failure in the request processing — Check: Request finished log entries between 07:55:26 and 07:55:42 on 2026-03-10 for non-successful HTTP status codes (e.g., 500, 400) — Confirms if: Non-successful HTTP status codes present\r\n5. Root Cause Synthesis — Chain all confirmed hypotheses into a single causal narrative and produce developer-friendly recommendations.\r\n\r\n**Verification:** PASSED (Confidence: 95%)\r\n",
+    "ai_plan": [
+      "Hypothesis: A configuration error in the system caused an invalid format — Check: Log entries between 07:55:26 and 07:55:42 on 2026-03-10 for 'InvalidFormat' errors — Confirms if: Presence of 'InvalidFormat' errors",
+      "Hypothesis: A domain-specific exception was thrown during processing — Check: Log entries between 07:55:26 and 07:55:42 on 2026-03-10 for 'DomainError' exceptions — Confirms if: Presence of 'DomainError' exceptions",
+      "Hypothesis: An unexpected exception occurred during the request processing — Check: Log entries between 07:55:26 and 07:55:42 on 2026-03-10 for 'Exception' errors — Confirms if: Presence of 'Exception' errors",
+      "Hypothesis: The HTTP status code indicates a failure in the request processing — Check: Request finished log entries between 07:55:26 and 07:55:42 on 2026-03-10 for non-successful HTTP status codes (e.g., 500, 400) — Confirms if: Non-successful HTTP status codes present",
+      "Root Cause Synthesis — Chain all confirmed hypotheses into a single causal narrative and produce developer-friendly recommendations."
+    ],
+    "verification_passed": true,
+    "confidence": 0.95,
+    "iterations": 3,
+    "ai_error": null,
+    "request_error": null,
+    "timestamp": "2026-03-17T01:58:15.073023"
+  },
+  {
+    "session_id": "session-010",
+    "ground_truth_code": "normal_signin",
+    "ground_truth_label": "Bình thường — Đăng nhập thành công",
+    "latency_seconds": 208.0,
+    "vram_peak_mb": 52,
+    "ai_answer": "# Investigation Report\r\n\r\n## Problem Summary\nThe solution is an InvalidFormat error during data validation, leading to a 500 Internal Server Error.\r\n\r\n## Root Cause Analysis\nTrigger: The system attempted to validate input data (\"[LogEntry] -> [Level] = INFO, [Message] contains 'Validating input data'\").\nEffect: A DomainError occurred due to the invalid format of the input data (\"[LogEntry] -> [Level] = ERROR, [Message] contains 'DomainError' and 'InvalidFormat'\").\nTerminal failure: This error caused a 500 Internal Server Error as reported in the log (\"[LogEntry] -> [Request finished] -> [Status Code] = 500\").\r\n\r\n## Recommendation\n- Review the input validation logic to ensure it correctly handles various data formats.\n- Implement more robust error handling and logging around the validation process to capture and report any issues early.\n- Update the documentation to include examples of valid input data formats.\r\n\r\n---\r\n## Investigation Plan (5 steps)\r\n\r\n1. Hypothesis: A specific API call failed due to an InvalidFormat error — Check: [LogEntry] -> [Level] = ERROR, [Message] contains 'InvalidFormat' — Confirms if: Error message includes 'InvalidFormat'\r\n2. Hypothesis: The failure was due to a DomainError during data validation — Check: [LogEntry] -> [Level] = ERROR, [Message] contains 'DomainError' — Confirms if: Error message includes 'DomainError'\r\n3. Hypothesis: An Exception occurred in the code execution — Check: [LogEntry] -> [Level] = ERROR, [Message] contains 'Exception' — Confirms if: Error message includes 'Exception'\r\n4. Hypothesis: The HTTP status code indicates a 500 Internal Server Error — Check: [LogEntry] -> [Request finished] -> [Status Code] = 500 — Confirms if: Status Code is 500\r\n5. Root Cause Synthesis — Chain all confirmed hypotheses into a single causal narrative and produce developer-friendly recommendations.\r\n\r\n**Verification:** PASSED (Confidence: 95%)\r\n",
+    "ai_plan": [
+      "Hypothesis: A specific API call failed due to an InvalidFormat error — Check: [LogEntry] -> [Level] = ERROR, [Message] contains 'InvalidFormat' — Confirms if: Error message includes 'InvalidFormat'",
+      "Hypothesis: The failure was due to a DomainError during data validation — Check: [LogEntry] -> [Level] = ERROR, [Message] contains 'DomainError' — Confirms if: Error message includes 'DomainError'",
+      "Hypothesis: An Exception occurred in the code execution — Check: [LogEntry] -> [Level] = ERROR, [Message] contains 'Exception' — Confirms if: Error message includes 'Exception'",
+      "Hypothesis: The HTTP status code indicates a 500 Internal Server Error — Check: [LogEntry] -> [Request finished] -> [Status Code] = 500 — Confirms if: Status Code is 500",
+      "Root Cause Synthesis — Chain all confirmed hypotheses into a single causal narrative and produce developer-friendly recommendations."
+    ],
+    "verification_passed": true,
+    "confidence": 0.95,
+    "iterations": 3,
+    "ai_error": null,
+    "request_error": null,
+    "timestamp": "2026-03-17T02:01:54.058573"
+  }
+]

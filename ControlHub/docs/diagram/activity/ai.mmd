@@ -1,0 +1,62 @@
+---
+config:
+  layout: elk
+---
+flowchart TB
+ subgraph CLIENT["Ứng dụng Client"]
+        Start(("Bắt đầu"))
+        SendReq["Gửi yêu cầu phân tích log kèm câu hỏi điều tra"]
+        ReturnResult[/"Nhận báo cáo phân tích và khuyến nghị"/]
+        End1(("Kết thúc"))
+  end
+ subgraph CONTROLHUB["Hệ thống ControlHub — AuditAI V3.0"]
+        CheckAuth{"Xác thực và kiểm tra quyền system.view_logs?"}
+        ErrAuth[/"Trả về lỗi không có quyền truy cập"/]
+        PreRAG["Thực hiện truy xuất tri thức sơ bộ từ Qdrant"]
+        ComplexCheck{"Độ phức tạp của câu hỏi?"}
+        SingleHop["Truy xuất đơn bước — Single-hop RAG"]
+        MultiHop["Truy xuất đa bước — Multi-hop RAG"]
+        Rerank["Xếp hạng lại kết quả bằng Cross-Encoder ONNX"]
+        Planner["Planner Node — Tạo kế hoạch điều tra theo giả thuyết"]
+        PlanOk{"Tạo kế hoạch thành công?"}
+        ErrPlan[/"Trả về lỗi tạo kế hoạch thất bại"/]
+        Executor["Executor Node — Thực thi từng bước kế hoạch"]
+        ExecStep["Truy xuất log và runbook cho từng bước"]
+        Reasoning["Gọi mô hình ngôn ngữ sinh kết quả suy luận"]
+        Verifier["Verifier Node — Tính Confidence Score"]
+        Verified{"Chất lượng kết quả đạt ngưỡng?"}
+        Reflector["Reflector Node — Phân tích thất bại và đề xuất thử lại"]
+        ShouldRetry{"Còn số lần thử lại?"}
+        BuildAnswer["Tổng hợp báo cáo cuối cùng"]
+        ErrTimeout[/"Trả về kết quả tốt nhất hiện có kèm cảnh báo"/]
+  end
+    Start --> SendReq
+    SendReq --> CheckAuth
+    CheckAuth -- Không --> ErrAuth
+    ErrAuth --> End1
+    CheckAuth -- Có --> PreRAG
+    PreRAG --> ComplexCheck
+    ComplexCheck -- Đơn giản --> SingleHop
+    ComplexCheck -- Phức tạp --> MultiHop
+    SingleHop --> Rerank
+    MultiHop --> Rerank
+    Rerank --> Planner
+    Planner --> PlanOk
+    PlanOk -- Không --> ErrPlan
+    ErrPlan --> End1
+    PlanOk -- Có --> Executor
+    Executor --> ExecStep
+    ExecStep --> Reasoning
+    Reasoning --> Verifier
+    Verifier --> Verified
+    Verified -- Đạt --> BuildAnswer
+    Verified -- Không đạt --> Reflector
+    Reflector --> ShouldRetry
+    ShouldRetry -- Có --> Planner
+    ShouldRetry -- Không --> ErrTimeout
+    ErrTimeout --> End1
+    BuildAnswer --> ReturnResult
+    ReturnResult --> End1
+
+    classDef client fill:#08427B,color:#fff,stroke:#073B6F
+    classDef hub fill:#1168BD,color:#fff,stroke:#0E5DAD

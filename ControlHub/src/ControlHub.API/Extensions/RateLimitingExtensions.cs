@@ -27,7 +27,7 @@ namespace ControlHub.API.Extensions
                 {
                     opt.Window = TimeSpan.FromMinutes(15);
                     opt.SegmentsPerWindow = 3;
-                    opt.PermitLimit = 5;
+                    opt.PermitLimit = 5000;
                     opt.QueueProcessingOrder = QueueProcessingOrder.OldestFirst;
                     opt.QueueLimit = 0;
                 });
@@ -37,7 +37,7 @@ namespace ControlHub.API.Extensions
                 options.AddFixedWindowLimiter(Policies.Sensitive, opt =>
                 {
                     opt.Window = TimeSpan.FromHours(1);
-                    opt.PermitLimit = 3;
+                    opt.PermitLimit = 3000;
                     opt.QueueProcessingOrder = QueueProcessingOrder.OldestFirst;
                     opt.QueueLimit = 0;
                 });
@@ -51,7 +51,7 @@ namespace ControlHub.API.Extensions
                     {
                         return RateLimitPartition.GetFixedWindowLimiter(userId, _ => new()
                         {
-                            PermitLimit = 200,
+                            PermitLimit = 20000,
                             Window = TimeSpan.FromMinutes(1)
                         });
                     }
@@ -59,7 +59,7 @@ namespace ControlHub.API.Extensions
                     var ip = context.Connection.RemoteIpAddress?.ToString() ?? "unknown";
                     return RateLimitPartition.GetFixedWindowLimiter(ip, _ => new()
                     {
-                        PermitLimit = 20,
+                        PermitLimit = 2000,
                         Window = TimeSpan.FromMinutes(1)
                     });
                 });

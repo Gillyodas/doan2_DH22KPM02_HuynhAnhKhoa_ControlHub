@@ -1,0 +1,40 @@
+sequenceDiagram
+    participant Client as Người dùng
+    participant AC as AuditController
+    participant RAG as AgenticRAGService
+    participant Agent as AuditAgentV3
+    participant OL as Ollama
+
+    Client->>AC: POST /api/audit/v3/investigate (query, correlationId)
+    Note over AC: Xác thực JWT + kiểm tra quyền system.view_logs
+    AC->>RAG: RetrieveAsync(query, correlationId)
+    RAG->>OL: GenerateEmbeddingAsync(query)
+    OL-->>RAG: vector[384]
+    RAG->>RAG: Tìm kiếm log theo correlationId + truy xuất Qdrant
+    RAG->>RAG: Xếp hạng lại bằng Cross-Encoder ONNX
+    RAG-->>AC: AgenticRAGResult (documents, strategy)
+    AC->>Agent: InvestigateAsync(query, correlationId)
+
+    Note over Agent: Planner Node
+    Agent->>OL: ReasonAsync — tạo kế hoạch điều tra
+    OL-->>Agent: InvestigationPlan (các bước giả thuyết)
+
+    Note over Agent: Executor Node
+    Agent->>OL: ReasonAsync — thực thi từng bước với evidence
+    OL-->>Agent: ExecutionResults (kết quả từng bước)
+
+    Note over Agent: Verifier Node
+    Agent->>Agent: Tính Confidence Score đa nhân tố
+
+    alt Confidence đạt ngưỡng
+        Agent->>Agent: Tổng hợp báo cáo cuối cùng
+    else Confidence chưa đạt và còn lượt thử
+        Note over Agent: Reflector Node
+        Agent->>OL: ReasonAsync — phân tích thất bại
+        OL-->>Agent: Phản hồi và đề xuất điều chỉnh kế hoạch
+        Agent->>Agent: Quay lại Planner với insight mới
+        Agent->>Agent: Tổng hợp kết quả tốt nhất hiện có
+    end
+
+    Agent-->>AC: AgentExecutionResult (answer, plan, confidence)
+    AC-->>Client: HTTP 200 — Báo cáo phân tích, kế hoạch, confidence score

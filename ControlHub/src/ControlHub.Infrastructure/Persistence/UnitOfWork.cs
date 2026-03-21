@@ -45,29 +45,29 @@ namespace ControlHub.Infrastructure.Persistence
                 return await SaveChangesAsync(ct);
             }
 
-            await using var transaction = await _dbContext.Database.BeginTransactionAsync(ct);
-            try
+            int changes;
+            await using (var transaction = await _dbContext.Database.BeginTransactionAsync(ct))
             {
-                _logger.LogInformation("Implicit transaction started");
-
-                var changes = await SaveChangesAsync(ct);
-                await transaction.CommitAsync(ct);
-
-                await DispatchDomainEventsAsync(ct);
-
-                _logger.LogInformation(
-                "Transaction committed successfully with {Changes} changes.",
-                changes);
-
-                return changes;
+                try
+                {
+                    _logger.LogInformation("Implicit transaction started");
+                    changes = await SaveChangesAsync(ct);
+                    await transaction.CommitAsync(ct);
+                    _logger.LogInformation(
+                        "Transaction committed successfully with {Changes} changes.",
+                        changes);
+                }
+                catch (Exception ex)
+                {
+                    _logger.LogError(ex, "Transaction failed. Rolling back...");
+                    await SafeRollbackAsync(transaction, ct);
+                    _dbContext.ChangeTracker.Clear();
+                    throw MapException(ex);
+                }
             }
-            catch (Exception ex)
-            {
-                _logger.LogError(ex, "Transaction failed. Rolling back...");
-                await SafeRollbackAsync(transaction, ct);
-                _dbContext.ChangeTracker.Clear();
-                throw MapException(ex);
-            }
+
+            await DispatchDomainEventsAsync(ct);
+            return changes;
         }
 
         public async Task CommitTransactionAsync(CancellationToken ct = default)

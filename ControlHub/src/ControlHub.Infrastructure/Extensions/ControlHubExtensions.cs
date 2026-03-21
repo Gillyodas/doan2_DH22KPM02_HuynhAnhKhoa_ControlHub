@@ -1,5 +1,6 @@
 ﻿using System.Reflection;
 using ControlHub.Infrastructure.DependencyInjection;
+using ControlHub.Infrastructure.Middlewares;
 using ControlHub.Infrastructure.Persistence;
 using ControlHub.Infrastructure.Persistence.Seeders;
 using Microsoft.AspNetCore.Builder;
@@ -17,6 +18,8 @@ public static class ControlHubExtensions
         this IServiceCollection services,
         IConfiguration configuration)
     {
+        services.AddMemoryCache();
+
         services
             .AddControlHubDatabase(configuration)
             .AddControlHubSecurity(configuration)
@@ -35,6 +38,8 @@ public static class ControlHubExtensions
     this IApplicationBuilder app,
     string guiPath = "/control-hub")
     {
+        app.UseMiddleware<TraceIdMiddleware>();
+
         using (var scope = app.ApplicationServices.CreateScope())
         {
             var db = scope.ServiceProvider.GetRequiredService<AppDbContext>();

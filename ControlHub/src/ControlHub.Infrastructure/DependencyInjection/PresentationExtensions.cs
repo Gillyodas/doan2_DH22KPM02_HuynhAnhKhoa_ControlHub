@@ -4,7 +4,7 @@ using FluentValidation;
 using MediatR;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.OpenApi.Models;
+using Microsoft.OpenApi;
 
 internal static class PresentationExtensions
 {
@@ -46,12 +46,12 @@ internal static class PresentationExtensions
             .Replace(",", "_")
             ?? type.Name);
 
-            c.AddServer(new Microsoft.OpenApi.Models.OpenApiServer
-            {
-                Url = "https://localhost:7110"
-            });
+            //c.AddServer(new Microsoft.OpenApi.Models.OpenApiServer
+            //{
+            //    Url = "https://localhost:7110"
+            //});
 
-            c.SwaggerDoc("v1", new OpenApiInfo
+            c.SwaggerDoc("controlhub-v1", new OpenApiInfo
             {
                 Title = "ControlHub Identity API",
                 Version = "v1",
@@ -91,18 +91,11 @@ internal static class PresentationExtensions
                 BearerFormat = "JWT"
             });
 
-            c.AddSecurityRequirement(new OpenApiSecurityRequirement
+            c.AddSecurityRequirement(_ => new OpenApiSecurityRequirement
             {
                 {
-                    new OpenApiSecurityScheme
-                    {
-                        Reference = new OpenApiReference
-                        {
-                            Type = ReferenceType.SecurityScheme,
-                            Id = "Bearer"
-                        }
-                    },
-                    Array.Empty<string>()
+                    new OpenApiSecuritySchemeReference("Bearer"),
+                    new List<string>()
                 }
             });
 
