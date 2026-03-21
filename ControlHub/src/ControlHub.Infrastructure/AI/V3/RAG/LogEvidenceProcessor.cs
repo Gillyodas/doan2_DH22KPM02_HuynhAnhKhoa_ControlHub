@@ -7,7 +7,7 @@ namespace ControlHub.Infrastructure.AI.V3.RAG
 {
     /// <summary>
     /// Processes raw log evidence: filters noise, extracts metadata, and formats a summary.
-    /// All processing is code-based (regex) — no AI needed.
+    /// Uses structured metadata from LogEntry when available, falls back to regex on content.
     /// </summary>
     public class LogEvidenceProcessor : ILogEvidenceProcessor
     {
@@ -35,7 +35,7 @@ namespace ControlHub.Infrastructure.AI.V3.RAG
             "Validation state: Valid"
         };
 
-        // Regex patterns for metadata extraction
+        // Regex fallbacks for when structured metadata is not available
         private static readonly Regex HttpStatusRegex = new(
             @"Request finished.*?-\s*(\d{3})\s", RegexOptions.Compiled);
 
@@ -43,11 +43,11 @@ namespace ControlHub.Infrastructure.AI.V3.RAG
             @"(\w+\.\w+(?:Error|Format|Exception|NotFound|Unauthorized|Forbidden|Conflict|Duplicate|Invalid\w*))",
             RegexOptions.Compiled);
 
+        // Updated to handle both text format and Serilog compact JSON @m format
         private static readonly Regex EndpointRegex = new(
-            @"(GET|POST|PUT|DELETE|PATCH)\s+(https?://[^\s]+)", RegexOptions.Compiled);
-
-        private static readonly Regex TimestampRegex = new(
-            @"\[(\d{2}:\d{2}:\d{2})", RegexOptions.Compiled);
+            @"(?:""?(GET|POST|PUT|DELETE|PATCH)""?\s+""?(?:https?://[^\s""]+)""*""?(/[^\s""]+)""?|"
+            + @"(GET|POST|PUT|DELETE|PATCH)\s+(https?://[^\s]+))",
+            RegexOptions.Compiled);
 
         public LogEvidenceProcessor(ILogger<LogEvidenceProcessor> logger)
         {
@@ -61,15 +61,16 @@ namespace ControlHub.Infrastructure.AI.V3.RAG
             // Step 1: Severity Filter
             var prioritized = FilterAndPrioritize(rawLogs);
 
-            // Step 2: Metadata Extraction
+            // Step 2: Metadata Extraction (structured fields first, regex fallback)
             var metadata = ExtractMetadata(rawLogs);
 
             // Step 3: Format Summary
             var summary = FormatSummary(metadata, prioritized);
 
             _logger.LogInformation(
-                "Evidence processed: {PriorityCount} priority logs, HTTP {Status}, Error: {ErrorCode}",
-                prioritized.Count, metadata.HttpStatusCode ?? "N/A", metadata.ErrorCode ?? "N/A");
+                "Evidence processed: {PriorityCount} priority logs, HTTP {Status}, Endpoint: {Endpoint}, Error: {ErrorCode}",
+                prioritized.Count, metadata.HttpStatusCode ?? "N/A",
+                metadata.AffectedEndpoint ?? "N/A", metadata.ErrorCode ?? "N/A");
 
             return new EvidenceSummary(prioritized, metadata, summary);
         }
@@ -153,7 +154,8 @@ namespace ControlHub.Infrastructure.AI.V3.RAG
         }
 
         /// <summary>
-        /// Extract structured metadata from log entries using regex (100% accurate, no AI).
+        /// Extract structured metadata from log entries.
+        /// Priority: structured metadata fields > regex fallback on content.
         /// </summary>
         private LogMetadata ExtractMetadata(IReadOnlyList<RetrievedDocument> logs)
         {
@@ -165,9 +167,12 @@ namespace ControlHub.Infrastructure.AI.V3.RAG
             string? lastTimestamp = null;
             int errorCount = 0, warnCount = 0, infoCount = 0;
 
+            // First pass: extract from structured metadata (100% reliable)
+            string? method = null;
+            string? requestPath = null;
+
             foreach (var log in logs)
             {
-                var content = log.Content;
                 var level = log.Metadata.GetValueOrDefault("level", "Information");
 
                 // Count severity distribution
@@ -179,7 +184,39 @@ namespace ControlHub.Infrastructure.AI.V3.RAG
                 else
                     infoCount++;
 
-                // Extract HTTP status from "Request finished" line
+                // Structured: HTTP status from metadata (set by Serilog on "Request finished")
+                if (httpStatus == null && log.Metadata.TryGetValue("statusCode", out var sc))
+                    httpStatus = sc;
+
+                // Structured: Method and RequestPath from metadata
+                if (method == null && log.Metadata.TryGetValue("method", out var m))
+                    method = m;
+                if (requestPath == null && log.Metadata.TryGetValue("requestPath", out var rp))
+                    requestPath = rp;
+
+                // Structured: Timestamp from ISO metadata
+                if (log.Metadata.TryGetValue("timestamp", out var ts))
+                {
+                    if (DateTime.TryParse(ts, out var dt))
+                    {
+                        var timeStr = dt.ToString("HH:mm:ss.fff");
+                        firstTimestamp ??= timeStr;
+                        lastTimestamp = timeStr;
+                    }
+                }
+            }
+
+            // Build endpoint from structured fields
+            if (method != null && requestPath != null)
+                endpoint = $"{method} {requestPath}";
+
+            // Second pass: regex fallback for anything not found via metadata
+            foreach (var log in logs)
+            {
+                var content = log.Content;
+                var level = log.Metadata.GetValueOrDefault("level", "Information");
+
+                // Fallback: HTTP status from "Request finished" content
                 if (httpStatus == null)
                 {
                     var statusMatch = HttpStatusRegex.Match(content);
@@ -187,7 +224,7 @@ namespace ControlHub.Infrastructure.AI.V3.RAG
                         httpStatus = statusMatch.Groups[1].Value;
                 }
 
-                // Extract domain error code
+                // Extract domain error code (always from content — not available as metadata)
                 if (errorCode == null)
                 {
                     var codeMatch = ErrorCodeRegex.Match(content);
@@ -195,31 +232,41 @@ namespace ControlHub.Infrastructure.AI.V3.RAG
                         errorCode = codeMatch.Groups[1].Value;
                 }
 
-                // Extract endpoint from "Request starting" line
+                // Fallback: endpoint from content
                 if (endpoint == null)
                 {
                     var endpointMatch = EndpointRegex.Match(content);
                     if (endpointMatch.Success)
-                        endpoint = $"{endpointMatch.Groups[1].Value} {endpointMatch.Groups[2].Value}";
+                    {
+                        // Match group 1+2 = Serilog compact format, group 3+4 = standard text format
+                        var verb = endpointMatch.Groups[1].Success
+                            ? endpointMatch.Groups[1].Value : endpointMatch.Groups[3].Value;
+                        var path = endpointMatch.Groups[2].Success
+                            ? endpointMatch.Groups[2].Value : endpointMatch.Groups[4].Value;
+                        endpoint = $"{verb} {path}";
+                    }
                 }
 
-                // Extract error message from WARNING/ERROR entries
+                // Error message: use raw @m from WARNING/ERROR entries directly
                 if (errorMessage == null && (level.Equals("Warning", StringComparison.OrdinalIgnoreCase)
                     || level.Equals("Error", StringComparison.OrdinalIgnoreCase)))
                 {
-                    // Extract the message part after the level indicator
-                    var msgPart = Regex.Match(content, @"\]\s*(.+)$");
-                    if (msgPart.Success)
-                        errorMessage = msgPart.Groups[1].Value.Trim();
-                }
+                    // Content format: "[timestamp] [Level] message..."
+                    // Extract message after the level bracket
+                    var bracketEnd = content.IndexOf(']', content.IndexOf(']') + 1);
+                    if (bracketEnd >= 0 && bracketEnd + 1 < content.Length)
+                    {
+                        errorMessage = content[(bracketEnd + 1)..].Trim();
+                    }
+                    else
+                    {
+                        // Direct @m content (no brackets)
+                        errorMessage = content.Trim();
+                    }
 
-                // Track timestamp range
-                var tsMatch = TimestampRegex.Match(content);
-                if (tsMatch.Success)
-                {
-                    var ts = tsMatch.Groups[1].Value;
-                    firstTimestamp ??= ts;
-                    lastTimestamp = ts;
+                    // Truncate very long messages for the summary
+                    if (errorMessage.Length > 300)
+                        errorMessage = errorMessage[..300] + "...";
                 }
             }
 

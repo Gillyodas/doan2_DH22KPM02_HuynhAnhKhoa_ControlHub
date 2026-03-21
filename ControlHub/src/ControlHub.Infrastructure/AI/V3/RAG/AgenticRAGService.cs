@@ -83,16 +83,37 @@ namespace ControlHub.Infrastructure.AI.V3.RAG
                     var logEntries = await _logReader.GetLogsByCorrelationIdAsync(options.CorrelationId);
                     _logger.LogInformation("Found {Count} log entries", logEntries.Count);
 
-                    var logDocs = logEntries.Select(entry => new RetrievedDocument(
-                        $"[{entry.Timestamp:yyyy-MM-dd HH:mm:ss}] [{entry.Level}] {entry.Message}",
-                        0.95f,
-                        new Dictionary<string, string>
+                    var logDocs = logEntries.Select(entry =>
+                    {
+                        var metadata = new Dictionary<string, string>
                         {
                             ["source"] = "log_file",
                             ["timestamp"] = entry.Timestamp.ToString("o"),
                             ["level"] = entry.Level
-                        }
-                    )).ToList();
+                        };
+
+                        // Pass structured fields so LogEvidenceProcessor can use them directly
+                        if (entry.RequestId != null) metadata["requestId"] = entry.RequestId;
+                        if (entry.SerilogTraceId != null) metadata["traceId"] = entry.SerilogTraceId;
+                        if (entry.SourceContext != null) metadata["sourceContext"] = entry.SourceContext;
+                        if (entry.SpanId != null) metadata["spanId"] = entry.SpanId;
+
+                        // Extract structured fields from Properties (set by Serilog enrichers)
+                        if (entry.Properties.TryGetValue("RequestPath", out var rp))
+                            metadata["requestPath"] = rp.ToString()!;
+                        if (entry.Properties.TryGetValue("StatusCode", out var sc))
+                            metadata["statusCode"] = sc.ToString()!;
+                        if (entry.Properties.TryGetValue("ElapsedMilliseconds", out var ms))
+                            metadata["elapsedMs"] = ms.ToString()!;
+                        if (entry.Properties.TryGetValue("Method", out var method))
+                            metadata["method"] = method.ToString()!;
+
+                        return new RetrievedDocument(
+                            $"[{entry.Timestamp:yyyy-MM-dd HH:mm:ss}] [{entry.Level}] {entry.Message}",
+                            0.95f,
+                            metadata
+                        );
+                    }).ToList();
 
                     var evidence = _evidenceProcessor.ProcessLogs(logDocs);
                     _cachedEvidenceSummary = evidence;
