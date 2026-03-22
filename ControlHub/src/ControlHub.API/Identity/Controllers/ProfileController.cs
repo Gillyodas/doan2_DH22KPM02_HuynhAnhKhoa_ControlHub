@@ -1,7 +1,5 @@
 using ControlHub.API.Extensions;
 using ControlHub.API.Identity.ViewModels.Request;
-using ControlHub.Application.Common.Interfaces;
-using ControlHub.Application.Identity.Commands.ChangePassword;
 using ControlHub.Application.Identity.Commands.UpdateMyProfile;
 using ControlHub.Application.Identity.Queries.GetMyProfile;
 using MediatR;
@@ -17,12 +15,9 @@ namespace ControlHub.API.Identity.Controllers
     [EnableRateLimiting(RateLimitingExtensions.Policies.GeneralApi)]
     public class ProfileController : ControlHub.API.Controllers.BaseApiController
     {
-        private readonly ICurrentUserService _currentUserService;
-
-        public ProfileController(IMediator mediator, ILogger<ProfileController> logger, ICurrentUserService currentUserService)
+        public ProfileController(IMediator mediator, ILogger<ProfileController> logger)
             : base(mediator, logger)
         {
-            _currentUserService = currentUserService;
         }
 
         [HttpGet("me")]
@@ -37,20 +32,6 @@ namespace ControlHub.API.Identity.Controllers
         public async Task<IActionResult> UpdateMyProfile([FromBody] UpdateProfileRequest request, CancellationToken cancellationToken)
         {
             var command = new UpdateMyProfileCommand(request.FirstName, request.LastName, request.PhoneNumber);
-            var result = await Mediator.Send(command, cancellationToken);
-            return HandleFailure(result) ?? NoContent();
-        }
-
-        [HttpPut("me/password")]
-        public async Task<IActionResult> ChangeMyPassword([FromBody] ChangePasswordRequest request, CancellationToken cancellationToken)
-        {
-            var userId = _currentUserService.UserId;
-            if (userId == Guid.Empty)
-            {
-                return Unauthorized();
-            }
-
-            var command = new ChangePasswordCommand(userId, request.CurrentPassword, request.NewPassword);
             var result = await Mediator.Send(command, cancellationToken);
             return HandleFailure(result) ?? NoContent();
         }

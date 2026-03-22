@@ -1,6 +1,6 @@
 "use client"
 
-import { LayoutDashboard, ShieldCheck, Settings, ChevronLeft, ChevronRight, Code2, Fingerprint, Sparkles, ShieldAlert } from "lucide-react"
+import { LayoutDashboard, ShieldCheck, Settings, ChevronLeft, ChevronRight, Code2, Fingerprint, Sparkles, ShieldAlert, Users } from "lucide-react"
 import { NavLink } from "react-router-dom"
 import { cn } from "@/lib/utils"
 import { Button } from "@/components/ui/button"
@@ -16,6 +16,7 @@ export function Sidebar({ collapsed, onToggle }: SidebarProps) {
 
   const menuItems = [
     { icon: LayoutDashboard, label: t('navigation.dashboard'), href: "/" },
+    { icon: Users, label: t('navigation.users'), href: "/users" },
     { icon: ShieldCheck, label: t('navigation.roles'), href: "/roles" },
     { icon: ShieldAlert, label: "Admins", href: "/admin-accounts" },
     { icon: Fingerprint, label: t('navigation.identifiers'), href: "/identifiers" },

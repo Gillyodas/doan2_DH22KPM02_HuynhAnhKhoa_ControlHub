@@ -65,7 +65,7 @@ export function Header() {
             <DropdownMenuLabel className="px-3 py-2 text-xs font-black text-muted-foreground uppercase tracking-widest">{t('navigation.accountMatrix')}</DropdownMenuLabel>
             <DropdownMenuSeparator className="bg-sidebar-border/50 mx-2" />
             <DropdownMenuItem asChild>
-              <Link to="/users" className="flex gap-3 px-3 py-2.5 text-sm font-semibold text-foreground focus:bg-sidebar-accent rounded-xl cursor-pointer">
+              <Link to="/profile" className="flex gap-3 px-3 py-2.5 text-sm font-semibold text-foreground focus:bg-sidebar-accent rounded-xl cursor-pointer">
                 {t('navigation.userProfile')}
               </Link>
             </DropdownMenuItem>

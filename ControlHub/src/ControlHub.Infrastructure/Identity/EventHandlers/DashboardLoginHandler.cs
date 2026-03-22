@@ -1,18 +1,16 @@
 using ControlHub.Application.Identity.Events;
-using ControlHub.Infrastructure.RealTime.Services;
+using ControlHub.Infrastructure.Identity.Services;
 using MediatR;
 using Microsoft.Extensions.Logging;
 
-namespace ControlHub.Infrastructure.RealTime.Handlers
+namespace ControlHub.Infrastructure.Identity.EventHandlers
 {
-    public class DashboardNotificationHandler : INotificationHandler<AccountSignedInEvent>
+    internal class DashboardLoginHandler : INotificationHandler<AccountSignedInEvent>
     {
         private readonly LoginEventBuffer _buffer;
-        private readonly ILogger<DashboardNotificationHandler> _logger;
+        private readonly ILogger<DashboardLoginHandler> _logger;
 
-        public DashboardNotificationHandler(
-        LoginEventBuffer buffer,
-        ILogger<DashboardNotificationHandler> logger)
+        public DashboardLoginHandler(LoginEventBuffer buffer, ILogger<DashboardLoginHandler> logger)
         {
             _buffer = buffer;
             _logger = logger;

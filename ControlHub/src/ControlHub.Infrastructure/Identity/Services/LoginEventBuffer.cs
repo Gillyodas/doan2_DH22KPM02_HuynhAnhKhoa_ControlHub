@@ -5,7 +5,7 @@ using Microsoft.AspNetCore.SignalR;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 
-namespace ControlHub.Infrastructure.RealTime.Services
+namespace ControlHub.Infrastructure.Identity.Services
 {
     public class LoginEventBuffer : BackgroundService
     {
@@ -25,10 +25,6 @@ namespace ControlHub.Infrastructure.RealTime.Services
             _logger = logger;
         }
 
-        /// <summary>
-        /// �u?c g?i t? DashboardNotificationHandler d? th�m event v�o buffer.
-        /// </summary>
-        /// 
         public void Enqueue(AccountSignedInEvent evt)
         {
             _channel.Writer.TryWrite(evt);
@@ -57,7 +53,6 @@ namespace ControlHub.Infrastructure.RealTime.Services
                     }
                     catch (OperationCanceledException)
                     {
-                        //TODO: Timeout - flush batch
                     }
 
                     if (batch.Count > 0)
@@ -68,7 +63,7 @@ namespace ControlHub.Infrastructure.RealTime.Services
                 }
                 catch (Exception ex)
                 {
-                    _logger.LogError(ex, "Error in LoginEventBuffer"); //TODO: Format log
+                    _logger.LogError(ex, "Error in LoginEventBuffer");
                 }
             }
         }

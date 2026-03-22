@@ -37,6 +37,7 @@ internal static class AiExtensions
             c => c.Timeout = TimeSpan.FromMinutes(3));
 
         // Core AI (shared across versions)
+        services.AddScoped<IRunbookService, RunbookService>();
         services.AddScoped<ILogParserService, Drain3ParserService>();
 
         // Sampling Strategy

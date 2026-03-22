@@ -1,9 +1,7 @@
+using ControlHub.Application.Common.Interfaces;
+
 namespace ControlHub.Infrastructure.RealTime.Services
 {
-    /// <summary>
-    /// Default implementation - ch?y trên single instance.
-    /// Ð? scale multi-instance: T?o RedisActiveUserTracker implements IActiveUserTracker.
-    /// </summary>
     internal class InMemoryActiveUserTracker : IActiveUserTracker
     {
         private int _count = 0;

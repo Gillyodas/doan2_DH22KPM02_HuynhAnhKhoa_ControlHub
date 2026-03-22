@@ -1,22 +1,22 @@
-using ControlHub.Infrastructure.RealTime.Services;
+using ControlHub.Application.Common.Interfaces;
 using Microsoft.AspNetCore.SignalR;
 using Microsoft.Extensions.Logging;
 
 namespace ControlHub.Infrastructure.RealTime.Hubs
 {
-    /// <summary>
-    /// Hub cho Admin Dashboard.
-    /// CH? Admin ho?c SupperAdmin m?i du?c connect.
-    /// </summary>
     public class DashboardHub : Hub
     {
         private readonly IActiveUserTracker _tracker;
+        private readonly IDashboardStatsProvider _statsProvider;
         private readonly ILogger<DashboardHub> _logger;
-        //TODO: Format log
 
-        public DashboardHub(IActiveUserTracker tracker, ILogger<DashboardHub> logger)
+        public DashboardHub(
+            IActiveUserTracker tracker,
+            IDashboardStatsProvider statsProvider,
+            ILogger<DashboardHub> logger)
         {
             _tracker = tracker;
+            _statsProvider = statsProvider;
             _logger = logger;
         }
 
@@ -40,8 +40,9 @@ namespace ControlHub.Infrastructure.RealTime.Hubs
 
         public async Task RequestCurrentStats()
         {
-            var count = _tracker.GetActiveCount();
-            await Clients.Caller.SendAsync("ActiveUsersUpdated", count);
+            var stats = await _statsProvider.GetStatsAsync();
+            await Clients.Caller.SendAsync("DashboardStatsUpdated", stats);
+            await Clients.Caller.SendAsync("ActiveUsersUpdated", stats.ActiveUsers);
         }
     }
 }

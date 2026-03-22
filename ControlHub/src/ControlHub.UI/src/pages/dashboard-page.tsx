@@ -7,13 +7,13 @@ import { cn } from "@/lib/utils" // Ensure this exists, or copy from original fi
 
 export function DashboardPage() {
   const { t } = useTranslation()
-  const { activeUsers, loginAttempts, connectionStatus } = useRealtimeStats()
+  const { activeUsers, totalRoles, totalIdentifiers, loginAttempts, connectionStatus } = useRealtimeStats()
 
   const stats = [
-    { title: t('dashboard.totalRoles'), value: "12", icon: ShieldCheck, color: "text-blue-500", bg: "bg-blue-500/10" },
-    { title: t('dashboard.identifiers'), value: "8", icon: Fingerprint, color: "text-purple-500", bg: "bg-purple-500/10" },
-    { title: t('dashboard.apiEndpoints'), value: "45", icon: Code2, color: "text-emerald-500", bg: "bg-emerald-500/10" },
-    { title: t('dashboard.activeUsers'), value: String(activeUsers), icon: Users, color: "text-amber-500", bg: "bg-amber-500/10" },
+    { title: t('dashboard.totalRoles'), value: String(totalRoles), icon: ShieldCheck, color: "text-blue-500", bg: "bg-blue-500/10", live: true },
+    { title: t('dashboard.identifiers'), value: String(totalIdentifiers), icon: Fingerprint, color: "text-purple-500", bg: "bg-purple-500/10", live: true },
+    { title: t('dashboard.apiEndpoints'), value: "45", icon: Code2, color: "text-emerald-500", bg: "bg-emerald-500/10", live: false },
+    { title: t('dashboard.activeUsers'), value: String(activeUsers), icon: Users, color: "text-amber-500", bg: "bg-amber-500/10", live: true },
   ]
 
   return (
@@ -42,7 +42,7 @@ export function DashboardPage() {
             <CardContent>
               <div className="text-3xl font-bold">{stat.value}</div>
               <p className="text-xs text-muted-foreground mt-1 font-medium">
-                {stat.title === t('dashboard.activeUsers') ? (
+                {stat.live ? (
                   <span className="flex items-center gap-1 text-emerald-500">
                     <span className="relative flex h-2 w-2">
                       <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>

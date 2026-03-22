@@ -1,7 +1,9 @@
 using ControlHub.Domain.AccessControl.Aggregates;
 using ControlHub.Domain.Identity.Entities;
 using ControlHub.Domain.Identity.Enums;
+using ControlHub.Domain.Identity.Events;
 using ControlHub.Domain.Identity.ValueObjects;
+using ControlHub.Domain.SharedKernel;
 using ControlHub.Domain.TokenManagement.Aggregates;
 using ControlHub.SharedKernel.Identity.Accounts;
 using ControlHub.SharedKernel.Identity.Users;
@@ -9,11 +11,11 @@ using ControlHub.SharedKernel.Results;
 
 namespace ControlHub.Domain.Identity.Aggregates
 {
-    public class Account
+    public class Account : AggregateRoot
     {
         public Guid Id { get; private set; }
 
-        // Value Object: Password (s? du?c map ph?ng vào b?ng Accounts)
+        // Value Object: Password (s? du?c map ph?ng vï¿½o b?ng Accounts)
         public Password Password { get; private set; } = default!;
 
         public bool IsActive { get; private set; }
@@ -22,11 +24,11 @@ namespace ControlHub.Domain.Identity.Aggregates
         // Foreign Key
         public Guid RoleId { get; private set; }
 
-        // Navigation Properties (EF Core c?n ki?u c? th?, không dùng Maybe<T> ? dây)
+        // Navigation Properties (EF Core c?n ki?u c? th?, khï¿½ng dï¿½ng Maybe<T> ? dï¿½y)
         public Role? Role { get; private set; }
         public User? User { get; private set; }
 
-        // Collections (EF Core s? map vào field private)
+        // Collections (EF Core s? map vï¿½o field private)
         private readonly List<Identifier> _identifiers = new();
         public IReadOnlyCollection<Identifier> Identifiers => _identifiers.AsReadOnly();
 
@@ -52,7 +54,11 @@ namespace ControlHub.Domain.Identity.Aggregates
 
         // Factory
         public static Account Create(Guid id, Password pass, Guid roleId)
-            => new Account(id, pass, roleId, true, false);
+        {
+            var account = new Account(id, pass, roleId, true, false);
+            account.RaiseDomainEvent(new AccountCreatedEvent(id, roleId));
+            return account;
+        }
 
         // Behaviors
         public Result AddIdentifier(Identifier identifier)
@@ -61,6 +67,7 @@ namespace ControlHub.Domain.Identity.Aggregates
                 return Result.Failure(AccountErrors.IdentifierAlreadyExists);
 
             _identifiers.Add(identifier);
+            RaiseDomainEvent(new IdentifierAddedEvent(Id, identifier.Type.ToString()));
             return Result.Success();
         }
 
@@ -85,12 +92,17 @@ namespace ControlHub.Domain.Identity.Aggregates
         public Result AttachRole(Role role)
         {
             if (role == null) return Result.Failure(AccountErrors.RoleRequired);
+            var oldRoleId = RoleId;
             Role = role;
             RoleId = role.Id;
+            if (oldRoleId != role.Id)
+            {
+                RaiseDomainEvent(new RoleAssignedToAccountEvent(Id, role.Id));
+            }
             return Result.Success();
         }
 
-        // Qu?n lý Token ngay trong Account (Aggregate Root)
+        // Qu?n lï¿½ Token ngay trong Account (Aggregate Root)
         public void AddToken(Token token)
         {
             _tokens.Add(token);
@@ -101,6 +113,7 @@ namespace ControlHub.Domain.Identity.Aggregates
 
         public void Delete()
         {
+            RaiseDomainEvent(new AccountDeletedEvent(Id));
             IsDeleted = true;
             User?.Delete();
 
@@ -121,6 +134,7 @@ namespace ControlHub.Domain.Identity.Aggregates
             if (!newPass.IsValid()) return Result.Failure(AccountErrors.PasswordIsNotValid);
 
             Password = newPass;
+            RaiseDomainEvent(new PasswordChangedEvent(Id));
             return Result.Success();
         }
     }
